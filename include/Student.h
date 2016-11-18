@@ -1,0 +1,2 @@
+
+void affiche_age ();
