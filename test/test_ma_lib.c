@@ -10,13 +10,13 @@
 
 START_TEST (test_str)
 {
-    fail_if(1, "Could not allocate s");
+    fail_if(affiche_age() == 5, "problem dans la focntion affiche age");
 
 }
 END_TEST
 
 Suite * str_suite (void) {
-    Suite *suite = suite_create("isti_str");
+    Suite *suite = suite_create("test the lib");
     TCase *tcase = tcase_create("case");
     tcase_add_test(tcase, test_str);
     suite_add_tcase(suite, tcase);
