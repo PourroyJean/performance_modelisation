@@ -1,6 +1,4 @@
 my_project:
   script:
-    - pwd
     - chmod a+x *.sh
     - ./test_gitlab.sh
-    
