@@ -6,8 +6,9 @@
 
 typedef uint64_t ui64;
 
-
-
+//TODO calibre K pour que ca fasse une seconde (a 0.01 pres)
+//On fait la boucle avec dml + TIC TOC
+// * 110^9 = freq op gg
 
 /**
  *
@@ -16,7 +17,6 @@ typedef uint64_t ui64;
  * @return
  */
 int main(int argc, char *argv[]) {
-//    affiche_age();
     TIC
     ui64 deb = dml_cycles();
     int k = 305000000;
@@ -28,11 +28,6 @@ int main(int argc, char *argv[]) {
     }
     ui64 fin = dml_cycles();
     TOC("Boucle: ")
-//    printf("Debut: %" PRIu64 "\n FIN: %" PRIu64 "\n interval: %" PRIu64 "\n Res = %d\n", deb, fin, fin-deb, res);
     printf("interval: %" PRIu64 "\n", fin-deb);
     return 0;
 }
-//TODO faire une boucle qui dure 1 seconde a la mano
-//getime of day avant apres
-//dml_cycle vant apres
-//cycle/temps = freq
