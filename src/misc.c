@@ -3,11 +3,12 @@
 #include <stdio.h>
 
 
+
+
+
 void print_times(char *s) {
     int total_usecs;
-    total_usecs = (end_time.tv_sec - start_time.tv_sec) * 1000000 +
-                  (end_time.tv_usec - start_time.tv_usec);
-    printf("%s%.2f\n", s, ((float) total_usecs) / 1000.0);
+    printf("%s%.2f\n", s, ((float) TIME_ELAPSED) / 1000.0);
 }
 
 

@@ -27,7 +27,7 @@ int main(int argc, char *argv[]) {
         res += d;
     }
     ui64 fin = dml_cycles();
-    TOC("Boucle: ")
+    TOC
 //    printf("Debut: %" PRIu64 "\n FIN: %" PRIu64 "\n interval: %" PRIu64 "\n Res = %d\n", deb, fin, fin-deb, res);
     printf("interval: %" PRIu64 "\n", fin-deb);
     return 0;

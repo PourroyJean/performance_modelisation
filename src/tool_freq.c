@@ -4,30 +4,47 @@
 #include "misc.h"
 
 
-typedef uint64_t ui64;
-
-//TODO calibre K pour que ca fasse une seconde (a 0.01 pres)
-//On fait la boucle avec dml + TIC TOC
-// * 110^9 = freq op gg
+/**
+ *  This function is used to calculate the number of time the loop has to be repeated to last 1 second
+ * @return number of iteration
+ */
+int find_second() {
+    int k = 100000000;
+    int res, i, a, b, c, d, e = 1;
+    TIME_ELAPSED = 0;
+    while (TIME_ELAPSED < 1000000) {
+        k += 100000000;
+        TIC
+        for (i = 0; i < k; ++i) {
+            a = b++ + c++;
+            d = a + e++;
+            res += d;
+        }
+        TOC
+    }
+    return k;
+}
 
 /**
- *
- * @param argc coucou
- * @param argv jannou
- * @return
+ *  This tool is used to calculate the processro frequency
+ * @param argc not needed
+ * @param argv not needed
+ * @return no return
  */
 int main(int argc, char *argv[]) {
+    int k = find_second();
     TIC
     ui64 deb = dml_cycles();
-    int k = 305000000;
-    int res, i, a,b,c,d,e = 1;
+    int res, i, a, b, c, d, e = 1;
     for (i = 0; i < k; ++i) {
         a = b++ + c++;
         d = a + e++;
         res += d;
     }
     ui64 fin = dml_cycles();
-    TOC("Boucle: ")
-    printf("interval: %" PRIu64 "\n", fin-deb);
+    (void) res; //be sure result is used to counter compiler optimization
+    TOC
+    //print_times("time elapsed: ");
+    printf("Frequency: %f\n", (fin - deb) / TIME_ELAPSED / 1000);
     return 0;
 }
