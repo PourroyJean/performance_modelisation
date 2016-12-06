@@ -26,7 +26,7 @@ int find_second() {
 }
 
 /**
- *  This tool is used to calculate the processro frequency
+ *  This tool is used to calculate the processor frequency
  * @param argc not needed
  * @param argv not needed
  * @return no return

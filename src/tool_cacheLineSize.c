@@ -30,7 +30,9 @@ int main(int argc, char *argv[]) {
     int stride = 1;
     int64_t * array = (int64_t *) malloc (ARRAY_SIZE * sizeof(int64_t));
     int nb_element = ARRAY_SIZE;
-    for (stride = 1; stride < 1024; stride *= 2) {
+    printf ("Size of one element: %lu byte\n", sizeof(int64_t));
+    printf ("Stride Cycle per elem\n");
+    for (stride = 1; stride <= 10000; stride *= 2) {
         TIC
         ui64 deb = dml_cycles();
         int res = 0;
@@ -43,6 +45,7 @@ int main(int argc, char *argv[]) {
         }
         ui64 fin = dml_cycles();
         TOC
-        printf("stride = %3d : %10.1f ms,  %f per elem, %d nb elem,  %"PRIu64 " cycle per elem\n", stride, TIME_ELAPSED, TIME_ELAPSED / res, res, (fin-deb)/res);
+        //printf("stride = %3d : %10.1f ms,  %f per elem, %d nb elem,  %"PRIu64 " cycle per elem\n", stride, TIME_ELAPSED, TIME_ELAPSED / res, res, (fin-deb)/res);
+        printf("%6d %14"PRIu64"\n", stride, (fin-deb)/res);
     }
 }
