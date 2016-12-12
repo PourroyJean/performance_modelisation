@@ -30,3 +30,10 @@ if(DOXYGEN_FOUND)
             WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
             COMMENT "Generating API documentation with Doxygen" VERBATIM)
 endif(DOXYGEN_FOUND)
+
+"pdflatex" -synctex=1 -interaction=nonstopmode %.tex|
+"bibtex" Chapitre1|
+"bibtex" Chapitre2|
+"makeglossaries" Main|
+"pdflatex" -synctex=1 -interaction=nonstopmode %.tex|
+"pdflatex" -synctex=1 -interaction=nonstopmode %.tex
