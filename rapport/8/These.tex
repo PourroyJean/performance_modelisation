@@ -1,0 +1,83 @@
+\documentclass[a4paper,11pt,twoside]{StyleThese}
+
+\include{formatAndDefs}
+
+\begin{document}
+
+\include{TitlePage}
+
+\dominitoc
+
+\pagenumbering{roman}
+
+ \cleardoublepage
+
+\section*{Remerciements}
+
+A faire en dernier :-)
+
+\tableofcontents
+
+\mainmatter
+
+\include{Chapter1}
+
+\appendix
+
+\include{Annexe1}
+
+\bibliographystyle{StyleThese}
+\bibliography{These}
+
+%\printnomenclature
+
+\cleardoublepage
+\begin{vcenterpage}
+\noindent\rule[2pt]{\textwidth}{0.5pt}
+\\
+{\large\textbf{RÃ©sumÃ© :}}
+L'objectif de cette thÃ¨se est de fournir aux radiothÃ©rapeutes des outils de contourage automatique des structures Ã  risque pour la planification de la radiothÃ©rapie des tumeurs cÃ©rÃ©brales et de la rÃ©gion ORL.
+\\
+Nous utilisons pour cela un atlas anatomique, constituÃ© d'une reprÃ©sentation de l'anatomie associÃ©e Ã  une image de celle-ci. Le recalage de cet atlas permet de contourer automatiquement les organes du patient et ainsi obtenir un gain de temps considÃ©rable. Les contributions prÃ©sentÃ©es se concentrent sur trois axes.
+\\
+Tout d'abord, nous souhaitons obtenir une mÃ©thode de recalage la plus indÃ©pendante possible du rÃ©glage de ses paramÃ¨tres. Celui-ci, effectuÃ© par le mÃ©decin, se doit d'Ãªtre minimal, tout en garantissant un rÃ©sultat robuste. Nous proposons donc des mÃ©thodes de recalage permettant un meilleur contrÃ´le de la transformation obtenue, en passant par des techniques de rejet d'appariements aberrants ou en utilisant des transformations localement affines.
+\\
+Le second axe est consacrÃ© Ã  la prise en compte de structures dues Ã  la tumeur. En effet, la prÃ©sence de ces structures, absentes de l'atlas, perturbe le recalage de celui-ci. Nous proposons donc Ã©galement des mÃ©thodes afin de contourer ces structures et de les prendre en compte dans le recalage.
+\\
+Enfin, nous prÃ©sentons la construction d'un atlas ORL et son Ã©valuation sur une base de patients. Nous montrons ici la faisabilitÃ© de l'utilisation d'un atlas de cette rÃ©gion, ainsi qu'une mÃ©thode simple afin d'Ã©valuer les mÃ©thodes de recalage utilisÃ©es pour construire un atlas.
+\\
+L'ensemble de ces travaux a Ã©tÃ© implÃ©mentÃ© dans le logiciel Imago de DOSIsoft, ceci ayant permis d'effectuer une validation en conditions cliniques.
+\\
+\\
+{\large\textbf{Mots clÃ©s :}}
+Segmentation par atlas, recalage non linÃ©aire, radiothÃ©rapie, crÃ©ation d'atlas
+\\
+\noindent\rule[2pt]{\textwidth}{0.5pt}
+\end{vcenterpage}
+
+\begin{vcenterpage}
+\noindent\rule[2pt]{\textwidth}{0.5pt}
+\begin{center}
+{\large\textbf{Design and Use of Numerical Anatomical Atlases for Radiotherapy\\}}
+\end{center}
+{\large\textbf{Abstract:}}
+The main objective of this thesis is to provide radio-oncology specialists with automatic tools for delineating organs at risk of a patient undergoing a radiotherapy treatment of cerebral or head and neck tumors.
+\\
+To achieve this goal, we use an anatomical atlas, i.e. a representative anatomy associated to a clinical image representing it. The registration of this atlas allows to segment automatically the patient structures and to accelerate this process. Contributions in this method are presented on three axes.
+\\
+First, we want to obtain a registration method which is as independent as possible w.r.t. the setting of its parameters. This setting, done by the clinician, indeed needs to be minimal while guaranteeing a robust result. We therefore propose registration methods allowing to better control the obtained transformation, using outlier rejection techniques or locally affine transformations.
+\\
+The second axis is dedicated to the consideration of structures associated with the presence of the tumor. These structures, not present in the atlas, indeed lead to local errors in the atlas-based segmentation. We therefore propose methods to delineate these structures and take them into account in the registration.
+\\
+Finally, we present the construction of an anatomical atlas of the head and neck region and its evaluation on a database of patients. We show in this part the feasibility of the use of an atlas for this region, as well as a simple method to evaluate the registration methods used to build an atlas.
+\\
+All this research work has been implemented in a commercial software (Imago from DOSIsoft), allowing us to validate our results in clinical conditions.
+\\
+\\
+{\large\textbf{Keywords:}}
+Atlas-based Segmentation, non rigid registration, radiotherapy, atlas creation
+\\
+\noindent\rule[2pt]{\textwidth}{0.5pt}
+\end{vcenterpage}
+
+\end{document}
