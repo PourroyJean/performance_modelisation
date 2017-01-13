@@ -181,24 +181,7 @@ Liste outils:
   url           = {http://dx.doi.org/10.1109/ICPPW.2010.38},
 }
 
-@InProceedings{Broquedis2010,
-  author        = {Broquedis, Fran{\c c}ois and Clet-Ortega, J{\'e}r{\^o}me and Moreaud, St{\'e}phanie and Furmento, Nathalie and Goglin, Brice and Mercier, Guillaume and Thibault, Samuel and Namyst, Raymond},
-  title         = {{hwloc: a Generic Framework for Managing Hardware Affinities in HPC Applications}},
-  booktitle     = {{PDP 2010 - The 18th Euromicro International Conference on Parallel, Distributed and Network-Based Computing}},
-  year          = {2010},
-  editor        = {IEEE},
-  address       = {Pisa, Italy},
-  month         = Feb,
-  __markedentry = {[jeanpourroy:6]},
-  doi           = {10.1109/PDP.2010.67},
-  file          = {main.pdf:https\://hal.inria.fr/inria-00429889/file/main.pdf:PDF;:/Users/jeanpourroy/Google Drive/ENS HPE - These/Etat de l'art/Papier de recherche/hwloc- a Generic Framework for Managing Hardware Affinities in HPC Applications.pdf:PDF},
-  hal_id        = {inria-00429889},
-  hal_version   = {v1},
-  review        = {PResentation générale
-explication d'un exmple d'affinity
-comment utiliser l'API},
-  url           = {https://hal.inria.fr/inria-00429889},
-}
+
 
 @InProceedings{Treibig:2011:PLL:2148600.2148616,
   author    = {Treibig, Jan and Hager, Georg and Wellein, Gerhard and Meier, Michael},
@@ -219,22 +202,24 @@ comment utiliser l'API},
   url       = {http://doi.acm.org/10.1145/2148600.2148616},
 }
 
-@InProceedings{Ste95,
-  author    = {Sterling, Thomas L. and Savarese, Daniel and Becker, Donald J. and Dorband, John E. and Ranawake, Udaya A. and Packer, Charles V.},
-  title     = {{BEOWULF}: A Parallel Workstation for Scientific Computation},
+@inproceedings{Ste95,
+  added-at = {2009-01-22T02:37:22.000+0100},
+  address = {Urbana-Champain, Illinois, USA},
+  author = {Sterling, Thomas L. and Savarese, Daniel and Becker, Donald J. and Dorband, John E. and Ranawake, Udaya A. and Packer, Charles V.},
+  biburl = {http://www.bibsonomy.org/bibtex/2e83cfcaf76abbaeb4e3cc1c1c74dd30d/sidney},
   booktitle = {Proceedings of the 1995 International Conference on Parallel Processing},
-  year      = {1995},
-  editor    = {Banerjee, Prithviraj},
-  volume    = {Volume I: Archit},
-  pages     = {11--14},
-  address   = {Urbana-Champain, Illinois, USA},
-  publisher = {CRC Press},
-  added-at  = {2009-01-22T02:37:22.000+0100},
-  biburl    = {http://www.bibsonomy.org/bibtex/2e83cfcaf76abbaeb4e3cc1c1c74dd30d/sidney},
+  editor = {Banerjee, Prithviraj},
   interhash = {7a1ec4867f04c051a74b021e0f7177b5},
   intrahash = {e83cfcaf76abbaeb4e3cc1c1c74dd30d},
-  keywords  = {imported},
+  keywords = {imported},
+  pages = {11--14},
+  publisher = {CRC Press},
   timestamp = {2009-01-22T02:37:23.000+0100},
+  title = {{BEOWULF}: A Parallel Workstation for Scientific Computation},
+  volume = {Volume I: Archit},
+  year = 1995
 }
+
+
 
 @Comment{jabref-meta: databaseType:bibtex;}
