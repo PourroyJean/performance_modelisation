@@ -49,6 +49,3 @@ build
 *.mtc1
 *.out
 *.synctex.gz
-*.els
-*.nls
-*.synctex.gz
