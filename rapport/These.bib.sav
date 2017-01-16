@@ -237,4 +237,20 @@ comment utiliser l'API},
   timestamp = {2009-01-22T02:37:23.000+0100},
 }
 
+@Article{PhysRevD.80.042003,
+  author        = {Abbott, B. P. and Abbott, R. and Adhikari},
+  title         = {Einstein@Home search for periodic gravitational waves in early S5 LIGO data},
+  journal       = {Phys. Rev. D},
+  year          = {2009},
+  volume        = {80},
+  pages         = {042003},
+  month         = {Aug},
+  collaboration = {LIGO Scientific Collaboration},
+  doi           = {10.1103/PhysRevD.80.042003},
+  issue         = {4},
+  numpages      = {14},
+  publisher     = {American Physical Society},
+  url           = {http://link.aps.org/doi/10.1103/PhysRevD.80.042003},
+}
+
 @Comment{jabref-meta: databaseType:bibtex;}
