@@ -4,6 +4,7 @@ This package should be used by every ninja programmer interested by tunning or m
 ## Content
 This package contains the following tools
 *   Frequency_check: used to determine what are the different frequency used by your processor during different scenario (AVX, Turbo...)
+**  We are
 *   ...
 
 
