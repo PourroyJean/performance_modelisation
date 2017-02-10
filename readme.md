@@ -3,8 +3,8 @@ This package should be used by every ninja programmer interested by tunning or m
 
 ## Content
 This package contains the following tools
-*   Frequency_check: used to determine what are the different frequency used by your processor during different scenario (AVX, Turbo...)
-**  We are
+*   tool_Freq: used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
+
 *   ...
 
 
@@ -12,7 +12,20 @@ This package contains the following tools
 
 A step by step series of examples that tell you have to get a development env running
 
+```
+* git clone git@github.com:PourroyJean/performance_modelisation.git performance_modelisation
+* cd performance_modelisation
+* mkdir build
+* cd build
+* cmake ..
+```
 
+# Example
+Here is an example explaining how to use `tool_freq`:
+```
+* cd performance_modelisation/build/bin
+* ./tool_freq
+```
 
 
 ## Running the tests
@@ -22,14 +35,14 @@ Explain how to run the automated tests for this system
 
 ## Requirement
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [CMAKE](https://cmake.org/) - An open-source, cross-platform family of tools designed to build, test and package software
 
 
 ## Authors
 
 * **[Jean Pourroy](https://www.linkedin.com/in/pourroyjean/)** - PHD strudent at ENS Paris Saclay - HPE
+* **[Fred]()** - Ninja
+* **[Dml]()** - Ninja
 
 ## License
 
