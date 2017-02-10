@@ -36,8 +36,7 @@ int main(int argc, char *argv[]) {
         TIC
         ui64 deb = dml_cycles();
         int res = 0;
-        int j;
-        for (j = 0; j < 4; ++j) {
+        for (int j = 0; j < 4; ++j) {
             for (int i = 0; i < ARRAY_SIZE; i += stride) {
                 array[i] = 1;
                 res += array[i];
