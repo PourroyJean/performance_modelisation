@@ -3,6 +3,8 @@
 file(GLOB SOURCES "*.c")
 #message(WARNING "-- YOLO    --" ${CMAKE_SOURCE_DIR})
 
+set (CMAKE_C_FLAGS "--std=gnu99 ${CMAKE_C_FLAGS}")
+
 include_directories(${CMAKE_SOURCE_DIR}/include)
 add_executable(main_programme mainapp.c misc.c)
 add_library(lib_misc misc.c)
@@ -11,3 +13,4 @@ add_library(lib_misc misc.c)
 add_executable(tool_freq tool_freq.c misc.c)
 add_executable(tool_cacheLineSize tool_cacheLineSize.c misc.c)
 add_executable(tool_cacheSize tool_cacheSize.c misc.c)
+
