@@ -13,18 +13,18 @@ This package contains the following tools
 A step by step series of examples that tell you have to get a development env running
 
 ```
-* git clone git@github.com:PourroyJean/performance_modelisation.git performance_modelisation
-* cd performance_modelisation
-* mkdir build
-* cd build
-* cmake ..
+git clone git@github.com:PourroyJean/performance_modelisation.git performance_modelisation
+cd performance_modelisation
+mkdir build
+cd build
+cmake ..
 ```
 
 # Example
 Here is an example explaining how to use `tool_freq`:
 ```
-* cd performance_modelisation/build/bin
-* ./tool_freq
+cd performance_modelisation/build/bin
+./tool_freq
 ```
 
 
