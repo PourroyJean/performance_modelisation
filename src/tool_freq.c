@@ -8,13 +8,15 @@
 #include <sched.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+
 #include <stdbool.h>
 
 #
 
 #define NITE 100
-//#define NLOOPS 40000000UL
-#define NLOOPS 400UL
+#define NLOOPS 40000000UL
+//#define NLOOPS 400UL
 #
 
 //Select which mode you want to test OK | KO
@@ -40,7 +42,7 @@
 //AVX2
 #define FREQ_TURBO_AVX2_64      false
 #define FREQ_TURBO_AVX2_128     false
-#define FREQ_TURBO_AVX2_256     false
+#define FREQ_TURBO_AVX2_256     true
 
 
 void aloop(unsigned int n);
@@ -298,6 +300,113 @@ void freq_turbo_avx2_256() {
 }
 
 
+void usage() {
+    fprintf(stderr, "Usage: ./tool_freq [-ilwT] [file...]\n");
+}
+
+enum {
+    TURBO_ON, TURBO_OFF,        //P_TURBO
+    SCALAR, SSE, AVX,           //P_SIMD
+    ADD, MUL, FMA               //P_OPRATION
+};
+const char *paramName[] = {
+        "ON", "OFF",
+        "SCALAR","SSE","AVX",
+        "ADD","MUL","FMA"
+};
+
+int P_TURBO = TURBO_OFF;
+int P_SIMD = SCALAR;
+int P_OPERATION_TYPE = ADD;
+int P_OPERATION_NB = 1;
+int P_BIND = 0;
+int P_WIDTH = 64;
+bool P_VERBOSE = false;
+
+void parse_arguments(int argc, char **argv) {
+    char option;
+    while ((option = getopt(argc, argv, "T:P:B:O:N:W:v")) != -1) {
+        int ioptarg;
+        switch (option) {
+            case 'T':
+                if (!strcmp(optarg, paramName[TURBO_ON])) {
+                    P_TURBO = TURBO_ON;
+                } else if (!strcmp(optarg, paramName[TURBO_OFF])) {
+                    P_TURBO = TURBO_OFF;
+                } else {
+                    printf("/!\\ WRONG TURBO OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'P':
+                if (!strcmp(optarg, paramName[SCALAR])) {
+                    P_SIMD = SCALAR;
+                } else if (!strcmp(optarg, paramName[SSE])) {
+                    P_SIMD = SSE;
+                } else if (!strcmp(optarg, paramName[AVX])) {
+                    P_SIMD = AVX;
+                } else {
+                    printf("/!\\ WRONG PARALLELISM OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'B':
+                P_BIND = atoi(optarg);
+                break;
+            case 'W':
+                ioptarg = atoi(optarg);
+                if (ioptarg == 64 || ioptarg == 128 || ioptarg == 256 || ioptarg == 512) {
+                    P_WIDTH = ioptarg;
+                }
+                 else {
+                    printf("/!\\ WRONG WIDTH OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'N':
+                ioptarg = atoi(optarg);
+                if (ioptarg == 1 || ioptarg == 2 || ioptarg == 3) {
+                    P_OPERATION_NB = ioptarg;
+                }
+                 else {
+                    printf("/!\\ WRONG NUMBER OF OPERATION OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'v':
+                P_VERBOSE = true;
+                break;
+            case 'O':
+                if (!strcmp(optarg, paramName[ADD])) {
+                    P_OPERATION_TYPE = ADD;
+                } else if (!strcmp(optarg, paramName[MUL])) {
+                    P_OPERATION_TYPE = MUL;
+                } else if (!strcmp(optarg, paramName[FMA])) {
+                    P_OPERATION_TYPE = FMA;
+                } else {
+                    printf("/!\\ WRONG OPERATION OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            default:
+                usage();
+                exit(EXIT_FAILURE);
+        }
+    }
+
+
+}
+
+void summary() {
+    printf("The frequency tool was launched with:\n");
+    printf("\t -T (turbo):          %s\n", paramName[P_TURBO]);
+    printf("\t -P (parallelism)     %s\n", paramName[P_SIMD]);
+    printf("\t -W (width)           %d\n", P_WIDTH);
+    printf("\t -O (type operation)  %s\n", paramName[P_OPERATION_TYPE]);
+    printf("\t -N (nb operation)    %d\n", P_OPERATION_NB);
+    printf("\t -B (core binding)    %d\n", P_BIND);
+}
+
 int main(int argc, char **argv) {
     int i = 0;
     mycpu = 0;
@@ -307,6 +416,11 @@ int main(int argc, char **argv) {
     uint64_t rtcstart, rtcend;
     double tstart, tend;
     float ipc;
+
+    parse_arguments(argc, argv);
+    if (P_VERBOSE) summary();
+
+    return 0;
 
 
     printf("TEST:\n");
