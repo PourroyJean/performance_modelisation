@@ -1,6 +1,4 @@
-#
-
-#define _GNU_SOURCE
+#define _GNU_SOURCE             /* See feature_test_macros(7) */
 
 #include <stdio.h>
 #include <stdint.h>
@@ -8,15 +6,19 @@
 #include <sched.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <string.h>
+#include <assert.h>
 #include <stdbool.h>
-
+#include "tool_freq_misc.h"
 #
 
 #define NITE 100
 //#define NLOOPS 40000000UL
-#define NLOOPS 400UL
+#define NLOOPS 4000UL
 #
 
+const  char * paramName [1];
+Tool_freq_parameters * tool_freq_parameters;
 //Select which mode you want to test OK | KO
 //#define FREQ_TURBO_ON           true
 //#define FREQ_TURBO_OFF          true
@@ -31,8 +33,6 @@
 
 
 //Select which mode you want to test OK | KO
-#define FREQ_TURBO_ON           false
-#define FREQ_TURBO_OFF          false
 //AVX
 #define FREQ_TURBO_AVX_64       false
 #define FREQ_TURBO_AVX_128      false
@@ -40,7 +40,16 @@
 //AVX2
 #define FREQ_TURBO_AVX2_64      false
 #define FREQ_TURBO_AVX2_128     false
-#define FREQ_TURBO_AVX2_256     false
+#define FREQ_TURBO_AVX2_256     true
+
+
+//int P_SIMD = SCALAR;
+//int P_OPERATION_TYPE = ADD;
+//int P_OPERATION_NB = 1;
+//int P_BIND = 0;
+//int P_WIDTH = 64;
+//bool P_VERBOSE = false;
+//bool P_HELP = false;
 
 
 void aloop(unsigned int n);
@@ -52,33 +61,6 @@ int mycpu;
 
 double mygettime();
 
-void print_res(char *test, double ipc) {
-    printf("%s\t%d\t%4.2f\t\t\t%u", test, mycpu, ipc, (unsigned int) ((double) freq * ipc));
-    if (ipc > 1.0001)
-        printf("\t\t(Turbo ON)");
-    else
-        printf("\t\t(Turbo OFF)");
-
-    printf("\n");
-}
-
-
-void cpu_binding() {
-    int i = 0;
-    cpu_set_t mycpumask;
-
-    CPU_ZERO(&mycpumask); //Clears set, so that it contains no CPUs.
-    if (mycpu >= 0) {
-        CPU_SET(mycpu, &mycpumask); //Add CPU cpu to set
-        sched_setaffinity(0, sizeof(cpu_set_t), &mycpumask);
-    };
-    /* double-check */
-    sched_getaffinity(0, sizeof(cpu_set_t), &mycpumask);
-    for (i = 0; i < sysconf(_SC_NPROCESSORS_CONF); i++) {
-        if (CPU_ISSET(i, &mycpumask)) printf("+ Running on CPU #%d\n", i);
-    };
-    return;
-}
 
 void native_frequency() {
     unsigned int time;
@@ -93,7 +75,49 @@ void native_frequency() {
     tend = mygettime();
     time = rtcend - rtcstart;
     freq = time / (1000000 * (tend - tstart));
-    printf("+ Estimating 'native' frequency to    %u MHz\n", freq);
+    printf("NATIVE_FREQUENCY %u MHz\n", freq);
+
+}
+
+void print_res(const char *test, double ipc) {
+    printf("%s\t%d\t%4.2f\t\t\t%u", test, tool_freq_parameters->P_BIND, ipc, (unsigned int) ((double) freq * ipc));
+    if (ipc > 1.0001)
+        printf("\t\t(Turbo ON)");
+    else
+        printf("\t\t(Turbo OFF)");
+
+    printf("\n");
+}
+
+
+void freq_scalar_64_add() {
+    unsigned int time;
+    uint64_t rtcstart, rtcend;
+    int i;
+    double ipc;
+
+    //On espere 10 cycles
+    for (i = 0; i < NITE; i++) {
+        rtcstart = rdtsc();
+        __asm__ ("aloopqq164: "
+                "       add    $0x1,%%ebx;"
+                "       add    $0x1,%%ebx;"
+                "       add    $0x1,%%ebx;"
+                "       add    $0x1,%%ebx;"
+                "       add    $0x1,%%ebx;"
+                "       add    $0x1,%%ebx;"
+                "       add    $0x1,%%ebx;"
+                "       add    $0x1,%%ebx;"
+                "       add    $0x1,%%ebx;"
+                "       add    $0x1,%%ebx;"
+                "       sub    $0x1,%%eax;"
+                "       jnz    aloopqq164" : : "a" (NLOOPS)
+        );
+        rtcend = rdtsc();
+    }
+    time = rtcend - rtcstart;
+    ipc = (double) NLOOPS *10 / (double) time;
+    print_res("1 ADD par CYCLE  ", ipc);
 
 }
 
@@ -298,48 +322,122 @@ void freq_turbo_avx2_256() {
 }
 
 
+
+
+void help() {
+    printf("This tool should be launched with the following parameters ([] = default):\n");
+    printf("\t -P (parallelism)     [SCALAR], SSE, AVX\n");
+    printf("\t -W (width)           [64] 128 256 512\n");
+    printf("\t -O (type operation)  [ADD] MUL FMA\n");
+    printf("\t -N (nb operation)    [1] 2 3\n");
+    printf("\t -B (core binding)    [0] 1 2 ... NbCore\n");
+}
+
+
+void usage() {
+    fprintf(stderr,
+            "Usage: ./tool_freq [-P  PARALLELISM] [-W WIDTH] [-O OPERATION] [-N NUMBEROP] [-B BINDING] [-v verbose]\n");
+    help();
+}
+
+
+
+void cpu_binding() {
+    int i = 0;
+//    cpu_set_t mycpumask;
+//
+//    CPU_ZERO(&mycpumask); //Clears set, so that it contains no CPUs.
+//    if (P_BIND >= 0) {
+//        CPU_SET(P_BIND, &mycpumask); //Add CPU cpu to set
+//        sched_setaffinity(0, sizeof(cpu_set_t), &mycpumask);
+//    };
+//    /* double-check */
+//    sched_getaffinity(0, sizeof(cpu_set_t), &mycpumask);
+//    for (i = 0; i < sysconf(_SC_NPROCESSORS_CONF); i++) {
+//        if (CPU_ISSET(i, &mycpumask)) printf("+ Running on CPU #%d\n", i);
+//    };
+    return;
+}
+
+
 int main(int argc, char **argv) {
     int i = 0;
     mycpu = 0;
-    cpu_set_t mycpumask;
+//    cpu_set_t mycpumask;
     unsigned int time;
     unsigned int res;
     uint64_t rtcstart, rtcend;
     double tstart, tend;
     float ipc;
 
+    //----------- ARGUMENT PARSING --------------
+    Tool_freq_parameters * tool_freq_parameters = new Tool_freq_parameters();
+//TODO
+    tool_freq_parameters->parse_arguments(argc, argv);
+//    check_arguments();
+    if (tool_freq_parameters->P_HELP) {
+        help();
+//        exit(0);
+    }
+    if (tool_freq_parameters->P_VERBOSE) {
+        printf("The frequency tool was launched with:\n");
+        tool_freq_parameters->parameter_summary();
+    };
 
-    printf("TEST:\n");
-    printf("FREQ_TURBO_ON           %s \n", (FREQ_TURBO_ON ? "TRUE" : "FALSE"));
-    printf("FREQ_TURBO_OFF          %s \n", (FREQ_TURBO_OFF ? "TRUE" : "FALSE"));
-    printf("FREQ_TURBO_AVX_64       %s \n", (FREQ_TURBO_AVX_64 ? "TRUE" : "FALSE"));
-    printf("FREQ_TURBO_AVX_128      %s \n", (FREQ_TURBO_AVX_128 ? "TRUE" : "FALSE"));
-    printf("FREQ_TURBO_AVX_256      %s \n", (FREQ_TURBO_AVX_256 ? "TRUE" : "FALSE"));
-    printf("FREQ_TURBO_AVX2_64      %s \n", (FREQ_TURBO_AVX2_64 ? "TRUE" : "FALSE"));
-    printf("FREQ_TURBO_AVX2_128     %s \n", (FREQ_TURBO_AVX2_128 ? "TRUE" : "FALSE"));
-    printf("FREQ_TURBO_AVX2_256     %s \n", (FREQ_TURBO_AVX2_256 ? "TRUE" : "FALSE"));
-
-
-
-    /* Retrieve which CPU to bind to */
-    if (argv[1]) mycpu = atoi(argv[1]);
+    //----------- BINDING ----------------------
     cpu_binding();
 
+    //----------- EXECUTING --------------------
 
-    /* Compute native frequency */
     native_frequency();
 
+    if (tool_freq_parameters->P_SIMD == SCALAR) {
+        if (tool_freq_parameters->P_OPERATION_TYPE == ADD) {
+            freq_scalar_64_add();
+        }
+        if (tool_freq_parameters->P_OPERATION_TYPE == MUL) {
+            freq_scalar_64_add();
+        }
 
-    /* Go through each test selected*/
-    printf("OPERARTION\tCORE_ID\tIPC (Expect 1.0) \tFreq (Mhz) \tTurbo\n");
+    } else if (tool_freq_parameters->P_SIMD == SSE) {
+
+    } else if (tool_freq_parameters->P_SIMD == AVX) {
+
+    }
+
+
+    return 0;
+
+//    printf("FREQ_TURBO_ON           %s \n", (FREQ_TURBO_ON ? "TRUE" : "FALSE"));
+//    printf("FREQ_TURBO_OFF          %s \n", (FREQ_TURBO_OFF ? "TRUE" : "FALSE"));
+//    printf("FREQ_TURBO_AVX_64       %s \n", (FREQ_TURBO_AVX_64 ? "TRUE" : "FALSE"));
+//    printf("FREQ_TURBO_AVX_128      %s \n", (FREQ_TURBO_AVX_128 ? "TRUE" : "FALSE"));
+//    printf("FREQ_TURBO_AVX_256      %s \n", (FREQ_TURBO_AVX_256 ? "TRUE" : "FALSE"));
+//    printf("FREQ_TURBO_AVX2_64      %s \n", (FREQ_TURBO_AVX2_64 ? "TRUE" : "FALSE"));
+//    printf("FREQ_TURBO_AVX2_128     %s \n", (FREQ_TURBO_AVX2_128 ? "TRUE" : "FALSE"));
+//    printf("FREQ_TURBO_AVX2_256     %s \n", (FREQ_TURBO_AVX2_256 ? "TRUE" : "FALSE"));
+//
+//
+//
+//    /* Retrieve which CPU to bind to */
+//    if (argv[1]) mycpu = atoi(argv[1]);
+//    cpu_binding();
+//
+//
+//    /* Compute native frequency */
+//    native_frequency();
+//
+//
+//    /* Go through each test selected*/
+//    printf("OPERARTION\tCORE_ID\tIPC (Expect 1.0) \tFreq (Mhz) \tTurbo\n");
 //    if (FREQ_TURBO_ON) { freq_turbo_on(); }
 //    if (FREQ_TURBO_OFF) { freq_turbo_off(); }
-    if (FREQ_TURBO_AVX_64) { freq_turbo_avx_64(); }
-    if (FREQ_TURBO_AVX_128) { freq_turbo_avx_128(); }
-    if (FREQ_TURBO_AVX_256) { freq_turbo_avx_256(); }
-    if (FREQ_TURBO_AVX2_64) { freq_turbo_avx2_64(); }
-    if (FREQ_TURBO_AVX2_128) { freq_turbo_avx2_128(); }
-    if (FREQ_TURBO_AVX2_256) { freq_turbo_avx2_256(); }
+//    if (FREQ_TURBO_AVX_64) { freq_turbo_avx_64(); }
+//    if (FREQ_TURBO_AVX_128) { freq_turbo_avx_128(); }
+//    if (FREQ_TURBO_AVX_256) { freq_turbo_avx_256(); }
+//    if (FREQ_TURBO_AVX2_64) { freq_turbo_avx2_64(); }
+//    if (FREQ_TURBO_AVX2_128) { freq_turbo_avx2_128(); }
+//    if (FREQ_TURBO_AVX2_256) { freq_turbo_avx2_256(); }
 
     return 0;
 }
