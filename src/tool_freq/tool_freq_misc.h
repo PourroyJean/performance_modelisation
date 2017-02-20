@@ -1,34 +1,19 @@
-#ifndef __tool_freq_misc_H__
-#define __tool_freq_misc_H__
+#ifndef PERFORMANCE_MODELISATION_TOOL_FREQ_MISC_H
+#define PERFORMANCE_MODELISATION_TOOL_FREQ_MISC_H
 
-#include <map>
-#include <string>
 
-using namespace std;
-enum {
-    SCALAR, SSE, AVX, ADD, MUL, FMA
-};
 
-static const string Parameter [] = {"SCALAR",  "SSE",  "AVX",  "ADD",  "MUL",  "FMA"};
-static std::map<int,std::string> mapParameter = {{SCALAR,"SCALAR"}, {SSE, "SSE"}, {AVX, "AVX"}, {ADD, "ADD"}, {MUL, "MUL"}, {FMA, "FMA"}};
-class Tool_freq_parameters {
-    public:
-    int P_SIMD;
-    int P_OPERATION_TYPE;
-    int P_OPERATION_NB;
-    int P_BIND;
-    int P_WIDTH;
-    bool P_VERBOSE;
-    bool P_HELP;
 
-//    std::map<char,std::string> mapParameter;
+#define DEBUG 1
+#ifdef DEBUG
+# define DEBUG_PRINT(x) printf (x)
+#else
+# define DEBUG_PRINT(x) do {} while (0)
+#endif
 
-    Tool_freq_parameters();
 
-    void check_arguments();
-    void parse_arguments(int argc, char **argv);
-    void parameter_summary();
 
-};
+void usage ();
 
-#endif //__tool_freq_misc_H__
+
+#endif //PERFORMANCE_MODELISATION_TOOL_FREQ_MISC_H
