@@ -11,6 +11,7 @@
 #include <stdbool.h>
 #include "tool_freq_parameters.h"
 #include "tool_freq_generators.h"
+#include "tool_freq_misc.h"
 #
 
 #define NITE 100
@@ -18,8 +19,6 @@
 #define NLOOPS 4000UL
 #
 
-
-#define DEBUG
 
 
 
@@ -339,24 +338,27 @@ int main(int argc, char **argv) {
 
     //------------ CODE GENERATION  -------------
     Tool_freq_generators * generator = new Tool_freq_generators ();
-    generator->generate_assembly(tool_freq_parameters);
-
-    //------------ ASSEMBLY EXECUTION -----------
-    system("g++  assembly_generated.cpp");
-
+    generator->Generate_code(tool_freq_parameters);
 
 
     return 0;
 
 
+    //------------ ASSEMBLY COMPILATION ---------
+    system("bash -c \"g++ -o " ASM_FILE_exe " " ASM_FILE_source  "\"");
 
     //----------- BINDING ----------------------
     //We let the kernel bind the process himself if no binding are set
     if (tool_freq_parameters->P_BIND == -1) cpu_binding();
 
+
     //----------- EXECUTING --------------------
+    system("./" ASM_FILE_exe);
+
 
     native_frequency();
+
+
 
     if (tool_freq_parameters->P_SIMD == SCALAR) {
             freq_scalar_64_add();

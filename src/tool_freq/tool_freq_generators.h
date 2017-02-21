@@ -5,6 +5,7 @@
 #ifndef PERFORMANCE_MODELISATION_TOOL_FREQ_GENERATORS_H
 #define PERFORMANCE_MODELISATION_TOOL_FREQ_GENERATORS_H
 
+#include <vector>
 #import "tool_freq_parameters.h"
 
 class Tool_freq_generators {
@@ -16,14 +17,29 @@ private:
 
     void generate_header();
 
-public:
-    string P_register_name;
-    unsigned P_next_register = 0;
+    void generate_assembly();
+
+    void generate_instructions();
+
+    void Init_Operation_set(Tool_freq_parameters *t);
+
+    void Init_Generator(Tool_freq_parameters *t);
 
     FILE *P_FPC;
     FILE *P_FPH;
 
-    string generate_assembly(Tool_freq_parameters *t);
+public:
+    string mRegister_name;
+    unsigned mNext_register;
+    string mPrefix;
+    std::vector<std::string> *mOperations_set = new vector<string>();
+    std::vector<std::string> *mInstructions_set = new vector<string>();
+
+    string mSuffix;
+    string mPrecision;
+
+
+    string Generate_code(Tool_freq_parameters *t);
 
     Tool_freq_generators();
 

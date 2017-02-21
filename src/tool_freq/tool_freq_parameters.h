@@ -24,6 +24,7 @@ public:
     string P_OPERATIONS;
     int P_BIND;
     bool P_DEPENDENCY;
+    string P_PRECISION;
     bool P_VERBOSE;
     bool P_HELP;
 
