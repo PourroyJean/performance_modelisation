@@ -4,11 +4,10 @@
 D_BUILD=$(pwd)
 
 
+echo "# COMPILNG "
 make  ||  exit 1
-echo "##"
+
 echo "# RUNNING #"
-echo "##"
-echo ""
 ./bin/tool_freq
 
 

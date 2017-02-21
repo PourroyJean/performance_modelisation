@@ -302,6 +302,7 @@ void freq_turbo_avx2_256() {
 
 
 
+
 void cpu_binding() {
     int i = 0;
 //    cpu_set_t mycpumask;
@@ -341,8 +342,6 @@ int main(int argc, char **argv) {
     generator->Generate_code(tool_freq_parameters);
 
 
-    return 0;
-
 
     //------------ ASSEMBLY COMPILATION ---------
     system("bash -c \"g++ -o " ASM_FILE_exe " " ASM_FILE_source  "\"");
@@ -354,6 +353,9 @@ int main(int argc, char **argv) {
 
     //----------- EXECUTING --------------------
     system("./" ASM_FILE_exe);
+
+
+    return 0;
 
 
     native_frequency();
