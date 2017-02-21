@@ -341,6 +341,8 @@ int main(int argc, char **argv) {
     Tool_freq_generators * generator = new Tool_freq_generators ();
     generator->generate_assembly(tool_freq_parameters);
 
+    //------------ ASSEMBLY EXECUTION -----------
+    system("g++  assembly_generated.cpp");
 
 
 
