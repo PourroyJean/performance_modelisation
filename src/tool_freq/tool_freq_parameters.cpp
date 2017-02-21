@@ -12,26 +12,28 @@ Tool_freq_parameters::Tool_freq_parameters() {
     P_OPERATIONS = "aaaa";
     P_BIND = -1;
     P_DEPENDENCY = false;
+    P_PRECISION = "double";
     P_VERBOSE = false;
     P_HELP = false;
 };
 
 
 void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
-    const char *const short_opts = "I:W:jkBvh";
+    const char *const short_opts = "I:W:P:jkBvh";
     const option long_opts[] = {
             {"instruction", required_argument, nullptr, 'I'},
             {"width",       required_argument, nullptr, 'W'},
             {"operations",  required_argument, nullptr, 'O'},
             {"bind",        required_argument, nullptr, 'B'},
             {"dependency",  required_argument, nullptr, 'D'},
+            {"precision",   required_argument, nullptr, 'P'},
             {"verbose",     no_argument,       nullptr, 'v'},
             {"help",        no_argument,       nullptr, 'h'},
             {nullptr, 0,                       nullptr, 0}
     };
 
     char option;
-
+    string precision;
 
     while ((option = getopt_long(argc, argv, short_opts, long_opts, nullptr)) != -1) {
         int ioptarg;
@@ -70,6 +72,17 @@ void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
                 break;
             case 'D':
                 P_DEPENDENCY = atoi(optarg);
+                break;
+            case 'P':
+                precision = optarg;
+                if (!precision.compare("single") || !precision.compare("double")) {
+                    this->P_PRECISION = optarg;
+                } else {
+                    printf("/!\\ WRONG PRECISION OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+
 
             case 'v':
                 this->P_VERBOSE = true;
@@ -100,9 +113,8 @@ void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
 
 
 void Tool_freq_parameters::check_operations() {
-    cout << P_OPERATIONS;
     for (char &c : P_OPERATIONS) {
-        if (c != 'a' && c != 'A' && c != 'f' && c != 'F' && c != 'm' && c != 'M'){
+        if (c != 'a' && c != 'A' && c != 'f' && c != 'F' && c != 'm' && c != 'M') {
             cout << "/!\\ WRONG OPERATIONS " << c << endl;
         }
     }
@@ -115,6 +127,7 @@ void Tool_freq_parameters::parameter_summary() {
     cout << "\t -O <operationsl list> " << this->P_OPERATIONS << endl;
     cout << "\t -B (core binding)     " << this->P_BIND << endl;
     cout << "\t -D (op dependency)    " << std::boolalpha << this->P_DEPENDENCY << endl;
+    cout << "\t -P (op precision)     " << this->P_PRECISION << endl;
 
 }
 
@@ -127,6 +140,7 @@ void Tool_freq_parameters::help() {
     cout << "\t -W, --width         [64] 128 256 512" << endl;
     cout << "\t -O                  [ADD] MUL FMA" << endl;
     cout << "\t -B,--binding        [0] 1 2 ... NbCore\n";
+    cout << "\t -P,--precision      single [double]\n";
     cout << "\t -h,--help\n";
 
 }
