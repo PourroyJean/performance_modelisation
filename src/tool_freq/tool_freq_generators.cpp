@@ -22,8 +22,6 @@ void Tool_freq_generators::generate_source(){
     WC("cout << \"coucou\";");
     WC("}")
     WC("")
-    WC("")
-    WC("")
 
 }
 void Tool_freq_generators::generate_header(){
