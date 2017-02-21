@@ -21,8 +21,6 @@ private:
 
     void generate_instructions();
 
-    void Init_Operation_set(Tool_freq_parameters *t);
-
     void Init_Generator(Tool_freq_parameters *t);
 
     FILE *P_FPC;
