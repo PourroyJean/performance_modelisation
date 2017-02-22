@@ -9,6 +9,10 @@
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <iostream>
+#include <iomanip>
+#include "tool_freq_parameters.h"
+#include "tool_freq_generators.h"
 #include "tool_freq_misc.h"
 #
 
@@ -17,40 +21,11 @@
 #define NLOOPS 4000UL
 #
 
+
+
+
 const  char * paramName [1];
 Tool_freq_parameters * tool_freq_parameters;
-//Select which mode you want to test OK | KO
-//#define FREQ_TURBO_ON           true
-//#define FREQ_TURBO_OFF          true
-////AVX
-//#define FREQ_TURBO_AVX_64       true
-//#define FREQ_TURBO_AVX_128      true
-//#define FREQ_TURBO_AVX_256      true
-////AVX2
-//#define FREQ_TURBO_AVX2_64      true
-//#define FREQ_TURBO_AVX2_128     true
-//#define FREQ_TURBO_AVX2_256     true
-
-
-//Select which mode you want to test OK | KO
-//AVX
-#define FREQ_TURBO_AVX_64       false
-#define FREQ_TURBO_AVX_128      false
-#define FREQ_TURBO_AVX_256      true
-//AVX2
-#define FREQ_TURBO_AVX2_64      false
-#define FREQ_TURBO_AVX2_128     false
-#define FREQ_TURBO_AVX2_256     true
-
-
-//int P_SIMD = SCALAR;
-//int P_OPERATION_TYPE = ADD;
-//int P_OPERATION_NB = 1;
-//int P_BIND = 0;
-//int P_WIDTH = 64;
-//bool P_VERBOSE = false;
-//bool P_HELP = false;
-
 
 void aloop(unsigned int n);
 
@@ -324,21 +299,9 @@ void freq_turbo_avx2_256() {
 
 
 
-void help() {
-    printf("This tool should be launched with the following parameters ([] = default):\n");
-    printf("\t -P (parallelism)     [SCALAR], SSE, AVX\n");
-    printf("\t -W (width)           [64] 128 256 512\n");
-    printf("\t -O (type operation)  [ADD] MUL FMA\n");
-    printf("\t -N (nb operation)    [1] 2 3\n");
-    printf("\t -B (core binding)    [0] 1 2 ... NbCore\n");
-}
 
 
-void usage() {
-    fprintf(stderr,
-            "Usage: ./tool_freq [-P  PARALLELISM] [-W WIDTH] [-O OPERATION] [-N NUMBEROP] [-B BINDING] [-v verbose]\n");
-    help();
-}
+
 
 
 
@@ -372,72 +335,47 @@ int main(int argc, char **argv) {
 
     //----------- ARGUMENT PARSING --------------
     Tool_freq_parameters * tool_freq_parameters = new Tool_freq_parameters();
-//TODO
     tool_freq_parameters->parse_arguments(argc, argv);
-//    check_arguments();
-    if (tool_freq_parameters->P_HELP) {
-        help();
-//        exit(0);
-    }
-    if (tool_freq_parameters->P_VERBOSE) {
-        printf("The frequency tool was launched with:\n");
-        tool_freq_parameters->parameter_summary();
-    };
+    tool_freq_parameters->check_arguments();
+
+
+    //------------ CODE GENERATION  -------------
+    Tool_freq_generators * generator = new Tool_freq_generators (tool_freq_parameters);
+    generator->Generate_code();
+
+
+
+    //------------ ASSEMBLY COMPILATION ---------
+    system("bash -c \"g++ -o " ASM_FILE_exe " " ASM_FILE_source  "\"");
 
     //----------- BINDING ----------------------
-    cpu_binding();
+    //We let the kernel bind the process himself if no binding are set
+    if (tool_freq_parameters->P_BIND == -1) cpu_binding();
+
 
     //----------- EXECUTING --------------------
 
-    native_frequency();
+    rtcstart = rdtsc();
+    system("./" ASM_FILE_exe);
+    rtcend = rdtsc();
+    time = rtcend - rtcstart;
+    long long int NbInstruction = tool_freq_parameters->P_OPERATIONS.size();
 
-    if (tool_freq_parameters->P_SIMD == SCALAR) {
-        if (tool_freq_parameters->P_OPERATION_TYPE == ADD) {
-            freq_scalar_64_add();
-        }
-        if (tool_freq_parameters->P_OPERATION_TYPE == MUL) {
-            freq_scalar_64_add();
-        }
+//    float IPC = (float)a / (float)b;
+    float IPC = (float) (NbInstruction * BENCH_NB_ITERATION) / (float)time;
 
-    } else if (tool_freq_parameters->P_SIMD == SSE) {
+    cout << " Nb Instruction    " << NbInstruction * BENCH_NB_ITERATION << endl
+         << " Nb Cycle          " << time << endl
+         << " IPC               " ;
+    cout<< fixed <<setprecision(10) <<  IPC << endl;
 
-    } else if (tool_freq_parameters->P_SIMD == AVX) {
-
-    }
 
 
     return 0;
 
-//    printf("FREQ_TURBO_ON           %s \n", (FREQ_TURBO_ON ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_OFF          %s \n", (FREQ_TURBO_OFF ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX_64       %s \n", (FREQ_TURBO_AVX_64 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX_128      %s \n", (FREQ_TURBO_AVX_128 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX_256      %s \n", (FREQ_TURBO_AVX_256 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX2_64      %s \n", (FREQ_TURBO_AVX2_64 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX2_128     %s \n", (FREQ_TURBO_AVX2_128 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX2_256     %s \n", (FREQ_TURBO_AVX2_256 ? "TRUE" : "FALSE"));
-//
-//
-//
-//    /* Retrieve which CPU to bind to */
-//    if (argv[1]) mycpu = atoi(argv[1]);
-//    cpu_binding();
-//
-//
-//    /* Compute native frequency */
-//    native_frequency();
-//
-//
-//    /* Go through each test selected*/
-//    printf("OPERARTION\tCORE_ID\tIPC (Expect 1.0) \tFreq (Mhz) \tTurbo\n");
-//    if (FREQ_TURBO_ON) { freq_turbo_on(); }
-//    if (FREQ_TURBO_OFF) { freq_turbo_off(); }
-//    if (FREQ_TURBO_AVX_64) { freq_turbo_avx_64(); }
-//    if (FREQ_TURBO_AVX_128) { freq_turbo_avx_128(); }
-//    if (FREQ_TURBO_AVX_256) { freq_turbo_avx_256(); }
-//    if (FREQ_TURBO_AVX2_64) { freq_turbo_avx2_64(); }
-//    if (FREQ_TURBO_AVX2_128) { freq_turbo_avx2_128(); }
-//    if (FREQ_TURBO_AVX2_256) { freq_turbo_avx2_256(); }
+
+    native_frequency();
+
 
     return 0;
 }
