@@ -17,11 +17,10 @@ add_custom_target(CopyScript
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_compile.sh ${CMAKE_BINARY_DIR}/bin/tool_freq_compile.sh
         )
 
-add_library(lib_tool_freq tool_freq_misc.cpp)
+add_library(lib_tool_freq tool_freq_parameters.cpp tool_freq_misc.cpp tool_freq_generators.cpp)
 
 
 #add_executable(tool_freq tool_freq.c misc.c)
-add_executable(tool_freq tool_freq.cxx tool_freq_misc.cpp)
-add_executable(tool_freq_generator assembly_generator.cpp)
+add_executable(tool_freq tool_freq.cxx tool_freq_parameters.cpp tool_freq_misc.cpp tool_freq_generators.cpp)
 
 add_dependencies(tool_freq CopyScript)
