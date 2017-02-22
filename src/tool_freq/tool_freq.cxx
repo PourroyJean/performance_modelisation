@@ -9,6 +9,8 @@
 #include <string.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <iostream>
+#include <iomanip>
 #include "tool_freq_parameters.h"
 #include "tool_freq_generators.h"
 #include "tool_freq_misc.h"
@@ -352,7 +354,21 @@ int main(int argc, char **argv) {
 
 
     //----------- EXECUTING --------------------
+
+    rtcstart = rdtsc();
     system("./" ASM_FILE_exe);
+    rtcend = rdtsc();
+    time = rtcend - rtcstart;
+    long long int NbInstruction = tool_freq_parameters->P_OPERATIONS.size();
+
+//    float IPC = (float)a / (float)b;
+    float IPC = (float) (NbInstruction * BENCH_NB_ITERATION) / (float)time;
+
+    cout << " Nb Instruction    " << NbInstruction * BENCH_NB_ITERATION << endl
+         << " Nb Cycle          " << time << endl
+         << " IPC               " ;
+    cout<< fixed <<setprecision(10) <<  IPC << endl;
+
 
 
     return 0;
@@ -360,48 +376,6 @@ int main(int argc, char **argv) {
 
     native_frequency();
 
-
-
-    if (tool_freq_parameters->P_SIMD == SCALAR) {
-            freq_scalar_64_add();
-    } else if (tool_freq_parameters->P_SIMD == SSE) {
-
-    } else if (tool_freq_parameters->P_SIMD == AVX) {
-
-    }
-
-
-
-//    printf("FREQ_TURBO_ON           %s \n", (FREQ_TURBO_ON ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_OFF          %s \n", (FREQ_TURBO_OFF ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX_64       %s \n", (FREQ_TURBO_AVX_64 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX_128      %s \n", (FREQ_TURBO_AVX_128 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX_256      %s \n", (FREQ_TURBO_AVX_256 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX2_64      %s \n", (FREQ_TURBO_AVX2_64 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX2_128     %s \n", (FREQ_TURBO_AVX2_128 ? "TRUE" : "FALSE"));
-//    printf("FREQ_TURBO_AVX2_256     %s \n", (FREQ_TURBO_AVX2_256 ? "TRUE" : "FALSE"));
-//
-//
-//
-//    /* Retrieve which CPU to bind to */
-//    if (argv[1]) mycpu = atoi(argv[1]);
-//    cpu_binding();
-//
-//
-//    /* Compute native frequency */
-//    native_frequency();
-//
-//
-//    /* Go through each test selected*/
-//    printf("OPERARTION\tCORE_ID\tIPC (Expect 1.0) \tFreq (Mhz) \tTurbo\n");
-//    if (FREQ_TURBO_ON) { freq_turbo_on(); }
-//    if (FREQ_TURBO_OFF) { freq_turbo_off(); }
-//    if (FREQ_TURBO_AVX_64) { freq_turbo_avx_64(); }
-//    if (FREQ_TURBO_AVX_128) { freq_turbo_avx_128(); }
-//    if (FREQ_TURBO_AVX_256) { freq_turbo_avx_256(); }
-//    if (FREQ_TURBO_AVX2_64) { freq_turbo_avx2_64(); }
-//    if (FREQ_TURBO_AVX2_128) { freq_turbo_avx2_128(); }
-//    if (FREQ_TURBO_AVX2_256) { freq_turbo_avx2_256(); }
 
     return 0;
 }
