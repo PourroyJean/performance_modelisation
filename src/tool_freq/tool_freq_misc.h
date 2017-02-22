@@ -15,6 +15,8 @@
 #define ASM_FILE_source "assembly_generated.cpp"
 #define ASM_FILE_exe "assembly"
 
+#define BENCH_NB_ITERATION 10000
+
 
 
 
