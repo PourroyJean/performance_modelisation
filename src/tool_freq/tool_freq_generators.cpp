@@ -43,14 +43,48 @@ void Tool_freq_generators::generate_source() {
     WC("#include <iostream>");
     WC("#include <unistd.h>");
     WC("using namespace std;");
+
+
     WC("int main(int argc, char **argv) {");
     WC("cout << \"coucou\\n\";");
 
     generate_assembly();
 
+    WC("}");
+
+
+    /*
+     *     WC("#include <string.h>");
+    WC("#include <stdio.h>");
+    WC("#include <iostream>");
+    WC("#include <unistd.h>");
+    WC("using namespace std;");
+
+    WC("uint64_t rdtsc() {");
+    WC("uint32_t lo, hi;");
+    WC("__asm__ __volatile__ (\"rdtsc\" : \"=a\" (lo), \"=d\" (hi));");
+    WC("return (uint64_t) hi << 32 | lo;}");
+
+
+    WC("int main(int argc, char **argv) {");
+    WC("cout << \"coucou\\n\";");
+    WC("unsigned int time;");
+    WC("uint64_t rtcstart, rtcend;");
+    WC("int i;");
+    WC("double ipc;");
+    //On espere 10 cycles
+    WC("for (i = 0; i < 1000; i++) {");
+    WC("rtcstart = rdtsc();");
+
+    generate_assembly();
 
     WC("}")
-    WC("")
+    WC("rtcend = rdtsc();");
+    WC("time = rtcend - rtcstart;");
+    WC("ipc = (double) 1000000 *10 / (double) time;");
+    WC("cout << \"mon cycle interne\" << time;");
+    WC("}");
+     */
 
 }
 
