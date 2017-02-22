@@ -44,7 +44,7 @@ void Tool_freq_generators::generate_source() {
     WC("#include <unistd.h>");
     WC("using namespace std;");
     WC("int main(int argc, char **argv) {");
-    WC("cout << \"coucou\";");
+    WC("cout << \"coucou\\n\";");
 
     generate_assembly();
 
