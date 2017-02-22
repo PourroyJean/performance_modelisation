@@ -8,7 +8,7 @@ echo "# COMPILNG "
 make  ||  exit 1
 
 echo "# RUNNING #"
-./bin/tool_freq
+./bin/tool_freq $*
 
 
 
