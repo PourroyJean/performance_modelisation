@@ -21,14 +21,21 @@ private:
 
     void generate_instructions();
 
-    void Init_Generator(Tool_freq_parameters *t);
+    void Init_Generator();
+
+    int Get_register_source();
+
+    int Get_register_cible();
+
+
 
     FILE *P_FPC;
     FILE *P_FPH;
 
 public:
+    Tool_freq_parameters * mParameters;
     string mRegister_name;
-    unsigned mNext_register;
+    unsigned mPrevious_target_register;
     string mPrefix;
     std::vector<std::string> *mOperations_set = new vector<string>();
     std::vector<std::string> *mInstructions_set = new vector<string>();
@@ -37,9 +44,9 @@ public:
     string mPrecision;
 
 
-    string Generate_code(Tool_freq_parameters *t);
+    string Generate_code();
 
-    Tool_freq_generators();
+    Tool_freq_generators(Tool_freq_parameters *param);
 
     virtual ~Tool_freq_generators();
 };

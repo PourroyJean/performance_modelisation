@@ -2,6 +2,7 @@
 #include <cstdlib>
 #include "tool_freq_parameters.h"
 #include <string.h>
+#include <sstream>      // std::istringstream
 #include <iostream>
 #include "tool_freq_misc.h"
 
@@ -19,22 +20,21 @@ Tool_freq_parameters::Tool_freq_parameters() {
 
 
 void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
-    const char *const short_opts = "I:W:P:jkBvh";
+    const char *const short_opts = "I:W:O:B:D:P:vh";
     const option long_opts[] = {
             {"instruction", required_argument, nullptr, 'I'},
             {"width",       required_argument, nullptr, 'W'},
             {"operations",  required_argument, nullptr, 'O'},
             {"bind",        required_argument, nullptr, 'B'},
             {"dependency",  required_argument, nullptr, 'D'},
-            {"precision",   required_argument, nullptr, 'P'},
+            {"tmp_str",   required_argument, nullptr, 'P'},
             {"verbose",     no_argument,       nullptr, 'v'},
             {"help",        no_argument,       nullptr, 'h'},
             {nullptr, 0,                       nullptr, 0}
     };
 
     char option;
-    string precision;
-
+    string tmp_str;
     while ((option = getopt_long(argc, argv, short_opts, long_opts, nullptr)) != -1) {
         int ioptarg;
         switch (option) {
@@ -71,35 +71,30 @@ void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
                 }
                 break;
             case 'D':
-                P_DEPENDENCY = atoi(optarg);
+                tmp_str = optarg;
+                if (!tmp_str.compare("true") || !tmp_str.compare("false")){
+                    bool b;
+                    istringstream(optarg) >> std::boolalpha >> b;
+                    P_DEPENDENCY = b;
+                }
+                else{
+                    printf("/!\\ WRONG DEPENDENCY OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+
                 break;
             case 'P':
-                precision = optarg;
-                if (!precision.compare("single") || !precision.compare("double")) {
+                tmp_str = optarg;
+                if (!tmp_str.compare("single") || !tmp_str.compare("double")) {
                     this->P_PRECISION = optarg;
                 } else {
                     printf("/!\\ WRONG PRECISION OPTION: %s\n", optarg);
                     exit(EXIT_FAILURE);
                 }
                 break;
-
-
             case 'v':
                 this->P_VERBOSE = true;
                 break;
-//            case 'O':
-//                if (!strcmp(optarg, mapParameter[ADD])) {
-//                    this->P_OPERATION_TYPE = ADD;
-//                } else if (!strcmp(optarg, mapParameter[MUL])) {
-//                    this->P_OPERATION_TYPE = MUL;
-//                } else if (!strcmp(optarg, mapParameter[FMA])) {
-//                    this->P_OPERATION_TYPE = FMA;
-//                } else {
-//                    printf("/!\\ WRONG OPERATION OPTION: %s\n", optarg);
-//                    exit(EXIT_FAILURE);
-//
-//                }
-//                break;
             case 'h':
                 this->P_HELP = true;
                 break;

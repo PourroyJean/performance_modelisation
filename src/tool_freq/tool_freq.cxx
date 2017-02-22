@@ -338,8 +338,8 @@ int main(int argc, char **argv) {
 
 
     //------------ CODE GENERATION  -------------
-    Tool_freq_generators * generator = new Tool_freq_generators ();
-    generator->Generate_code(tool_freq_parameters);
+    Tool_freq_generators * generator = new Tool_freq_generators (tool_freq_parameters);
+    generator->Generate_code();
 
 
 
