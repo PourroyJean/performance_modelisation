@@ -23,4 +23,6 @@ $SCRIPT_DIR/GRE.jini.sh
 
 echo "Lancement en background" ; $BIN &
 
+$SCRIPT_DIR/GRE.jop.sh
+
 #./GRE.obj.sh $BIN
