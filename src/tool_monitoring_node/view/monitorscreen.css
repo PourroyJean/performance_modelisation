@@ -1,0 +1,530 @@
+#Monitoring-screen {
+
+    width: 90%;
+    height: 750px;
+    position: relative;
+}
+.howto {
+    position: absolute;
+    top: 2%;
+    right: 2%;
+}
+
+.socket{
+    width: 40%;
+    height: 50%;
+    border: 3px solid blue;
+    position: absolute;
+    top: 20%;
+}
+
+#socket_0 { left: 0%;}
+#socket_1 { left: 60%;}
+
+.equalizer {
+    width: 77%;
+    height: 75%;
+    border: 3px solid black;
+    left: 15%;
+    top: 70px;
+    position: relative;
+    display: inline-block;
+
+}
+
+.membw-container {
+    width: 40%;
+    height: 20%;
+    position: absolute;
+    top: 0%;
+}
+
+#membw_socket_0 {left: 0%;}
+#membw_socket_1 {left: 60%;}
+
+.membw-arrow-container{
+    width: 30%;
+    height: 100%;
+    position: absolute;
+    left: 35%;
+}
+.icon-membw-arrow-down, .icon-membw-arrow-up{
+    position: absolute;
+    top: 20%;
+    height: 80%;
+    width: 50%;
+}
+.icon-membw-arrow-up{left: 50%;}
+.icon-membw-arrow-down{left: 0%;}
+
+.icon-ram {
+    position: absolute;
+    top: -7%;
+    left: 30%;
+    height: 35%;
+    width: 40%;
+}
+
+.membw-stick-container {
+    position: absolute;
+    height: 60%;
+    width: 26.5%;
+}
+.membw-stick-container-down {
+    left: 11%;
+    top: 22%;
+}
+.membw-stick-container-up {
+    left: 62%;
+    top: 38%;
+}
+
+.membw-stick{
+    width: 100%;
+    height: 30%;
+    background-color: white;
+    position: absolute;
+}
+.membw-stick-down {bottom:0%;}
+.membw-stick-up   {top:  0%;}
+
+.membw-line {
+    width: 20%;
+    height: 50%;
+    background-color: black;
+    position: absolute;
+    left: 40%;
+}
+
+.membw-echelle {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+.membw-echelle > div{
+    position: absolute;
+    height: 12.5%;
+    width: 100%;
+}
+
+.membw-line-down {top: 0;}
+.membw-line-up {bottom:  0;}
+
+.membw-counter-max-down, .membw-counter-avg-down, .membw-counter-max-up, .membw-counter-avg-up, .membw-counter-max-sum {
+    position: absolute;
+    height: 20px;
+    width: 25%;
+}
+
+.membw-counter-avg-down, .membw-counter-avg-up {
+    border: 1px solid #36a2eb;
+    color: #36a2eb;
+}
+.membw-counter-max-down, .membw-counter-max-up, .membw-counter-max-sum {
+    border: 1px solid black;
+}
+.membw-counter-max-down, .membw-counter-avg-down {left: 10%;}
+.membw-counter-max-up, .membw-counter-avg-up {left: 70%;}
+.membw-counter-max-down, .membw-counter-max-up {top: 35%;}
+.membw-counter-avg-down, .membw-counter-avg-up {top: 50%;}
+.membw-counter-max-sum {
+    top: 2%;
+    left: 15%;
+}
+
+.number-membw, .title-membw, .unit-membw {
+    color: inherit;
+    height: 100%;
+    width: 33%;
+    display: inline-block;
+}
+
+.qpi-container{
+    width: 18%;
+    height: 45%;
+    position: absolute;
+    display: inline-block;
+    top: 25%;
+    left: 41%;
+}
+.qpi-arrow-container {
+    width: 100%;
+    height: 50%;
+    position: absolute;
+    top: 25%;
+}
+.icon-qpi-arrow-right, .icon-qpi-arrow-left {
+    width: 100%;
+    height: 35%;
+    position: absolute;
+}
+.icon-qpi-arrow-right {top: 0% ;}
+.icon-qpi-arrow-left  {bottom: 0%;}
+
+.icon-switch{
+    position: absolute;
+    width: 30%;
+    height: 35%;
+    left: 35%;
+    top: 32.5%;
+}
+.qpi-stick-container {
+    width: 80%;
+    height: 18%;
+    position: absolute;
+}
+.qpi-stick-container-right{
+    top: 9%;
+    left: 2%;
+}
+.qpi-stick-container-left{
+    bottom: 9%;
+    right: 2%;
+}
+.qpi-stick {
+    background-color: white;
+    width: 30%;
+    height: 100%;
+    position: absolute;
+}
+.qpi-stick-left {left:0%;}
+.qpi-stick-right {right:0%;}
+
+.qpi-line {
+    background-color: black;
+    width: 60%;
+    height: 14%;
+    position: absolute;
+    top: 43%;
+}
+.qpi-line-left {right:0%;}
+.qpi-line-right {left:0%;}
+
+.qpi-counter-max-left, .qpi-counter-avg-left, .qpi-counter-max-right, .qpi-counter-avg-right, .qpi-counter-max-sum {
+    position: absolute;
+    height: 20px;
+    width: 60%;
+}
+
+.qpi-counter-avg-left, .qpi-counter-avg-right {
+    border: 1px solid #36a2eb;
+    color: #36a2eb;
+}
+.qpi-counter-max-left, .qpi-counter-max-right {
+    border: 1px solid black;
+}
+.qpi-counter-max-left, .qpi-counter-avg-left {left: 30%;}
+.qpi-counter-max-right, .qpi-counter-avg-right {right: 30%;}
+.qpi-counter-max-left {bottom: 10%;}
+.qpi-counter-avg-left {bottom: 20%;}
+.qpi-counter-max-right {top: 10%;}
+.qpi-counter-avg-right {top: 20%;}
+
+.number-qpi, .title-qpi, .unit-qpi {
+    color: inherit;
+    height: 100%;
+    width: 33%;
+    display: inline-block;
+}
+
+.qpi-echelle {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+.qpi-echelle > div{
+    position: absolute;
+    top: 0%;
+    height: 100%;
+    width: 25%;
+}
+
+
+
+
+.power-stick-container, .temp-stick-container{
+    background-color: grey;
+    height: 80%;
+    width: 4%;
+    position: absolute;
+    top: 15%;
+}
+.temp-stick-container{left: 3%;}
+.power-stick-container{left: 9%;}
+
+.icon_temperature, .icon_power, .icon_proc {
+    width:5%;
+    height:6%;
+    position: absolute;
+    top: 8%;
+}
+.icon_temperature{    left: 2.5%;}
+.icon_power{    left: 8.5%;}
+
+.icon_proc{
+
+    width:7%;
+    height:auto;
+    position: absolute;
+    top: 8%;
+    left: 50%;
+
+}
+
+.temp-stick {background-color: #ff844e ;}
+.power-stick {background-color: #ffe64e ;}
+
+.temp-stick, .power-stick {
+    text-align: center;
+    height: 30%;
+    width: 90%;
+    position: absolute;
+    bottom: 1px;
+    left: 5%;
+    z-index: 1;
+/*    display: inline-block;*/
+}
+.temp-line, .power-line {
+    background-color: black;
+    height: 40%;
+    width: 20%;
+    position: absolute;
+    bottom: 1px;
+    left: 40%;
+    z-index: 0;
+/*    display: inline-block;*/
+}
+
+.equalizer-stick-container {
+    height: 100%;
+    width: 8%;
+    /*
+    margin-bottom: 1px;
+    margin-top: 1px;
+    margin-left: 1%;
+    */
+    /*float: left;*/
+    display: inline-block;
+    position: relative;
+    margin-right: 0.5%;
+}
+
+.equalizer-stick {
+    background-color: lightblue;
+    height: 30%;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+/*    display: inline-block;*/
+}
+
+.equalizer-line {
+    background-color: black;
+    height: 30%;
+    width: 20%;
+    position: absolute;
+    bottom: 0px;
+    left: 40%;
+}
+
+#equalizer_timer, #equalizer_last_timer{
+    display: inline-block;
+    border: 1px solid green;
+}
+
+#equalizer_timer_status {
+    display: inline-block;
+}
+
+
+#data_requesting > p, #data_requesting, #data_activity > p, #data_activity{
+    display: inline-block;
+}
+
+#echelle-0_0, #echelle-0_5, #echelle-1_0, #echelle-1_5 {
+    height: 24%;
+    width: 100%;
+    position: absolute;
+    background-color: white;
+}
+
+#echelle-0_0 {
+    bottom: 0%;
+    height: 24.5%;
+}
+#echelle-0_5 {
+    bottom: 25.5%;
+}
+#echelle-1_0 {
+    bottom: 50.5%;
+}
+#echelle-1_5 {
+    bottom: 75.5%;
+    height: 24.5%;
+}
+
+
+#echelle {
+    position: absolute;
+    top:  0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #19309A;
+}
+
+.indicateur {
+    position: absolute;
+    left: 93.5%;
+    font-size: small;
+}
+
+
+.echelle_indicateur-2_0 {top: 16%;}
+.echelle_indicateur-1_5 {top: 35%;}
+.echelle_indicateur-1_0 {top: 53%;}
+.echelle_indicateur-0_5 {top: 72%;}
+.echelle_indicateur-0_0 {top: 91%;}
+
+
+.pci {
+  width: 100%;
+  height: 25%;
+  position: absolute;
+  top : 70%;
+}
+
+.pci-container {
+  display: inline-block;
+  width: 40%;
+  height: 100%;
+}
+.pci-container:first-child {
+  margin-right: 20%;
+}
+
+.pci-container-bus {
+  height: 100%;
+  width: 25%;
+  display: inline-block;
+  position: relative;
+/*  border: 1px solid black;*/
+}
+
+.icon-pcie-arrow {
+  pointer-events:none;
+  width: 64%;
+  height: 76.5%;
+  position: absolute;
+}
+.icon-pcie-arrow-up {
+  top: 3%;
+  left: 34.7%;
+}
+.icon-pcie-arrow-down {
+  bottom: 3%;
+  left: 5%;
+}
+.pci-counter {
+    position: absolute;
+    height: 20px;
+    width : 100%;
+    border: 1px solid #36a2eb;
+    color: #36a2eb;
+}
+.pci-counter-max-up, .pci-counter-max-down {
+    border: 1px solid black;
+    color: black;
+}
+.pci-counter-avg-up, .pci-counter-avg-down {
+    border: 1px solid #36a2eb;
+    color: #36a2eb;
+ }
+.pci-counter-max-up {
+  top: 5%;
+}
+.pci-counter-avg-up {
+  top: 25%;
+}
+.pci-counter-max-down {
+  top: 55%;
+}
+.pci-counter-avg-down {
+  top: 75%;
+}
+
+.number-pci, .title-pci, .unit-pci {
+    color: inherit;
+    height: 100%;
+    width: 33%;
+    display: inline-block;
+}
+
+.pci-counter-hover:hover {
+  background: rgba(200, 200, 200, .5);
+  opacity : 1;
+  filter: alpha(opacity=100); /* For IE8 and earlier */
+}
+.pci-counter-hover {
+  opacity : 0;
+  filter: alpha(opacity=0); /* For IE8 and earlier */
+  z-index: 2;
+  height: 100%;
+  width: 100%;
+}
+
+.pci-stick-container {
+    z-index: -1;  /* To make the "pci-counter-hover" stable */
+    position: absolute;
+    height: 54%;
+    width: 27%;
+}
+.pci-stick-container-down {
+    left: 23.3%;
+    top: 23.7%;
+}
+.pci-stick-container-up {
+    left: 53.3%;
+    top: 22%;
+}
+
+.pci-echelle {
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+}
+.pci-echelle > div {
+  position:absolute;
+  height: 50%;
+  width : 100%
+}
+
+.pci-echelle > div:nth-child(2n+1) {
+  background-color: #99f7ff;
+}
+.pci-echelle > div:nth-child(2n) {
+  background-color: #36a2eb;
+}
+
+.pci-stick {
+    width: 100%;
+    height: 30%;
+    background-color: white;
+    position: absolute;
+}
+.pci-stick-up{top:0%;}
+.pci-stick-down{bottom:0%;}
+
+
+.pci-line {
+    width: 20%;
+    height: 80%;
+    background-color: black;
+    position: absolute;
+    left: 40%;
+}
+
+.pci-line-down {top: 0;}
+.pci-line-up {bottom:  0;}
