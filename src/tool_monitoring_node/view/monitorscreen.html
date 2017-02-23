@@ -1,0 +1,37 @@
+<html><body>
+
+    <head><meta http-equiv="content-type" content="text/html; charset=utf-8" /></head>
+
+    <link rel="stylesheet" type="text/css" href="monitorscreen.css">
+
+<h2>Monitoring tool in developpement !</h2>
+<a href="../man/howto.pdf" class="howto" rel="help" target="_blank" > How to use it</a>
+<p>
+  Directory to find files :<br>
+  <input size="100" type="text" name="directory" id="directory_input" value="../data">
+</p>
+<nav>
+<div class ="timer" id="equalizer_timer"> unknow</div>
+<div class ="timer" id="equalizer_last_timer"> unknow</div>
+<div class ="timer" id="equalizer_timer_status"> stopped</div>
+</nav>
+<div id="data_activity">
+    <div id="data_requesting">
+        <button id="start_request">Start requesting data</button>
+        <button id="stop_request"> Stop requesting data </button>
+        <p id="data_status">no data</p>
+    </div>
+</div>
+
+<div id="Monitoring-screen">
+
+</div>
+
+<article> New information here...</article>
+
+</body>
+</html>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="monitorscreen.js"></script>
