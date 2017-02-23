@@ -354,20 +354,17 @@ int main(int argc, char **argv) {
 
 
     //----------- EXECUTING --------------------
+    int NbCycle = generator->ExecuteAssembly();
 
-    rtcstart = rdtsc();
-    system("./" ASM_FILE_exe);
-    rtcend = rdtsc();
-    time = rtcend - rtcstart;
-    long long int NbInstruction = tool_freq_parameters->P_OPERATIONS.size();
 
-//    float IPC = (float)a / (float)b;
-    float IPC = (float) (NbInstruction * BENCH_NB_ITERATION) / (float)time;
+    //----------- CONCLUDING -------------------
+    int NbInstruction = BENCH_NB_ITERATION * tool_freq_parameters->P_OPERATIONS.size();
+    float IPC = (float) NbInstruction/ (float) NbCycle;
 
-    cout << " Nb Instruction    " << NbInstruction * BENCH_NB_ITERATION << endl
-         << " Nb Cycle          " << time << endl
-         << " IPC               " ;
-    cout<< fixed <<setprecision(10) <<  IPC << endl;
+
+    cout << " Nb Instruction    " << NbInstruction << endl
+         << " Nb Cycle          " << NbCycle << endl
+         << " IPC               " << fixed << setprecision(10) <<  IPC << endl;
 
 
 
