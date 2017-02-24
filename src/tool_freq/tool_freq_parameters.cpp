@@ -155,5 +155,4 @@ void Tool_freq_parameters::check_arguments() {
     };
 
     check_operations();
-
 }
