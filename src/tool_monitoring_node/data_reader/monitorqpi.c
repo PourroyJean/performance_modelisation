@@ -5,8 +5,8 @@
 #include <stdint.h>
 
 #define BUF_SIZE 200
-#define NB_LINE_TAIL 5000
-#define MAX_LINE_OUTPUT 22
+#define NB_LINE_TAIL 10000
+#define MAX_LINE_OUTPUT 44
 
 typedef struct socket_file_and_info{
     uint32_t socket_number;

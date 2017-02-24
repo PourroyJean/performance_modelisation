@@ -337,7 +337,15 @@
 #equalizer_timer_status {
     display: inline-block;
 }
+#counter_checkbox {
+    display: inline-block;
+    position: absolute;
+    left: 250px;
+}
 
+.hidden_counter {
+  display: none;
+}
 
 #data_requesting > p, #data_requesting, #data_activity > p, #data_activity{
     display: inline-block;

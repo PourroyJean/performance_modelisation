@@ -5,13 +5,13 @@
 #include <stdint.h>
 
 #define BUF_SIZE 200
-#define NB_LINE_TAIL 205
-#define MAX_LINE_OUTPUT 42
+#define NB_LINE_TAIL 2050
+#define MAX_LINE_OUTPUT 420
 
 typedef struct socket_file_and_info{
     uint32_t socket_number;
     FILE *data;
-    char *last_line;                // 100 char are allocated in open_files() 
+    char *last_line;                // 100 char are allocated in open_files()
 } socket_info;
 
 
@@ -21,10 +21,10 @@ uint32_t nb_socket;
 socket_info* open_files(char *file_name[], int number_of_file){
     nb_socket = number_of_file;
     socket_info *sockets = (socket_info*) malloc(sizeof (socket_info) * nb_socket);
-    
+
     for (int i = 0; i<nb_socket; i++){   // Opening files
         // Assuming the file name looks like "cpupowerstats.x"
-        
+
         uint32_t length = strlen(file_name[i]);
         sockets[i].socket_number = file_name[i][length - 1]-'0';
 
@@ -32,13 +32,13 @@ socket_info* open_files(char *file_name[], int number_of_file){
         sprintf(cmd, "tail -n %d %s", NB_LINE_TAIL, file_name[i]);
         //printf("opening pipe with for the socket #%d with the cmd \"%s\" \n", sockets[i].core_number, sockets[i].socket_number, cmd);
         sockets[i].data = (FILE*) popen(cmd, "r");
-        if (sockets[i].data == NULL) 
+        if (sockets[i].data == NULL)
             perror("Failed while opening a pipe");
         sockets[i].last_line = (char*) malloc(sizeof (char) * BUF_SIZE);
         if(fgets(sockets[i].last_line, sizeof(char) * BUF_SIZE, sockets[i].data) == NULL)
             perror("One file is empty or difunctionning");
     }
-    
+
     return sockets;
 }
 
@@ -48,12 +48,12 @@ void fetch_line(socket_info *socket){
 }
 
 float get_timer(socket_info *socket){
-    
+
     if(socket->last_line == NULL) {
         exit(1);
     } else  {
 //        printf("lets read data %s ...\n",socket->last_line );fflush(stdout);
-        char* token; 
+        char* token;
         char str[BUF_SIZE];
         strcpy(str, socket->last_line);
         token = strtok(str, " ");
@@ -64,42 +64,42 @@ float get_timer(socket_info *socket){
 
 int reach_time(socket_info *socket, float time_to_reach){
     if(socket->last_line == NULL) return 0;
-    
+
     while(socket->last_line != NULL && get_timer(socket)<time_to_reach){
         fetch_line(socket);
     }
-    
+
     if(socket->last_line == NULL) {
         return 0;
     } else {
         return 1;
     }
-    
+
 }
 
 int read_data(socket_info *socket, float* data, float max_timer){
 
-    float CPU_P_sum = 0,CPU_T_sum = 0; 
-    float CPU_P_max = 0,CPU_T_max = 0; 
+    float CPU_P_sum = 0,CPU_T_sum = 0;
+    float CPU_P_max = 0,CPU_T_max = 0;
     uint32_t nb_value = 0;
     char buffer[BUF_SIZE];
     char* token; float value;
-    
+
     while(socket->last_line != NULL && get_timer(socket) <= max_timer) {
         strcpy(buffer, socket->last_line);
-        
+
         token = strtok(buffer, " ");    // "t="
         token = strtok(NULL, " ");      // timer
         token = strtok(NULL, " ");      // "CPU_P ="
         token = strtok(NULL, " ");      // CPU_P
-    
+
         value = atof(token);
         CPU_P_sum += value;
         if (CPU_P_max < value) CPU_P_max = value;
-        
+
         token = strtok(NULL, " ");      // "CPU_T ="
         token = strtok(NULL, " ");      // CPU_T
-        
+
         value = atof(token);
         CPU_T_sum += value;
         if (CPU_T_max < value) CPU_T_max = value;
@@ -107,7 +107,7 @@ int read_data(socket_info *socket, float* data, float max_timer){
         fetch_line(socket);
         nb_value++;
     }
-    
+
     if(socket->last_line == NULL){ // End of file
         return 0;
     }
@@ -116,7 +116,7 @@ int read_data(socket_info *socket, float* data, float max_timer){
     data[2] = CPU_P_max;           //data[2] = CPU_P_max
     data[3] = CPU_T_sum/nb_value;  //data[3] = CPU_T_avg
     data[4] = CPU_T_max;           //data[4] = CPU_T_max
-    
+
     for(int i = 0; i<5; i++) {
         //printf("data[%d] = %f,  ", i, data[i]);
     }
@@ -126,7 +126,7 @@ int read_data(socket_info *socket, float* data, float max_timer){
 
 
 void write_data(float*** data, uint32_t data_read){
-    
+
     if(data_read != 0) {
         printf("[");
         for (uint32_t k = 0; k<data_read; k++){
@@ -146,7 +146,7 @@ void write_data(float*** data, uint32_t data_read){
             printf("}");
         }
         printf("]");
-    }   
+    }
 }
 
 void close_files(socket_info *sockets, uint32_t nb_socket){
@@ -162,18 +162,18 @@ void close_files(socket_info *sockets, uint32_t nb_socket){
 
 
 int main(int argc, char *argv[]) {
-    
-    
+
+
     if (argc < 3) {
         //printf ("Usage \n ./prog timer files*");
         exit(1);
     }
     float start_time = atof(argv[1]);
     float latest_time = 0;
-    
+
     socket_info* sockets = open_files(argv+2, argc-2);
 
-    
+
     for (int i = 0; i<nb_socket; i++) {
 //        printf("socket %d socket %d ...\n", sockets[i].core_number,sockets[i].socket_number);fflush(stdout);
         if (get_timer(sockets+i) > latest_time){
@@ -194,10 +194,10 @@ int main(int argc, char *argv[]) {
 
 
     //  Preparing the data array
-    
+
     //printf("We will do a malloc for %d socket, %d socket, %d line, %d data\n", nb_socket,  MAX_LINE_OUTPUT, 5);
-    float ***data;          //  
-    
+    float ***data;          //
+
     data = (float***) malloc(sizeof(float***) * nb_socket);
     for (int i = 0; i<nb_socket; i++){
         data[i] = (float**) malloc(sizeof(float*) * MAX_LINE_OUTPUT);
@@ -205,27 +205,27 @@ int main(int argc, char *argv[]) {
             data[i][k] = (float*) malloc(sizeof(float) * 5);
         }
     }
-    
-    
+
+
     uint32_t end_of_file = 0, data_read = 0;
     float max_time = start_time + 0.5;
 
-    
+
     while (end_of_file == 0 && data_read < MAX_LINE_OUTPUT-1) {
-        for (int i = 0; i<nb_socket; i++) { 
+        for (int i = 0; i<nb_socket; i++) {
             end_of_file += 1 - read_data(sockets+i, data[sockets[i].socket_number][data_read], max_time);
         }
         //printf("data reached for timer %f \n",max_time);fflush(stdout);
         max_time += 0.5;
         data_read++;
     }
-    
+
     if(end_of_file != 0) data_read--;
 
-    
+
 
     write_data(data, data_read);
-    
+
     for (int i = 0; i<nb_socket; i++){
         for(int k = 0; k<MAX_LINE_OUTPUT; k++){
             free(data[i][k]);
@@ -233,7 +233,7 @@ int main(int argc, char *argv[]) {
         free(data[i]);
     }
     free(data);
-    
+
     close_files(sockets, argc-2);
 
     return 0;
