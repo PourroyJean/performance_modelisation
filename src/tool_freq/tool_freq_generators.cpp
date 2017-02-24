@@ -15,20 +15,21 @@
 
 
 void Tool_freq_generators::generate_assembly() {
+
+    //Get the number of time we perform the loop
     stringstream tmpSS;
     string strNbIteration;
     tmpSS << BENCH_NB_ITERATION;
     tmpSS >> strNbIteration;
 
+    //Generate the assembly loop executed BENCH_NB_ITERATION
     WC("__asm__ (\"myBench: \" ");
     for (auto instruction: *mInstructions_set) {
         const char *s = instruction.c_str();
         fprintf(P_FPC, "\t\t\"");
         fprintf(P_FPC, instruction.c_str());
         fprintf(P_FPC, "\"\n");
-
     }
-//    WC("\"       sub    $0x1, %%eax;\"");
     fprintf(P_FPC, "\"  sub    $0x1, %%%%eax;\"\n");
     string jumpLine = "\"  jnz    myBench\" : : \"a\" (" + strNbIteration + ")";
     fprintf(P_FPC, jumpLine.c_str());
@@ -37,23 +38,6 @@ void Tool_freq_generators::generate_assembly() {
 
 
 void Tool_freq_generators::generate_source() {
-//    WC("#include \"assembly_generated.h\"");
-//    WC("#include <string.h>");
-//    WC("#include <stdio.h>");
-//    WC("#include <iostream>");
-//    WC("#include <unistd.h>");
-//    WC("using namespace std;");
-//
-//
-//    WC("int main(int argc, char **argv) {");
-//    WC("cout << \"coucou\\n\";");
-//
-//    generate_assembly();
-//
-//    WC("}");
-//
-//
-//    /*
 
     stringstream tmpSS;
     string strNbIteration;
@@ -61,54 +45,68 @@ void Tool_freq_generators::generate_source() {
     tmpSS >> strNbIteration;
     string strTmp;
 
+    //Generate include needed by the generated program
     WC("#include <string.h>");
     WC("#include <stdio.h>");
     WC("#include <iostream>");
     WC("#include <unistd.h>");
     WC("#include <stdint.h>");
+    WC("#include <iomanip>");
     WC("using namespace std;");
 
+
+    //Function rdtsc to monitor the cycle count
     WC("uint64_t rdtsc() {");
     WC("uint32_t lo, hi;");
     WC("__asm__ __volatile__ (\"rdtsc\" : \"=a\" (lo), \"=d\" (hi));");
     WC("return (uint64_t) hi << 32 | lo;}");
 
-
-    WC("int main(int argc, char **argv) {");
-    WC("unsigned int time;");
-    WC("uint64_t rtcstart, rtcend;");
-    WC("int i;");
-    WC("double ipc;");
-    //On espere 10 cycles
-//    strTmp = "for (i = 0; i < " +  strNbIteration  + " ; i++) {\n";
-    strTmp = "for (i = 0; i < 10000000 ; i++) {\n";
-    fprintf(P_FPC, strTmp.c_str());
-    //Init register mm0 and mm1
-    WC("__asm__ ( ");
-    WC(" \"mov     $1, %%%%rax;\"");      //addition
-    WC(" \"movq    %%%%rax, %%%%xmm1;\"");  //xmm1 = utilisé pour l'addition
-    WC(" \"mov     $1, %%%%rax;\"");      //addition
-    WC(" \"movq    %%%%rax, %%%%xmm0;\"");  //xmm1 = utilisé pour l'addition
-    WC("::);");
-
-    WC("rtcstart = rdtsc();");
-    generate_assembly();
-    WC("rtcend = rdtsc();");
-
-    WC("}")
-    WC("time = rtcend - rtcstart;");
-    WC("cout << time << endl;");
-    WC("return time;");
+    //Gettimeofday homemade
+    WC("#include <sys/time.h>");
+    WC("double mygettime() {");
+    WC("    struct timeval tp;");
+    WC("    struct timezone tzp;");
+    WC("    int i;");
+    WC("    i = gettimeofday(&tp, &tzp);");
+    WC("    return ((double) tp.tv_sec + (double) tp.tv_usec * 1.e-6);");
     WC("}");
 
-}
+    WC("int main(int argc, char **argv) {");
+    WC("unsigned int nbCycleIn;");
+    WC("uint64_t cycleInStart, cycleInEnd;");
+    WC("double timeStart, timeEnd, timeSpent;")
+    WC("int i;");
+    WC("double ipc;");
 
-void Tool_freq_generators::generate_header() {
-    WH("#ifndef ASSEMBLY_GENERATED_H")
-    WH("#define ASSEMBLY_GENERATED_H")
-    WH("void assembly_function ();")
-    WH("#endif //ASSEMBLY_GENERATED_H")
+    //Boucle de warming
+    strTmp = "for (i = 0; i < 1000 ; i++) {\n";
+    fprintf(P_FPC, strTmp.c_str());
 
+
+    //TODO needed ? Init register mm0 and mm1 etc...
+//    WC("__asm__ ( ");
+//    WC(" \"mov     $1, %%%%rax;\"");        //addition
+//    WC(" \"movq    %%%%rax, %%%%xmm0;\"");  //xmm0 = utilisé pour l'addition
+//    WC(" \"mov     $1, %%%%rax;\"");        //addition
+//    WC(" \"movq    %%%%rax, %%%%xmm1;\"");  //xmm1 = utilisé pour l'addition
+//    WC("::);");
+
+    // --------------- ASSEMBLY GENERATION OF THE CODE ------------
+    WC("timeStart   = mygettime();");
+    WC("cycleInStart = rdtsc();");
+    generate_assembly();
+    WC("cycleInEnd = rdtsc();");
+    WC("timeEnd     = mygettime();");
+    WC("}")
+
+
+    //We extract the cycle count and the elapsed time to calculate the IPC and the frequency
+    WC("nbCycleIn = cycleInEnd - cycleInStart;");
+    WC("timeSpent = timeEnd - timeStart;");
+    WC("unsigned int freq = nbCycleIn / (1000000 * (timeEnd - timeStart));");
+    WC("cout << nbCycleIn << \' \' << fixed << setprecision(3) << freq << endl;");
+    WC("return 0;");
+    WC("}");
 
 }
 
@@ -144,7 +142,11 @@ void Tool_freq_generators::generate_instructions() {
         instruction += "%%%%" + mRegister_name + "0, ";
         instruction += "%%%%" + mRegister_name + saveSource + ", ";
         instruction += "%%%%" + mRegister_name + saveCible + "; ";
-//        instruction += "%%%%" + mRegister_name + "2" + "; ";
+        //tmp pour verifier dependency
+//        instruction += "%%%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
+//        instruction += "%%%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
+//        instruction += "%%%%" + mRegister_name + to_string(Get_register_cible()) + "; ";
+
         mInstructions_set->push_back(instruction);
     }
 
@@ -205,7 +207,6 @@ string Tool_freq_generators::Generate_code() {
     }
 
     generate_source();
-    generate_header();
 
     fflush(P_FPC);
     fflush(P_FPH);
@@ -227,20 +228,25 @@ Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
     mPrecision = "d";
 }
 
-int Tool_freq_generators::ExecuteAssembly(){
+void Tool_freq_generators::ExecuteAssembly(){
     DEBUG_PRINT("-- Execution the generated assembly file\n");
 
     FILE *lsofFile_p = popen("./" ASM_FILE_exe, "r");
 
     if (!lsofFile_p)
     {
-        return -1;
+        return;
     }
 
     char buffer[1024];
-    char *line_p = fgets(buffer, sizeof(buffer), lsofFile_p);
+    string line_p = fgets(buffer, sizeof(buffer), lsofFile_p);
+    std::vector<std::string> x = split(line_p, ' ');
+
+    //First value returned is the cycle count followed by the frequency.
+    mExecutionCycle =       stoi(x[0]);
+    mExecutionFrequency =   stoi(x[1]);
     pclose(lsofFile_p);
-    return stoi (line_p);
+    return;
 
 }
 
@@ -248,5 +254,4 @@ int Tool_freq_generators::ExecuteAssembly(){
 Tool_freq_generators::~Tool_freq_generators() {
     fclose(P_FPC);
     fclose(P_FPH);
-
 }
