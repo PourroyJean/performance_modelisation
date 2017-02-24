@@ -8,10 +8,10 @@ var nb_core = 0;
 
 /*  Finals */
 var max_bw_qpi = 40;
-var max_bw_pci = 20;
+var max_bw_pci = 15;
 var max_bw_membw = 80;
 var nb_pci_bus = 4;
-
+var supress_latency = 1; // 0 = no, 1 = yes
 
 var current_data_index;
 var time_of_simulation = 0;
@@ -39,6 +39,15 @@ $(document).ready(function(){
     });
     $("#stop_request").click(function(){   // setup the break button
         stop_request();
+    });
+    $("#displayCounter").change(function(){   // setup the checkbox button action
+      if($(this).is(':checked')) {
+        console.log("- box checked " + $(this).is(':checked'));
+        $(".counter").removeClass("hidden_counter");
+      } else {
+        console.log("+ box unchecked " + $(this).is(':checked'));
+        $(".counter").addClass("hidden_counter");
+      }
     });
 });
 
@@ -150,9 +159,11 @@ function launch_runner(){
                 fetch_sample();
 
                 // If there a big latency
-                var delta_plus_5 = Number(time_of_simulation) +5 - Number(last_timer_known);
-                if(delta_plus_5 < 0) {
-                    setTimeout(fetch_sample, 250);
+                if(supress_latency > 0) {
+                  var delta_plus_5 = Number(time_of_simulation) +5 - Number(last_timer_known);
+                  if(delta_plus_5 < 0) {
+                      setTimeout(fetch_sample, 250);
+                  }
                 }
             }, 1000 * interval);
             fetch_semple_is_running = true;
@@ -333,15 +344,25 @@ function update_pci(){
     var Number_to_show_max_down, Number_to_show_max_up; // Max
     for (var i = 0; i<nb_socket; i++){
       for (var bus = 0; bus<nb_pci_bus; bus++){
+
+
         Number_to_show_avg_up   = Math.round((current_data[current_data_index]["data_pci"][i][bus][0])/100 )/10;        // avg GB/s
         Number_to_show_max_up   = Math.round((current_data[current_data_index]["data_pci"][i][bus][1])/100 )/10;        // max GB/s
         Number_to_show_avg_down = Math.round((current_data[current_data_index]["data_pci"][i][bus][2])/100 )/10;        // avg GB/s
         Number_to_show_max_down = Math.round((current_data[current_data_index]["data_pci"][i][bus][3])/100 )/10;        // max GB/s
 
-        blue_height_up     = 100 - Number_to_show_avg_up*(100/max_bw_qpi);     // avg bandwith (normalized to max_bw_pci GB/s max)
-        black_height_up    = Number_to_show_max_up*(100/max_bw_qpi);           // max bandwith (normalized to max_bw_pci GB/s max)
-        blue_height_down   = 100 - Number_to_show_avg_down*(100/max_bw_qpi);   // avg bandwith (normalized to max_bw_pci GB/s max)
-        black_height_down  = Number_to_show_max_down*(100/max_bw_qpi);         // max bandwith (normalized to max_bw_pci GB/s max)
+        blue_height_up     = 100 - Number_to_show_avg_up*(100/max_bw_pci);     // avg bandwith (normalized to max_bw_pci GB/s max)
+        black_height_up    = Number_to_show_max_up*(100/max_bw_pci);           // max bandwith (normalized to max_bw_pci GB/s max)
+        blue_height_down   = 100 - Number_to_show_avg_down*(100/max_bw_pci);   // avg bandwith (normalized to max_bw_pci GB/s max)
+        black_height_down  = Number_to_show_max_down*(100/max_bw_pci);         // max bandwith (normalized to max_bw_pci GB/s max)
+
+        if(bus == 1) {
+          // 4 lanes instead of 16, so 4x less bw
+          blue_height_up     = 100 - 4 * Number_to_show_avg_up*(100/max_bw_pci);     // avg bandwith (normalized to max_bw_pci GB/s max)
+          black_height_up    = Number_to_show_max_up*(100/max_bw_pci)*4;           // max bandwith (normalized to max_bw_pci GB/s max)
+          blue_height_down   = 100 - 4 * Number_to_show_avg_down*(100/max_bw_pci);   // avg bandwith (normalized to max_bw_pci GB/s max)
+          black_height_down  = Number_to_show_max_down*(100/max_bw_pci)*4;         // max bandwith (normalized to max_bw_pci GB/s max)
+        }
 
         $("#pci_socket_"+i+" .pci-counter-hover-bus-" + bus + " > .pci-counter-avg-up > .number-pci").text(parseFloat(Number_to_show_avg_up).toFixed(1));
         $("#pci_socket_"+i+" .pci-counter-hover-bus-" + bus + " > .pci-counter-max-up > .number-pci").text(parseFloat(Number_to_show_max_up).toFixed(1));
@@ -375,10 +396,10 @@ function create_qpi_html(parent){
     var arrow = "";
     arrow += "<div class=\"qpi-container\">";
 
-    arrow +=   "<div class=\"qpi-counter-max-right\"><div class=\"title-qpi\">Max </div><div class=\"number-qpi\"> </div><div class=\"unit-qpi\">GB/s </div> </div>";
-    arrow +=   "<div class=\"qpi-counter-avg-right\"><div class=\"title-qpi\">Avg </div><div class=\"number-qpi\"> </div><div class=\"unit-qpi\">GB/s </div> </div>";
-    arrow +=   "<div class=\"qpi-counter-max-left\"> <div class=\"title-qpi\">Max </div><div class=\"number-qpi\"> </div><div class=\"unit-qpi\">GB/s </div> </div>";
-    arrow +=   "<div class=\"qpi-counter-avg-left\"> <div class=\"title-qpi\">Avg </div><div class=\"number-qpi\"> </div><div class=\"unit-qpi\">GB/s </div> </div>";
+    arrow +=   "<div class=\"qpi-counter-max-right counter\"><div class=\"title-qpi\">Max </div><div class=\"number-qpi\"> </div><div class=\"unit-qpi\">GB/s </div> </div>";
+    arrow +=   "<div class=\"qpi-counter-avg-right counter\"><div class=\"title-qpi\">Avg </div><div class=\"number-qpi\"> </div><div class=\"unit-qpi\">GB/s </div> </div>";
+    arrow +=   "<div class=\"qpi-counter-max-left counter\"> <div class=\"title-qpi\">Max </div><div class=\"number-qpi\"> </div><div class=\"unit-qpi\">GB/s </div> </div>";
+    arrow +=   "<div class=\"qpi-counter-avg-left counter\"> <div class=\"title-qpi\">Avg </div><div class=\"number-qpi\"> </div><div class=\"unit-qpi\">GB/s </div> </div>";
 
     arrow +=    "<div class=\"qpi-arrow-container\">";
     arrow +=      "<img src=\" pictures/white-arrow-right.png\" alt=\"arrow\" class=\"icon-qpi-arrow-right\" >";
@@ -449,11 +470,11 @@ function create_arrow_membw_html(parent, socket_number){
     arrow +=       "<div class=\"membw-line membw-line-up\"  > </div> ";
     arrow +=     "</div>";
     arrow +=   "</div>";
-    arrow +=   "<div class=\"membw-counter-max-down\"><div class=\"title-membw\">Max </div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
-    arrow +=   "<div class=\"membw-counter-avg-down\"><div class=\"title-membw\">Avg</div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
-    arrow +=   "<div class=\"membw-counter-max-up\"><div class=\"title-membw\">Max</div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
-    arrow +=   "<div class=\"membw-counter-avg-up\"><div class=\"title-membw\">Avg</div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
-    arrow +=   "<div class=\"membw-counter-max-sum\"> <div class=\"title-membw\">Max </div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
+    arrow +=   "<div class=\"membw-counter-max-down counter\"><div class=\"title-membw\">Max </div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
+    arrow +=   "<div class=\"membw-counter-avg-down counter\"><div class=\"title-membw\">Avg</div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
+    arrow +=   "<div class=\"membw-counter-max-up counter\"><div class=\"title-membw\">Max</div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
+    arrow +=   "<div class=\"membw-counter-avg-up counter\"><div class=\"title-membw\">Avg</div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
+    arrow +=   "<div class=\"membw-counter-max-sum counter\"> <div class=\"title-membw\">Max </div><div class=\"number-membw\"> </div><div class=\"unit-membw\">GB/s </div> </div>";
     arrow += "</div>";
     parent.append(arrow);
 
