@@ -306,7 +306,7 @@ void freq_turbo_avx2_256() {
 
 
 void cpu_binding() {
-    int i = 0;
+//    int i = 0;
 //    cpu_set_t mycpumask;
 //
 //    CPU_ZERO(&mycpumask); //Clears set, so that it contains no CPUs.
@@ -352,10 +352,8 @@ int main(int argc, char **argv) {
     //We let the kernel bind the process himself if no binding are set
     if (tool_freq_parameters->P_BIND == -1) cpu_binding();
 
-
     //----------- EXECUTING --------------------
     int NbCycle = generator->ExecuteAssembly();
-
 
     //----------- CONCLUDING -------------------
     int NbInstruction = BENCH_NB_ITERATION * tool_freq_parameters->P_OPERATIONS.size();
