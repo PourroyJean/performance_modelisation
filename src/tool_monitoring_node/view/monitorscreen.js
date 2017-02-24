@@ -40,6 +40,15 @@ $(document).ready(function(){
     $("#stop_request").click(function(){   // setup the break button
         stop_request();
     });
+    $("#displayCounter").change(function(){   // setup the checkbox button action
+      if($(this).is(':checked')) {
+        console.log("- box checked " + $(this).is(':checked'));
+        $(".counter").removeClass("hidden_counter");
+      } else {
+        console.log("+ box unchecked " + $(this).is(':checked'));
+        $(".counter").addClass("hidden_counter");
+      }
+    });
 });
 
 function stop_request(){   // setup the break button
