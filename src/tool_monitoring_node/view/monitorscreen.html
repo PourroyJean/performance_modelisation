@@ -6,15 +6,11 @@
 
 <h2>Monitoring tool in developpement !</h2>
 <a href="../man/howto.pdf" class="howto" rel="help" target="_blank" > How to use it</a>
-<p>
+<div>
   Directory to find files :<br>
   <input size="100" type="text" name="directory" id="directory_input" value="../data">
-</p>
+</div>
 <nav>
-<div class ="timer" id="equalizer_timer"> unknow</div>
-<div class ="timer" id="equalizer_last_timer"> unknow</div>
-<div class ="timer" id="equalizer_timer_status"> stopped</div>
-</nav>
 <div id="data_activity">
     <div id="data_requesting">
         <button id="start_request">Start requesting data</button>
@@ -22,6 +18,17 @@
         <p id="data_status">no data</p>
     </div>
 </div>
+<br>
+<div style="position:relative;">
+  <div class ="timer" id="equalizer_timer"> unknow</div>
+  <div class ="timer" id="equalizer_last_timer"> unknow</div>
+  <div class ="timer" id="equalizer_timer_status"> stopped</div>
+  <div class ="timer" id="counter_checkbox">
+    <input type="checkbox" class ="display-counter" name="displayCounter" id="displayCounter" value="display counter" checked>
+    <label for="displayCounter">Display numbers</label>
+  </div>
+</div>
+</nav>
 
 <div id="Monitoring-screen">
 
