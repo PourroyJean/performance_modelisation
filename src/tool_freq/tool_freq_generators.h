@@ -40,11 +40,11 @@ public:
     std::vector<std::string> *mInstructions_set = new vector<string>();
     string mSuffix;
     string mPrecision;
-
+    int mExecutionCycle;
+    double mExecutionFrequency;
     string AssemblyFileName;
 
-
-    int ExecuteAssembly();
+    void ExecuteAssembly();
 
     string Generate_code();
 
