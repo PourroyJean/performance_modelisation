@@ -1,8 +1,8 @@
-data_read/monitorqpi
-data_read/monitorpci
-data_read/monitorfreq
-data_read/monitormembw
-data_read/monitorpower
+data_reader/monitorqpi
+data_reader/monitorpci
+data_reader/monitorfreq
+data_reader/monitormembw
+data_reader/monitorpower
 data/*
 *.log
 *.ac
