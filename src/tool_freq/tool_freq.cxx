@@ -392,3 +392,88 @@ void freq_turbo_avx2_256() {
     print_res("AVX2_256", ipc);
 
 }
+
+void cpu_binding() {
+//    int i = 0;
+//    cpu_set_t mycpumask;
+//
+//    CPU_ZERO(&mycpumask); //Clears set, so that it contains no CPUs.
+//    if (P_BIND >= 0) {
+//        CPU_SET(P_BIND, &mycpumask); //Add CPU cpu to set
+//        sched_setaffinity(0, sizeof(cpu_set_t), &mycpumask);
+//    };
+//    /* double-check */
+//    sched_getaffinity(0, sizeof(cpu_set_t), &mycpumask);
+//    for (i = 0; i < sysconf(_SC_NPROCESSORS_CONF); i++) {
+//        if (CPU_ISSET(i, &mycpumask)) printf("+ Running on CPU #%d\n", i);
+//    };
+    return;
+}
+
+
+int main(int argc, char **argv) {
+    int i = 0;
+    mycpu = 0;
+//    cpu_set_t mycpumask;
+    unsigned int time;
+    unsigned int res;
+    uint64_t rtcstart, rtcend;
+    double tstart, tend;
+    float ipc;
+
+    //----------- ARGUMENT PARSING --------------
+    Tool_freq_parameters * tool_freq_parameters = new Tool_freq_parameters();
+    tool_freq_parameters->parse_arguments(argc, argv);
+    tool_freq_parameters->check_arguments();
+
+
+    //------------ CODE GENERATION  -------------
+    Tool_freq_generators * generator = new Tool_freq_generators (tool_freq_parameters);
+    generator->Generate_code();
+
+
+
+    //------------ ASSEMBLY COMPILATION ---------
+    system("bash -c \"g++ -o " ASM_FILE_exe " " ASM_FILE_source  "\"");
+
+    //----------- BINDING ----------------------
+    //We let the kernel bind the process himself if no binding are set
+    if (tool_freq_parameters->P_BIND == -1) cpu_binding();
+
+    //----------- EXECUTING --------------------
+    int NbCycle = generator->ExecuteAssembly();
+
+    //----------- CONCLUDING -------------------
+    int NbInstruction = BENCH_NB_ITERATION * tool_freq_parameters->P_OPERATIONS.size();
+    float IPC = (float) NbInstruction/ (float) NbCycle;
+
+
+    cout << " Nb Instruction    " << NbInstruction << endl
+         << " Nb Cycle          " << NbCycle << endl
+         << " IPC               " << fixed << setprecision(10) <<  IPC << endl;
+
+
+
+    return 0;
+
+
+    native_frequency();
+
+
+    return 0;
+}
+
+uint64_t rdtsc() {
+    uint32_t lo, hi;
+    /* We cannot use "=A", since this would use %rax on x86_64 */
+    __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
+    return (uint64_t) hi << 32 | lo;
+}
+
+double mygettime() {
+    struct timeval tp;
+    struct timezone tzp;
+    int i;
+    i = gettimeofday(&tp, &tzp);
+    return ((double) tp.tv_sec + (double) tp.tv_usec * 1.e-6);
+}

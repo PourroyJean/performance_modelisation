@@ -16,18 +16,20 @@ Tool_freq_parameters::Tool_freq_parameters() {
     P_PRECISION = "double";
     P_VERBOSE = false;
     P_HELP = false;
+    P_LOOP_SIZE = BENCH_NB_ITERATION;
 };
 
 
 void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
-    const char *const short_opts = "I:W:O:B:D:P:vh";
+    const char *const short_opts = "I:W:O:B:D:P:L:vh";
     const option long_opts[] = {
             {"instruction", required_argument, nullptr, 'I'},
             {"width",       required_argument, nullptr, 'W'},
             {"operations",  required_argument, nullptr, 'O'},
             {"bind",        required_argument, nullptr, 'B'},
             {"dependency",  required_argument, nullptr, 'D'},
-            {"tmp_str",   required_argument, nullptr, 'P'},
+            {"precision",   required_argument, nullptr, 'P'},
+            {"loopsize",    required_argument, nullptr, 'L'},
             {"verbose",     no_argument,       nullptr, 'v'},
             {"help",        no_argument,       nullptr, 'h'},
             {nullptr, 0,                       nullptr, 0}
@@ -92,6 +94,15 @@ void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
                     exit(EXIT_FAILURE);
                 }
                 break;
+            case 'L':
+                ioptarg = atoi(optarg);
+                if (ioptarg > 0  && ioptarg < 10000000) {
+                    this->P_LOOP_SIZE = ioptarg;
+                } else {
+                    printf("/!\\ WRONG LOOP SIZE OPTION OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
             case 'v':
                 this->P_VERBOSE = true;
                 break;
@@ -123,6 +134,7 @@ void Tool_freq_parameters::parameter_summary() {
     cout << "\t -B (core binding)     " << this->P_BIND << endl;
     cout << "\t -D (op dependency)    " << std::boolalpha << this->P_DEPENDENCY << endl;
     cout << "\t -P (op precision)     " << this->P_PRECISION << endl;
+    cout << "\t -L (loop size)        " << this->P_LOOP_SIZE<< endl;
 
 }
 
@@ -136,6 +148,7 @@ void Tool_freq_parameters::help() {
     cout << "\t -O                  [ADD] MUL FMA" << endl;
     cout << "\t -B,--binding        [0] 1 2 ... NbCore\n";
     cout << "\t -P,--precision      single [double]\n";
+    cout << "\t -L,--loopsize       [200] \n";
     cout << "\t -h,--help\n";
 
 }
