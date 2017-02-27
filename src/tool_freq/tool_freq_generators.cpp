@@ -7,6 +7,13 @@
 #include "tool_freq_generators.h"
 #include "tool_freq_misc.h"
 
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
+#include <sched.h>
+#include <unistd.h>
+
 
 
 //Write to Cpp or Header file
@@ -68,9 +75,7 @@ void Tool_freq_generators::generate_source() {
 
 
     //Boucle de warming
-    strTmp = "for (i = 0; i < 1000 ; i++) {\n";
-    fprintf(P_FPC, strTmp.c_str());
-
+    WC("for (i = 0; i < 1000000 ; i++) {");
 
     //TODO needed ? Init register mm0 and mm1 etc...
 //    WC("__asm__ ( ");
@@ -220,6 +225,9 @@ Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
 void Tool_freq_generators::ExecuteAssembly(){
     DEBUG_PRINT("-- Execution the generated assembly file\n");
 
+    //We let the kernel bind the process himself if no binding are set
+    Cpu_binding();
+
     FILE *lsofFile_p = popen("./" ASM_FILE_exe, "r");
 
     if (!lsofFile_p)
@@ -237,6 +245,30 @@ void Tool_freq_generators::ExecuteAssembly(){
     pclose(lsofFile_p);
     return;
 
+}
+
+
+void Tool_freq_generators::Cpu_binding() {
+
+    //We only bind the process if the user enterer -B parameter
+    if(mParameters->P_BIND < 0 ){
+        return;
+    }
+
+    int i = 0;
+    cpu_set_t mycpumask;
+
+    CPU_ZERO(&mycpumask); //Clears set, so that it contains no CPUs.
+    if (mParameters->P_BIND >= 0) {
+        CPU_SET(mParameters->P_BIND, &mycpumask); //Add CPU cpu to set
+        sched_setaffinity(0, sizeof(cpu_set_t), &mycpumask);
+    };
+    /* double-check */
+    sched_getaffinity(0, sizeof(cpu_set_t), &mycpumask);
+    for (i = 0; i < sysconf(_SC_NPROCESSORS_CONF); i++) {
+        if (CPU_ISSET(i, &mycpumask)) printf("+ Running on CPU #%d\n", i);
+    };
+    return;
 }
 
 
