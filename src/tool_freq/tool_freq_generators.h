@@ -46,6 +46,9 @@ public:
 
     void ExecuteAssembly();
 
+    void Cpu_binding ();
+
+
     string Generate_code();
 
     Tool_freq_generators(Tool_freq_parameters *param);

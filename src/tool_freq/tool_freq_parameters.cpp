@@ -8,15 +8,15 @@
 
 
 Tool_freq_parameters::Tool_freq_parameters() {
-    P_SIMD = SCALAR;
-    P_WIDTH = 64;
-    P_OPERATIONS = "aaaa";
-    P_BIND = -1;
-    P_DEPENDENCY = false;
-    P_PRECISION = "double";
-    P_VERBOSE = false;
-    P_HELP = false;
-    P_LOOP_SIZE = BENCH_NB_ITERATION;
+    P_SIMD = PARAM_SIMD;
+    P_WIDTH = PARAM_WIDTH;
+    P_OPERATIONS = PARAM_OPERATIONS;
+    P_BIND = PARAM_BIND;
+    P_DEPENDENCY = PARAM_DEPENDENCY;
+    P_PRECISION = PARAM_PRECISION;
+    P_VERBOSE = PARAM_VERBOSE;
+    P_HELP =  false;
+    P_LOOP_SIZE = PARAM_LOOP_SIZE;
 };
 
 
