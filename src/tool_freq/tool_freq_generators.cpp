@@ -15,10 +15,7 @@
 
 
 void Tool_freq_generators::generate_assembly() {
-    stringstream tmpSS;
-    string strNbIteration;
-    tmpSS << BENCH_NB_ITERATION;
-    tmpSS >> strNbIteration;
+    string strNbIteration = to_string(mParameters->P_LOOP_SIZE);
 
     WC("__asm__ (\"myBench: \" ");
     for (auto instruction: *mInstructions_set) {
@@ -28,7 +25,7 @@ void Tool_freq_generators::generate_assembly() {
         fprintf(P_FPC, "\"\n");
 
     }
-//    WC("\"       sub    $0x1, %%eax;\"");
+
     fprintf(P_FPC, "\"  sub    $0x1, %%%%eax;\"\n");
     string jumpLine = "\"  jnz    myBench\" : : \"a\" (" + strNbIteration + ")";
     fprintf(P_FPC, jumpLine.c_str());
@@ -37,30 +34,6 @@ void Tool_freq_generators::generate_assembly() {
 
 
 void Tool_freq_generators::generate_source() {
-//    WC("#include \"assembly_generated.h\"");
-//    WC("#include <string.h>");
-//    WC("#include <stdio.h>");
-//    WC("#include <iostream>");
-//    WC("#include <unistd.h>");
-//    WC("using namespace std;");
-//
-//
-//    WC("int main(int argc, char **argv) {");
-//    WC("cout << \"coucou\\n\";");
-//
-//    generate_assembly();
-//
-//    WC("}");
-//
-//
-//    /*
-
-    stringstream tmpSS;
-    string strNbIteration;
-    tmpSS << BENCH_NB_ITERATION;
-    tmpSS >> strNbIteration;
-    string strTmp;
-
     WC("#include <string.h>");
     WC("#include <stdio.h>");
     WC("#include <iostream>");
@@ -79,10 +52,8 @@ void Tool_freq_generators::generate_source() {
     WC("uint64_t rtcstart, rtcend;");
     WC("int i;");
     WC("double ipc;");
-    //On espere 10 cycles
 //    strTmp = "for (i = 0; i < " +  strNbIteration  + " ; i++) {\n";
-    strTmp = "for (i = 0; i < 10000000 ; i++) {\n";
-    fprintf(P_FPC, strTmp.c_str());
+    WC("for (i = 0; i < 10000000 ; i++) {");
     //Init register mm0 and mm1
     WC("__asm__ ( ");
     WC(" \"mov     $1, %%%%rax;\"");      //addition
@@ -250,3 +221,5 @@ Tool_freq_generators::~Tool_freq_generators() {
     fclose(P_FPH);
 
 }
+
+
