@@ -15,13 +15,7 @@
 
 
 void Tool_freq_generators::generate_assembly() {
-
-    //Get the number of time we perform the loop
-    stringstream tmpSS;
-    string strNbIteration;
-    tmpSS << BENCH_NB_ITERATION;
-    tmpSS >> strNbIteration;
-
+    string strNbIteration = to_string(mParameters->P_LOOP_SIZE);
     //Generate the assembly loop executed BENCH_NB_ITERATION
     WC("__asm__ (\"myBench: \" ");
     for (auto instruction: *mInstructions_set) {
@@ -38,12 +32,6 @@ void Tool_freq_generators::generate_assembly() {
 
 
 void Tool_freq_generators::generate_source() {
-
-    stringstream tmpSS;
-    string strNbIteration;
-    tmpSS << BENCH_NB_ITERATION;
-    tmpSS >> strNbIteration;
-    string strTmp;
 
     //Generate include needed by the generated program
     WC("#include <string.h>");
@@ -77,6 +65,7 @@ void Tool_freq_generators::generate_source() {
     WC("double timeStart, timeEnd, timeSpent;")
     WC("int i;");
     WC("double ipc;");
+
 
     //Boucle de warming
     strTmp = "for (i = 0; i < 1000 ; i++) {\n";
@@ -255,3 +244,5 @@ Tool_freq_generators::~Tool_freq_generators() {
     fclose(P_FPC);
     fclose(P_FPH);
 }
+
+

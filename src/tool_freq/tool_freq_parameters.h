@@ -27,7 +27,7 @@ public:
     string P_PRECISION;
     bool P_VERBOSE;
     bool P_HELP;
-
+    unsigned P_LOOP_SIZE;
 
     Tool_freq_parameters();
 
