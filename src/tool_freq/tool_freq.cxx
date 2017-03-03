@@ -20,7 +20,11 @@
 
 
 
+std::string BIN_DIR ;
+
 int main(int argc, char **argv) {
+    init_tool_freq ();
+
 
     //----------- ARGUMENT PARSING --------------
     Tool_freq_parameters * tool_freq_parameters = new Tool_freq_parameters();
@@ -33,7 +37,10 @@ int main(int argc, char **argv) {
     generator->Generate_code();
 
     //------------ ASSEMBLY COMPILATION ---------
-    system("bash -c \"g++ -o " ASM_FILE_exe " " ASM_FILE_source  "\"");
+
+    string stmp = "bash -c \"g++ --std=c++11  -o " + FILE_ASM_EXE + " " +  FILE_ASM_SOURCE_GENERATED +  "\"";
+    cout << " END : " << stmp << endl;
+    system(stmp.c_str());
 
     //----------- EXECUTING --------------------
     generator->ExecuteAssembly();
