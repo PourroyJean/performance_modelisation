@@ -27,10 +27,9 @@ private:
 
     int Get_register_cible();
 
-
-    FILE *P_FPC;
-    FILE *P_FPH;
-
+    FILE * mFile_assembly_src;
+    FILE * mFile_template_start;
+    FILE * mFile_template_end;
 public:
     Tool_freq_parameters *mParameters;
     string mRegister_name;

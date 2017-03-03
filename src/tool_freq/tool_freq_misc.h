@@ -13,8 +13,10 @@
 
 #include <vector>
 
-#define ASM_FILE_source "assembly_generated.cpp"
-#define ASM_FILE_exe "assembly"
+#define FILE_TEMPLATE_START         (BIN_DIR + "/tool_freq_template_start.cpp")
+#define FILE_TEMPLATE_END           (BIN_DIR + "/tool_freq_template_end.cpp")
+#define FILE_ASM_SOURCE_GENERATED   (BIN_DIR + "/assembly_generated.cpp")
+#define FILE_ASM_EXE                (BIN_DIR + "/assembly")
 
 
 #define BENCH_NB_ITERATION 50000
@@ -31,6 +33,9 @@
 #define PARAM_LOOP_SIZE     200
 
 
+extern std::string BIN_DIR ;
+
+
 void usage();
 
 std::vector<std::string> split(const std::string &s, char delim);
@@ -41,5 +46,6 @@ uint64_t rdtsc();
 
 void native_frequency();
 
+void init_tool_freq ();
 
 #endif //PERFORMANCE_MODELISATION_TOOL_FREQ_MISC_H
