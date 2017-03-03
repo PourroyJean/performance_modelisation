@@ -70,12 +70,10 @@ void Tool_freq_generators::generate_source() {
     WC("unsigned int nbCycleIn;");
     WC("uint64_t cycleInStart, cycleInEnd;");
     WC("double timeStart, timeEnd, timeSpent;")
-    WC("int i;");
     WC("double ipc;");
 
-
     //Boucle de warming
-    WC("for (i = 0; i < 1000000 ; i++) {");
+    WC("for (int i = 0; i < 1000000 ; i++) {");
 
     //TODO needed ? Init register mm0 and mm1 etc...
 //    WC("__asm__ ( ");
