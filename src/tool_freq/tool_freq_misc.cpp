@@ -14,6 +14,28 @@
 #include <sys/time.h>
 
 
+#include <unistd.h>
+#define GetCurrentDir getcwd
+
+
+
+using namespace std;
+void init_tool_freq (){
+    char cCurrentPath[FILENAME_MAX];
+
+    if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
+    {
+        cout << "ERROR BINARY PATH";
+        return;
+    }
+
+    cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
+
+    string c (cCurrentPath);
+    BIN_DIR = c;
+//    printf ("The current working directory is %s", cCurrentPath);
+
+}
 void usage() {
     fprintf(stderr,
             "Usage: ./tool_freq [-I INSTRUCTIONS ] [-W WIDTH] [-O operations] [-B BINDING] [-vh]\n");
