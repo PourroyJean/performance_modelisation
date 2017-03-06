@@ -6,6 +6,8 @@
 #include <sstream>
 #include "tool_freq_generators.h"
 #include "tool_freq_misc.h"
+#include <unistd.h>
+
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
@@ -14,6 +16,7 @@
 #include <sched.h>
 #include <unistd.h>
 #include <fstream>      // std::fstream
+#include <cmath>
 
 
 
@@ -43,10 +46,15 @@ void Tool_freq_generators::generate_assembly() {
 void Tool_freq_generators::generate_source() {
     int n;
     char buffer[999];
+
+    string stmp ="#define TMP_FILE_monitoring \"" + FILE_MONTORING_TMP + "\"\n";
+    fprintf(mFile_assembly_src, stmp.c_str());
+
     while ((n = fread(buffer, 1, 999, mFile_template_start)) > 0)
     {
         fwrite(buffer, 1, n, mFile_assembly_src);
     }
+
 
     generate_assembly();
 
@@ -185,7 +193,15 @@ Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
     stmp = FILE_TEMPLATE_END;
     mFile_template_end    = fopen(stmp.c_str(), "rb");
     stmp = FILE_ASM_SOURCE_GENERATED;
-    mFile_assembly_src    = fopen(stmp.c_str(), "wb");
+    mFile_assembly_src    = fopen(stmp.c_str(), "w+");
+
+    if (mFile_assembly_src == NULL || mFile_template_end == NULL | mFile_template_start == NULL){
+        cerr << "Error Opening file";
+        cerr << FILE_TEMPLATE_START << endl;
+        cerr << FILE_TEMPLATE_END << endl;
+        cerr << FILE_ASM_SOURCE_GENERATED << endl;
+        exit (0);
+    }
 }
 
 void Tool_freq_generators::ExecuteAssembly(){
@@ -195,28 +211,61 @@ void Tool_freq_generators::ExecuteAssembly(){
     Cpu_binding();
 
     string stmp  (FILE_ASM_EXE);
+    system(stmp.c_str());
 
-        cout << "EXE" << stmp << endl;
-    FILE *lsofFile_p = popen("/nfs/pourroy/code/THESE/performance_modelisation/build/bin/assembly", "r");
 
-    if (!lsofFile_p)
-    {
-        return;
-    }
-
-    char buffer[1024];
-    string line_p = fgets(buffer, sizeof(buffer), lsofFile_p);
-    std::vector<std::string> x = split(line_p, ' ');
-
-    //First value returned is the cycle count followed by the frequency.
-    mExecutionCycle =       stoi(x[0]);
-    mExecutionFrequency =   stoi(x[1]);
-    pclose(lsofFile_p);
+//    const char * path = "/nfs/pourroy/code/THESE/performance_modelisation/build/bin/assembly";
+//    const char * path = "./bin/assembly";
+//    FILE *lsofFile_p = popen(path, "r");
     return;
 
 }
 
 
+void Tool_freq_generators::Monitor_Execution() {
+    ifstream res_file(FILE_MONTORING_TMP);
+    int tab_cycle [PARAM_NB_LOOP];
+    double tab_time [PARAM_NB_LOOP];
+
+    unsigned total_cycle = 0;
+    double total_time = 0;
+    int total_var_cycle = 0;
+    double total_var_time = 0;
+    for (int i = 0; i < PARAM_NB_LOOP; ++i){
+        res_file >> tab_cycle [i] >> tab_time[i];
+        total_cycle += tab_cycle [i];
+        total_time  += tab_time  [i];
+        
+        //Variance
+        total_var_cycle += tab_cycle [i] * tab_cycle [i];
+        total_var_time  += tab_time  [i] * tab_time  [i];
+    }
+
+    unsigned     mean_cycle   = total_cycle / PARAM_NB_LOOP;
+    double  mean_time = total_time  / PARAM_NB_LOOP;
+    
+    double  var_cycle = total_cycle / PARAM_NB_LOOP - mean_cycle * mean_cycle;
+    double  var_time = total_time / PARAM_NB_LOOP - mean_time * mean_time;
+
+    double  et_cycle = sqrt(var_cycle);
+    double  et_time  = sqrt(var_time);
+    
+    cout << "Mean cycle         " << mean_cycle << endl;
+    cout << "Mean time          "  << mean_time  << endl;
+    cout << "var cycle          " << var_cycle << endl;
+    cout << "var time           "  << var_time  << endl;
+    cout << "Ecart type cycle   " << et_cycle << endl;
+    cout << "Ecart type time    "  << et_time  << endl;
+
+    int NbInstruction = mParameters->P_LOOP_SIZE * mParameters->P_OPERATIONS.size();
+    float IPC = (float) NbInstruction/ (float) mean_cycle;
+    cout << "IPC                " << IPC  << endl;
+
+
+
+
+
+}
 void Tool_freq_generators::Cpu_binding() {
 
     //We only bind the process if the user enterer -B parameter

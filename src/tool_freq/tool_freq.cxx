@@ -20,11 +20,8 @@
 
 
 
-std::string BIN_DIR ;
 
 int main(int argc, char **argv) {
-    init_tool_freq ();
-
 
     //----------- ARGUMENT PARSING --------------
     Tool_freq_parameters * tool_freq_parameters = new Tool_freq_parameters();
@@ -32,6 +29,7 @@ int main(int argc, char **argv) {
     tool_freq_parameters->check_arguments();
 
 
+    cout <<"JEAN : " << HOME_DIR;
     //------------ CODE GENERATION  -------------
     Tool_freq_generators * generator = new Tool_freq_generators (tool_freq_parameters);
     generator->Generate_code();
@@ -39,20 +37,13 @@ int main(int argc, char **argv) {
     //------------ ASSEMBLY COMPILATION ---------
 
     string stmp = "bash -c \"g++ --std=c++11  -o " + FILE_ASM_EXE + " " +  FILE_ASM_SOURCE_GENERATED +  "\"";
-    cout << " END : " << stmp << endl;
     system(stmp.c_str());
 
     //----------- EXECUTING --------------------
     generator->ExecuteAssembly();
 
-    //----------- CONCLUDING -------------------
-    int NbCycle = generator->mExecutionCycle;
-    int NbInstruction = tool_freq_parameters->P_LOOP_SIZE * tool_freq_parameters->P_OPERATIONS.size();
-    float IPC = (float) NbInstruction/ (float) NbCycle;
-
-    cout << " Nb Instruction    " << NbInstruction << endl
-         << " Nb Cycle          " << NbCycle << endl
-         << " IPC               " << fixed << setprecision(10) <<  IPC << endl;
+    //----------- ANALYZING -------------------
+    generator->Monitor_Execution();
 
 
 
