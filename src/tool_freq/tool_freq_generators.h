@@ -27,6 +27,7 @@ private:
 
     int Get_register_cible();
 
+
     FILE * mFile_assembly_src;
     FILE * mFile_template_start;
     FILE * mFile_template_end;
@@ -47,6 +48,7 @@ public:
 
     void Cpu_binding ();
 
+    void Monitor_Execution();
 
     string Generate_code();
 
