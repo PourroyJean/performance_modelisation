@@ -5,6 +5,14 @@
 #include <sstream>      // std::istringstream
 #include <iostream>
 #include "tool_freq_misc.h"
+#include <unistd.h>
+
+
+
+
+
+std::string BIN_DIR ;
+std::string HOME_DIR ;
 
 
 Tool_freq_parameters::Tool_freq_parameters() {
@@ -21,6 +29,17 @@ Tool_freq_parameters::Tool_freq_parameters() {
 
 
 void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
+
+    //Parse the binary directory absolute path
+    string s1 (argv[0]);
+    BIN_DIR = s1.substr(0, s1.find_last_of("\\/"));
+
+    //Get the current directory
+    char buff[999];
+    getcwd( buff, 999 );
+    string cwd( buff );
+    HOME_DIR = cwd;
+
     const char *const short_opts = "I:W:O:B:D:P:L:vh";
     const option long_opts[] = {
             {"instruction", required_argument, nullptr, 'I'},
@@ -96,7 +115,7 @@ void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
                 break;
             case 'L':
                 ioptarg = atoi(optarg);
-                if (ioptarg > 0  && ioptarg < 10000000) {
+                if (ioptarg > 0  && ioptarg < 1000000000) {
                     this->P_LOOP_SIZE = ioptarg;
                 } else {
                     printf("/!\\ WRONG LOOP SIZE OPTION OPTION: %s\n", optarg);
@@ -148,7 +167,7 @@ void Tool_freq_parameters::help() {
     cout << "\t -O                  [ADD] MUL FMA" << endl;
     cout << "\t -B,--binding        [0] 1 2 ... NbCore\n";
     cout << "\t -P,--precision      single [double]\n";
-    cout << "\t -L,--loopsize       [200] \n";
+    cout << "\t -L,--loopsize       [3000000] \n";
     cout << "\t -h,--help\n";
 
 }

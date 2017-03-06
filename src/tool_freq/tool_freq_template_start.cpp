@@ -7,8 +7,6 @@
 #include <utility>
 
 
-#define TMP_FILE_monitoring "tmp"
-
 
 uint64_t rdtsc() {
     uint32_t lo, hi;
