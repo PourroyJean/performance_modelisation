@@ -6,96 +6,68 @@
 #include <sstream>
 #include "tool_freq_generators.h"
 #include "tool_freq_misc.h"
+#include <unistd.h>
+
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
+#include <sched.h>
+#include <unistd.h>
+#include <fstream>      // std::fstream
+#include <cmath>
 
 
 
 //Write to Cpp or Header file
-#define WC(s) fprintf(P_FPC, s "\n");
-#define WH(s) fprintf(P_FPH, s "\n");
+#define WC(s) fprintf(mFile_assembly_src, s "\n");
+//#define WH(s) fprintf(P_FPH, s "\n");
+
 
 
 void Tool_freq_generators::generate_assembly() {
     string strNbIteration = to_string(mParameters->P_LOOP_SIZE);
-    //Generate the assembly loop executed BENCH_NB_ITERATION
+
     WC("__asm__ (\"myBench: \" ");
     for (auto instruction: *mInstructions_set) {
         const char *s = instruction.c_str();
-        fprintf(P_FPC, "\t\t\"");
-        fprintf(P_FPC, instruction.c_str());
-        fprintf(P_FPC, "\"\n");
+        fprintf(mFile_assembly_src, "\t\t\"");
+        fprintf(mFile_assembly_src, instruction.c_str());
+        fprintf(mFile_assembly_src, "\"\n");
     }
-    fprintf(P_FPC, "\"  sub    $0x1, %%%%eax;\"\n");
+    fprintf(mFile_assembly_src, "\"  sub    $0x1, %%%%eax;\"\n");
     string jumpLine = "\"  jnz    myBench\" : : \"a\" (" + strNbIteration + ")";
-    fprintf(P_FPC, jumpLine.c_str());
+    fprintf(mFile_assembly_src, jumpLine.c_str());
     WC(");");
 }
 
 
 void Tool_freq_generators::generate_source() {
+    int n;
+    char buffer[999];
 
-    //Generate include needed by the generated program
-    WC("#include <string.h>");
-    WC("#include <stdio.h>");
-    WC("#include <iostream>");
-    WC("#include <unistd.h>");
-    WC("#include <stdint.h>");
-    WC("#include <iomanip>");
-    WC("using namespace std;");
+    string stmp ="#define TMP_FILE_monitoring \"" + FILE_MONTORING_TMP + "\"\n";
+    fprintf(mFile_assembly_src, stmp.c_str());
 
-
-    //Function rdtsc to monitor the cycle count
-    WC("uint64_t rdtsc() {");
-    WC("uint32_t lo, hi;");
-    WC("__asm__ __volatile__ (\"rdtsc\" : \"=a\" (lo), \"=d\" (hi));");
-    WC("return (uint64_t) hi << 32 | lo;}");
-
-    //Gettimeofday homemade
-    WC("#include <sys/time.h>");
-    WC("double mygettime() {");
-    WC("    struct timeval tp;");
-    WC("    struct timezone tzp;");
-    WC("    int i;");
-    WC("    i = gettimeofday(&tp, &tzp);");
-    WC("    return ((double) tp.tv_sec + (double) tp.tv_usec * 1.e-6);");
-    WC("}");
-
-    WC("int main(int argc, char **argv) {");
-    WC("unsigned int nbCycleIn;");
-    WC("uint64_t cycleInStart, cycleInEnd;");
-    WC("double timeStart, timeEnd, timeSpent;")
-    WC("int i;");
-    WC("double ipc;");
+    while ((n = fread(buffer, 1, 999, mFile_template_start)) > 0)
+    {
+        fwrite(buffer, 1, n, mFile_assembly_src);
+    }
 
 
-    //Boucle de warming
-    strTmp = "for (i = 0; i < 1000 ; i++) {\n";
-    fprintf(P_FPC, strTmp.c_str());
-
-
-    //TODO needed ? Init register mm0 and mm1 etc...
-//    WC("__asm__ ( ");
-//    WC(" \"mov     $1, %%%%rax;\"");        //addition
-//    WC(" \"movq    %%%%rax, %%%%xmm0;\"");  //xmm0 = utilisé pour l'addition
-//    WC(" \"mov     $1, %%%%rax;\"");        //addition
-//    WC(" \"movq    %%%%rax, %%%%xmm1;\"");  //xmm1 = utilisé pour l'addition
-//    WC("::);");
-
-    // --------------- ASSEMBLY GENERATION OF THE CODE ------------
-    WC("timeStart   = mygettime();");
-    WC("cycleInStart = rdtsc();");
     generate_assembly();
-    WC("cycleInEnd = rdtsc();");
-    WC("timeEnd     = mygettime();");
-    WC("}")
+
+    while ((n = fread(buffer, 1, 999, mFile_template_end)) > 0)
+    {
+        fwrite(buffer, 1, n, mFile_assembly_src);
+    }
 
 
-    //We extract the cycle count and the elapsed time to calculate the IPC and the frequency
-    WC("nbCycleIn = cycleInEnd - cycleInStart;");
-    WC("timeSpent = timeEnd - timeStart;");
-    WC("unsigned int freq = nbCycleIn / (1000000 * (timeEnd - timeStart));");
-    WC("cout << nbCycleIn << \' \' << fixed << setprecision(3) << freq << endl;");
-    WC("return 0;");
-    WC("}");
+
+    fclose (mFile_template_start);
+    fclose (mFile_template_end);
+    fclose (mFile_assembly_src);
 
 }
 
@@ -197,16 +169,16 @@ string Tool_freq_generators::Generate_code() {
 
     generate_source();
 
-    fflush(P_FPC);
-    fflush(P_FPH);
+//    fflush(P_FPC);
+//    fflush(P_FPH);
 
 
     return "";
 }
 
 Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
-    P_FPC = fopen("assembly_generated.cpp", "w+");
-    P_FPH = fopen("assembly_generated.h", "w+");
+//    P_FPC = fopen("assembly_generated.cpp", "w+");
+//    P_FPH = fopen("assembly_generated.h", "w+");
 
     mParameters = param;
     mRegister_name = "xmm";
@@ -215,34 +187,112 @@ Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
     mOperations_set = new vector<string>();
     mSuffix = "s";
     mPrecision = "d";
+
+    string stmp = FILE_TEMPLATE_START;
+    mFile_template_start  = fopen(stmp.c_str(), "rb");
+    stmp = FILE_TEMPLATE_END;
+    mFile_template_end    = fopen(stmp.c_str(), "rb");
+    stmp = FILE_ASM_SOURCE_GENERATED;
+    mFile_assembly_src    = fopen(stmp.c_str(), "w+");
+
+    if (mFile_assembly_src == NULL || mFile_template_end == NULL | mFile_template_start == NULL){
+        cerr << "Error Opening file";
+        cerr << FILE_TEMPLATE_START << endl;
+        cerr << FILE_TEMPLATE_END << endl;
+        cerr << FILE_ASM_SOURCE_GENERATED << endl;
+        exit (0);
+    }
 }
 
 void Tool_freq_generators::ExecuteAssembly(){
     DEBUG_PRINT("-- Execution the generated assembly file\n");
 
-    FILE *lsofFile_p = popen("./" ASM_FILE_exe, "r");
+    //We let the kernel bind the process himself if no binding are set
+    Cpu_binding();
 
-    if (!lsofFile_p)
-    {
-        return;
-    }
+    string stmp  (FILE_ASM_EXE);
+    system(stmp.c_str());
 
-    char buffer[1024];
-    string line_p = fgets(buffer, sizeof(buffer), lsofFile_p);
-    std::vector<std::string> x = split(line_p, ' ');
 
-    //First value returned is the cycle count followed by the frequency.
-    mExecutionCycle =       stoi(x[0]);
-    mExecutionFrequency =   stoi(x[1]);
-    pclose(lsofFile_p);
+//    const char * path = "/nfs/pourroy/code/THESE/performance_modelisation/build/bin/assembly";
+//    const char * path = "./bin/assembly";
+//    FILE *lsofFile_p = popen(path, "r");
     return;
 
 }
 
 
+void Tool_freq_generators::Monitor_Execution() {
+    ifstream res_file(FILE_MONTORING_TMP);
+    int tab_cycle [PARAM_NB_LOOP];
+    double tab_time [PARAM_NB_LOOP];
+
+    long long int total_cycle = 0;
+    double total_time = 0;
+    long long int total_var_cycle = 0;
+    double total_var_time = 0;
+    for (int i = 0; i < PARAM_NB_LOOP; ++i){
+        res_file >> tab_cycle [i] >> tab_time[i];
+        total_cycle += tab_cycle [i];
+        total_time  += tab_time  [i];
+        
+        //Variance
+        total_var_cycle += tab_cycle [i] * tab_cycle [i];
+        total_var_time  += tab_time  [i] * tab_time  [i];
+    }
+
+    long long int mean_cycle   = total_cycle / PARAM_NB_LOOP;
+    double   mean_time = total_time  / PARAM_NB_LOOP;
+    
+    long double  var_cycle = total_cycle / PARAM_NB_LOOP - mean_cycle * mean_cycle;
+    long double  var_time = total_time / PARAM_NB_LOOP - mean_time * mean_time;
+
+    double  et_cycle = sqrt(var_cycle);
+    double  et_time  = sqrt(var_time);
+    
+    cout << "Mean cycle         " << mean_cycle << endl;
+    cout << "Mean time          "  << mean_time  << endl;
+    cout << "var cycle          " << var_cycle << endl;
+    cout << "var time           "  << var_time  << endl;
+    cout << "Ecart type cycle   " << et_cycle << endl;
+    cout << "Ecart type time    "  << et_time  << endl;
+
+    int NbInstruction = mParameters->P_LOOP_SIZE * mParameters->P_OPERATIONS.size();
+    float IPC = (float) NbInstruction/ (float) mean_cycle;
+    cout << "IPC                " << IPC  << endl;
+
+
+
+
+
+}
+void Tool_freq_generators::Cpu_binding() {
+
+    //We only bind the process if the user enterer -B parameter
+    if(mParameters->P_BIND < 0 ){
+        return;
+    }
+
+    int i = 0;
+    cpu_set_t mycpumask;
+
+    CPU_ZERO(&mycpumask); //Clears set, so that it contains no CPUs.
+    if (mParameters->P_BIND >= 0) {
+        CPU_SET(mParameters->P_BIND, &mycpumask); //Add CPU cpu to set
+        sched_setaffinity(0, sizeof(cpu_set_t), &mycpumask);
+    };
+    /* double-check */
+    sched_getaffinity(0, sizeof(cpu_set_t), &mycpumask);
+    for (i = 0; i < sysconf(_SC_NPROCESSORS_CONF); i++) {
+        if (CPU_ISSET(i, &mycpumask)) printf("+ Running on CPU #%d\n", i);
+    };
+    return;
+}
+
+
 Tool_freq_generators::~Tool_freq_generators() {
-    fclose(P_FPC);
-    fclose(P_FPH);
+//    fclose(P_FPC);
+//    fclose(P_FPH);
 }
 
 
