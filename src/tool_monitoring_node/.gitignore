@@ -1,0 +1,9 @@
+data_reader/monitorqpi
+data_reader/monitorpci
+data_reader/monitorfreq
+data_reader/monitormembw
+data_reader/monitorpower
+data/*
+*.log
+*.ac
+*.odt#
