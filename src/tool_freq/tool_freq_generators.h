@@ -6,7 +6,9 @@
 #define PERFORMANCE_MODELISATION_TOOL_FREQ_GENERATORS_H
 
 #include <vector>
+#include <fstream>
 #include "tool_freq_parameters.h"
+#include "tool_freq_misc.h"
 
 class Tool_freq_generators {
 
@@ -27,10 +29,10 @@ private:
 
     int Get_register_cible();
 
-
-    FILE * mFile_assembly_src;
-    FILE * mFile_template_start;
-    FILE * mFile_template_end;
+    ofstream mFile_assembly_src   ;
+    ifstream mFile_template_start ;
+    ifstream mFile_template_end   ;
+    
 public:
     Tool_freq_parameters *mParameters;
     string mRegister_name;
@@ -50,7 +52,7 @@ public:
 
     void Monitor_Execution();
 
-    string Generate_code();
+    void Generate_code();
 
     Tool_freq_generators(Tool_freq_parameters *param);
 

@@ -15,7 +15,6 @@
 
 
 #include <unistd.h>
-#define GetCurrentDir getcwd
 
 
 
