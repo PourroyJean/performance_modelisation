@@ -6,94 +6,68 @@
 #include <sstream>
 #include "tool_freq_generators.h"
 #include "tool_freq_misc.h"
+#include <unistd.h>
+
+
+#ifndef _GNU_SOURCE
+#define _GNU_SOURCE
+#endif
+
+#include <sched.h>
+#include <unistd.h>
+#include <fstream>      // std::fstream
+#include <cmath>
 
 
 
 //Write to Cpp or Header file
-#define WC(s) fprintf(P_FPC, s "\n");
-#define WH(s) fprintf(P_FPH, s "\n");
+#define WC(s) fprintf(mFile_assembly_src, s "\n");
+//#define WH(s) fprintf(P_FPH, s "\n");
+
 
 
 void Tool_freq_generators::generate_assembly() {
-    stringstream tmpSS;
-    string strNbIteration;
-    tmpSS << BENCH_NB_ITERATION;
-    tmpSS >> strNbIteration;
+    string strNbIteration = to_string(mParameters->P_LOOP_SIZE);
 
     WC("__asm__ (\"myBench: \" ");
     for (auto instruction: *mInstructions_set) {
         const char *s = instruction.c_str();
-        fprintf(P_FPC, "\t\t\"");
-        fprintf(P_FPC, instruction.c_str());
-        fprintf(P_FPC, "\"\n");
-
+        fprintf(mFile_assembly_src, "\t\t\"");
+        fprintf(mFile_assembly_src, instruction.c_str());
+        fprintf(mFile_assembly_src, "\"\n");
     }
-//    WC("\"       sub    $0x1, %%eax;\"");
-    fprintf(P_FPC, "\"  sub    $0x1, %%%%eax;\"\n");
+    fprintf(mFile_assembly_src, "\"  sub    $0x1, %%%%eax;\"\n");
     string jumpLine = "\"  jnz    myBench\" : : \"a\" (" + strNbIteration + ")";
-    fprintf(P_FPC, jumpLine.c_str());
+    fprintf(mFile_assembly_src, jumpLine.c_str());
     WC(");");
 }
 
 
 void Tool_freq_generators::generate_source() {
-//    WC("#include \"assembly_generated.h\"");
-    WC("#include <string.h>");
-    WC("#include <stdio.h>");
-    WC("#include <iostream>");
-    WC("#include <unistd.h>");
-    WC("using namespace std;");
+    int n;
+    char buffer[999];
 
+    string stmp ="#define TMP_FILE_monitoring \"" + FILE_MONTORING_TMP + "\"\n";
+    fprintf(mFile_assembly_src, stmp.c_str());
 
-    WC("int main(int argc, char **argv) {");
-    WC("cout << \"coucou\\n\";");
+    while ((n = fread(buffer, 1, 999, mFile_template_start)) > 0)
+    {
+        fwrite(buffer, 1, n, mFile_assembly_src);
+    }
+
 
     generate_assembly();
 
-    WC("}");
+    while ((n = fread(buffer, 1, 999, mFile_template_end)) > 0)
+    {
+        fwrite(buffer, 1, n, mFile_assembly_src);
+    }
 
 
-    /*
-     *     WC("#include <string.h>");
-    WC("#include <stdio.h>");
-    WC("#include <iostream>");
-    WC("#include <unistd.h>");
-    WC("using namespace std;");
 
-    WC("uint64_t rdtsc() {");
-    WC("uint32_t lo, hi;");
-    WC("__asm__ __volatile__ (\"rdtsc\" : \"=a\" (lo), \"=d\" (hi));");
-    WC("return (uint64_t) hi << 32 | lo;}");
-
-
-    WC("int main(int argc, char **argv) {");
-    WC("cout << \"coucou\\n\";");
-    WC("unsigned int time;");
-    WC("uint64_t rtcstart, rtcend;");
-    WC("int i;");
-    WC("double ipc;");
-    //On espere 10 cycles
-    WC("for (i = 0; i < 1000; i++) {");
-    WC("rtcstart = rdtsc();");
-
-    generate_assembly();
-
-    WC("}")
-    WC("rtcend = rdtsc();");
-    WC("time = rtcend - rtcstart;");
-    WC("ipc = (double) 1000000 *10 / (double) time;");
-    WC("cout << \"mon cycle interne\" << time;");
-    WC("}");
-     */
-
-}
-
-void Tool_freq_generators::generate_header() {
-    WH("#ifndef ASSEMBLY_GENERATED_H")
-    WH("#define ASSEMBLY_GENERATED_H")
-    WH("void assembly_function ();")
-    WH("#endif //ASSEMBLY_GENERATED_H")
-
+    fclose (mFile_template_start);
+    fclose (mFile_template_end);
+    fclose (mFile_assembly_src);
 
 }
 
@@ -122,11 +96,18 @@ void Tool_freq_generators::generate_instructions() {
     mPrevious_target_register = 1;
 
     for (auto operation : *mOperations_set) {
+        string saveSource = to_string(Get_register_source());
+        string saveCible  = to_string(Get_register_cible());
         //v add p d
         string instruction = mPrefix + operation + mSuffix + mPrecision + " ";
         instruction += "%%%%" + mRegister_name + "0, ";
-        instruction += "%%%%" + mRegister_name + to_string(Get_register_source()) + ", ";
-        instruction += "%%%%" + mRegister_name + to_string(Get_register_cible()) + "; ";
+        instruction += "%%%%" + mRegister_name + saveSource + ", ";
+        instruction += "%%%%" + mRegister_name + saveCible + "; ";
+        //tmp pour verifier dependency
+//        instruction += "%%%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
+//        instruction += "%%%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
+//        instruction += "%%%%" + mRegister_name + to_string(Get_register_cible()) + "; ";
+
         mInstructions_set->push_back(instruction);
     }
 
@@ -165,7 +146,7 @@ void Tool_freq_generators::Init_Generator() {
             mOperations_set->push_back("mul");
         }
         if (op == 'f') {
-            mOperations_set->push_back("fma");
+            mOperations_set->push_back("fmadd231");
         }
     }
 
@@ -187,18 +168,17 @@ string Tool_freq_generators::Generate_code() {
     }
 
     generate_source();
-    generate_header();
 
-    fflush(P_FPC);
-    fflush(P_FPH);
+//    fflush(P_FPC);
+//    fflush(P_FPH);
 
 
     return "";
 }
 
 Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
-    P_FPC = fopen("assembly_generated.cpp", "w+");
-    P_FPH = fopen("assembly_generated.h", "w+");
+//    P_FPC = fopen("assembly_generated.cpp", "w+");
+//    P_FPH = fopen("assembly_generated.h", "w+");
 
     mParameters = param;
     mRegister_name = "xmm";
@@ -207,10 +187,112 @@ Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
     mOperations_set = new vector<string>();
     mSuffix = "s";
     mPrecision = "d";
+
+    string stmp = FILE_TEMPLATE_START;
+    mFile_template_start  = fopen(stmp.c_str(), "rb");
+    stmp = FILE_TEMPLATE_END;
+    mFile_template_end    = fopen(stmp.c_str(), "rb");
+    stmp = FILE_ASM_SOURCE_GENERATED;
+    mFile_assembly_src    = fopen(stmp.c_str(), "w+");
+
+    if (mFile_assembly_src == NULL || mFile_template_end == NULL | mFile_template_start == NULL){
+        cerr << "Error Opening file";
+        cerr << FILE_TEMPLATE_START << endl;
+        cerr << FILE_TEMPLATE_END << endl;
+        cerr << FILE_ASM_SOURCE_GENERATED << endl;
+        exit (0);
+    }
 }
+
+void Tool_freq_generators::ExecuteAssembly(){
+    DEBUG_PRINT("-- Execution the generated assembly file\n");
+
+    //We let the kernel bind the process himself if no binding are set
+    Cpu_binding();
+
+    string stmp  (FILE_ASM_EXE);
+    system(stmp.c_str());
+
+
+//    const char * path = "/nfs/pourroy/code/THESE/performance_modelisation/build/bin/assembly";
+//    const char * path = "./bin/assembly";
+//    FILE *lsofFile_p = popen(path, "r");
+    return;
+
+}
+
+
+void Tool_freq_generators::Monitor_Execution() {
+    ifstream res_file(FILE_MONTORING_TMP);
+    int tab_cycle [PARAM_NB_LOOP];
+    double tab_time [PARAM_NB_LOOP];
+
+    long long int total_cycle = 0;
+    double total_time = 0;
+    long long int total_var_cycle = 0;
+    double total_var_time = 0;
+    for (int i = 0; i < PARAM_NB_LOOP; ++i){
+        res_file >> tab_cycle [i] >> tab_time[i];
+        total_cycle += tab_cycle [i];
+        total_time  += tab_time  [i];
+        
+        //Variance
+        total_var_cycle += tab_cycle [i] * tab_cycle [i];
+        total_var_time  += tab_time  [i] * tab_time  [i];
+    }
+
+    long long int mean_cycle   = total_cycle / PARAM_NB_LOOP;
+    double   mean_time = total_time  / PARAM_NB_LOOP;
+    
+    long double  var_cycle = total_cycle / PARAM_NB_LOOP - mean_cycle * mean_cycle;
+    long double  var_time = total_time / PARAM_NB_LOOP - mean_time * mean_time;
+
+    double  et_cycle = sqrt(var_cycle);
+    double  et_time  = sqrt(var_time);
+    
+    cout << "Mean cycle         " << mean_cycle << endl;
+    cout << "Mean time          "  << mean_time  << endl;
+    cout << "var cycle          " << var_cycle << endl;
+    cout << "var time           "  << var_time  << endl;
+    cout << "Ecart type cycle   " << et_cycle << endl;
+    cout << "Ecart type time    "  << et_time  << endl;
+
+    int NbInstruction = mParameters->P_LOOP_SIZE * mParameters->P_OPERATIONS.size();
+    float IPC = (float) NbInstruction/ (float) mean_cycle;
+    cout << "IPC                " << IPC  << endl;
+
+
+
+
+
+}
+void Tool_freq_generators::Cpu_binding() {
+
+    //We only bind the process if the user enterer -B parameter
+    if(mParameters->P_BIND < 0 ){
+        return;
+    }
+
+    int i = 0;
+    cpu_set_t mycpumask;
+
+    CPU_ZERO(&mycpumask); //Clears set, so that it contains no CPUs.
+    if (mParameters->P_BIND >= 0) {
+        CPU_SET(mParameters->P_BIND, &mycpumask); //Add CPU cpu to set
+        sched_setaffinity(0, sizeof(cpu_set_t), &mycpumask);
+    };
+    /* double-check */
+    sched_getaffinity(0, sizeof(cpu_set_t), &mycpumask);
+    for (i = 0; i < sysconf(_SC_NPROCESSORS_CONF); i++) {
+        if (CPU_ISSET(i, &mycpumask)) printf("+ Running on CPU #%d\n", i);
+    };
+    return;
+}
+
 
 Tool_freq_generators::~Tool_freq_generators() {
-    fclose(P_FPC);
-    fclose(P_FPH);
-
+//    fclose(P_FPC);
+//    fclose(P_FPH);
 }
+
+
