@@ -28,8 +28,8 @@ double mygettime() {
 }
 
 int main(int argc, char **argv) {
-    unsigned int nbCycleIn;
-    uint64_t cycleInStart, cycleInEnd;
+    unsigned long long int nbCycleIn;
+    unsigned long long int cycleInStart, cycleInEnd;
     double timeStart, timeEnd, timeSpent;
     int i;
     double ipc;
