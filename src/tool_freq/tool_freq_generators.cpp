@@ -227,9 +227,9 @@ void Tool_freq_generators::Monitor_Execution() {
     int tab_cycle [PARAM_NB_LOOP];
     double tab_time [PARAM_NB_LOOP];
 
-    unsigned total_cycle = 0;
+    long long int total_cycle = 0;
     double total_time = 0;
-    int total_var_cycle = 0;
+    long long int total_var_cycle = 0;
     double total_var_time = 0;
     for (int i = 0; i < PARAM_NB_LOOP; ++i){
         res_file >> tab_cycle [i] >> tab_time[i];
@@ -241,11 +241,11 @@ void Tool_freq_generators::Monitor_Execution() {
         total_var_time  += tab_time  [i] * tab_time  [i];
     }
 
-    unsigned     mean_cycle   = total_cycle / PARAM_NB_LOOP;
-    double  mean_time = total_time  / PARAM_NB_LOOP;
+    long long int mean_cycle   = total_cycle / PARAM_NB_LOOP;
+    double   mean_time = total_time  / PARAM_NB_LOOP;
     
-    double  var_cycle = total_cycle / PARAM_NB_LOOP - mean_cycle * mean_cycle;
-    double  var_time = total_time / PARAM_NB_LOOP - mean_time * mean_time;
+    long double  var_cycle = total_cycle / PARAM_NB_LOOP - mean_cycle * mean_cycle;
+    long double  var_time = total_time / PARAM_NB_LOOP - mean_time * mean_time;
 
     double  et_cycle = sqrt(var_cycle);
     double  et_time  = sqrt(var_time);
