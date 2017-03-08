@@ -32,7 +32,7 @@ private:
     ofstream mFile_assembly_src   ;
     ifstream mFile_template_start ;
     ifstream mFile_template_end   ;
-    
+
 public:
     Tool_freq_parameters *mParameters;
     string mRegister_name;
