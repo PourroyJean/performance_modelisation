@@ -6,7 +6,9 @@
 #define PERFORMANCE_MODELISATION_TOOL_FREQ_GENERATORS_H
 
 #include <vector>
+#include <fstream>
 #include "tool_freq_parameters.h"
+#include "tool_freq_misc.h"
 
 class Tool_freq_generators {
 
@@ -27,9 +29,9 @@ private:
 
     int Get_register_cible();
 
-
-    FILE *P_FPC;
-    FILE *P_FPH;
+    ofstream mFile_assembly_src   ;
+    ifstream mFile_template_start ;
+    ifstream mFile_template_end   ;
 
 public:
     Tool_freq_parameters *mParameters;
@@ -40,13 +42,17 @@ public:
     std::vector<std::string> *mInstructions_set = new vector<string>();
     string mSuffix;
     string mPrecision;
-
+    int mExecutionCycle;
+    double mExecutionFrequency;
     string AssemblyFileName;
 
+    void ExecuteAssembly();
 
-    int ExecuteAssembly();
+    void Cpu_binding ();
 
-    string Generate_code();
+    void Monitor_Execution();
+
+    void Generate_code();
 
     Tool_freq_generators(Tool_freq_parameters *param);
 
