@@ -14,6 +14,8 @@
 #include <fstream>      // std::fstream
 #include <cmath>
 
+using namespace std;
+
 
 void Tool_freq_generators::generate_assembly() {
 
@@ -29,6 +31,7 @@ void Tool_freq_generators::generate_assembly() {
 
 void Tool_freq_generators::generate_source() {
     mFile_assembly_src << "#define TMP_FILE_monitoring \"" + FILE_MONTORING_TMP + "\"\n";
+    mFile_assembly_src << "int NB_lOOP = " << mParameters->P_SAMPLES << ";\n";
 
     //Template_START + LOOP_ASSEMBLY + Template_END
     mFile_assembly_src << mFile_template_start.rdbuf();
@@ -85,6 +88,18 @@ void Tool_freq_generators::generate_instructions() {
 
 void Tool_freq_generators::Init_Generator() {
     DEBUG_PRINT("-- Init Generator register, prefix, suffix, and precision \n");
+
+    //only [v]addpd instructions supported
+    mPrefix = "v";
+
+    //vadd[s,p]d
+    if (mParameters->P_WIDTH == 64) {
+        mSuffix = "s";
+    } else {
+        mSuffix = "p";
+    }
+
+    //Regster used involved the type of instruction used
     if (mParameters->P_WIDTH == 64 || mParameters->P_WIDTH == 128) {
         mRegister_name = "xmm";
     }
@@ -94,19 +109,15 @@ void Tool_freq_generators::Init_Generator() {
     if (mParameters->P_WIDTH == 512) {
         mRegister_name = "zmm";
     }
-    //only v instructions supported
-    mPrefix = "v";
-    if (mParameters->P_WIDTH == 64) {
-        mSuffix = "s";
-    } else {
-        mSuffix = "p";
-    }
+
+    //vaddp[s,d]
     if (!mParameters->P_PRECISION.compare("single")) {
         mPrecision = "s";
     } else {
         mPrecision = "d";
     }
 
+    //generate the instructions vector
     for (auto op: mParameters->P_OPERATIONS) {
         if (op == 'a') {
             mOperations_set->push_back("add");
@@ -163,88 +174,6 @@ Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
     }
 }
 
-void Tool_freq_generators::ExecuteAssembly() {
-    DEBUG_PRINT("-- Execution the generated assembly file\n");
-
-    //We let the kernel bind the process himself if no binding are set
-    Cpu_binding();
-
-    string stmp(FILE_ASM_EXE);
-    system(stmp.c_str());
-
-
-//    const char * path = "/nfs/pourroy/code/THESE/performance_modelisation/build/bin/assembly";
-//    const char * path = "./bin/assembly";
-//    FILE *lsofFile_p = popen(path, "r");
-    return;
-
-}
-
-
-void Tool_freq_generators::Monitor_Execution() {
-    ifstream res_file(FILE_MONTORING_TMP);
-    int tab_cycle[PARAM_NB_LOOP];
-    double tab_time[PARAM_NB_LOOP];
-
-    long long int total_cycle = 0;
-    double total_time = 0;
-    long long int total_var_cycle = 0;
-    double total_var_time = 0;
-    for (int i = 0; i < PARAM_NB_LOOP; ++i) {
-        res_file >> tab_cycle[i] >> tab_time[i];
-        total_cycle += tab_cycle[i];
-        total_time += tab_time[i];
-
-        //Variance
-        total_var_cycle += tab_cycle[i] * tab_cycle[i];
-        total_var_time += tab_time[i] * tab_time[i];
-    }
-
-    long long int mean_cycle = total_cycle / PARAM_NB_LOOP;
-    double mean_time = total_time / PARAM_NB_LOOP;
-
-    long double var_cycle = total_cycle / PARAM_NB_LOOP - mean_cycle * mean_cycle;
-    long double var_time = total_time / PARAM_NB_LOOP - mean_time * mean_time;
-
-    double et_cycle = sqrt(var_cycle);
-    double et_time = sqrt(var_time);
-
-    cout << "Mean cycle         " << mean_cycle << endl;
-    cout << "Mean time          " << mean_time << endl;
-    cout << "var cycle          " << var_cycle << endl;
-    cout << "var time           " << var_time << endl;
-    cout << "Ecart type cycle   " << et_cycle << endl;
-    cout << "Ecart type time    " << et_time << endl;
-
-    int NbInstruction = mParameters->P_LOOP_SIZE * mParameters->P_OPERATIONS.size();
-    float IPC = (float) NbInstruction / (float) mean_cycle;
-    cout << "IPC                " << IPC << endl;
-
-
-}
-
-void Tool_freq_generators::Cpu_binding() {
-
-    //We only bind the process if the user enterer -B parameter
-    if (mParameters->P_BIND < 0) {
-        return;
-    }
-//
-//    int i = 0;
-//    cpu_set_t mycpumask;
-//
-//    CPU_ZERO(&mycpumask); //Clears set, so that it contains no CPUs.
-//    if (mParameters->P_BIND >= 0) {
-//        CPU_SET(mParameters->P_BIND, &mycpumask); //Add CPU cpu to set
-//        sched_setaffinity(0, sizeof(cpu_set_t), &mycpumask);
-//    };
-//    /* double-check */
-//    sched_getaffinity(0, sizeof(cpu_set_t), &mycpumask);
-//    for (i = 0; i < sysconf(_SC_NPROCESSORS_CONF); i++) {
-//        if (CPU_ISSET(i, &mycpumask)) printf("+ Running on CPU #%d\n", i);
-//    };
-    return;
-}
 
 
 Tool_freq_generators::~Tool_freq_generators() {
