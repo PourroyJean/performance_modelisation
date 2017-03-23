@@ -15,6 +15,7 @@
 #include <iomanip>
 #include "tool_freq_parameters.h"
 #include "tool_freq_generators.h"
+#include "tool_freq_executor.h"
 #include "tool_freq_misc.h"
 #
 
@@ -32,14 +33,15 @@ int main(int argc, char **argv) {
     generator->Generate_code();
 
     //------------ ASSEMBLY COMPILATION ---------
-    string stmp = "bash -c \"g++ --std=c++11  -o " + FILE_ASM_EXE + " " +  FILE_ASM_SOURCE_GENERATED +  "\"";
+    std::string stmp = "bash -c \"g++ --std=c++11  -o " + FILE_ASM_EXE + " " +  FILE_ASM_SOURCE_GENERATED +  "\"";
     system(stmp.c_str());
 
     //----------- EXECUTING --------------------
-    generator->ExecuteAssembly();
+    Tool_freq_executor  * executor = new Tool_freq_executor (generator);
+    executor->Execute_assembly();
 
     //----------- ANALYZING -------------------
-    generator->Monitor_Execution();
+    executor->Monitor_Execution();
 
     return 0;
 }

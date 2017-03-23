@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
     double ipc;
     std::pair<int, double> *pairArr = new pair<int, double>[1000000];
 
-    for (i = 0; i < 100; i++) {
+    for (i = 0; i < NB_lOOP; i++) {
         timeStart = mygettime();
         cycleInStart = rdtsc();
 
