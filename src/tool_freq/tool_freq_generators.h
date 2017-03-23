@@ -29,28 +29,19 @@ private:
 
     int Get_register_cible();
 
-    ofstream mFile_assembly_src   ;
-    ifstream mFile_template_start ;
-    ifstream mFile_template_end   ;
+    std::ofstream mFile_assembly_src   ;
+    std::ifstream mFile_template_start ;
+    std::ifstream mFile_template_end   ;
 
 public:
     Tool_freq_parameters *mParameters;
-    string mRegister_name;
+    std::string mRegister_name;
     unsigned mPrevious_target_register;
-    string mPrefix;
-    std::vector<std::string> *mOperations_set = new vector<string>();
-    std::vector<std::string> *mInstructions_set = new vector<string>();
-    string mSuffix;
-    string mPrecision;
-    int mExecutionCycle;
-    double mExecutionFrequency;
-    string AssemblyFileName;
-
-    void ExecuteAssembly();
-
-    void Cpu_binding ();
-
-    void Monitor_Execution();
+    std::string mPrefix;
+    std::vector<std::string> *mOperations_set   = new std::vector<std::string>();
+    std::vector<std::string> *mInstructions_set = new std::vector<std::string>();
+    std::string mSuffix;
+    std::string mPrecision;
 
     void Generate_code();
 
