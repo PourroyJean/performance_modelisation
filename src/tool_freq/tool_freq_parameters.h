@@ -4,12 +4,11 @@
 #include <map>
 #include <string>
 
-using namespace std;
 enum {
     SCALAR, SSE, AVX, ADD, MUL, FMA
 };
 
-static const string Parameter[] = {"SCALAR", "SSE", "AVX", "ADD", "MUL", "FMA"};
+static const std::string Parameter[] = {"SCALAR", "SSE", "AVX", "ADD", "MUL", "FMA"};
 static std::map<int, std::string> mapParameter = {{SCALAR, "SCALAR"},
                                                   {SSE,    "SSE"},
                                                   {AVX,    "AVX"},
@@ -19,15 +18,16 @@ static std::map<int, std::string> mapParameter = {{SCALAR, "SCALAR"},
 
 class Tool_freq_parameters {
 public:
-    int P_SIMD;
     int P_WIDTH;
-    string P_OPERATIONS;
+    std::string P_OPERATIONS;
     int P_BIND;
     bool P_DEPENDENCY;
-    string P_PRECISION;
+    std::string P_PRECISION;
     bool P_VERBOSE;
     bool P_HELP;
     unsigned P_LOOP_SIZE;
+    bool P_GRAPH;
+    unsigned P_SAMPLES;
 
     Tool_freq_parameters();
 
