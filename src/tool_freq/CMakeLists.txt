@@ -15,7 +15,7 @@ include_directories(${CMAKE_SOURCE_DIR}/src/tool_freq)
 #copy the generator script
 add_custom_target(CopyScript
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_compile.sh ${CMAKE_BINARY_DIR}/bin/tool_freq_compile.sh
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/normal_distribution.py ${CMAKE_BINARY_DIR}/bin/normal_distribution.py
+        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_distribution.py ${CMAKE_BINARY_DIR}/bin/tool_freq_distribution.py
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_graphical.sh ${CMAKE_BINARY_DIR}/bin/tool_freq_graphical.sh
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/tool_freq/tool_freq_template_start.cpp ${CMAKE_BINARY_DIR}/bin/tool_freq_template_start.cpp
         COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/tool_freq/tool_freq_template_end.cpp ${CMAKE_BINARY_DIR}/bin/tool_freq_template_end.cpp
