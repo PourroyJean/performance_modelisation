@@ -22,6 +22,7 @@ Tool_freq_parameters::Tool_freq_parameters() {
     P_PRECISION = PARAM_PRECISION;
     P_LOOP_SIZE = PARAM_LOOP_SIZE;
     P_GRAPH = PARAM_GRAPH;
+    P_SAMPLES = PARAM_SAMPLES;
     P_VERBOSE = PARAM_VERBOSE;
     P_HELP = false;
 };

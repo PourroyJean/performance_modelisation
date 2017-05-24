@@ -91,7 +91,6 @@ void Tool_freq_executor::Graphical_Output() {
     string stmp(FILE_SCRIPT_REPARTITION);
     int nbRect = PARAM_SAMPLES / 10;
     string exe = stmp + " " + FILE_MONTORING_TMP + " " +  to_string(nbRect);
-    cout << " JEAN  " << exe;
     system(exe.c_str());
 }
 

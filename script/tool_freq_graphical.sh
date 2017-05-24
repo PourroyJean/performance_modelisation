@@ -8,15 +8,18 @@ then
     exit
 fi
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 FILE_DATA_ORIGINAL=$1
+SIZE_RECTANGLE=$2
+
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
 FILE_DATA_CYCLE=$FILE_DATA_ORIGINAL\_cycle
 
-SIZE_RECTANGLE=$2
 
 cat $FILE_DATA_ORIGINAL | awk '{printf ("%d ", $1 )  }' > $FILE_DATA_CYCLE
 
-python /Users/jeanpourroy/Documents/programmation/performance_modelisation/script/normal_distribution.py $FILE_DATA_CYCLE $SIZE_RECTANGLE
+python $DIR/tool_freq_distribution.py $FILE_DATA_CYCLE $SIZE_RECTANGLE
 
 
 
