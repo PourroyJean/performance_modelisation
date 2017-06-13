@@ -7,7 +7,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     # Mac OSX
     sysctl -n hw.physicalcpu
 else
-    CORE_SOC=$(lscpu | grep '^Core' |  awk '{print $4}')
-    CPUS=$(lscpu | grep '^Socket(s)' |  awk '{print $2}')
+    CORE_SOC=$(lscpu | grep '^Core' |  awk '{print $NF}')
+    CPUS=$(lscpu | grep '^Socket(s)' |  awk '{print $NF}')
     echo $(($CORE_SOC * CPUS))
 fi
