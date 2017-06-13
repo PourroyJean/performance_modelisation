@@ -13,18 +13,27 @@ include_directories(${CMAKE_SOURCE_DIR}/src/tool_freq)
 
 
 #copy the generator script
-add_custom_target(CopyScript
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_compile.sh ${CMAKE_BINARY_DIR}/bin/tool_freq_compile.sh
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_distribution.py ${CMAKE_BINARY_DIR}/bin/tool_freq_distribution.py
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_graphical.sh ${CMAKE_BINARY_DIR}/bin/tool_freq_graphical.sh
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/tool_freq/tool_freq_template_start.cpp ${CMAKE_BINARY_DIR}/bin/tool_freq_template_start.cpp
-        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/tool_freq/tool_freq_template_end.cpp ${CMAKE_BINARY_DIR}/bin/tool_freq_template_end.cpp
-        )
+#add_custom_target(CopyScript
+#        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_compile.sh ${CMAKE_BINARY_DIR}/bin/tool_freq/tool_freq_compile.sh
+#        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_distribution.py ${CMAKE_BINARY_DIR}/bin/tool_freq/tool_freq_distribution.py
+#        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/script/tool_freq_graphical.sh ${CMAKE_BINARY_DIR}/bin/tool_freq/tool_freq_graphical.sh
+#        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/tool_freq/tool_freq_template_start.cpp ${CMAKE_BINARY_DIR}/bin/tool_freq/tool_freq_template_start.cpp
+#        COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/src/tool_freq/tool_freq_template_end.cpp ${CMAKE_BINARY_DIR}/bin/tool_freq/tool_freq_template_end.cpp
+#        )
+#add_dependencies(tool_freq CopyScript )
 
 add_library(lib_tool_freq tool_freq_parameters.cpp tool_freq_misc.cpp tool_freq_generators.cpp tool_freq_executor.cpp)
-
-
-#add_executable(tool_freq tool_freq.c misc.c)
 add_executable(tool_freq tool_freq.cxx tool_freq_parameters.cpp tool_freq_misc.cpp tool_freq_generators.cpp tool_freq_executor.cpp)
 
-add_dependencies(tool_freq CopyScript )
+
+set_target_properties( tool_freq
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tool_freq"
+)
+
+
+file(GLOB TOOL_FREQ_COPY_FILES
+        "${CMAKE_SOURCE_DIR}/src/tool_freq/script/*.py"
+        "${CMAKE_SOURCE_DIR}/src/tool_freq/script/*.sh"
+        )
+file(COPY ${TOOL_FREQ_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_freq)
