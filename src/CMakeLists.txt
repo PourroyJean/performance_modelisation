@@ -1,7 +1,6 @@
 
 #However, the file(GLOB...) allows for wildcard additions:
 file(GLOB SOURCES "*.c")
-#message(WARNING "-- YOLO    --" ${CMAKE_SOURCE_DIR})
 
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
@@ -14,3 +13,4 @@ add_library(lib_misc misc.c)
 #add_executable(tool_cacheSize tool_cacheSize.c misc.c)
 
 add_subdirectory (tool_freq)
+add_subdirectory (tool_hw_description)
