@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
-lscpu | grep '^CPU MHz' |  awk '{print $NF}'
+
+for var in  ${!PM_*} ; do
+cmd="echo \$$var"
+val=`eval $cmd`
+echo $var $val
+
+done
+
