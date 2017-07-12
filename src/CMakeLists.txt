@@ -12,5 +12,4 @@ add_library(lib_misc misc.c)
 #add_executable(tool_cacheLineSize tool_cacheLineSize.c misc.c)
 #add_executable(tool_cacheSize tool_cacheSize.c misc.c)
 
-add_subdirectory (tool_freq)
 add_subdirectory (tool_hw_description)

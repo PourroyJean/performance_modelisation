@@ -31,3 +31,10 @@ if(DOXYGEN_FOUND)
             COMMENT "Generating API documentation with Doxygen" VERBATIM)
 endif(DOXYGEN_FOUND)
 
+
+#
+#file(GLOB S_FILES
+#        "${CMAKE_SOURCE_DIR}/script/*"
+#        )
+#
+#file(COPY ${S_FILES}   DESTINATION ${CMAKE_BINARY_DIR}/bin/script)
