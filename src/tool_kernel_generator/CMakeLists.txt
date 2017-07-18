@@ -10,29 +10,29 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
-#include_directories(${CMAKE_SOURCE_DIR}/src/tool_freq)
+#include_directories(${CMAKE_SOURCE_DIR}/src/tool_kernel_generator)
 
 
 
-add_library(lib_tool_freq tool_freq_parameters.cpp tool_freq_misc.cpp tool_freq_generators.cpp tool_freq_executor.cpp)
-add_executable(tool_freq tool_freq.cxx tool_freq_parameters.cpp tool_freq_misc.cpp tool_freq_generators.cpp tool_freq_executor.cpp)
+add_library(lib_kg kg_parameters.cpp kg_misc.cpp kg_generators.cpp kg_executor.cpp)
+add_executable(kg kg_main.cxx kg_parameters.cpp kg_misc.cpp kg_generators.cpp kg_executor.cpp)
 
 
-set_target_properties( tool_freq
+set_target_properties( kg
         PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tool_hw_description/tool_freq"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tool_hw_description/kg"
 )
 
 
-file(GLOB TOOL_FREQ_COPY_FILES
+file(GLOB KG_COPY_FILES
         "script/*.py"
         "script/*.sh"
-        "tool_freq_template_start.cpp"
-        "tool_freq_template_end.cpp"
+        "kg_template_start.cpp"
+        "kg_template_end.cpp"
         )
 
 
-file(COPY ${TOOL_FREQ_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_hw_description/tool_freq)
+file(COPY ${KG_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_hw_description/kg)
 
 
 
