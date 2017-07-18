@@ -1,20 +1,20 @@
 #include <iostream>
-#include "tool_freq_parameters.h"
-#include "tool_freq_misc.h"
-#include "tool_freq_generators.h"
-#include "tool_freq_executor.h"
+#include "kg_parameters.h"
+#include "kg_misc.h"
+#include "kg_generators.h"
+#include "kg_executor.h"
 #include <cmath>
 
 
 using namespace std;
 
-Tool_freq_executor::Tool_freq_executor (Tool_freq_generators * generator){
+KG_executor::KG_executor (KG_generators * generator){
     mGenerator = generator;
     mParameters = generator->mParameters;
 }
 
 
-void Tool_freq_executor::Execute_assembly() {
+void KG_executor::Execute_assembly() {
     DEBUG_PRINT("-- Execution the generated assembly file\n");
 
     //We let the kernel bind the process himself if no binding are set
@@ -27,7 +27,7 @@ void Tool_freq_executor::Execute_assembly() {
 }
 
 
-void Tool_freq_executor::Monitor_Execution() {
+void KG_executor::Monitor_Execution() {
     ifstream res_file(FILE_MONTORING_TMP);
     int tab_cycle[mParameters->P_SAMPLES];
     double tab_time[mParameters->P_SAMPLES];
@@ -87,14 +87,14 @@ void Tool_freq_executor::Monitor_Execution() {
 
 }
 
-void Tool_freq_executor::Graphical_Output() {
+void KG_executor::Graphical_Output() {
     string stmp(FILE_SCRIPT_REPARTITION);
     int nbRect = PARAM_SAMPLES / 10;
     string exe = stmp + " " + FILE_MONTORING_TMP + " " +  to_string(nbRect);
     system(exe.c_str());
 }
 
-void Tool_freq_executor::Cpu_binding() {
+void KG_executor::Cpu_binding() {
 
     //We only bind the process if the user enterer -B parameter
     if (mParameters->P_BIND < 0) {

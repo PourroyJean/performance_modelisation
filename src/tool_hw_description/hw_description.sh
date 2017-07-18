@@ -17,7 +17,7 @@ popd  > /dev/null
 
 
 PATH_SCRIPT=$PATH_TOOL/script
-TOOL_FREQ=$PATH_TOOL/tool_freq/tool_freq
+KG=$PATH_TOOL/kg/kg
 
 
 echo "Current execution: $PATH_TOOL"
@@ -52,23 +52,23 @@ echo "####  FLOATING POINT UNIT #####"
 
 echo "--------- operation per cycle ----------"
 
-$TOOL_FREQ | grep IPC |  awk '{print $2}'
+$KG | grep IPC |  awk '{print $2}'
 
 OPERATION='mmmmmmm'
 
 echo "# MUL SINGLE PRECISION "
 export PM_HW_ALU_32_MUL_SP= #NOT YET AVAILABLE
-export PM_HW_ALU_64_MUL_SP=` $TOOL_FREQ -O $OPERATION -W 64  -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_128_MUL_SP=`$TOOL_FREQ -O $OPERATION -W 128 -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_256_MUL_SP=`$TOOL_FREQ -O $OPERATION -W 256 -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_512_MUL_SP=`$TOOL_FREQ -O $OPERATION -W 512 -P single | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_64_MUL_SP=` $KG -O $OPERATION -W 64  -P single | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_128_MUL_SP=`$KG -O $OPERATION -W 128 -P single | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_256_MUL_SP=`$KG -O $OPERATION -W 256 -P single | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_512_MUL_SP=`$KG -O $OPERATION -W 512 -P single | grep IPC |  awk '{print $2}'`
 
 echo "# MUL DOUBLE PRECISION "
 export PM_HW_ALU_32_MUL_DP= #NOT YET AVAILABLE
-export PM_HW_ALU_64_MUL_DP=` $TOOL_FREQ -O $OPERATION -W 64  -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_128_MUL_DP=`$TOOL_FREQ -O $OPERATION -W 128 -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_256_MUL_DP=`$TOOL_FREQ -O $OPERATION -W 256 -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_512_MUL_DP=`$TOOL_FREQ -O $OPERATION -W 512 -P double | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_64_MUL_DP=` $KG -O $OPERATION -W 64  -P double | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_128_MUL_DP=`$KG -O $OPERATION -W 128 -P double | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_256_MUL_DP=`$KG -O $OPERATION -W 256 -P double | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_512_MUL_DP=`$KG -O $OPERATION -W 512 -P double | grep IPC |  awk '{print $2}'`
 
 
 
@@ -76,17 +76,17 @@ OPERATION='fffffff'
 
 echo "# FMA SINGLE PRECISION "
 export PM_HW_ALU_32_FMA_SP= #NOT YET AVAILABLE
-export PM_HW_ALU_64_FMA_SP=` $TOOL_FREQ -O $OPERATION -W 64  -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_128_FMA_SP=`$TOOL_FREQ -O $OPERATION -W 128 -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_256_FMA_SP=`$TOOL_FREQ -O $OPERATION -W 256 -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_512_FMA_SP=`$TOOL_FREQ -O $OPERATION -W 512 -P single | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_64_FMA_SP=` $KG -O $OPERATION -W 64  -P single | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_128_FMA_SP=`$KG -O $OPERATION -W 128 -P single | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_256_FMA_SP=`$KG -O $OPERATION -W 256 -P single | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_512_FMA_SP=`$KG -O $OPERATION -W 512 -P single | grep IPC |  awk '{print $2}'`
 
 echo "# FMA DOUBLE PRECISION "
 export PM_HW_ALU_32_FMA_DP= #NOT YET AVAILABLE
-export PM_HW_ALU_64_FMA_DP=` $TOOL_FREQ -O $OPERATION -W 64  -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_128_FMA_DP=`$TOOL_FREQ -O $OPERATION -W 128 -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_256_FMA_DP=`$TOOL_FREQ -O $OPERATION -W 256 -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_512_FMA_DP=`$TOOL_FREQ -O $OPERATION -W 512 -P double | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_64_FMA_DP=` $KG -O $OPERATION -W 64  -P double | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_128_FMA_DP=`$KG -O $OPERATION -W 128 -P double | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_256_FMA_DP=`$KG -O $OPERATION -W 256 -P double | grep IPC |  awk '{print $2}'`
+export PM_HW_ALU_512_FMA_DP=`$KG -O $OPERATION -W 512 -P double | grep IPC |  awk '{print $2}'`
 
 
 echo "#########  MEMORY  ############ "
