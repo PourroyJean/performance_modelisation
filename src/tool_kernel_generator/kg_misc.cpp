@@ -22,7 +22,7 @@ using namespace std;
 
 void usage() {
     fprintf(stderr,
-            "Usage: ./tool_freq [-I INSTRUCTIONS ] [-W WIDTH] [-O operations] [-B BINDING] [-vh]\n");
+            "Usage: ./tool_kernel_generator [-I INSTRUCTIONS ] [-W WIDTH] [-O operations] [-B BINDING] [-vh]\n");
 }
 
 template<typename Out>
