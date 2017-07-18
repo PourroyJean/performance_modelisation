@@ -4,7 +4,7 @@
 #include <string.h>
 #include <sstream>      // std::istringstream
 #include <iostream>
-#include "tool_freq_misc.h"
+#include "kg_misc.h"
 #include <unistd.h>
 
 
