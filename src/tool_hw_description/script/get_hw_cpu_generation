@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+
+#Get the processor generation
+cpuid -1 | grep "(synth)" | awk '{ for (i=3; i<=NF; i++) { printf $i "_"  } }'

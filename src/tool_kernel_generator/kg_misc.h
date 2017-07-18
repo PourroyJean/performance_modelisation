@@ -1,5 +1,5 @@
-#ifndef PERFORMANCE_MODELISATION_TOOL_FREQ_MISC_H
-#define PERFORMANCE_MODELISATION_TOOL_FREQ_MISC_H
+#ifndef PERFORMANCE_MODELISATION_KG_MISC_H
+#define PERFORMANCE_MODELISATION_KG_MISC_H
 
 
 #include <string>
@@ -17,15 +17,15 @@
 //**        FILES PATH      **
 //****************************
 //These files are two template used to generate the code. _start and _end containing the beginning and the ending of the final file
-#define FILE_TEMPLATE_START         (BIN_DIR  + "/tool_freq_template_start.cpp")
-#define FILE_TEMPLATE_END           (BIN_DIR  + "/tool_freq_template_end.cpp")
+#define FILE_TEMPLATE_START         (BIN_DIR  + "/kg_template_start.cpp")
+#define FILE_TEMPLATE_END           (BIN_DIR  + "/kg_template_end.cpp")
 //This is the generated cpp file and the program compiled with. Generated file are created in the user's current directory
 #define FILE_ASM_SOURCE_GENERATED   (HOME_DIR  + "/assembly_generated.cpp")
 #define FILE_ASM_EXE                (HOME_DIR  + "/assembly")
 //During the execution we use a temporal file to store the value (cycle and time)
-#define FILE_MONTORING_TMP          (HOME_DIR + "/tmp_tool_freq_output")
+#define FILE_MONTORING_TMP          (HOME_DIR + "/tmp_kg_output")
 //If the graphical option is set, we draw some graph with python scripts
-#define FILE_SCRIPT_REPARTITION     (BIN_DIR  + "/tool_freq_graphical.sh")
+#define FILE_SCRIPT_REPARTITION     (BIN_DIR  + "/kg_graphical.sh")
 
 
 //--------------
@@ -58,8 +58,5 @@ double mygettime();
 
 uint64_t rdtsc();
 
-void native_frequency();
 
-void init_tool_freq ();
-
-#endif //PERFORMANCE_MODELISATION_TOOL_FREQ_MISC_H
+#endif //PERFORMANCE_MODELISATION_KG_MISC_H

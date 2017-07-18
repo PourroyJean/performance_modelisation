@@ -13,10 +13,10 @@
 #include <stdbool.h>
 #include <iostream>
 #include <iomanip>
-#include "tool_freq_parameters.h"
-#include "tool_freq_generators.h"
-#include "tool_freq_executor.h"
-#include "tool_freq_misc.h"
+#include "kg_parameters.h"
+#include "kg_generators.h"
+#include "kg_executor.h"
+#include "kg_misc.h"
 #
 
 
@@ -25,11 +25,11 @@
 int main(int argc, char **argv) {
 
     //----------- ARGUMENT PARSING --------------
-    Tool_freq_parameters * tool_freq_parameters = new Tool_freq_parameters();
-    tool_freq_parameters->parse_arguments(argc, argv);
+    KG_parameters * kg_parameters = new KG_parameters();
+    kg_parameters->parse_arguments(argc, argv);
 
     //------------ CODE GENERATION  -------------
-    Tool_freq_generators * generator = new Tool_freq_generators (tool_freq_parameters);
+    KG_generators * generator = new KG_generators (kg_parameters);
     generator->Generate_code();
 
     //------------ ASSEMBLY COMPILATION ---------
@@ -37,7 +37,7 @@ int main(int argc, char **argv) {
     system(stmp.c_str());
 
     //----------- EXECUTING --------------------
-    Tool_freq_executor  * executor = new Tool_freq_executor (generator);
+    KG_executor  * executor = new KG_executor (generator);
     executor->Execute_assembly();
 
     //----------- ANALYZING -------------------
