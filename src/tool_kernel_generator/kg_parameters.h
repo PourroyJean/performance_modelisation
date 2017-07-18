@@ -1,5 +1,5 @@
-#ifndef __tool_freq_misc_H__
-#define __tool_freq_misc_H__
+#ifndef __kg_misc_H__
+#define __kg_misc_H__
 
 #include <map>
 #include <string>
@@ -16,7 +16,7 @@ static std::map<int, std::string> mapParameter = {{SCALAR, "SCALAR"},
                                                   {MUL,    "MUL"},
                                                   {FMA,    "FMA"}};
 
-class Tool_freq_parameters {
+class KG_parameters {
 public:
     int P_WIDTH;
     std::string P_OPERATIONS;
@@ -29,7 +29,7 @@ public:
     bool P_GRAPH;
     unsigned P_SAMPLES;
 
-    Tool_freq_parameters();
+    KG_parameters();
 
     void check_arguments();
 
@@ -43,4 +43,4 @@ public:
 
 };
 
-#endif //__tool_freq_misc_H__
+#endif //__kg_misc_H__
