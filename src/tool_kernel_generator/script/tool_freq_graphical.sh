@@ -19,7 +19,7 @@ FILE_DATA_CYCLE=$FILE_DATA_ORIGINAL\_cycle
 
 cat $FILE_DATA_ORIGINAL | awk '{printf ("%d ", $1 )  }' > $FILE_DATA_CYCLE
 
-python $DIR/tool_freq_distribution.py $FILE_DATA_CYCLE $SIZE_RECTANGLE
+python $DIR/kg_distribution.py $FILE_DATA_CYCLE $SIZE_RECTANGLE
 
 
 

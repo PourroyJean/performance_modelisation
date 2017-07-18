@@ -8,14 +8,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 
 
-add_subdirectory ("tool_freq")
+#add_subdirectory ("../../tool_kernel_generator")
 
-#include_directories(${CMAKE_SOURCE_DIR}/src/tool_freq)
+#include_directories(${CMAKE_SOURCE_DIR}/src/tool_kernel_generator)
 
 
 
-#add_library(lib_tool_freq tool_freq_parameters.cpp tool_freq_misc.cpp tool_freq_generators.cpp tool_freq_executor.cpp)
-#add_executable(tool_freq tool_freq.cxx tool_freq_parameters.cpp tool_freq_misc.cpp tool_freq_generators.cpp tool_freq_executor.cpp)
+#add_library(lib_kg kg_parameters.cpp kg_misc.cpp kg_generators.cpp kg_executor.cpp)
+#add_executable(tool_kernel_generator tool_kernel_generator.cxx kg_parameters.cpp kg_misc.cpp kg_generators.cpp kg_executor.cpp)
 
 add_executable(get_hw_has_turbo get_hw_has_turbo.cxx)
 
@@ -25,8 +25,8 @@ set_target_properties( get_hw_has_turbo
 )
 
 
-#file(GLOB TOOL_FREQ_COPY_FILES
-#        "${CMAKE_SOURCE_DIR}/src/tool_freq/script/*.py"
-#        "${CMAKE_SOURCE_DIR}/src/tool_freq/script/*.sh"
+#file(GLOB KG_COPY_FILES
+#        "${CMAKE_SOURCE_DIR}/src/tool_kernel_generator/script/*.py"
+#        "${CMAKE_SOURCE_DIR}/src/tool_kernel_generator/script/*.sh"
 #        )
-#file(COPY ${TOOL_FREQ_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_freq)
+#file(COPY ${KG_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_kernel_generator)

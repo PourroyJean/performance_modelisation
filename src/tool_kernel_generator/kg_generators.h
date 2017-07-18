@@ -2,22 +2,20 @@
 // Created by Jean Pourroy on 20/02/2017.
 //
 
-#ifndef PERFORMANCE_MODELISATION_TOOL_FREQ_GENERATORS_H
-#define PERFORMANCE_MODELISATION_TOOL_FREQ_GENERATORS_H
+#ifndef PERFORMANCE_MODELISATION_KG_GENERATORS_H
+#define PERFORMANCE_MODELISATION_KG_GENERATORS_H
 
 #include <vector>
 #include <fstream>
-#include "tool_freq_parameters.h"
-#include "tool_freq_misc.h"
+#include "kg_parameters.h"
+#include "kg_misc.h"
 
-class Tool_freq_generators {
+class KG_generators {
 
 private:
     void init_files();
 
     void generate_source();
-
-    void generate_header();
 
     void generate_assembly();
 
@@ -34,7 +32,7 @@ private:
     std::ifstream mFile_template_end   ;
 
 public:
-    Tool_freq_parameters *mParameters;
+    KG_parameters *mParameters;
     std::string mRegister_name;
     unsigned mPrevious_target_register;
     std::string mPrefix;
@@ -45,10 +43,10 @@ public:
 
     void Generate_code();
 
-    Tool_freq_generators(Tool_freq_parameters *param);
+    KG_generators(KG_parameters *param);
 
-    virtual ~Tool_freq_generators();
+    virtual ~KG_generators();
 };
 
 
-#endif //PERFORMANCE_MODELISATION_TOOL_FREQ_GENERATORS_H
+#endif //PERFORMANCE_MODELISATION_KG_GENERATORS_H

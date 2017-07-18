@@ -6,6 +6,6 @@ echo $PATH
 echo Running test in parallel on CPUs: $*
 for i in $*
 do
-  /nfs/pourroy/code/THESE/performance_modelisation/build/bin/tool_freq $i  &
+  /nfs/pourroy/code/THESE/performance_modelisation/build/bin/kg $i  &
 done
 wait

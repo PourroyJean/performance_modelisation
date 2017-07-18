@@ -3,7 +3,7 @@
 //
 
 #include <cstdio>
-#include "tool_freq_misc.h"
+#include "kg_misc.h"
 
 
 #include <algorithm>

@@ -2,29 +2,29 @@
 // Created by Jean Pourroy on 21/03/2017.
 //
 
-#ifndef __tool_freq_executor_H__
-#define __tool_freq_executor_H__
+#ifndef __kg_executor_H__
+#define __kg_executor_H__
 
 
 #include <vector>
 #include <fstream>
-#include "tool_freq_parameters.h"
-#include "tool_freq_misc.h"
-#include "tool_freq_generators.h"
+#include "kg_parameters.h"
+#include "kg_misc.h"
+#include "kg_generators.h"
 
 
-class Tool_freq_executor {
+class KG_executor {
 
 private:
-    Tool_freq_generators *mGenerator;
-    Tool_freq_parameters *mParameters;
+    KG_generators *mGenerator;
+    KG_parameters *mParameters;
 
     void Cpu_binding();
 
 
 public:
 
-    Tool_freq_executor(Tool_freq_generators *generator);
+    KG_executor(KG_generators *generator);
 
     void Execute_assembly();
 
@@ -36,4 +36,4 @@ public:
 };
 
 
-#endif //__tool_freq_executor_H__
+#endif //__kg_executor_H__
