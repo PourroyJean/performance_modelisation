@@ -91,6 +91,8 @@ export PM_HW_ALU_512_FMA_DP=`$TOOL_FREQ -O $OPERATION -W 512 -P double | grep IP
 
 echo "#########  MEMORY  ############ "
 
+export PM_HW_MEMORY_CACHE_LINE_SIZE=
+
 export PM_HW_MEMORY_L1_D_SIZE=
 export PM_HW_MEMORY_L1_I_SIZE=
 export PM_HW_MEMORY_L1_LATENCY=
