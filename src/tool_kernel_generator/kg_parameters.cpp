@@ -1,10 +1,10 @@
 #include <getopt.h>
 #include <cstdlib>
-#include "tool_freq_parameters.h"
+#include "kg_parameters.h"
 #include <string.h>
 #include <sstream>      // std::istringstream
 #include <iostream>
-#include "tool_freq_misc.h"
+#include "kg_misc.h"
 #include <unistd.h>
 
 
@@ -13,7 +13,7 @@ std::string HOME_DIR;
 
 using namespace std;
 
-Tool_freq_parameters::Tool_freq_parameters() {
+KG_parameters::KG_parameters() {
     //By default use the parameters located in the tool_feq_misch.h file
     P_WIDTH = PARAM_WIDTH;
     P_OPERATIONS = PARAM_OPERATIONS;
@@ -28,7 +28,7 @@ Tool_freq_parameters::Tool_freq_parameters() {
 };
 
 
-void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
+void KG_parameters::parse_arguments(int argc, char **argv) {
 
     //Parse the binary directory absolute path
     string s1(argv[0]);
@@ -139,7 +139,7 @@ void Tool_freq_parameters::parse_arguments(int argc, char **argv) {
 }
 
 
-void Tool_freq_parameters::check_operations() {
+void KG_parameters::check_operations() {
     for (char &c : P_OPERATIONS) {
         if (c != 'a' && c != 'A' && c != 'f' && c != 'F' && c != 'm' && c != 'M') {
             cout << "/!\\ WRONG OPERATIONS " << c << endl;
@@ -149,7 +149,7 @@ void Tool_freq_parameters::check_operations() {
 }
 
 
-void Tool_freq_parameters::parameter_summary() {
+void KG_parameters::parameter_summary() {
     cout << "\t -W (width)            " << this->P_WIDTH << endl;
     cout << "\t -O <operationsl list> " << this->P_OPERATIONS << endl;
     cout << "\t -B (core binding)     " << this->P_BIND << endl;
@@ -162,7 +162,7 @@ void Tool_freq_parameters::parameter_summary() {
 }
 
 
-void Tool_freq_parameters::help() {
+void KG_parameters::help() {
     cout << endl;
     cout << "This tool should be launched with the following parameters ([] = default):\n";
     cout << "\t -W, --width            ["<< PARAM_WIDTH<< "] / 64 128 256 512" << endl;
@@ -177,7 +177,7 @@ void Tool_freq_parameters::help() {
     cout << "\t -h,--help\n";
 }
 
-void Tool_freq_parameters::check_arguments() {
+void KG_parameters::check_arguments() {
     if (this->P_HELP) {
         this->help();
         exit(0);

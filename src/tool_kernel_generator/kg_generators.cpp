@@ -3,8 +3,8 @@
 //
 #include <stdio.h>
 #include <iostream>
-#include "tool_freq_generators.h"
-#include "tool_freq_misc.h"
+#include "kg_generators.h"
+#include "kg_misc.h"
 
 
 #ifndef _GNU_SOURCE
@@ -17,7 +17,7 @@
 using namespace std;
 
 
-void Tool_freq_generators::generate_assembly() {
+void KG_generators::generate_assembly() {
 
     mFile_assembly_src << "__asm__ (\"myBench: \" " << endl;
     for (auto instruction: *mInstructions_set) {
@@ -29,7 +29,7 @@ void Tool_freq_generators::generate_assembly() {
 }
 
 
-void Tool_freq_generators::generate_source() {
+void KG_generators::generate_source() {
     mFile_assembly_src << "#define TMP_FILE_monitoring \"" + FILE_MONTORING_TMP + "\"\n";
     mFile_assembly_src << "int NB_lOOP = " << mParameters->P_SAMPLES << ";\n";
 
@@ -44,7 +44,7 @@ void Tool_freq_generators::generate_source() {
 }
 
 
-int Tool_freq_generators::Get_register_source() {
+int KG_generators::Get_register_source() {
     if (mParameters->P_DEPENDENCY) {
         return mPrevious_target_register;
     } else {
@@ -52,7 +52,7 @@ int Tool_freq_generators::Get_register_source() {
     }
 }
 
-int Tool_freq_generators::Get_register_cible() {
+int KG_generators::Get_register_cible() {
     if (mPrevious_target_register == 15) {
         mPrevious_target_register = 1;
     }
@@ -61,7 +61,7 @@ int Tool_freq_generators::Get_register_cible() {
 }
 
 
-void Tool_freq_generators::generate_instructions() {
+void KG_generators::generate_instructions() {
     DEBUG_PRINT("-- Generating instructions vector\n");
 
     mInstructions_set->clear();
@@ -86,7 +86,7 @@ void Tool_freq_generators::generate_instructions() {
 }
 
 
-void Tool_freq_generators::Init_Generator() {
+void KG_generators::Init_Generator() {
     DEBUG_PRINT("-- Init Generator register, prefix, suffix, and precision \n");
 
     //only [v]addpd instructions supported
@@ -133,7 +133,7 @@ void Tool_freq_generators::Init_Generator() {
 }
 
 
-void Tool_freq_generators::Generate_code() {
+void KG_generators::Generate_code() {
     DEBUG_PRINT("Generating assembly...\n");
 
     //----- INITIALISATION -----------
@@ -151,7 +151,7 @@ void Tool_freq_generators::Generate_code() {
     return;
 }
 
-Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
+KG_generators::KG_generators(KG_parameters *param) {
     mParameters = param;
     mRegister_name = "xmm";
     mPrevious_target_register = 1;
@@ -176,7 +176,7 @@ Tool_freq_generators::Tool_freq_generators(Tool_freq_parameters *param) {
 
 
 
-Tool_freq_generators::~Tool_freq_generators() {
+KG_generators::~KG_generators() {
 //    fclose(P_FPC);
 //    fclose(P_FPH);
 }

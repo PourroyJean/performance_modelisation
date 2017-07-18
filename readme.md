@@ -3,7 +3,7 @@ This package should be used by every ninja programmer interested by tunning or m
 
 ## Content
 This package contains the following tools
-*   tool_Freq: used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
+*   kg: used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
 
 *   ...
 
@@ -21,10 +21,10 @@ cmake ..
 ```
 
 # Example
-Here is an example explaining how to use `tool_freq`:
+Here is an example explaining how to use `kg`:
 ```
 cd performance_modelisation/build/bin
-./tool_freq
+./kg
 ```
 
 
