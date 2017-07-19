@@ -55,3 +55,6 @@ build
 *.els
 *.nls
 *.synctex.gz
+
+
+his_oprofile*
