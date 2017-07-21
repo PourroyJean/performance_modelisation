@@ -21,6 +21,7 @@ void print_times(char *s);
 
 
 typedef uint64_t ui64;
+typedef uint32_t ui32;
 /**
  * This assembly function return the number of the current cycle
  * @return  cycle number

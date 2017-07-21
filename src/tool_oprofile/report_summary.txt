@@ -1,0 +1,14 @@
+CPU: Intel Broadwell microarchitecture, speed 2397.32 MHz (estimated)
+Counted CPU_CLK_UNHALTED events (Clock cycles when not halted) with a unit mask of 0x00 (No unit mask) count 10000000
+Counted INST_RETIRED events (number of instructions retired) with a unit mask of 0x00 (No unit mask) count 10000000
+CPU_CLK_UNHALT...|INST_RETIRED:1...|
+  samples|      %|  samples|      %|
+------------------------------------
+     1404 96.7609      4606 99.5246 multiply
+       35  2.4121        10  0.2161 no-vmlinux
+        7  0.4824         8  0.1729 libc-2.17.so
+        2  0.1378         1  0.0216 ld-2.17.so
+        1  0.0689         2  0.0432 bash
+        1  0.0689         0       0 systemd-journald
+        1  0.0689         0       0 panfs_stat
+        0       0         1  0.0216 grep
