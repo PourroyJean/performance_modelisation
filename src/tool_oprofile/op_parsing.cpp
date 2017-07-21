@@ -15,7 +15,7 @@ using namespace std;
 
 typedef unsigned long long ui64;
 typedef unsigned long      ui32;
- 
+
 ui64 stoullhexa(string str)
 {
         ui64 add=0;
@@ -33,7 +33,7 @@ const vector<string> split(const string& s, const char& c)
 {
 	string buff{""};
 	vector<string> v;
-	
+
 	for(auto n:s)
 	{
 		if(n != c) buff+=n; else
@@ -141,7 +141,7 @@ objdump_line::objdump_line(string line)
 					//cout << v[0] << " " << v[1] << endl;
 				}
 			}
-			//cout << "_2_ " << std::dec << len_str << " " << line_ctr << " " << last_func << " " << 
+			//cout << "_2_ " << std::dec << len_str << " " << line_ctr << " " << last_func << " " <<
 				          //line << " " << address << " " <<  std::hex << address << endl;
 			return;
 		}
@@ -150,7 +150,7 @@ objdump_line::objdump_line(string line)
 
 void read_object_file(const char* fname)
 {
-    	ifstream fobj (fname);  
+    	ifstream fobj (fname);
 	assert(  fobj.is_open());
 	while(1){
 		string line;
@@ -246,8 +246,8 @@ oprofile_line::oprofile_line(string line)
 			get_address_and_ctrs();
 			line_fname=last_func;
 			oprofile_address[address]=line_ctr;
-			//cout << "_2_ " << std::dec << len_str << " " << line_ctr << " " << last_func << " " 
-				       //<< line << " " << address << " " <<  std::hex << address << " " << std::dec 
+			//cout << "_2_ " << std::dec << len_str << " " << line_ctr << " " << last_func << " "
+				       //<< line << " " << address << " " <<  std::hex << address << " " << std::dec
 				       //<< ctr1 << " " << ctr2 << endl;
 			type=2;
 			return;
@@ -256,7 +256,7 @@ oprofile_line::oprofile_line(string line)
 }
 void read_oprofile_file(const char* fname)
 {
-    	ifstream fop2 (fname);  
+    	ifstream fop2 (fname);
 	assert(  fop2.is_open());
 	while(1){
 		string line;
@@ -280,8 +280,8 @@ void read_oprofile_file(const char* fname)
 
 void results()
 {
-	// we have all data now ; we will reconstruct the profile in same order 
-	// we have to present the hot spots in same order as op2 
+	// we have all data now ; we will reconstruct the profile in same order
+	// we have to present the hot spots in same order as op2
 	cout << "================================================================================================================" << endl;
 	cout << "================================================================================================================" << endl;
 	for(int line=0;line<oprofile_file.size();line++){
@@ -301,7 +301,7 @@ void results()
 			ui64 add=stoullhexa(v[0]);
 			// we dump the disassembly of all functions consuming more than 0.1% of total
 			if(cycles>0.1){
-				// we search the line in objdump 
+				// we search the line in objdump
 				int in_objdump=objdump_address[add];
 				cout << "_2_ " << add << " " << in_objdump << " " << v[0] << " "  << oprofile_file[line].str << endl;
 				cout << "----------------------------------------------------------------------------------------------------------------" << endl;
@@ -328,7 +328,7 @@ void results()
 						cout <<  "_5_ " << std::setw(12) << sum4 << " "
 						       		<< std::setw(12) << sum3 << " "
 						       		<< std::setw(12) << sum2 << " | "
-						       		<< std::setw(12) << ctr1 << " " 
+						       		<< std::setw(12) << ctr1 << " "
 						       		<< std::setw(12) << ctr2 << "    " << str << endl;
 					if(len>=32){ // we try to detect a loop
 						string instr=str.substr(32,999);
@@ -339,7 +339,7 @@ void results()
 							ui64 diff=myadd-add;
 							if(diff<100000ull){ // backward loop
 								// we will sum the cycles and instructions of the loop
-								ui64 sumcy=0; 
+								ui64 sumcy=0;
 								ui64 sumin=0;
 								int  count=0;
 								for(int li2=li;;li2--){
@@ -354,7 +354,7 @@ void results()
 								double IPC=double(sumin)/double(sumcy);
 								double cyL=double(count)/IPC;
 								cout << "----------------------------------------------------------------------------------------------------------------" << endl;
-								cout << "_7_ LOOP from " << std::hex << myadd << " to " << std::hex << add << " size= " << std::dec << diff  << " sum(cycles)= " 
+								cout << "_7_ LOOP from " << std::hex << myadd << " to " << std::hex << add << " size= " << std::dec << diff  << " sum(cycles)= "
 								               << sumcy << " sum(inst)= " << sumin << " #inst= " << count << " IPC= " << IPC << " cycles/LOOP= " << cyL  << endl;
 								cout << "----------------------------------------------------------------------------------------------------------------" << endl;
 							}
@@ -366,7 +366,7 @@ void results()
 	}
 	cout << "================================================================================================================" << endl;
 	cout << "================================================================================================================" << endl;
-	
+
 }
 
 int main(int argc, char* argv[]) {
