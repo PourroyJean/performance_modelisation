@@ -14,3 +14,4 @@ add_library(lib_misc misc.c)
 
 add_subdirectory (tool_hw_description)
 add_subdirectory (tool_kernel_generator)
+add_subdirectory (tool_oprofile)
