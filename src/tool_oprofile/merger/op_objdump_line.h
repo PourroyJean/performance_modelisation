@@ -39,11 +39,14 @@ private:
     int cur_line;
     int line_fname;
     int target; // branch target 0:not target 1=target
+
+    void Extract_Function_Name (string line);
 };
 
-//TODO deplacer dehors
-// OBJECT FILE lines
+
+// OBJECT FILE: each line represented by a objdump_line
 extern vector<objdump_line> objdump_file;
+
 // map address of instructions of OBJECT FILE to line inside objdump_file
 // used for branch instruction to recover the line of the branch
 extern std::unordered_map<ui64,int> objdump_address;
