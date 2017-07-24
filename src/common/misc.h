@@ -10,11 +10,10 @@
 #include <inttypes.h>
 
 float TIME_ELAPSED;
+struct timeval start_time, end_time;
 
 #define TIC gettimeofday(&start_time, NULL);
 #define TOC gettimeofday(&end_time, NULL); TIME_ELAPSED = (end_time.tv_sec - start_time.tv_sec) * 1000000 + (end_time.tv_usec - start_time.tv_usec);
-
-struct timeval start_time, end_time;
 
 void print_times(char *s);
 
@@ -31,7 +30,7 @@ ui64 dml_cycles();
 
 #define DEBUG 1
 #ifdef DEBUG
-# define DEBUG_PRINT(x) printf ((x))
+# define DEBUG_PRINT(x) std::cout << ((x))
 #else
 # define DEBUG_PRINT(x) do {} while (0)
 #endif
