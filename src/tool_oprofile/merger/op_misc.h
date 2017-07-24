@@ -7,15 +7,13 @@
 
 #include <string>
 #include <vector>
-
+#include <misc.h>
 
 
 
 
 using namespace std;
 
-typedef uint64_t ui64;
-typedef uint32_t ui32;
 
 const vector<string> split(const std::string & s, const char& c);
 
