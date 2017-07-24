@@ -29,4 +29,12 @@ typedef uint32_t ui32;
 ui64 dml_cycles();
 
 
+#define DEBUG 1
+#ifdef DEBUG
+# define DEBUG_PRINT(x) printf ((x))
+#else
+# define DEBUG_PRINT(x) do {} while (0)
+#endif
+
+
 #endif //__misc_H__

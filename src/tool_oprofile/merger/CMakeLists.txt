@@ -22,6 +22,9 @@ set_target_properties(merger
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tool_oprofile/"
 )
 
+add_definitions(-DOP_DEBUG)
+
+
 
 
 

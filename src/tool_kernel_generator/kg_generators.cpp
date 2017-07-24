@@ -13,6 +13,7 @@
 
 #include <fstream>      // std::fstream
 #include <cmath>
+#include <misc.h>
 
 using namespace std;
 

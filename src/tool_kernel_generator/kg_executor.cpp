@@ -4,6 +4,7 @@
 #include "kg_generators.h"
 #include "kg_executor.h"
 #include <cmath>
+#include <misc.h>
 
 
 using namespace std;
