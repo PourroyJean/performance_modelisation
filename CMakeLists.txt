@@ -14,7 +14,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMakeModules/")
 #message(WARNING "-- bin directory    --" ${performance_modelisation_BINARY_DIR})
 
 #Bring the headers, such as Student.h into the project
-include_directories("${CMAKE_SOURCE_DIR}/include")
+#include_directories("${CMAKE_SOURCE_DIR}/include")
 
 add_subdirectory (src)
 #add_subdirectory (test)
