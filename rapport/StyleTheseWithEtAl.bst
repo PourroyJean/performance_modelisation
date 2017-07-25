@@ -867,7 +867,7 @@ FUNCTION {default.type} { misc }
  
 MACRO {jan} {"Janvier"}
  
-MACRO {feb} {"Février"}
+MACRO {feb} {"Fï¿½vrier"}
  
 MACRO {mar} {"Mars"}
  
@@ -879,7 +879,7 @@ MACRO {jun} {"Juin"}
  
 MACRO {jul} {"Juillet"}
  
-MACRO {aug} {"Août"}
+MACRO {aug} {"Aoï¿½t"}
  
 MACRO {sep} {"Septembre"}
  
@@ -887,7 +887,7 @@ MACRO {oct} {"Octobre"}
  
 MACRO {nov} {"Novembre"}
  
-MACRO {dec} {"Décembre"}
+MACRO {dec} {"Dï¿½cembre"}
  
 MACRO {acmcs} {"ACM Computing Surveys"}
  

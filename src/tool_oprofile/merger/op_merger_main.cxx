@@ -1,6 +1,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <iterator>
 #include <unordered_map>
 #include <iomanip>
 
@@ -8,8 +9,44 @@
 #include "op_oprofile_line.h"
 #include "op_misc.h"
 
+
 using namespace std;
 
+
+void update_objdump_counters() {
+    for (std::vector<oprofile_line>::iterator it = oprofile_file.begin(); it != oprofile_file.end(); ++it) {
+        if (it->type == oprofile_line::Type::INST) {
+            /* std::cout << *it; ... */
+            int in_objdump = objdump_address[it->memory_address] - 1;
+
+            if (in_objdump > 0) {
+                objdump_file[in_objdump].event_cpu_clk = it->event_cpu_clk;
+                objdump_file[in_objdump].event_inst_retired = it->event_inst_retired;
+                //cout << "_3_ ";for(auto n:v) cout << n << " "; cout << event_cpu_clk << " " << event_inst_retired << " " << in_objdump << " " << objdump_file[in_objdump].str << endl;
+            }
+        }
+
+    }
+}
+
+
+void oprofile_print_resume() {
+    cout << "======================== OPROFILE FILE WITH > 0.1 CYCLES ======================================" << endl
+         << "===============================================================================================" << endl;
+
+    for (int line = 0; line < oprofile_file.size(); line++) {
+        if (oprofile_file[line].type == oprofile_line::Type::NO) {
+            cout << "_0_ " << oprofile_file[line].line_original_string << endl;
+        }
+        if (oprofile_file[line].type == oprofile_line::Type::FUNC) {
+            if (oprofile_file[line].event_cpu_clk > 0.01)
+                cout << "_1_ " << oprofile_file[line].line_original_string << endl;
+        }
+    }
+    cout << "==============================================================================================="
+         << "==============================================================================================="
+         << endl << endl;
+}
 
 int main(int argc, char *argv[]) {
 
@@ -23,38 +60,161 @@ int main(int argc, char *argv[]) {
     read_object_file(argv[1]);
     read_oprofile_file(argv[2]);
 
-// we have all data now ; we will reconstruct the profile in same order
+    update_objdump_counters();
+
+
+
+    // we have all data now ; we will reconstruct the profile in same order
+    oprofile_print_resume();
+
     // we have to present the hot spots in same order as op2
-    cout
-            << "================================================================================================================"
-            << endl;
-    cout
-            << "================================================================================================================"
-            << endl;
+
+
+
+
     for (int line = 0; line < oprofile_file.size(); line++) {
-        if (oprofile_file[line].type == 0) cout << "_0_ " << oprofile_file[line].str << endl;
-        if (oprofile_file[line].type == 1) {
-            vector<string> v{split(oprofile_file[line].str, ' ')};
-            double cycles = stof(v[2]);
-            if (cycles > 0.01)cout << "_1_ " << oprofile_file[line].str << endl;
+
+        vector<string> v{split(oprofile_file[line].line_original_string, ' ')};
+        ui64 memory_address = oprofile_file[line].memory_address;
+        int in_objdump = objdump_address[memory_address];
+
+
+
+        // we dump the disassembly of all functions consuming more than 0.1% of total
+        if (oprofile_file[line].type != oprofile_line::Type::FUNC
+            || oprofile_file[line].event_cpu_clk_percentage <= 0.1
+            || in_objdump <= 0) {
+            continue;
         }
+
+
+
+
+
+//        cout << "_2_ " << memory_address << " " << in_objdump << " " << v[0] << " " << oprofile_file[line].line_original_string << endl;
+        cout << endl
+             << "====================================================================================================================================================\n"
+             << "_FUNCTION_ANALYSIS_ " << oprofile_file[line].line_original_string << endl
+             << "====================================================================================================================================================\n"
+             << "           SUM*4        SUM*3        SUM*2          CYCLES       INSTS      ADDRESS     code HEXA               disassembly\n"
+             << "---------------------------------------------------------------------------------------------------------------------------------------"
+             << endl;
+
+        for (int li = in_objdump - 1;; li++) {
+            if (objdump_file[li].len_str == 0) {
+                break;
+            }
+
+//            cout << "NANOU " <<  objdump_file[li].str << endl;
+
+            //Make some values local
+            int type = objdump_file[li].type;
+            ui64 event_cpu_clk = objdump_file[li].event_cpu_clk;
+            ui64 event_inst_retired = objdump_file[li].event_inst_retired;
+            string str = objdump_file[li].line_original_string;
+            ui64 myadd = objdump_file[li].address;
+
+            //Sum 2 3 4
+            ui64 sum2 = event_cpu_clk;
+            sum2 += objdump_file[li + 1].event_cpu_clk;
+            ui64 sum3 = sum2;
+            sum3 += objdump_file[li + 2].event_cpu_clk;
+            ui64 sum4 = sum3;
+            sum4 += objdump_file[li + 3].event_cpu_clk;
+
+            if (event_cpu_clk > 0 && event_inst_retired > 0) {
+                cout << "_5_ "
+                     << std::setw(12) << sum4 << " "
+                     << std::setw(12) << sum3 << " "
+                     << std::setw(12) << sum2 << " | "
+                     << std::setw(12) << event_cpu_clk << " "
+                     << std::setw(12) << event_inst_retired << "    "
+                     << str << endl;
+            }
+//            cout << " AFFICHE\n";
+
+            if (objdump_file[li].len_str >= 32) { // we try to detect a loop
+                string instr = str.substr(32, 999);
+                vector<string> v{split(instr, ' ')};
+
+
+                cout  << "JANNOU " << instr[0]<< instr[1]<< instr[2]<< instr[3] << ' ' << v[0] << endl;
+
+
+                //Detect if its a jump but not a JMPQ one.
+                if (instr[0] == 'j' &&v[0].compare("jmpq") != 0) {
+
+                        ui64 add = stoullhexa(v[1]);
+
+
+                        ui64 diff = myadd - add;
+                        if (diff < 100000ull) { // backward loop
+                            // we will sum the cycles and instructions of the loop
+                            ui64 sumcy = 0;
+                            ui64 sumin = 0;
+                            int count = 0;
+                            for (int li2 = li;; li2--) {
+                                ui64 event_cpu_clk = objdump_file[li2].event_cpu_clk;
+                                ui64 event_inst_retired = objdump_file[li2].event_inst_retired;
+                                sumcy += event_cpu_clk;
+                                sumin += event_inst_retired;
+                                count++;
+                                ui64 addt = objdump_file[li2].address;
+                                if (addt == add)break;
+                            }
+                            double IPC = double(sumin) / double(sumcy);
+                            double cyL = double(count) / IPC;
+                            cout
+                                    << "----------------------------------------------------------------------------------------------------------------"
+                                    << endl;
+                            cout << "_7_ LOOP from " << std::hex << myadd << " to " << std::hex << add
+                                 << " size= " << std::dec << diff << " sum(cycles)= "
+                                 << sumcy << " sum(inst)= " << sumin << " #inst= " << count << " IPC= "
+                                 << IPC << " cycles/LOOP= " << cyL << endl;
+                            cout
+                                    << "----------------------------------------------------------------------------------------------------------------"
+                                    << endl;
+                        }
+                    }
+            }
+        }
+
+
     }
+
     cout
             << "================================================================================================================"
-            << endl;
-    cout
+            << endl
             << "================================================================================================================"
             << endl;
-    for (int line = 0; line < oprofile_file.size(); line++) {
-        if (oprofile_file[line].type == 1) {
-            vector<string> v{split(oprofile_file[line].str, ' ')};
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+  for (int line = 0; line < oprofile_file.size(); line++) {
+        if (oprofile_file[line].type == oprofile_line::Type::FUNC) {
+            vector<string> v{split(oprofile_file[line].line_original_string, ' ')};
             double cycles = stof(v[2]);
             ui64 add = stoullhexa(v[0]);
             // we dump the disassembly of all functions consuming more than 0.1% of total
             if (cycles > 0.1) {
                 // we search the line in objdump
                 int in_objdump = objdump_address[add];
-                cout << "_2_ " << add << " " << in_objdump << " " << v[0] << " " << oprofile_file[line].str << endl;
+                cout << "_2_ " << add << " " << in_objdump << " " << v[0] << " " << oprofile_file[line].line_original_string << endl;
                 cout
                         << "----------------------------------------------------------------------------------------------------------------"
                         << endl;
@@ -68,17 +228,17 @@ int main(int argc, char *argv[]) {
                 if (in_objdump > 0)
                     for (int li = in_objdump - 1;; li++) {
                         int type = objdump_file[li].type;
-                        ui64 ctr1 = objdump_file[li].ctr1;
-                        ui64 ctr2 = objdump_file[li].ctr2;
+                        ui64 ctr1 = objdump_file[li].event_cpu_clk;
+                        ui64 ctr2 = objdump_file[li].event_inst_retired;
                         string str = objdump_file[li].str;
                         int len = objdump_file[li].len_str;
                         ui64 myadd = objdump_file[li].address;
                         ui64 sum2 = ctr1;
-                        sum2 += objdump_file[li + 1].ctr1;
+                        sum2 += objdump_file[li + 1].event_cpu_clk;
                         ui64 sum3 = sum2;
-                        sum3 += objdump_file[li + 2].ctr1;
+                        sum3 += objdump_file[li + 2].event_cpu_clk;
                         ui64 sum4 = sum3;
-                        sum4 += objdump_file[li + 3].ctr1;
+                        sum4 += objdump_file[li + 3].event_cpu_clk;
                         if (len == 0)break;
                         if (ctr1 > 0)
                             if (ctr2 > 0)
@@ -100,8 +260,8 @@ int main(int argc, char *argv[]) {
                                         ui64 sumin = 0;
                                         int count = 0;
                                         for (int li2 = li;; li2--) {
-                                            ui64 ctr1 = objdump_file[li2].ctr1;
-                                            ui64 ctr2 = objdump_file[li2].ctr2;
+                                            ui64 ctr1 = objdump_file[li2].event_cpu_clk;
+                                            ui64 ctr2 = objdump_file[li2].event_inst_retired;
                                             sumcy += ctr1;
                                             sumin += ctr2;
                                             count++;
@@ -127,13 +287,6 @@ int main(int argc, char *argv[]) {
             }
         }
     }
-    cout
-            << "================================================================================================================"
-            << endl;
-    cout
-            << "================================================================================================================"
-            << endl;
 
-}
-
+ */
 

@@ -9,38 +9,39 @@
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <misc.h>
 
-
-
-typedef uint64_t ui64;
-typedef uint32_t ui32;
 
 using namespace std;
+
 
 class oprofile_line {
 public:
     oprofile_line(string);
 
-    string getstr() { return str; };
+    string line_original_string;
 
-    void get_address_and_ctrs();
+    void get_event_counters();
+    void get_address();
 
-    string str;
-    int type;  // 1=func : 2=inst
+    enum class Type {NO, FUNC, INST};
+    Type type;                              //0=NO,  1=FUNC : 2=INST
+    ui64 memory_address;                    //Memory address of the instruction
+
+    ui64   event_cpu_clk;                     //Clock cycles when not halted
+    double event_cpu_clk_percentage;          //Clock cycles when not halted
+    ui64   event_inst_retired;                //number of instructions retired
+
 private:
-    ui64 ctr1;
-    ui64 ctr2;
-    ui64 address;
     int cur_line;
-    int len_str;
+    int len_str;                            //Size of the line
     int line_fname;
-    static int line_ctr;
-    static int last_func;
+    static int static_line_counter;         //Current line number in the file
+    static int static_line_of_last_func;    //Line number of the last function we found
 };
 
 
-//TODO garder dans le main
-// OBJECT FILE lines
+//Oprofile file is converted in a vector of oprofile_line
 extern vector<oprofile_line> oprofile_file;
 
 // map address of instructions of OBJECT FILE to line inside oprofile_file
