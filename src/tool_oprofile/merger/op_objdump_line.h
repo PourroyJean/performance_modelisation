@@ -19,13 +19,15 @@ class objdump_line {
 public:
     objdump_line (string s);
 
-    string getstr() { return str; };
+    string getstr() { return line_original_string; };
 
     ui64 get_address();
 
-    string str;
-    ui64 ctr1;
-    ui64 ctr2;
+
+
+    string line_original_string;
+    ui64 event_cpu_clk;
+    ui64 event_inst_retired;
     ui64 address;
     int type;  // 1=func : 2=inst
     int len_str;
@@ -49,6 +51,7 @@ extern vector<objdump_line> objdump_file;
 
 // map address of instructions of OBJECT FILE to line inside objdump_file
 // used for branch instruction to recover the line of the branch
+// [MEMORY_ADDRESS]  --> LINE_NUMBER
 extern std::unordered_map<ui64,int> objdump_address;
 
 

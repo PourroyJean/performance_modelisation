@@ -16,11 +16,11 @@ vector<objdump_line> objdump_file;
 std::unordered_map<ui64, int> objdump_address;
 
 objdump_line::objdump_line(string line) {
-    ctr1 = 0;
-    ctr2 = 0;
+    event_cpu_clk = 0;
+    event_inst_retired = 0;
     target = 0;
     line_ctr++; //Number of the line in the txt file
-    str = line;
+    line_original_string = line;
 
 
     len_str = line.length();
@@ -104,7 +104,7 @@ ui64 objdump_line::get_address() {
     ui64 address = 0;
     for (int i = 2;; i++) {
         //We go char by char
-        char c = str[i];
+        char c = line_original_string[i];
 
         //Did we find the end of the address ?
         if (c == ':' || c == 0)

@@ -49,6 +49,7 @@ const vector<string> split(const string &s, const char &c) {
     return v;
 }
 
+
 void read_oprofile_file(const char *fname) {
     ifstream fop2(fname);
     assert(fop2.is_open());
@@ -73,8 +74,6 @@ void read_object_file(const char *fname) {
             break;
         assert(!fobj.fail() && !fobj.bad());
         objdump_file.push_back(line);
-        // all lines dumped in objdump_file from [0-line_ctr-1]
-        //cout << "_7_ " << std::dec << objdump_line::line_ctr << objdump_file[objdump_line::line_ctr-1].str << endl;
     }
     fobj.close();
 }
