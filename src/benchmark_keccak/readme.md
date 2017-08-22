@@ -5,12 +5,12 @@ This is intended to be used as a proxy to evaluate how those architectures would
 There are many more codes that can be developped in this suite, we hope people will extend this suite with more codes, or tuned variants or measures on a wide range of hardwares
 
 A large proportion of the crypto codes have a similar behavior
-1: use only boolean or integer operations ; use NO floating point operations
-2: present a massive parallelism ; generally many parallelisms if not all can be exploited
-3: consist in long chains of operations presenting few parallelisms inside a chain ; but we have a huge number of chains to compute; this make the instruction parallelism more difficult to use
-4: do not stress the memory subsystem ; do not require large memory
-5: scale with the cores if no thermal limitation, scale with the clock and most compute parallelism mecanisms relativelly easily; but not always; this is what this suite need to discover
-6: very sensitive to BUGS and hardware problems ; any temporal problem will generate a totally different checksum ; then the benchmark is very robust
+* 1: use only boolean or integer operations ; use NO floating point operations
+* 2: present a massive parallelism ; generally many parallelisms if not all can be exploited
+* 3: consist in long chains of operations presenting few parallelisms inside a chain ; but we have a huge number of chains to compute; this make the instruction parallelism more difficult to use
+* 4: do not stress the memory subsystem ; do not require large memory
+* 5: scale with the cores if no thermal limitation, scale with the clock and most compute parallelism mecanisms relativelly easily; but not always; this is what this suite need to discover
+* 6: very sensitive to BUGS and hardware problems ; any temporal problem will generate a totally different checksum ; then the benchmark is very robust
 
 In this case the main challenge is this long chain of dependencies between the integer operations 
 
@@ -69,13 +69,17 @@ _S_          1 cf0269634671e842 636b7123683cd142     1.361470
 _S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     1.361990
 _S_          3 c23846f289232c2d ed7fd6114294a99c     1.364584
 ----------------------------------------------------------------------------------------------------------------------------------------
+
 ```
 
-16 jobs in parallel:
+```bash
+#16 jobs in parallel:
 more jmany
 for i in {0..15};do
         numactl  --physcpubind=$i $*&
 done
+```
+```
 ----------------------------------------------------------------------------------------------------------------------------------------
  jmany bench_keccakf_tuned_icc
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     1.672716
@@ -111,10 +115,13 @@ _S_          1 cf0269634671e842 636b7123683cd142     1.672085
 _S_          1 cf0269634671e842 636b7123683cd142     1.672080
 _S_          1 cf0269634671e842 636b7123683cd142     1.681232
 ----------------------------------------------------------------------------------------------------------------------------------------
-CONCLUSION:
-1: best option for compiler is icc -O3 -x=core-avx2
-2: -x=core-avx512 is not efficient
-3: running 16 jobs degrades 25%
+```
+
+
+**CONCLUSION:**
+* 1: best option for compiler is icc -O3 -x=core-avx2
+* 2: -x=core-avx512 is not efficient
+* 3: running 16 jobs degrades 25%
 ========================================================================================================================================
  icc -O3 -x=core-avx2 bench_keccakf_tuned.cpp -o bench_keccakf_tuned_icc
  bench_keccakf_tuned_icc
