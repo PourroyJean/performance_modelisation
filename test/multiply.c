@@ -49,6 +49,36 @@ void mult_KIJ(double *a, double *b, double *c) {
 }
 
 
+int VERSION;
+
+void mult_var(double *a, double *b, double *c) {
+  memset(c, 0, sizeof(c[0]) * N * N);
+  if (VERSION == 1){
+
+    int i, j, k;
+    for (k = 0; k < M; ++k)
+      for (i = 0; i < N; ++i) 
+	for (j = 0; j < N; ++j) 
+	  C(i, j) += A(i, k) * B(k, j);
+  }
+
+
+  if(VERSION   == 2){
+    int i, j, k;
+    for (i = 0; i < N; ++i) {
+      for (j = 0; j < N; ++j) {
+	for (k = 0; k < M; ++k) {
+	  C(i, j) += A(i, k) * B(k, j);
+	}
+      }
+    }
+  }
+
+
+  return;
+}
+
+
 
 
 void init_mat (double * a, int N, int M){
@@ -61,9 +91,9 @@ void init_mat (double * a, int N, int M){
 }
 
 
-int main (){
+int main (int argc, char *argv[]){
   N = 1000;
-  M = 500;
+  M = 700;
 
   double *a = (double *) malloc(sizeof(double) * N * M);
   double *b = (double *) malloc(sizeof(double) * N * M);
@@ -76,11 +106,12 @@ int main (){
 
 
 
-  mult_simple(a, b, c);
-  printf("simple:  %lf\n", sum_res(c, N, M));
+  //  mult_simple(a, b, c);
+  //printf("simple:  %lf\n", sum_res(c, N, M));
 
-  mult_KIJ(a, b, c);
-  printf("kij:  %lf\n", sum_res(c, N, M));
+  VERSION = atoi(argv[1]);
+  mult_var(a, b, c);
+  printf("VERSION %d:  %lf\n",VERSION, sum_res(c, N, M));
 
 
 }
