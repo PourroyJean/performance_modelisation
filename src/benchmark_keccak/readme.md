@@ -44,33 +44,42 @@ We do not deliver the mecanisms for exercising the parallelisms of the component
 ========================================================================================================================================
 processor : model name      : Intel(R) Xeon(R) Silver 4110 CPU @ 2.10GHz 2 SOCKETS*8cores
 ========================================================================================================================================
- icc -O bench_keccakf_ref.cpp -o bench_keccakf_ref_icc
- bench_keccakf_ref_icc
+```
+
+**icc -O bench_keccakf_ref.cpp -o bench_keccakf_ref_icc**
+```
+./bench_keccakf_ref_icc
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     1.427213
 _S_          1 cf0269634671e842 636b7123683cd142     1.431792
-_S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     1.426703
-----------------------------------------------------------------------------------------------------------------------------------------
- icc -O3 -x=core-avx2 bench_keccakf_ref.cpp -o bench_keccakf_ref_icc
- publicable]$ ./bench_keccakf_ref_icc
+_S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     1.426703
+```
+
+**icc -O3 -x=core-avx2 bench_keccakf_ref.cpp -o bench_keccakf_ref_icc**
+```
+./bench_keccakf_ref_icc
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     1.338454
 _S_          1 cf0269634671e842 636b7123683cd142     1.338262
 _S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     1.339961
-----------------------------------------------------------------------------------------------------------------------------------------
- icc -O3 -x=core-avx512 bench_keccakf_ref.cpp -o bench_keccakf_ref_icc
- bench_keccakf_ref_icc
+```
+
+**icc -O3 -x=core-avx512 bench_keccakf_ref.cpp -o bench_keccakf_ref_icc**
+```
+./bench_keccakf_ref_icc
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     3.202901
 _S_          1 cf0269634671e842 636b7123683cd142     3.203751
 _S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     3.203557
-----------------------------------------------------------------------------------------------------------------------------------------
- gcc -O3 bench_keccakf_ref.cpp -o bench_keccakf_ref_cpp
- publicable]$ bench_keccakf_ref_cpp
+```
+ 
+**gcc -O3 bench_keccakf_ref.cpp -o bench_keccakf_ref_cpp**
+```
+./bench_keccakf_ref_cpp
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     1.363096
 _S_          1 cf0269634671e842 636b7123683cd142     1.361470
 _S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     1.361990
 _S_          3 c23846f289232c2d ed7fd6114294a99c     1.364584
 ----------------------------------------------------------------------------------------------------------------------------------------
-
 ```
+
 
 ```bash
 #16 jobs in parallel:
