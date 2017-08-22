@@ -81,13 +81,14 @@ _S_          3 c23846f289232c2d ed7fd6114294a99c     1.364584
 ```
 
 
+**jmany file**
 ```bash
-#16 jobs in parallel:
-more jmany
+#Example for 16 jobs in parallel
 for i in {0..15};do
         numactl  --physcpubind=$i $*&
 done
 ```
+
 ```
 ----------------------------------------------------------------------------------------------------------------------------------------
  jmany bench_keccakf_tuned_icc
@@ -123,7 +124,6 @@ _S_          1 cf0269634671e842 636b7123683cd142     1.673611
 _S_          1 cf0269634671e842 636b7123683cd142     1.672085
 _S_          1 cf0269634671e842 636b7123683cd142     1.672080
 _S_          1 cf0269634671e842 636b7123683cd142     1.681232
-----------------------------------------------------------------------------------------------------------------------------------------
 ```
 
 
@@ -144,12 +144,14 @@ _S_          4 82a600ea7029e730 6fd9d6fb32bd4eac     0.493693
 ```
 gcc -O3 bench_keccakf_tuned.cpp -o bench_keccakf_tuned_gcc
 ```
-publicable]$ bench_keccakf_tuned_gcc
+./bench_keccakf_tuned_gcc
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     0.856292
 _S_          1 cf0269634671e842 636b7123683cd142     0.851146
 _S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     0.849197
-----------------------------------------------------------------------------------------------------------------------------------------
- jmany bench_keccakf_tuned_icc
+```
+
+```
+jmany bench_keccakf_tuned_icc
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     0.618157
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     0.617979
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     0.618132
@@ -182,13 +184,11 @@ _S_          1 cf0269634671e842 636b7123683cd142     0.617685
 _S_          1 cf0269634671e842 636b7123683cd142     0.617538
 _S_          1 cf0269634671e842 636b7123683cd142     0.617712
 _S_          1 cf0269634671e842 636b7123683cd142     0.626201
-----------------------------------------------------------------------------------------------------------------------------------------
 ```
 The tuned version is 2.76X better than the rererence code
-========================================================================================================================================
 
-gcc -O3 -mavx2 bench_keccakf_quad.cpp -o bench_keccakf_quad_gcc
 
+**gcc -O3 -mavx2 bench_keccakf_quad.cpp -o bench_keccakf_quad_gcc**
 ```
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     0.618130
 _S_          1 cf0269634671e842 636b7123683cd142     0.618130
@@ -199,8 +199,10 @@ _S_          5   75db901707152f 6fac0d6b25ba5b83     0.610089
 _S_          6 e69ed015b75d5da0 8932dd7e92e70623     0.610089
 _S_          7 b0bf01b096c67f87 398ddcce042179a4     0.610089
 _F_ fkey=      0 lkey=      8 loops= 1048576 SUM= 398ddcce042179a4 seconds= 1.228265   Mks= 6.829640
-----------------------------------------------------------------------------------------------------------------------------------------
- jmany bench_keccakf_quad_gcc 0 8
+```
+
+```
+./jmany bench_keccakf_quad_gcc 0 8
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     0.764634
 _S_          1 cf0269634671e842 636b7123683cd142     0.764634
 _S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     0.764634
@@ -222,9 +224,10 @@ _S_          7 b0bf01b096c67f87 398ddcce042179a4     0.767036
 _F_ fkey=      0 lkey=      8 loops= 1048576 SUM= 398ddcce042179a4 seconds= 1.534700   Mks= 5.465959
 ----------------------------------------------------------------------------------------------------------------------------------------
 ```
-icc -O3 -x=core-avx2 bench_keccakf_quad.cpp -o bench_keccakf_quad_icc
+
+**icc -O3 -x=core-avx2 bench_keccakf_quad.cpp -o bench_keccakf_quad_icc**
 ```
-bench_keccakf_quad_icc 0 8
+./bench_keccakf_quad_icc 0 8
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     0.651637
 _S_          1 cf0269634671e842 636b7123683cd142     0.651637
 _S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     0.651637
@@ -236,11 +239,10 @@ _S_          7 b0bf01b096c67f87 398ddcce042179a4     0.653566
 _F_ fkey=      0 lkey=      8 loops= 1048576 SUM= 398ddcce042179a4 seconds= 1.305248   Mks= 6.426831
 ----------------------------------------------------------------------------------------------------------------------------------------
 ```
-The vectorized code compute 4 chains at each call then the performance is the same 
-We can see the 4 chains are computed with 30% degradation vs 1 at a time ; this is a significant 3X improvment over the single chain version
+- The vectorized code compute 4 chains at each call then the performance is the same 
+- We can see the 4 chains are computed with 30% degradation vs 1 at a time ; this is a significant 3X improvment over the single chain version
 ```
-----------------------------------------------------------------------------------------------------------------------------------------
- jmany bench_keccakf_quad_icc 0 8
+./jmany bench_keccakf_quad_icc 0 8
 _S_          0 ac6918402e4d3900 ac6918402e4d3900     0.813202
 _S_          1 cf0269634671e842 636b7123683cd142     0.813202
 _S_          2 4c2ce1c0a38b54f3 2f4790e3cbb785b1     0.813202
@@ -259,8 +261,7 @@ _S_          5   75db901707152f 6fac0d6b25ba5b83     0.820079
 _S_          6 e69ed015b75d5da0 8932dd7e92e70623     0.820079
 _S_          7 b0bf01b096c67f87 398ddcce042179a4     0.820079
 _F_ fkey=      0 lkey=      8 loops= 1048576 SUM= 398ddcce042179a4 seconds= 1.640481   Mks= 5.113505
-----------------------------------------------------------------------------------------------------------------------------------------
 ```
-Using all cores also degrade by 25% the performance vs 1 single core
-gcc is slightly better 6% than icc on the quad version
+- Using all cores also degrade by 25% the performance vs 1 single core
+- gcc is slightly better 6% than icc on the quad version
 
