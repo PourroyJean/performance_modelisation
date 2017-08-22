@@ -10,6 +10,8 @@
 
 
 sudo opcontrol --dump
+sudo opcontrol --deinit
+
 #Generating two report
 opreport    1> $OP_FILE_SUMMARY 2> $OP_TMP_FILE
 opreport -d 1> $OP_FILE_INST    2> $OP_TMP_FILE
