@@ -65,6 +65,7 @@ int KG_generators::Get_register_cible() {
 void KG_generators::generate_instructions() {
     DEBUG << "-- Generating instructions vector\n";
 
+
     mInstructions_set->clear();
     mPrevious_target_register = 1;
 
