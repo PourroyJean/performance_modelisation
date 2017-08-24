@@ -9,13 +9,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-#include_directories(${CMAKE_SOURCE_DIR}/src/tool_kernel_generator)
 
+include_directories(../common)
 
 
 add_library(lib_kg kg_parameters.cpp kg_misc.cpp kg_generators.cpp kg_executor.cpp)
 add_executable(kg kg_main.cxx kg_parameters.cpp kg_misc.cpp kg_generators.cpp kg_executor.cpp)
+
+target_link_libraries(kg misc)
 
 
 set_target_properties( kg
