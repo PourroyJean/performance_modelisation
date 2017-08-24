@@ -13,29 +13,20 @@
 
 #include <fstream>      // std::fstream
 #include <cmath>
+#include <misc.h>
 
 using namespace std;
 
 
 void KG_generators::generate_assembly() {
 
-    mFile_assembly_src << "\t\t__asm__ (\"myBench: \"); " << endl;
-    mFile_assembly_src << "\t\ttimeStart = mygettime();" << endl;
-    mFile_assembly_src << "\t\tcycleInStart = rdtsc();"  << endl;
-    mFile_assembly_src << "\t\t__asm__ (" << endl;
+    mFile_assembly_src << "__asm__ (\"myBench: \" " << endl;
     for (auto instruction: *mInstructions_set) {
-        mFile_assembly_src << "\t\t\t\"" << instruction << "\"\n";
+        mFile_assembly_src << "\t\t\"" << instruction << "\"\n";
     }
-
-    mFile_assembly_src << "\t\t);"  << endl;
-
-    mFile_assembly_src << "\t\tcycleInEnd = rdtsc();"  << endl;
-    mFile_assembly_src << "\t\ttimeEnd = mygettime();" << endl;
-    mFile_assembly_src << "\t\tpairArr[i] = make_pair(cycleInEnd - cycleInStart, timeEnd - timeStart);" << endl;
-    mFile_assembly_src << "\t\t__asm__ (" << endl;
-    mFile_assembly_src << "\t\t\"  sub    $0x1, %%eax;\"\n";
-    mFile_assembly_src << "\t\t\"  jnz    myBench\" : : \"a\" (" << mParameters->P_LOOP_SIZE << ")";
-    mFile_assembly_src << "\t\t);";
+    mFile_assembly_src << "\"  sub    $0x1, %%eax;\"\n";
+    mFile_assembly_src << "\"  jnz    myBench\" : : \"a\" (" << mParameters->P_LOOP_SIZE << ")";
+    mFile_assembly_src << ");";
 }
 
 
@@ -72,7 +63,7 @@ int KG_generators::Get_register_cible() {
 
 
 void KG_generators::generate_instructions() {
-    DEBUG_PRINT("-- Generating instructions vector\n");
+//    DEBUG << "-- Generating instructions vector\n";
 
     mInstructions_set->clear();
     mPrevious_target_register = 1;
@@ -82,9 +73,9 @@ void KG_generators::generate_instructions() {
         string saveCible = to_string(Get_register_cible());
         //v add p d
         string instruction = mPrefix + operation + mSuffix + mPrecision + " ";
-        instruction += "%" + mRegister_name + "0, ";
-        instruction += "%" + mRegister_name + saveSource + ", ";
-        instruction += "%" + mRegister_name + saveCible + "; ";
+        instruction += "%%" + mRegister_name + "0, ";
+        instruction += "%%" + mRegister_name + saveSource + ", ";
+        instruction += "%%" + mRegister_name + saveCible + "; ";
         //tmp pour verifier dependency
 //        instruction += "%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
 //        instruction += "%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
@@ -97,7 +88,7 @@ void KG_generators::generate_instructions() {
 
 
 void KG_generators::Init_Generator() {
-    DEBUG_PRINT("-- Init Generator register, prefix, suffix, and precision \n");
+//    DEBUG << "-- Init Generator register, prefix, suffix, and precision \n";
 
     //only [v]addpd instructions supported
     mPrefix = "v";
@@ -144,7 +135,7 @@ void KG_generators::Init_Generator() {
 
 
 void KG_generators::Generate_code() {
-    DEBUG_PRINT("Generating assembly...\n");
+//    DEBUG << "Generating assembly...\n";
 
     //----- INITIALISATION -----------
     Init_Generator();
