@@ -73,22 +73,22 @@ void KG_executor::Monitor_Execution() {
 
 
 
-    cout << "  ## Number of instruction per loop:  " <<  mParameters->P_OPERATIONS.size() << "\n";
-    cout << "  ## Number of instruction TOTAL   :  " <<  NbInstruction << "\n";
-    cout << "  ## Size boucle                      " << mParameters->P_LOOP_SIZE<< endl;
-    cout << "  ## cycle                            " << total_cycle << endl;
+    DEBUG << "Number of instruction per loop:  " <<  mParameters->P_OPERATIONS.size() << "\n";
+    DEBUG << "Number of instruction TOTAL   :  " <<  NbInstruction << "\n";
+    DEBUG << "Size boucle                      " << mParameters->P_LOOP_SIZE<< endl;
+    DEBUG << "cycle                            " << total_cycle << endl;
 
 
 
 
-    cout << "Mean cycle         " << mean_cycle << endl;
-    cout << "Ecart cycle        " << ecart_cycle << endl;
-    cout << "Mean time          " <<fixed << mean_time << endl;
-    cout << "Ecart time         " << ecart_time << endl;
-    cout << "----------------------------------------" << endl;
-    cout << "Frequency          " << frequency << endl;
-    cout << "IPC                " << IPC << endl;
-    cout << "----------------------------------------" << endl;
+    DEBUG << "Mean cycle         " << mean_cycle << endl;
+    DEBUG << "Ecart cycle        " << ecart_cycle << endl;
+    DEBUG << "Mean time          " <<fixed << mean_time << endl;
+    DEBUG << "Ecart time         " << ecart_time << endl;
+    cout  << "----------------------------------------" << endl;
+    cout  << "Frequency          " << frequency << endl;
+    cout  << "IPC                " << IPC << endl;
+    cout  << "----------------------------------------" << endl;
 
     if(mParameters->P_GRAPH){
         Graphical_Output();
