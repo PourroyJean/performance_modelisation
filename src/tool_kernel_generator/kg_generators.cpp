@@ -63,7 +63,8 @@ int KG_generators::Get_register_cible() {
 
 
 void KG_generators::generate_instructions() {
-//    DEBUG << "-- Generating instructions vector\n";
+    DEBUG << "-- Generating instructions vector\n";
+
 
     mInstructions_set->clear();
     mPrevious_target_register = 1;
@@ -88,7 +89,7 @@ void KG_generators::generate_instructions() {
 
 
 void KG_generators::Init_Generator() {
-//    DEBUG << "-- Init Generator register, prefix, suffix, and precision \n";
+    DEBUG << "-- Init Generator register, prefix, suffix, and precision \n";
 
     //only [v]addpd instructions supported
     mPrefix = "v";
@@ -135,7 +136,7 @@ void KG_generators::Init_Generator() {
 
 
 void KG_generators::Generate_code() {
-//    DEBUG << "Generating assembly...\n";
+    DEBUG << "Generating assembly...\n";
 
     //----- INITIALISATION -----------
     Init_Generator();

@@ -5,6 +5,10 @@
 
 
 
+float TIME_ELAPSED;
+struct timeval start_time, end_time;
+
+
 
 void print_times(char *s) {
     int total_usecs;
