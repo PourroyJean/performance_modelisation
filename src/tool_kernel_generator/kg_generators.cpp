@@ -4,16 +4,13 @@
 #include <stdio.h>
 #include <iostream>
 #include "kg_generators.h"
-#include "kg_misc.h"
+#include <misc.h>
 
 
 #ifndef _GNU_SOURCE
 #define _GNU_SOURCE
 #endif
 
-#include <fstream>      // std::fstream
-#include <cmath>
-#include <misc.h>
 
 using namespace std;
 
@@ -135,7 +132,7 @@ void KG_generators::Init_Generator() {
 
 
 void KG_generators::Generate_code() {
-    DEBUG << "Generating assembly...\n";
+    DEBUG << "-- Generating assembly...\n";
 
     //----- INITIALISATION -----------
     Init_Generator();
@@ -144,7 +141,7 @@ void KG_generators::Generate_code() {
     generate_instructions();
 
     for (auto i: *mInstructions_set) {
-        cout << i << endl;
+        DEBUG << i << endl;
     }
 
     generate_source();
