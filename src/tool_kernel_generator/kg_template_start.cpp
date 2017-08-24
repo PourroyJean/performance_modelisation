@@ -7,7 +7,36 @@
 #include <utility>
 #include <fstream>
 
+/*
+ *   unsigned long long int CUMUL_CYCLE = 0;
+        double CUMUL_TIME = 0;
 
+        __asm__ ("myBench: ");
+        cycleInStart = rdtsc();
+        timeStart = mygettime();
+
+        __asm__(
+                "vmulpd %xmm0, %xmm1, %xmm2; "
+                "vmulpd %xmm0, %xmm1, %xmm3; "
+                "vmulpd %xmm0, %xmm1, %xmm4; "
+                "vmulpd %xmm0, %xmm1, %xmm5; "
+                "vmulpd %xmm0, %xmm1, %xmm6; "
+                "vmulpd %xmm0, %xmm1, %xmm7; "
+                "vmulpd %xmm0, %xmm1, %xmm8; "
+                "vmulpd %xmm0, %xmm1, %xmm9; "
+                "vmulpd %xmm0, %xmm1, %xmm10; "
+                "vmulpd %xmm0, %xmm1, %xmm11; ");
+
+        cycleInEnd = rdtsc();
+        timeEnd = mygettime();
+
+        CUMUL_CYCLE += cycleInEnd - cycleInStart;
+        CUMUL_TIME  += timeEnd - timeStart;
+        __asm__(
+                "  sub    $0x1, %%eax;"
+                "  jnz    myBench" : : "a" (200000));//--------------
+        pairArr[i] = make_pair(CUMUL_CYCLE, CUMUL_TIME);
+ */
 
 
 uint64_t rdtsc() {
@@ -40,11 +69,3 @@ int main(int argc, char **argv) {
     for (i = 0; i < NB_lOOP; i++) {
         timeStart = mygettime();
         cycleInStart = rdtsc();
-
-        //    //TODO needed ? Init register mm0 and mm1 etc...
-////    WC("__asm__ ( ");
-////    WC(" \"mov     $1, %%%%rax;\"");        //addition
-////    WC(" \"movq    %%%%rax, %%%%xmm0;\"");  //xmm0 = utilisé pour l'addition
-////    WC(" \"mov     $1, %%%%rax;\"");        //addition
-////    WC(" \"movq    %%%%rax, %%%%xmm1;\"");  //xmm1 = utilisé pour l'addition
-////    WC("::);");
