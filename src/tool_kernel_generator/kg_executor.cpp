@@ -71,6 +71,13 @@ void KG_executor::Monitor_Execution() {
 
 
 
+
+    cout << "  ## Number of instruction per loop:  " <<  mParameters->P_OPERATIONS.size() << "\n";
+    cout << "  ## Size boucle                      " << mParameters->P_LOOP_SIZE<< endl;
+    cout << "  ## cycle                            " << total_cycle << endl;
+
+
+
     cout << "Mean cycle         " << mean_cycle << endl;
     cout << "Ecart cycle        " << ecart_cycle << endl;
     cout << "Mean time          " <<fixed << mean_time << endl;

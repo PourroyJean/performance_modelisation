@@ -1,7 +1,7 @@
         //--------------
-        cycleInEnd = rdtsc();
-        timeEnd = mygettime();
-        pairArr[i] = make_pair(cycleInEnd - cycleInStart, timeEnd - timeStart);
+//        cycleInEnd = rdtsc();
+//        timeEnd = mygettime();
+//        pairArr[i] = make_pair(cycleInEnd - cycleInStart, timeEnd - timeStart);
     }
     ofstream mFile_template_start (TMP_FILE_monitoring, std::ios_base::binary);
 
