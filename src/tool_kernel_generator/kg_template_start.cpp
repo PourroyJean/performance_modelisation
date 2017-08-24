@@ -37,14 +37,9 @@ int main(int argc, char **argv) {
     double ipc;
     std::pair<int, double> *pairArr = new pair<int, double>[1000000];
 
-    for (i = 0; i < NB_lOOP; i++) {
-        timeStart = mygettime();
-        cycleInStart = rdtsc();
 
-        //    //TODO needed ? Init register mm0 and mm1 etc...
-////    WC("__asm__ ( ");
-////    WC(" \"mov     $1, %%%%rax;\"");        //addition
-////    WC(" \"movq    %%%%rax, %%%%xmm0;\"");  //xmm0 = utilisé pour l'addition
-////    WC(" \"mov     $1, %%%%rax;\"");        //addition
-////    WC(" \"movq    %%%%rax, %%%%xmm1;\"");  //xmm1 = utilisé pour l'addition
-////    WC("::);");
+    for (i = 0; i < NB_lOOP; i++) {
+
+
+
+
