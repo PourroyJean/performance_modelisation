@@ -20,13 +20,12 @@ using namespace std;
 
 void KG_generators::generate_assembly() {
 
-    mFile_assembly_src << "__asm__ (\"myBench: \" " << endl;
+    mFile_assembly_src << "\t\t__asm__ (\"myBench: \" " << endl;
     for (auto instruction: *mInstructions_set) {
-        mFile_assembly_src << "\t\t\"" << instruction << "\"\n";
+        mFile_assembly_src << "\t\t\t\t\"" << instruction << "\"\n";
     }
-    mFile_assembly_src << "\"  sub    $0x1, %%eax;\"\n";
-    mFile_assembly_src << "\"  jnz    myBench\" : : \"a\" (" << mParameters->P_LOOP_SIZE << ")";
-    mFile_assembly_src << ");";
+    mFile_assembly_src << "\t\t\"sub  $0x1, %%eax;\"\n";
+    mFile_assembly_src << "\t\t\"jnz  myBench\" : : \"a\" (" << mParameters->P_LOOP_SIZE << "));";
 }
 
 
