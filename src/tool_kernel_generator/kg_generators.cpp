@@ -19,13 +19,23 @@ using namespace std;
 
 void KG_generators::generate_assembly() {
 
-    mFile_assembly_src << "__asm__ (\"myBench: \" " << endl;
+    mFile_assembly_src << "\t\t__asm__ (\"myBench: \"); " << endl;
+    mFile_assembly_src << "\t\ttimeStart = mygettime();" << endl;
+    mFile_assembly_src << "\t\tcycleInStart = rdtsc();"  << endl;
+    mFile_assembly_src << "\t\t__asm__ (" << endl;
     for (auto instruction: *mInstructions_set) {
-        mFile_assembly_src << "\t\t\"" << instruction << "\"\n";
+        mFile_assembly_src << "\t\t\t\"" << instruction << "\"\n";
     }
-    mFile_assembly_src << "\"  sub    $0x1, %%eax;\"\n";
-    mFile_assembly_src << "\"  jnz    myBench\" : : \"a\" (" << mParameters->P_LOOP_SIZE << ")";
-    mFile_assembly_src << ");";
+
+    mFile_assembly_src << "\t\t);"  << endl;
+
+    mFile_assembly_src << "\t\tcycleInEnd = rdtsc();"  << endl;
+    mFile_assembly_src << "\t\ttimeEnd = mygettime();" << endl;
+    mFile_assembly_src << "\t\tpairArr[i] = make_pair(cycleInEnd - cycleInStart, timeEnd - timeStart);" << endl;
+    mFile_assembly_src << "\t\t__asm__ (" << endl;
+    mFile_assembly_src << "\t\t\"  sub    $0x1, %%eax;\"\n";
+    mFile_assembly_src << "\t\t\"  jnz    myBench\" : : \"a\" (" << mParameters->P_LOOP_SIZE << ")";
+    mFile_assembly_src << "\t\t);";
 }
 
 
@@ -72,9 +82,9 @@ void KG_generators::generate_instructions() {
         string saveCible = to_string(Get_register_cible());
         //v add p d
         string instruction = mPrefix + operation + mSuffix + mPrecision + " ";
-        instruction += "%%" + mRegister_name + "0, ";
-        instruction += "%%" + mRegister_name + saveSource + ", ";
-        instruction += "%%" + mRegister_name + saveCible + "; ";
+        instruction += "%" + mRegister_name + "0, ";
+        instruction += "%" + mRegister_name + saveSource + ", ";
+        instruction += "%" + mRegister_name + saveCible + "; ";
         //tmp pour verifier dependency
 //        instruction += "%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
 //        instruction += "%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
