@@ -4,6 +4,7 @@
 #include "kg_generators.h"
 #include "kg_executor.h"
 #include <cmath>
+#include <misc.h>
 
 
 using namespace std;
@@ -15,7 +16,7 @@ KG_executor::KG_executor (KG_generators * generator){
 
 
 void KG_executor::Execute_assembly() {
-    DEBUG_PRINT("-- Execution the generated assembly file\n");
+    DEBUG << "-- Execute the generated assembly file\n";
 
     //We let the kernel bind the process himself if no binding are set
     Cpu_binding();
