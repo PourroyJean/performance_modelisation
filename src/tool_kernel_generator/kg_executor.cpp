@@ -64,7 +64,7 @@ void KG_executor::Monitor_Execution() {
 //    double et_cycle = sqrt(var_cycle);
 //    double et_time = sqrt(var_time);
 
-    int NbInstruction = mParameters->P_SAMPLES * mParameters->P_LOOP_SIZE * mParameters->P_OPERATIONS.size();
+    long long int NbInstruction = mParameters->P_SAMPLES * mParameters->P_LOOP_SIZE * mParameters->P_OPERATIONS.size();
     float IPC = (float) NbInstruction / (float) total_cycle;
 
     double frequency = (mean_cycle / mean_time )/1000000000;
@@ -73,8 +73,10 @@ void KG_executor::Monitor_Execution() {
 
 
     cout << "  ## Number of instruction per loop:  " <<  mParameters->P_OPERATIONS.size() << "\n";
+    cout << "  ## Number of instruction TOTAL   :  " <<  NbInstruction << "\n";
     cout << "  ## Size boucle                      " << mParameters->P_LOOP_SIZE<< endl;
     cout << "  ## cycle                            " << total_cycle << endl;
+
 
 
 
