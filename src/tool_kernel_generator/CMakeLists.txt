@@ -21,7 +21,7 @@ target_link_libraries(kg misc)
 
 set_target_properties( kg
         PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tool_hw_description/kg"
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tool_kernel_generator"
 )
 
 
@@ -33,7 +33,7 @@ file(GLOB KG_COPY_FILES
         )
 
 
-file(COPY ${KG_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_hw_description/kg)
+file(COPY ${KG_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_kernel_generator)
 
 
 
