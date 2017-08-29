@@ -33,7 +33,8 @@ int main(int argc, char **argv) {
     generator->Generate_code();
 
     //------------ ASSEMBLY COMPILATION ---------
-    std::string stmp = "bash -c \"g++ --std=c++11  -o " + FILE_ASM_EXE + " " +  FILE_ASM_SOURCE_GENERATED +  "\"";
+    std::string debug_option = (kg_parameters->P_DEBUG ? "-g" : "");
+    std::string stmp = "bash -c \"g++ --std=c++11 " +  debug_option  +  " -o " + FILE_ASM_EXE + " " +  FILE_ASM_SOURCE_GENERATED +  "\"";
     system(stmp.c_str());
 
     //----------- EXECUTING --------------------

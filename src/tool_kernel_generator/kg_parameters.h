@@ -28,6 +28,7 @@ public:
     unsigned P_LOOP_SIZE;
     bool P_GRAPH;
     unsigned P_SAMPLES;
+    bool P_DEBUG;
 
     KG_parameters();
 

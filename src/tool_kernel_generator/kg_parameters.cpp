@@ -25,6 +25,7 @@ KG_parameters::KG_parameters() {
     P_SAMPLES = PARAM_SAMPLES;
     P_VERBOSE = PARAM_VERBOSE;
     P_HELP = false;
+    P_DEBUG = PARAM_DEBUG;
 };
 
 
@@ -40,7 +41,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
     string cwd(buff);
     HOME_DIR = cwd;
 
-    const char *const short_opts = "W:O:B:D:P:L:S:vhG";
+    const char *const short_opts = "W:O:B:D:P:L:S:A:vhG";
     const option long_opts[] = {
             {"width",      required_argument, nullptr, 'W'},
             {"operations", required_argument, nullptr, 'O'},
@@ -52,6 +53,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
             {"samples",    required_argument, nullptr, 'S'},
             {"verbose",    no_argument,       nullptr, 'v'},
             {"help",       no_argument,       nullptr, 'h'},
+            {"debug",      required_argument, nullptr, 'A'},
             {nullptr, 0,                      nullptr, 0}
     };
 
@@ -123,6 +125,20 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                 }
                 break;
 
+            case 'A':
+                tmp_str = optarg;
+                if (!tmp_str.compare("true") || !tmp_str.compare("false")) {
+                    bool b;
+                    istringstream(optarg) >> std::boolalpha >> b;
+                    P_DEBUG = b;
+                } else {
+                    printf("/!\\ WRONG DEBUG OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+
+                break;
+
+
             case 'v':
                 this->P_VERBOSE = true;
                 break;
@@ -158,6 +174,7 @@ void KG_parameters::parameter_summary() {
     cout << "\t -L (loop size)        " << this->P_LOOP_SIZE << endl;
     cout << "\t -G (graphic)          " << this->P_GRAPH << endl;
     cout << "\t -S (samples)          " << this->P_SAMPLES << endl;
+    cout << "\t -A (analysis)         " << this->P_DEBUG << endl;
 
 }
 
@@ -173,6 +190,7 @@ void KG_parameters::help() {
     cout << "\t -L,--loopsize          [" << PARAM_LOOP_SIZE << "]\n";
     cout << "\t -G,--graphic            grapical output (python required)\n";
     cout << "\t -S,--samples           [" << PARAM_SAMPLES << "]\n";
+    cout << "\t -A,--debug             [" << PARAM_DEBUG << "]\n";
     cout << "\t -v,--verbose\n";
     cout << "\t -h,--help\n";
 }
