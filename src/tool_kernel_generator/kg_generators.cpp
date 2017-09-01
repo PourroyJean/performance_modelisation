@@ -17,18 +17,61 @@ using namespace std;
 
 void KG_generators::generate_assembly() {
 
-    mFile_assembly_src << "\t\t__asm__ (\"myBench: \" " << endl;
+    mFile_assembly_src << "\t\t__asm__ (\"\" " << endl;
+
+
+    mFile_assembly_src << "\t\t //Initialisation opérandes à 1\n";
+    mFile_assembly_src << "\t\t \"mov     $1,    %%rbx; \"\n" ;
+    mFile_assembly_src << "\t\t \"movq    %%rbx, %%" <<   mRegister_name  <<  "0;\""    << "  //xmm0 = utilisé pour l'addition;\n\n";
+//    mFile_assembly_src << "\t\t \"movq    %%rbx, %%" <<   mRegister_name  <<  "1;\""    << "  //xmm1 = utilisé pour l'addition;\n\n";
+
+
+    mFile_assembly_src << "\t\t //Initialisation compteur\n";
+    mFile_assembly_src << "\t\t \"mov     $1,    %%rbx; \"\n" ;
+    for (int i = 2; i <= 15; ++i) {
+        mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << mRegister_name << "" << i  << ";\"\n";
+    }
+    mFile_assembly_src << endl;
+
+
+    mFile_assembly_src << "\t\t \"myBench: \" " << endl;
     for (auto instruction: *mInstructions_set) {
         mFile_assembly_src << "\t\t\t\t\"" << instruction << "\"\n";
     }
     mFile_assembly_src << "\t\t\"sub  $0x1, %%eax;\"\n";
-    mFile_assembly_src << "\t\t\"jnz  myBench\" : : \"a\" (" << mParameters->P_LOOP_SIZE << "));";
+    mFile_assembly_src << "\t\t\"jnz  myBench;\"";
+
+
+
+    mFile_assembly_src << "\n\n\t\t//Réduction: dommer le nombre d'addition total dans xmm0\n";
+    mFile_assembly_src << "\t\t \"mov     $0,    %%rbx; \"\n" ;
+    mFile_assembly_src << "\t\t \"movq    %%rbx, %%xmm0;\"\n" ;
+    for (int i = 2; i <= 15; ++i) {
+        mFile_assembly_src << "\t\t \"vaddpd  %%" << mRegister_name << "0, %%" << mRegister_name <<  i  << ", %%xmm0;\"\n";
+    }
+    mFile_assembly_src << "\t\t \"movd  %%xmm0, %0;\"\n";
+
+    mFile_assembly_src << endl;
+
+
+
+
+    mFile_assembly_src
+            <<  "\t\t: \"=r\" (instructions_executed) "
+            << ": \"a\" (" << mParameters->P_LOOP_SIZE << "));";
+
 }
+
+
+//
+//
 
 
 void KG_generators::generate_source() {
     mFile_assembly_src << "#define TMP_FILE_monitoring \"" + FILE_MONTORING_TMP + "\"\n";
     mFile_assembly_src << "int NB_lOOP = " << mParameters->P_SAMPLES << ";\n";
+    mFile_assembly_src << "int NB_lOOP_IN = " << mParameters->P_LOOP_SIZE << ";\n";
+    mFile_assembly_src << "int NB_INST = " << mParameters->P_OPERATIONS.length() << ";\n";
 
     //Template_START + LOOP_ASSEMBLY + Template_END
     mFile_assembly_src << mFile_template_start.rdbuf();
@@ -71,7 +114,7 @@ void KG_generators::generate_instructions() {
         //v add p d
         string instruction = mPrefix + operation + mSuffix + mPrecision + " ";
         instruction += "%%" + mRegister_name + "0, ";
-        instruction += "%%" + mRegister_name + saveSource + ", ";
+        instruction += "%%" + mRegister_name + saveCible + ", "; //TODO faire un parametre
         instruction += "%%" + mRegister_name + saveCible + "; ";
         //tmp pour verifier dependency
 //        instruction += "%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
