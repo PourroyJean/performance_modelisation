@@ -138,7 +138,7 @@ int main(int argc, char *argv[]) {
                 vector<string> v{split(instr, ' ')};
 
 
-                cout  << "JANNOU " << instr[0]<< instr[1]<< instr[2]<< instr[3] << ' ' << v[0] << endl;
+//                cout  << "JANNOU " << instr[0]<< instr[1]<< instr[2]<< instr[3] << ' ' << v[0] << endl;
 
 
                 //Detect if its a jump but not a JMPQ one.

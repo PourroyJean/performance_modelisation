@@ -7,8 +7,10 @@ add_subdirectory (merger)
 
 #
 file(GLOB KG_COPY_FILES
-        "report_instructions.txt"
-        "op_objdump.txt"
+        "op_analysis.sh"
+        "op_stop.sh"
+        "op_start.sh"
+        "op_main.sh"
 )
 
 
