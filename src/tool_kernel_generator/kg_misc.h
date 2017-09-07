@@ -36,9 +36,10 @@
 #define PARAM_LOOP_SIZE     200000
 #define PARAM_GRAPH         false
 #define PARAM_DEBUG         false
+#define PARAM_COUNT         false
 
 //We do  several measures to calculate the IPC of the program
-#define PARAM_SAMPLES       1000
+#define PARAM_SAMPLES       100
 
 //These both string are used to locate where the binary is, and from where the user is launching it.
 extern std::string BIN_DIR ;

@@ -23,6 +23,7 @@ KG_parameters::KG_parameters() {
     P_LOOP_SIZE = PARAM_LOOP_SIZE;
     P_GRAPH = PARAM_GRAPH;
     P_SAMPLES = PARAM_SAMPLES;
+    P_COUNT = PARAM_COUNT;
     P_VERBOSE = PARAM_VERBOSE;
     P_HELP = false;
     P_DEBUG = PARAM_DEBUG;
@@ -41,7 +42,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
     string cwd(buff);
     HOME_DIR = cwd;
 
-    const char *const short_opts = "W:O:B:D:P:L:S:A:vhG";
+    const char *const short_opts = "W:O:B:D:P:L:S:A:C:vhG";
     const option long_opts[] = {
             {"width",      required_argument, nullptr, 'W'},
             {"operations", required_argument, nullptr, 'O'},
@@ -51,6 +52,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
             {"loopsize",   required_argument, nullptr, 'L'},
             {"graphic",    no_argument,       nullptr, 'G'},
             {"samples",    required_argument, nullptr, 'S'},
+            {"count",      required_argument, nullptr, 'C'},
             {"verbose",    no_argument,       nullptr, 'v'},
             {"help",       no_argument,       nullptr, 'h'},
             {"debug",      required_argument, nullptr, 'A'},
@@ -125,6 +127,18 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                 }
                 break;
 
+            case 'C':
+                tmp_str = optarg;
+                if (!tmp_str.compare("true") || !tmp_str.compare("false")) {
+                    bool b;
+                    istringstream(optarg) >> std::boolalpha >> b;
+                    P_COUNT = b;
+                } else {
+                    printf("/!\\ WRONG COUNT OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+
+
             case 'A':
                 tmp_str = optarg;
                 if (!tmp_str.compare("true") || !tmp_str.compare("false")) {
@@ -175,6 +189,7 @@ void KG_parameters::parameter_summary() {
     cout << "\t -G (graphic)          " << this->P_GRAPH << endl;
     cout << "\t -S (samples)          " << this->P_SAMPLES << endl;
     cout << "\t -A (analysis)         " << this->P_DEBUG << endl;
+    cout << "\t -C (count)            " << this->P_COUNT << endl;
 
 }
 

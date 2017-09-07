@@ -35,6 +35,7 @@ public:
     KG_parameters *mParameters;
     std::string mRegister_name;
     unsigned mPrevious_target_register;
+    unsigned mRegister_max=0;
     std::string mPrefix;
     std::vector<std::string> *mOperations_set   = new std::vector<std::string>();
     std::vector<std::string> *mInstructions_set = new std::vector<std::string>();
