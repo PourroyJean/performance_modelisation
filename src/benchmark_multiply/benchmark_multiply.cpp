@@ -6,6 +6,12 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <iomanip>
+#include "multiply_version.h"
+
+
+#if defined(_OPENMP)
+#include <omp.h>
+#endif
 
 using namespace std;
 
@@ -14,91 +20,15 @@ int MATRIX_LINES = 100;
 int MATRIX_COLUMNS = 100;
 
 
-#define A(i, j) a[i*MATRIX_COLUMNS+j]
-#define B(i, j) b[i*MATRIX_LINES+j]
-#define C(i, j) c[i*MATRIX_LINES+j]
-
-
 void print_usage(int argc, char **argv) {
     cout << "Usage: " << argv[0] << " <option>" << endl;
     cout << "   -V <version>" << endl <<
          "       1 : standard multiplication (IJK)" << endl <<
          "       2 : rotated  multiplication (KIJ)" << endl <<
+         "       3 : standard multiplication with OpenMP" << endl <<
          "   -L <lines>    number of lines" << endl <<
          "   -C <columns>  number of columns";
     cout << endl;
-}
-
-double sum_res(double *c, int MATRIX_LINES, int MATRIX_COLUMNS) {
-    int i;
-    double res = 0;
-    for (i = 0; i < MATRIX_LINES; i++) {
-        res += C(i, 0);
-    }
-    return res;
-}
-
-void mult_simple(double *a, double *b, double *c) {
-
-    int i, j, k;
-    for (i = 0; i < MATRIX_LINES; ++i) {
-        for (j = 0; j < MATRIX_LINES; ++j) {
-            for (k = 0; k < MATRIX_COLUMNS; ++k) {
-                C(i, j) += A(i, k) * B(k, j);
-            }
-        }
-    }
-    return;
-}
-
-void mult_KIJ(double *a, double *b, double *c) {
-    memset(c, 0, sizeof(c[0]) * MATRIX_LINES * MATRIX_LINES);
-    int i, j, k;
-    for (k = 0; k < MATRIX_COLUMNS; ++k)
-        for (i = 0; i < MATRIX_LINES; ++i) {
-            for (j = 0; j < MATRIX_LINES; ++j) {
-                C(i, j) += A(i, k) * B(k, j);
-            }
-        }
-    return;
-}
-
-
-void mult_var(double *a, double *b, double *c) {
-    memset(c, 0, sizeof(c[0]) * MATRIX_LINES * MATRIX_LINES);
-    if (BENCH_VERSION == 1) {
-
-        int i, j, k;
-        for (k = 0; k < MATRIX_COLUMNS; ++k)
-            for (i = 0; i < MATRIX_LINES; ++i)
-                for (j = 0; j < MATRIX_LINES; ++j)
-                    C(i, j) += A(i, k) * B(k, j);
-    }
-
-
-    if (BENCH_VERSION == 2) {
-        int i, j, k;
-        for (i = 0; i < MATRIX_LINES; ++i) {
-            for (j = 0; j < MATRIX_LINES; ++j) {
-                for (k = 0; k < MATRIX_COLUMNS; ++k) {
-                    C(i, j) += A(i, k) * B(k, j);
-                }
-            }
-        }
-    }
-
-
-    return;
-}
-
-
-void init_mat(double *a, int MATRIX_LINES, int MATRIX_COLUMNS) {
-    int i, j;
-    for (i = 0; i < MATRIX_LINES; i++) {
-        for (j = 0; j < MATRIX_COLUMNS; j++) {
-            A(i, j) = rand() % 100;
-        }
-    }
 }
 
 
@@ -129,7 +59,7 @@ void parse_arguments(int argc, char **argv) {
             case 'L':
                 ioptarg = atoi(optarg);
 
-                if (ioptarg <= 0 || ioptarg > 9999999999999) {
+                if (ioptarg >= 0 && ioptarg < 9999999999999) {
                     MATRIX_LINES = ioptarg;
                 } else {
                     printf("/!\\ WRONG LINES OPTION: %s\n", optarg);
@@ -140,7 +70,7 @@ void parse_arguments(int argc, char **argv) {
             case 'C':
                 ioptarg = atoi(optarg);
 
-                if (ioptarg <= 0 || ioptarg > 9999999999999) {
+                if (ioptarg > 0 && ioptarg < 9999999999999) {
                     MATRIX_COLUMNS = ioptarg;
                 } else {
                     printf("/!\\ WRONG COLUMNS OPTION: %s\n", optarg);
@@ -151,7 +81,7 @@ void parse_arguments(int argc, char **argv) {
             case 'V':
                 ioptarg = atoi(optarg);
 
-                if (ioptarg >= 1 || ioptarg <= 2) {
+                if (ioptarg >= 1 || ioptarg <= 3) {
                     BENCH_VERSION = ioptarg;
                 } else {
                     printf("/!\\ WRONG VERSION OPTION: %s\n", optarg);
@@ -191,18 +121,35 @@ int main(int argc, char *argv[]) {
 
     switch (BENCH_VERSION) {
         case 1:
-            mult_simple(a, b, c);
-            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS)
+                 << endl;
             break;
 
         case 2:
-            mult_KIJ(a, b, c);
-            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            mult_KIJ(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS)
+                 << endl;
             break;
+        case 3:
+            int nb_threads = 0;
+#pragma omp  parallel default(shared)
+            {
+#pragma omp atomic
+                nb_threads ++;
+            }
+#pragma omp barrier
+
+            cout << "There is " << nb_threads << " threads\n";
+
+            mult_simple_omp(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS)
+                 << endl;
+
     }
 
 
-    mult_var(a, b, c);
+//    mult_var(a, b, c);
 
 
 }
