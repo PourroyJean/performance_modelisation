@@ -27,9 +27,9 @@ double mygettime() {
 }
 
 int main(int argc, char **argv) {
-    unsigned long long  nbCycleIn;
-    unsigned long long  cycleInStart, cycleInEnd;
-    unsigned long long  cycle_total, instructions_total, instructions_executed, instructions_executed_total = 0;
+    unsigned long long int nbCycleIn;
+    unsigned long long int cycleInStart, cycleInEnd;
+    unsigned long long int cycle_total, instructions_total, instructions_executed, instructions_executed_total = 0;
     double IPC = 0.0;
     int i;
     double timeStart, timeEnd, timeSpent;
