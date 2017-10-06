@@ -21,6 +21,8 @@ KG_parameters::KG_parameters() {
     P_DEPENDENCY = PARAM_DEPENDENCY;
     P_PRECISION = PARAM_PRECISION;
     P_LOOP_SIZE = PARAM_LOOP_SIZE;
+    P_UNROLLING = PARAM_UNROLLING;
+    P_FREQUENCY = PARAM_FREQUENCY;
     P_GRAPH = PARAM_GRAPH;
     P_SAMPLES = PARAM_SAMPLES;
     P_COUNT = PARAM_COUNT;
@@ -42,7 +44,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
     string cwd(buff);
     HOME_DIR = cwd;
 
-    const char *const short_opts = "W:O:B:D:P:L:S:A:C:vhG";
+    const char *const short_opts = "W:O:B:D:P:L:U:F:S:A:C:vhG";
     const option long_opts[] = {
             {"width",      required_argument, nullptr, 'W'},
             {"operations", required_argument, nullptr, 'O'},
@@ -50,6 +52,8 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
             {"dependency", required_argument, nullptr, 'D'},
             {"precision",  required_argument, nullptr, 'P'},
             {"loopsize",   required_argument, nullptr, 'L'},
+            {"unrolling",  required_argument, nullptr, 'U'},
+            {"frequency",  required_argument, nullptr, 'F'},
             {"graphic",    no_argument,       nullptr, 'G'},
             {"samples",    required_argument, nullptr, 'S'},
             {"count",      required_argument, nullptr, 'C'},
@@ -114,6 +118,26 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                     exit(EXIT_FAILURE);
                 }
                 break;
+            case 'U':
+                ioptarg = atoi(optarg);
+                if (ioptarg >= 1 && ioptarg < 1000000000) {
+                    this->P_UNROLLING = ioptarg;
+                } else {
+                    printf("/!\\ WRONG UNROLLING OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'F':
+                tmp_str = optarg;
+                if (!tmp_str.compare("true") || !tmp_str.compare("false")) {
+                    bool b;
+                    istringstream(optarg) >> std::boolalpha >> b;
+                    P_FREQUENCY = b;
+                } else {
+                    printf("/!\\ WRONG FREQUENCY CHECK OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+
             case 'G':
                 this->P_GRAPH = true;
                 break;
@@ -186,6 +210,8 @@ void KG_parameters::parameter_summary() {
     cout << "\t -D (op dependency)    " << std::boolalpha << this->P_DEPENDENCY << endl;
     cout << "\t -P (op precision)     " << this->P_PRECISION << endl;
     cout << "\t -L (loop size)        " << this->P_LOOP_SIZE << endl;
+    cout << "\t -U (unrolling)        " << this->P_UNROLLING << endl;
+    cout << "\t -F (frequency)        " << std::boolalpha << this->P_FREQUENCY << endl;
     cout << "\t -G (graphic)          " << this->P_GRAPH << endl;
     cout << "\t -S (samples)          " << this->P_SAMPLES << endl;
     cout << "\t -A (analysis)         " << this->P_DEBUG << endl;
@@ -203,6 +229,8 @@ void KG_parameters::help() {
     cout << "\t -D,--dependency        ["<< boolalpha <<  PARAM_DEPENDENCY<< "] / true false\n";
     cout << "\t -P,--precision         [" << PARAM_PRECISION <<"] / single double\n";
     cout << "\t -L,--loopsize          [" << PARAM_LOOP_SIZE << "]\n";
+    cout << "\t -U,--unrolling         [" << PARAM_UNROLLING << "]\n";
+    cout << "\t -F,--frequency         [" << PARAM_FREQUENCY << "] check the frequency of the core\n";
     cout << "\t -G,--graphic            grapical output (python required)\n";
     cout << "\t -S,--samples           [" << PARAM_SAMPLES << "]\n";
     cout << "\t -A,--debug             [" << PARAM_DEBUG << "]\n";

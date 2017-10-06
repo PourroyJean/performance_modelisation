@@ -6,6 +6,9 @@
 #include <iomanip>
 #include <utility>
 #include <fstream>
+#include <inttypes.h>
+
+float check_frequency ();
 
 uint64_t rdtsc() {
     uint32_t lo, hi;
@@ -29,11 +32,15 @@ double mygettime() {
 int main(int argc, char **argv) {
     unsigned long long int nbCycleIn;
     unsigned long long int cycleInStart, cycleInEnd;
-    unsigned long long int cycle_total, instructions_total, instructions_executed, instructions_executed_total = 0;
+    uint64_t cycle_total, instructions_total, instructions_executed, instructions_executed_total, loop_nb_instruction, nb_total_loop_iteration = 0;
     double IPC = 0.0;
     int i;
-    double timeStart, timeEnd, timeSpent;
-    std::pair<int, double> *pairArr = new pair<int, double>[1000000];
+    double timeStart, timeEnd, time_total;
+    std::pair<int, double> *pairArr = new pair<int, double>[NB_lOOP];
+    float Base_vs_Current_freq = 1;
+
+    std::cout.precision(3);
+
 
     for (i = 0; i < NB_lOOP; i++) {
         timeStart = mygettime();

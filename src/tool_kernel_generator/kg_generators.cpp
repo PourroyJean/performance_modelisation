@@ -21,12 +21,11 @@ void KG_generators::generate_assembly() {
 
     string smallestRegisterName = "xmm";
 
-
+    //-- KERNEL INIT
     mFile_assembly_src << "\t\t //Initialisation opérandes à 1\n";
     mFile_assembly_src << "\t\t \"mov     $1,    %%rbx; \"\n";
     mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName << "0;\"" << "  //operand 1;\n";
     mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName << "1;\"" << "  //operand 2;\n\n";
-
 
     if (mParameters->P_COUNT) {
         mFile_assembly_src << "\t\t //Initialisation compteur\n";
@@ -38,14 +37,17 @@ void KG_generators::generate_assembly() {
     }
 
 
+    //-- KERNEL GENERATION: loop generation
     mFile_assembly_src << "\t\t \"myBench: \" " << endl;
-    for (auto instruction: *mInstructions_set) {
-        mFile_assembly_src << "\t\t\t\t\"" << instruction << "\"\n";
+    for (int i = 0; i < mParameters->P_UNROLLING; ++i) {
+        for (auto instruction: *mInstructions_set) {
+            mFile_assembly_src << "\t\t\t\t\"" << instruction << "\"\n";
+        }
     }
     mFile_assembly_src << "\t\t\"sub  $0x1, %%eax;\"\n";
     mFile_assembly_src << "\t\t\"jnz  myBench;\"";
 
-
+    //-- ONLY IF WE SELF CHECK
     if (mParameters->P_COUNT) {
         mFile_assembly_src << "\n\n\t\t//Réduction: dommer le nombre d'addition total dans xmm0\n";
         mFile_assembly_src << "\t\t \"mov     $0,    %%rbx; \"\n";
@@ -60,7 +62,7 @@ void KG_generators::generate_assembly() {
 
     mFile_assembly_src
             << "\t\t: \"=r\" (instructions_executed) "
-            << ": \"a\" (" << mParameters->P_LOOP_SIZE << "));";
+            << ": \"a\" (NB_lOOP_IN));";
 
 
 }
@@ -72,14 +74,22 @@ void KG_generators::generate_source() {
     mFile_assembly_src << "int NB_lOOP_IN = " << mParameters->P_LOOP_SIZE << ";\n";
     mFile_assembly_src << "int NB_INST = " << mParameters->P_OPERATIONS.length() << ";\n";
     mFile_assembly_src << "int P_COUNT = " << mParameters->P_COUNT << ";\n";
+    mFile_assembly_src << "int P_UNROLLING = " << mParameters->P_UNROLLING << ";\n";
+    mFile_assembly_src << "int FLOP_SP_PER_LOOP = " << mFLOP_SP  << ";\n";
+    mFile_assembly_src << "int FLOP_DP_PER_LOOP = " << mFLOP_DP  << ";\n";
+    mFile_assembly_src << "bool is_check_freq = " << std::boolalpha << mParameters->P_FREQUENCY  << ";\n";
+
 
     //Template_START + LOOP_ASSEMBLY + Template_END
     mFile_assembly_src << mFile_template_start.rdbuf();
     generate_assembly();
     mFile_assembly_src << mFile_template_end.rdbuf();
+    mFile_assembly_src << mFile_template_freq.rdbuf();
+
 
     mFile_template_start.close();
     mFile_template_end.close();
+    mFile_template_freq.close();
     mFile_assembly_src.close();
 }
 
@@ -129,18 +139,22 @@ void KG_generators::generate_instructions() {
 //        instruction += "%%" + mRegister_name + to_string(Get_register_cible()) + "; ";
 
         mInstructions_set->push_back(instruction);
+        DEBUG << instruction << endl;
+
     }
+
+
+
 
 }
 
 
-void KG_generators::Init_Generator() {
+void KG_generators::parse_and_label_instructions() {
     DEBUG << "-- Init Generator register, prefix, suffix, and precision \n";
 
     //only [v]addpd instructions supported
     mPrefix = "v";
 
-    //vadd[s,p]d
     if (mParameters->P_WIDTH == 64) {
         mSuffix = "s";
     } else {
@@ -158,65 +172,88 @@ void KG_generators::Init_Generator() {
         mRegister_name = "zmm";
     }
 
+    int flop_per_inst = 0;
     //vaddp[s,d]
     if (!mParameters->P_PRECISION.compare("single")) {
         mPrecision = "s";
+        flop_per_inst = mParameters->P_WIDTH / 32;
     } else {
         mPrecision = "d";
+        flop_per_inst = mParameters->P_WIDTH / 64;
+
     }
 
+    int flop = 0;
     //generate the instructions vector
     for (auto op: mParameters->P_OPERATIONS) {
         if (op == 'a') {
             mOperations_set->push_back("add");
+            flop += flop_per_inst;
         }
-        if (op == 'm') {
+        else if (op == 'm') {
             mOperations_set->push_back("mul");
+            flop += flop_per_inst;
         }
-        if (op == 'f') {
+        else if (op == 'f') {
             mOperations_set->push_back("fmadd231");
+            flop += flop_per_inst * 2;
+        }
+        else {
+            cout << "ERROR PARSING INSTRUCTION";
+            exit (1);
         }
     }
 
+    flop *= mParameters->P_UNROLLING;
+
+
+    if (!mParameters->P_PRECISION.compare("single")) {
+        mFLOP_SP = flop ;
+    } else {
+        mFLOP_DP = flop ;
+    }
+
 }
+
 
 
 void KG_generators::Generate_code() {
     DEBUG << "-- Generating assembly...\n";
 
-    //----- INITIALISATION -----------
-    Init_Generator();
+    parse_and_label_instructions();
 
-    //Generate each final instruction
     generate_instructions();
 
-    for (auto i: *mInstructions_set) {
-        DEBUG << i << endl;
-    }
-
     generate_source();
+
+
 
     return;
 }
 
-KG_generators::KG_generators(KG_parameters *param) {
-    mParameters = param;
-    mRegister_name = "xmm";
-    mPrevious_target_register = 1;
-    mPrefix = "v";
-    mOperations_set = new vector<string>();
-    mSuffix = "s";
-    mPrecision = "d";
+KG_generators::KG_generators(KG_parameters *param) :
+        mParameters(param),
+        mRegister_name("xmm"),
+        mPrevious_target_register(1),
+        mPrefix("v"),
+        mSuffix("s"),
+        mPrecision("d"),
+        mFLOP_SP(0),
+        mFLOP_DP(0)
+{
 
+    mOperations_set = new vector<string>();
     mFile_template_start.open(FILE_TEMPLATE_START, std::ios_base::binary);
     mFile_template_end.open(FILE_TEMPLATE_END, std::ios_base::binary);
+    mFile_template_freq.open(FILE_TEMPLATE_FREQ, std::ios_base::binary);
     mFile_assembly_src.open(FILE_ASM_SOURCE_GENERATED, std::ios_base::binary);
 
 
-    if (!(mFile_assembly_src.is_open() && mFile_template_end.is_open() && mFile_template_start.is_open())) {
+    if (!(mFile_assembly_src.is_open() && mFile_template_end.is_open() && mFile_template_start.is_open() && mFile_template_freq.is_open() )) {
         cerr << "Error opening one of these files: \n";
         cerr << FILE_TEMPLATE_START << endl;
         cerr << FILE_TEMPLATE_END << endl;
+        cerr << FILE_TEMPLATE_FREQ << endl;
         cerr << FILE_ASM_SOURCE_GENERATED << endl;
         exit(0);
     }

@@ -26,6 +26,8 @@ public:
     bool        P_VERBOSE;
     bool        P_HELP;
     unsigned    P_LOOP_SIZE;
+    unsigned    P_UNROLLING;
+    bool        P_FREQUENCY;
     bool        P_GRAPH;
     unsigned    P_SAMPLES;
     bool        P_COUNT;
