@@ -21,7 +21,9 @@ private:
 
     void generate_instructions();
 
-    void Init_Generator();
+    void parse_and_label_instructions();
+
+    void calcul_flop();
 
     int Get_register_source();
 
@@ -30,6 +32,7 @@ private:
     std::ofstream mFile_assembly_src   ;
     std::ifstream mFile_template_start ;
     std::ifstream mFile_template_end   ;
+    std::ifstream mFile_template_freq   ;
 
 public:
     KG_parameters *mParameters;
@@ -41,6 +44,8 @@ public:
     std::vector<std::string> *mInstructions_set = new std::vector<std::string>();
     std::string mSuffix;
     std::string mPrecision;
+    int mFLOP_SP;
+    int mFLOP_DP;
 
     void Generate_code();
 
