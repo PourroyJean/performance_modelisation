@@ -75,6 +75,7 @@ void KG_generators::generate_source() {
     mFile_assembly_src << "int NB_INST = " << mParameters->P_OPERATIONS.length() << ";\n";
     mFile_assembly_src << "int P_COUNT = " << mParameters->P_COUNT << ";\n";
     mFile_assembly_src << "int P_UNROLLING = " << mParameters->P_UNROLLING << ";\n";
+    mFile_assembly_src << "int CPU_BIND = " << mParameters->P_BIND << ";\n";
     mFile_assembly_src << "int FLOP_SP_PER_LOOP = " << mFLOP_SP  << ";\n";
     mFile_assembly_src << "int FLOP_DP_PER_LOOP = " << mFLOP_DP  << ";\n";
     mFile_assembly_src << "bool is_check_freq = " << std::boolalpha << mParameters->P_FREQUENCY  << ";\n";
