@@ -42,7 +42,7 @@ export o=$PWD
 
 
 # CHECK WHETHER PROFILING MODE IS EXPECTED
-PROF=0
+PROF=1
 #if [ -n "$SLURM_JOB_ID" ]; then
 #  if [ `scontrol show job $SLURM_JOB_ID |grep -E 'Comment|Command' |grep -c 'prof'` -gt 0 ]; then PROF=1; fi
 #else
@@ -149,7 +149,10 @@ echo "RUN THE BENCH NOW" >>myoutput
 # RUN BENCHMARK
 # RUN BENCHMARK
 
-/usr/bin/time -p ./kg -P double -W 128 -U 4 -L 100000000 -O mmmmmm  >& myoutput
+#/usr/bin/time -p ./kg -P double -W 128 -U 4 -L 100000000 -O mmmmmm  >& myoutput
+#perf stat  ./kg -P double -W 256 -U 8 -L 10000000 -O mmmmmmmmmm -B 2 >& myoutput
+    ./kg -P double -W 256 -U 4 -L 1000000 -O mmmmmmmmmm -B 0 >& myoutput
+
 
 
 # RUN BENCHMARK

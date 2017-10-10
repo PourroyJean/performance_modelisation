@@ -7,6 +7,7 @@
 #include <utility>
 #include <fstream>
 #include <inttypes.h>
+#include <sched.h>
 
 float check_frequency ();
 
@@ -41,6 +42,19 @@ int main(int argc, char **argv) {
 
     std::cout.precision(3);
 
+
+
+    //    Let's bind the process to a particular core
+    cpu_set_t mycpumask;
+    CPU_ZERO(&mycpumask);
+    CPU_SET(CPU_BIND, &mycpumask);
+    sched_setaffinity(0, sizeof(cpu_set_t), &mycpumask);
+    /* double-check */
+    sched_getaffinity(0, sizeof(cpu_set_t), &mycpumask);
+    for (i = 0; i < sysconf(_SC_NPROCESSORS_CONF); i++) {
+        if (CPU_ISSET(i, &mycpumask))
+            printf("+ Running on CPU #%d\n", i);
+    };
 
     for (i = 0; i < NB_lOOP; i++) {
         timeStart = mygettime();

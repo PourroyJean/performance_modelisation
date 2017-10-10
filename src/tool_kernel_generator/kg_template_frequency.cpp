@@ -8,21 +8,29 @@ float check_frequency() {
     cout << "--------------------  CHECK FREQUENCY  ------------------------" << endl;
 
     int i;
-    double timeStart, timeEnd, time_total, freq;
+    double timeStart, timeEnd, time_total, freq_Base;
     unsigned long long int cycleInStart, cycleInEnd;
+    int N_LOOP = 5;
 
-    unsigned int freq2;
+    //********************
+    //** BASE FREQUENCY  *
+    //********************
     timeStart = mygettime();
     cycleInStart = rdtsc();
     usleep(10000);
     cycleInEnd = rdtsc();
     timeEnd = mygettime();
-    unsigned long long int time = (cycleInEnd - cycleInStart);
-    freq = time / (1000000000 * (timeEnd - timeStart));
-    cout << "+ Base      frequency is " << freq << "Ghz" << endl;
+    unsigned long long int cycleSpent = (cycleInEnd - cycleInStart);
 
+    freq_Base = cycleSpent / (1000000000 * (timeEnd - timeStart));
+    cout << "+ Base      frequency is " << freq_Base << "Ghz" << endl;
+
+
+    //********************
+    //** REAL FREQUENCY  *
+    //********************
     cycleInStart = rdtsc();
-    for (i = 0; i < 20; i++) {
+    for (i = 0; i < N_LOOP; i++) {
         __asm__ ("aloop: "
                 "       sub    $0x1,%%eax;"
                 "       sub    $0x1,%%eax;"
@@ -36,38 +44,26 @@ float check_frequency() {
         );
     }
     cycleInEnd = rdtsc();
-    time = (cycleInEnd - cycleInStart);
-    float ipc = (double) 20 * (double) 40000000UL / (double) time;
-    float real_freq = freq * ipc;
-    cout << "+ Current   frequency is " << real_freq << "Ghz" << endl;
-    float Base_vs_Current_freq;
-    if (freq - real_freq > 0.05) {
-        cout << "+ /!\\ The frequence seems to be capped: x" << (1-ipc) <<  endl;
-    } else if (real_freq - freq > 0.05) {
-        cout << "+ /!\\ Turbo seems to be ON: x" << ipc << endl;
+    cycleSpent = (cycleInEnd - cycleInStart);
+
+    unsigned long long int NbInstruction = (double) N_LOOP * (double) 40000000UL;
+    float ipc = NbInstruction / (double) cycleSpent; //Should be equal to 1: 1 inst. per cycle
+    float freq_Real = freq_Base * ipc;
+    cout << "+ Current   frequency is " << freq_Real << "Ghz" << endl;
+
+
+
+    //***************************************************
+    //** OUTPUT: warning if the frequency is different  *
+    //***************************************************
+    if (freq_Base - freq_Real > 0.05) {
+        cout << "+ /!\\ The frequency seems to be capped: -" << (1-ipc)*100 <<'%' <<  endl;
+    } else if (freq_Real - freq_Base > 0.05) {
+        cout << "+ /!\\ Turbo seems to be ON: +" << ipc  <<'%'  << " (be carful with the following values)"<< endl;
     } else{
         cout << "+ OK: the core is running at his frequency based value" << endl;
-        Base_vs_Current_freq = 1;
     }
 
-
-
-    if (Base_vs_Current_freq < 0.98){
-//        cout << "+      FREQ is mutliplied by " << Base_vs_Current_freq << endl;
-//        cout << "+      IPC  is mutliplied by " << (2 - Base_vs_Current_freq)<< endl;
-//        freq = freq * Base_vs_Current_freq;
-//        IPC  = IPC  * (2 - Base_vs_Current_freq);
-
-    }
-
-    else if (Base_vs_Current_freq > 1.02){
-//        cout << "+      FREQ is mutliplied by " << Base_vs_Current_freq << endl;
-//        cout << "+      IPC  is mutliplied by " << Base_vs_Current_freq << endl;
-//        freq = freq * Base_vs_Current_freq;
-//        IPC  = IPC  * (2 - Base_vs_Current_freq);
-
-
-    }
 
 
     return  ipc;
