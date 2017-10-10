@@ -28,13 +28,18 @@ for n in 16
 do
   if [ $(( $lfsz * $ppn )) -lt $n ];then mode=excl; else mode=full; fi
   settopo  nslots=$n leafsize=$lfsz ppn=$ppn $mode
-  setpart  gre0_all
-  setconst 'gre0'
-  setname "Kg-$n"
-  fTURBO="turbo off"
-  fMONITOR="monitorfreq; monitormembw; monitorflops"
-  fHYPERT="disable cpus = smt"
-  setfeat "$fTURBO ; $fMONITOR ; $fHYPERT"
+
+    setpart  skl
+#    setconst 4110
+    setconst 6148
+    setname "B_6148"
+
+    ### FEATURE ###
+    fTURBO="turbo off"
+    fMONITOR="monitorfreq; monitorflops"
+#    fHYPERT="disable cpus = smt"
+    fFREQ="cap cpu freq=2.0Ghz"
+    setfeat "$fFREQ ; $fTURBO ; $fMONITOR ; $fHYPERT"
 
 #  sbatch -L  kg_run_slurm.sh -c sedan_4m -n $n -t 1 -f /nfs -l ${ppn}ppn.TEST
   sbatch  $SCRIPTPATH/kg_run_slurm.sh -n $n -t 1 -f /nfs -l ${ppn}ppn.TEST

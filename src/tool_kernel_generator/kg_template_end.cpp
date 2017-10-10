@@ -13,10 +13,23 @@
 
     IPC = double(instructions_total) / double(cycle_total);
     double freq = (cycle_total / time_total )/1000000000;
+
+    //Applying some correction depending on the cpu clock: if the CPU is capped or has turbo: the rdtsc instruction will not work as expected
+    float coef_freq = check_frequency ();
+    if (coef_freq < 0.98){
+        IPC /= (coef_freq);
+        freq *= coef_freq;
+    }
+    else if (coef_freq > 1.02){
+        IPC /= coef_freq;
+        freq *= coef_freq;
+    }
+
+
     double flops_sp = freq * 1000000000 * float((FLOP_SP_PER_LOOP * nb_total_loop_iteration)) / cycle_total;
     double flops_dp = freq * 1000000000 * float((FLOP_DP_PER_LOOP * nb_total_loop_iteration)) / cycle_total;
 
-    check_frequency ();
+
 
         cout << endl;
 
@@ -42,7 +55,7 @@
 
 
 
-        for (int i = 0; i < NB_lOOP; ++i) {
+    for (int i = 0; i < NB_lOOP; ++i) {
         mFile_template_start << pairArr[i].first << " " << to_string(pairArr[i].second) << endl;
     }
     mFile_template_start.close();
