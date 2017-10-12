@@ -20,10 +20,9 @@ gre0
 # sbatch [<extra_sbatch_flags>] <script> <args> : submit job according to what was set by previous functions
 
 ###########################################################################
-function gre0() {
-lfsz=1
+funct
+lfsz1
 ppn=28
-
 resetcond
 for n in 16
 do
