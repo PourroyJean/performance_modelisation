@@ -63,7 +63,7 @@ float check_frequency() {
     } else{
         cout << "+ OK: the core is running at his frequency based value" << endl;
     }
-    cout << endl;
+    cout << endl << flush;
 
 
 
