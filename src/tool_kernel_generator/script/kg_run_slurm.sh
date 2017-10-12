@@ -151,7 +151,7 @@ echo "RUN THE BENCH NOW" >>myoutput
 
 #/usr/bin/time -p ./kg -P double -W 128 -U 4 -L 100000000 -O mmmmmm  >& myoutput
 #perf stat  ./kg -P double -W 256 -U 8 -L 10000000 -O mmmmmmmmmm -B 2 >& myoutput
-    ./kg -P double -W 256 -U 4 -L 1000000 -O mmmmmmmmmm -B 0 >& myoutput
+    ./kg -P single  -W 64 -U 8 -L 1000000 -O mmmmmmmmmm -B 0 >& myoutput
 
 
 
