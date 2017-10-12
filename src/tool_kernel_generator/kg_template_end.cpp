@@ -1,3 +1,4 @@
+
         cycleInEnd = rdtsc();
         timeEnd = mygettime();
         pairArr[i] = make_pair(cycleInEnd - cycleInStart, timeEnd - timeStart);
@@ -34,10 +35,6 @@
     }
 
     inst_second = IPC * freq;
-
-
-
-
 
 
     cout << "------------------  INSTRUCTIONS SUMMARY -----------------------" << endl;

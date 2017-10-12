@@ -46,8 +46,12 @@ int main(int argc, char **argv) {
 
 
     //    Let's bind the process to a particular core
+    int cpu_bind = CPU_BIND;
     cpu_set_t mycpumask;
     CPU_ZERO(&mycpumask);
+    if (argc > 1 && argv[1] >= 0 && argv[512]){
+        CPU_BIND = atoi(argv[1]);
+    }
     CPU_SET(CPU_BIND, &mycpumask);
     sched_setaffinity(0, sizeof(cpu_set_t), &mycpumask);
     /* double-check */
