@@ -34,11 +34,12 @@ int main(int argc, char **argv) {
     unsigned long long int nbCycleIn;
     unsigned long long int cycleInStart, cycleInEnd;
     uint64_t cycle_total, instructions_total, instructions_executed, instructions_executed_total, loop_nb_instruction, nb_total_loop_iteration = 0;
-    double IPC = 0.0;
+    double IPC, inst_second = 0.0;
     int i;
     double timeStart, timeEnd, time_total;
     std::pair<int, double> *pairArr = new pair<int, double>[NB_lOOP];
     float Base_vs_Current_freq = 1;
+    double flop_cycle_sp ,flop_cycle_dp ,flops_sp ,flops_dp;
 
     std::cout.precision(3);
 

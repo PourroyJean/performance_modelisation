@@ -156,10 +156,25 @@ void KG_generators::parse_and_label_instructions() {
     //only [v]addpd instructions supported
     mPrefix = "v";
 
+    int flop_per_inst = 0;
+    int size_register = 0;
+
+    //vaddp[s,d]
+    if (!mParameters->P_PRECISION.compare("single")) {
+        mPrecision = "s";
+        size_register = 32;
+    } else {
+        mPrecision = "d";
+        size_register = 64;
+    }
+
     if (mParameters->P_WIDTH == 64) {
+        //Scalar
         mSuffix = "s";
+        flop_per_inst =1;
     } else {
         mSuffix = "p";
+        flop_per_inst = mParameters->P_WIDTH / size_register;
     }
 
     //Regster used involved the type of instruction used
@@ -173,16 +188,7 @@ void KG_generators::parse_and_label_instructions() {
         mRegister_name = "zmm";
     }
 
-    int flop_per_inst = 0;
-    //vaddp[s,d]
-    if (!mParameters->P_PRECISION.compare("single")) {
-        mPrecision = "s";
-        flop_per_inst = mParameters->P_WIDTH / 32;
-    } else {
-        mPrecision = "d";
-        flop_per_inst = mParameters->P_WIDTH / 64;
 
-    }
 
     int flop = 0;
     //generate the instructions vector
@@ -206,7 +212,6 @@ void KG_generators::parse_and_label_instructions() {
     }
 
     flop *= mParameters->P_UNROLLING;
-
 
     if (!mParameters->P_PRECISION.compare("single")) {
         mFLOP_SP = flop ;
