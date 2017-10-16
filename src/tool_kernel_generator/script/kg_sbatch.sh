@@ -4,7 +4,8 @@ function main() {
 
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname $SCRIPT`
-gre0
+#gre0
+gre_fluent
 #gre6
 }
 
@@ -20,6 +21,64 @@ gre0
 # sbatch [<extra_sbatch_flags>] <script> <args> : submit job according to what was set by previous functions
 
 ###########################################################################
+
+
+function gre_fluent() {
+lfsz=32
+ppn=16
+resetcond
+
+declare -A part_cpu_pairs=(
+            [4110]=skl
+            [5117]=skl
+#            [6126]=gre3_all
+            [6130]=skl
+#            [6150]=skl
+#            [6138]=skl
+#            [6148]=skl
+            [8160]=skl
+)
+
+
+#for key in ${!part_cpu_pairs[@]}; do
+for key in 4110 5117 6150 8160; do
+#    echo ${key} ${part_cpu_pairs[${key}]}
+
+    CPU=${key}
+#    PART=${part_cpu_pairs[${key}]}
+    PART=skl
+    n=16
+
+    echo $CPU "  "  $PART
+
+    if [ $(( $lfsz * $ppn )) -lt $n ];then mode=excl; else mode=full; fi
+    settopo  nslots=$n leafsize=$lfsz ppn=$ppn $mode
+
+    setpart  $PART
+    setconst $CPU
+    setname "KG_$CPU"
+
+    ### FEATURE ###
+    fTURBO="turbo off"
+#    fMONITOR="monitormembw; monitorflops"
+#    fMONITOR="monitorflops;"
+#    fHYPERT="disable cpus = smt"
+    fFREQ="cap cpu freq=2.0Ghz"
+    setfeat "$fFREQ ; $fTURBO ; $fMONITOR ; $fHYPERT"
+
+
+    #########
+    ## RUN ##
+    #########
+    sbatch  $SCRIPTPATH/kg_run_slurm.sh -n $n -t 1 -f /nfs -l ${CPU}_SINGLE_512
+
+
+    #setcond # Pour lancer 1 job par 1. Un wait.
+done
+
+}
+
+
 function gre0() {
 lfsz=1
 ppn=28
