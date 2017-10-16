@@ -25,7 +25,7 @@ while getopts hc:n:t:f:l: opt; do
     n) np=$OPTARG ;;
     t) nt=$OPTARG ;;
     f) fs=$OPTARG/$LOGNAME ;;
-    l) l=.$OPTARG ;;
+    l) l=$OPTARG ;;
     *) exit 2 ;;
   esac
 done
@@ -61,7 +61,7 @@ fi
 PROJECT_NAME=""
 APP_NAME=""
 #export d=$fs/$PROJECT_NAME/$APP_NAME/work.${c}.${np}Px${nt}T.jobid-$jobid.`hostname`.`date +"%Y%m%d.%H%M%S"`$l
-export d=/nfs/pourroy/code/THESE/performance_modelisation/build/WORKDIR/work-${c}-${np}Px${nt}T--id_$jobid--.`hostname`.`date +"%Y%m%d.%H%M%S"`$l
+export d=/nfs/pourroy/code/THESE/performance_modelisation/build/WORKDIR/work_id_${jobid}_$l
 
 # CREATE WORK DIRECTORY AND COPY RELEVANT DATA
 mkdir -p $d
@@ -69,6 +69,8 @@ mkdir -p $d
 
 fsroot=`echo $fs |cut -f 2 -d /`
 ln -s /nfs/pourroy/code/THESE/performance_modelisation/build/bin/tool_kernel_generator/* $d    ### custom cases (case, data and journal files available in <case>)
+cp -s /nfs/pourroy/code/THESE/performance_modelisation/build/a.out $d    ### custom cases (case, data and journal files available in <case>)
+cp /nfs/pourroy/code/THESE/performance_modelisation/build/assembly $d    ### custom cases (case, data and journal files available in <case>)
 
 
 # cd TO WORK DIRECTORY
@@ -151,7 +153,8 @@ echo "RUN THE BENCH NOW" >>myoutput
 
 #/usr/bin/time -p ./kg -P double -W 128 -U 4 -L 100000000 -O mmmmmm  >& myoutput
 #perf stat  ./kg -P double -W 256 -U 8 -L 10000000 -O mmmmmmmmmm -B 2 >& myoutput
-    ./kg -P single  -W 64 -U 8 -L 1000000 -O mmmmmmmmmm -B 0 >& myoutput
+#    ./kg -P single  -W 64 -U 8 -L 1000000 -O mmmmmmmmmm -B 0 >& myoutput
+    mygflops.sh ./assembly >& myoutput
 
 
 

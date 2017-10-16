@@ -44,17 +44,17 @@
         cout << setw(25) << instructions_total   << setw(25) << instructions_executed_total << setw(20) << cycle_total   << setw(13) << freq        << setw(10) << IPC * Base_vs_Current_freq << std::endl;
 
     } else {
-        cout << setw(20) << "NB INSTRUCTIONS"    << setw(13) << "FREQUENCY" << setw(20) << "Giga_inst/sec" << setw(10) << "IPC" << std::endl;
-        cout << setw(20) << instructions_total   << setw(13) << freq        << setw(20) <<   inst_second   << setw(10) << IPC   << std::endl;
-        }
+        cout << "_label_|" <<  setw(18) <<"NB INSTRUCTIONS"    << setw(10) << "Time"     << setw(13) << "FREQUENCY" << setw(20) << "Giga_inst/sec" << setw(10) << "IPC" << std::endl;
+        cout << "_value_|" <<  setw(18) <<instructions_total   << setw(10) << time_total << setw(13) << freq        << setw(20) <<   inst_second   << setw(10) << IPC   << std::endl;
+    }
 
     cout << endl;
 
-        cout << "----------------------  FLOP SUMMARY  --------------------------" << endl;
-        cout << setw(10) << "PRECISION"  << setw(15) << "FLOP/cycle"   << setw(20) << "FLOP/second" << endl;
-        cout << setw(10) << "Single"     << setw(15) << flop_cycle_sp  << setw(20) << flops_sp << endl ;
-        cout << setw(10) << "Double"     << setw(15) << flop_cycle_dp  << setw(20) << flops_dp << endl ;
-        cout << "----------------------------------------------------------------" << endl;
+    cout << "----------------------  FLOP SUMMARY  --------------------------" << endl;
+    cout << setw(10) << "PRECISION"  << setw(15) << "FLOP/cycle"   << setw(20) << "FLOP/second" << endl;
+    cout << setw(10) << "Single"     << setw(15) << flop_cycle_sp  << setw(20) << flops_sp << endl ;
+    cout << setw(10) << "Double"     << setw(15) << flop_cycle_dp  << setw(20) << flops_dp << endl ;
+    cout << "----------------------------------------------------------------" << endl;
 
 
 
