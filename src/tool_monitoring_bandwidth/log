@@ -1,0 +1,284 @@
+# started on Mon Nov 27 19:01:47 2017
+
+#           time             counts unit events
+     0.101667978         100.170445      task-clock (msec)          (100.00%)
+     0.101667978                 18      context-switches           (100.00%)
+     0.101667978                  0      cpu-migrations             (100.00%)
+     0.101667978                  2      page-faults              
+     0.101667978    <not supported>      cycles                   
+     0.101667978    <not supported>      stalled-cycles-frontend  
+     0.101667978    <not supported>      stalled-cycles-backend   
+     0.101667978    <not supported>      instructions             
+     0.101667978    <not supported>      branches                 
+     0.101667978    <not supported>      branch-misses            
+     0.201841999         101.706669      task-clock (msec)          (100.00%)
+     0.201841999                 12      context-switches           (100.00%)
+     0.201841999                  0      cpu-migrations             (100.00%)
+     0.201841999                  6      page-faults              
+     0.201841999    <not supported>      cycles                   
+     0.201841999    <not supported>      stalled-cycles-frontend  
+     0.201841999    <not supported>      stalled-cycles-backend   
+     0.201841999    <not supported>      instructions             
+     0.201841999    <not supported>      branches                 
+     0.201841999    <not supported>      branch-misses            
+     0.302025921         100.184189      task-clock (msec)          (100.00%)
+     0.302025921                 37      context-switches           (100.00%)
+     0.302025921                  0      cpu-migrations             (100.00%)
+     0.302025921                  0      page-faults              
+     0.302025921    <not supported>      cycles                   
+     0.302025921    <not supported>      stalled-cycles-frontend  
+     0.302025921    <not supported>      stalled-cycles-backend   
+     0.302025921    <not supported>      instructions             
+     0.302025921    <not supported>      branches                 
+     0.302025921    <not supported>      branch-misses            
+     0.402228443         100.201626      task-clock (msec)          (100.00%)
+     0.402228443                  4      context-switches           (100.00%)
+     0.402228443                  0      cpu-migrations             (100.00%)
+     0.402228443                  0      page-faults              
+     0.402228443    <not supported>      cycles                   
+     0.402228443    <not supported>      stalled-cycles-frontend  
+     0.402228443    <not supported>      stalled-cycles-backend   
+     0.402228443    <not supported>      instructions             
+     0.402228443    <not supported>      branches                 
+     0.402228443    <not supported>      branch-misses            
+     0.502372263         100.147709      task-clock (msec)          (100.00%)
+     0.502372263                  2      context-switches           (100.00%)
+     0.502372263                  0      cpu-migrations             (100.00%)
+     0.502372263                  0      page-faults              
+     0.502372263    <not supported>      cycles                   
+     0.502372263    <not supported>      stalled-cycles-frontend  
+     0.502372263    <not supported>      stalled-cycles-backend   
+     0.502372263    <not supported>      instructions             
+     0.502372263    <not supported>      branches                 
+     0.502372263    <not supported>      branch-misses            
+     0.602513283         100.138392      task-clock (msec)          (100.00%)
+     0.602513283                  6      context-switches           (100.00%)
+     0.602513283                  0      cpu-migrations             (100.00%)
+     0.602513283                  0      page-faults              
+     0.602513283    <not supported>      cycles                   
+     0.602513283    <not supported>      stalled-cycles-frontend  
+     0.602513283    <not supported>      stalled-cycles-backend   
+     0.602513283    <not supported>      instructions             
+     0.602513283    <not supported>      branches                 
+     0.602513283    <not supported>      branch-misses            
+     0.702685504         100.174547      task-clock (msec)          (100.00%)
+     0.702685504                  2      context-switches           (100.00%)
+     0.702685504                  0      cpu-migrations             (100.00%)
+     0.702685504                  0      page-faults              
+     0.702685504    <not supported>      cycles                   
+     0.702685504    <not supported>      stalled-cycles-frontend  
+     0.702685504    <not supported>      stalled-cycles-backend   
+     0.702685504    <not supported>      instructions             
+     0.702685504    <not supported>      branches                 
+     0.702685504    <not supported>      branch-misses            
+     0.802815324         100.130892      task-clock (msec)          (100.00%)
+     0.802815324                 40      context-switches           (100.00%)
+     0.802815324                  0      cpu-migrations             (100.00%)
+     0.802815324                  0      page-faults              
+     0.802815324    <not supported>      cycles                   
+     0.802815324    <not supported>      stalled-cycles-frontend  
+     0.802815324    <not supported>      stalled-cycles-backend   
+     0.802815324    <not supported>      instructions             
+     0.802815324    <not supported>      branches                 
+     0.802815324    <not supported>      branch-misses            
+     0.902972445         100.153314      task-clock (msec)          (100.00%)
+     0.902972445                  4      context-switches           (100.00%)
+     0.902972445                  0      cpu-migrations             (100.00%)
+     0.902972445                  0      page-faults              
+     0.902972445    <not supported>      cycles                   
+     0.902972445    <not supported>      stalled-cycles-frontend  
+     0.902972445    <not supported>      stalled-cycles-backend   
+     0.902972445    <not supported>      instructions             
+     0.902972445    <not supported>      branches                 
+     0.902972445    <not supported>      branch-misses            
+     1.003128965         100.160398      task-clock (msec)          (100.00%)
+     1.003128965                 17      context-switches           (100.00%)
+     1.003128965                  0      cpu-migrations             (100.00%)
+     1.003128965                  1      page-faults              
+     1.003128965    <not supported>      cycles                   
+     1.003128965    <not supported>      stalled-cycles-frontend  
+     1.003128965    <not supported>      stalled-cycles-backend   
+     1.003128965    <not supported>      instructions             
+     1.003128965    <not supported>      branches                 
+     1.003128965    <not supported>      branch-misses            
+     1.103283486         100.154102      task-clock (msec)          (100.00%)
+     1.103283486                  4      context-switches           (100.00%)
+     1.103283486                  0      cpu-migrations             (100.00%)
+     1.103283486                  0      page-faults              
+     1.103283486    <not supported>      cycles                   
+     1.103283486    <not supported>      stalled-cycles-frontend  
+     1.103283486    <not supported>      stalled-cycles-backend   
+     1.103283486    <not supported>      instructions             
+     1.103283486    <not supported>      branches                 
+     1.103283486    <not supported>      branch-misses            
+     1.203393704         100.109092      task-clock (msec)          (100.00%)
+     1.203393704                 10      context-switches           (100.00%)
+     1.203393704                  0      cpu-migrations             (100.00%)
+     1.203393704                  0      page-faults              
+     1.203393704    <not supported>      cycles                   
+     1.203393704    <not supported>      stalled-cycles-frontend  
+     1.203393704    <not supported>      stalled-cycles-backend   
+     1.203393704    <not supported>      instructions             
+     1.203393704    <not supported>      branches                 
+     1.203393704    <not supported>      branch-misses            
+     1.303530824         100.137898      task-clock (msec)          (100.00%)
+     1.303530824                 32      context-switches           (100.00%)
+     1.303530824                  0      cpu-migrations             (100.00%)
+     1.303530824                  0      page-faults              
+     1.303530824    <not supported>      cycles                   
+     1.303530824    <not supported>      stalled-cycles-frontend  
+     1.303530824    <not supported>      stalled-cycles-backend   
+     1.303530824    <not supported>      instructions             
+     1.303530824    <not supported>      branches                 
+     1.303530824    <not supported>      branch-misses            
+     1.403691445         100.157399      task-clock (msec)          (100.00%)
+     1.403691445                  4      context-switches           (100.00%)
+     1.403691445                  0      cpu-migrations             (100.00%)
+     1.403691445                  0      page-faults              
+     1.403691445    <not supported>      cycles                   
+     1.403691445    <not supported>      stalled-cycles-frontend  
+     1.403691445    <not supported>      stalled-cycles-backend   
+     1.403691445    <not supported>      instructions             
+     1.403691445    <not supported>      branches                 
+     1.403691445    <not supported>      branch-misses            
+     1.503881467         100.190723      task-clock (msec)          (100.00%)
+     1.503881467                 11      context-switches           (100.00%)
+     1.503881467                  0      cpu-migrations             (100.00%)
+     1.503881467                  0      page-faults              
+     1.503881467    <not supported>      cycles                   
+     1.503881467    <not supported>      stalled-cycles-frontend  
+     1.503881467    <not supported>      stalled-cycles-backend   
+     1.503881467    <not supported>      instructions             
+     1.503881467    <not supported>      branches                 
+     1.503881467    <not supported>      branch-misses            
+     1.604029687         100.151791      task-clock (msec)          (100.00%)
+     1.604029687                  6      context-switches           (100.00%)
+     1.604029687                  0      cpu-migrations             (100.00%)
+     1.604029687                  0      page-faults              
+     1.604029687    <not supported>      cycles                   
+     1.604029687    <not supported>      stalled-cycles-frontend  
+     1.604029687    <not supported>      stalled-cycles-backend   
+     1.604029687    <not supported>      instructions             
+     1.604029687    <not supported>      branches                 
+     1.604029687    <not supported>      branch-misses            
+     1.704134106         100.104560      task-clock (msec)          (100.00%)
+     1.704134106                  9      context-switches           (100.00%)
+     1.704134106                  0      cpu-migrations             (100.00%)
+     1.704134106                  0      page-faults              
+     1.704134106    <not supported>      cycles                   
+     1.704134106    <not supported>      stalled-cycles-frontend  
+     1.704134106    <not supported>      stalled-cycles-backend   
+     1.704134106    <not supported>      instructions             
+     1.704134106    <not supported>      branches                 
+     1.704134106    <not supported>      branch-misses            
+     1.804285426         100.146979      task-clock (msec)          (100.00%)
+     1.804285426                 46      context-switches           (100.00%)
+     1.804285426                  0      cpu-migrations             (100.00%)
+     1.804285426                  0      page-faults              
+     1.804285426    <not supported>      cycles                   
+     1.804285426    <not supported>      stalled-cycles-frontend  
+     1.804285426    <not supported>      stalled-cycles-backend   
+     1.804285426    <not supported>      instructions             
+     1.804285426    <not supported>      branches                 
+     1.804285426    <not supported>      branch-misses            
+     1.904446747         100.164738      task-clock (msec)          (100.00%)
+     1.904446747                  4      context-switches           (100.00%)
+     1.904446747                  0      cpu-migrations             (100.00%)
+     1.904446747                  0      page-faults              
+     1.904446747    <not supported>      cycles                   
+     1.904446747    <not supported>      stalled-cycles-frontend  
+     1.904446747    <not supported>      stalled-cycles-backend   
+     1.904446747    <not supported>      instructions             
+     1.904446747    <not supported>      branches                 
+     1.904446747    <not supported>      branch-misses            
+     2.004589667         100.143371      task-clock (msec)          (100.00%)
+     2.004589667                  4      context-switches           (100.00%)
+     2.004589667                  0      cpu-migrations             (100.00%)
+     2.004589667                  0      page-faults              
+     2.004589667    <not supported>      cycles                   
+     2.004589667    <not supported>      stalled-cycles-frontend  
+     2.004589667    <not supported>      stalled-cycles-backend   
+     2.004589667    <not supported>      instructions             
+     2.004589667    <not supported>      branches                 
+     2.004589667    <not supported>      branch-misses            
+     2.104827991         100.238683      task-clock (msec)          (100.00%)
+     2.104827991                 11      context-switches           (100.00%)
+     2.104827991                  0      cpu-migrations             (100.00%)
+     2.104827991                  0      page-faults              
+     2.104827991    <not supported>      cycles                   
+     2.104827991    <not supported>      stalled-cycles-frontend  
+     2.104827991    <not supported>      stalled-cycles-backend   
+     2.104827991    <not supported>      instructions             
+     2.104827991    <not supported>      branches                 
+     2.104827991    <not supported>      branch-misses            
+     2.205104416         100.276805      task-clock (msec)          (100.00%)
+     2.205104416                 10      context-switches           (100.00%)
+     2.205104416                  0      cpu-migrations             (100.00%)
+     2.205104416                  0      page-faults              
+     2.205104416    <not supported>      cycles                   
+     2.205104416    <not supported>      stalled-cycles-frontend  
+     2.205104416    <not supported>      stalled-cycles-backend   
+     2.205104416    <not supported>      instructions             
+     2.205104416    <not supported>      branches                 
+     2.205104416    <not supported>      branch-misses            
+     2.305256636         100.148622      task-clock (msec)          (100.00%)
+     2.305256636                 36      context-switches           (100.00%)
+     2.305256636                  0      cpu-migrations             (100.00%)
+     2.305256636                  0      page-faults              
+     2.305256636    <not supported>      cycles                   
+     2.305256636    <not supported>      stalled-cycles-frontend  
+     2.305256636    <not supported>      stalled-cycles-backend   
+     2.305256636    <not supported>      instructions             
+     2.305256636    <not supported>      branches                 
+     2.305256636    <not supported>      branch-misses            
+     2.405417957         100.165335      task-clock (msec)          (100.00%)
+     2.405417957                 12      context-switches           (100.00%)
+     2.405417957                  0      cpu-migrations             (100.00%)
+     2.405417957                  0      page-faults              
+     2.405417957    <not supported>      cycles                   
+     2.405417957    <not supported>      stalled-cycles-frontend  
+     2.405417957    <not supported>      stalled-cycles-backend   
+     2.405417957    <not supported>      instructions             
+     2.405417957    <not supported>      branches                 
+     2.405417957    <not supported>      branch-misses            
+     2.505612279         100.189086      task-clock (msec)          (100.00%)
+     2.505612279                  2      context-switches           (100.00%)
+     2.505612279                  0      cpu-migrations             (100.00%)
+     2.505612279                  0      page-faults              
+     2.505612279    <not supported>      cycles                   
+     2.505612279    <not supported>      stalled-cycles-frontend  
+     2.505612279    <not supported>      stalled-cycles-backend   
+     2.505612279    <not supported>      instructions             
+     2.505612279    <not supported>      branches                 
+     2.505612279    <not supported>      branch-misses            
+#           time             counts unit events
+     2.605793001         100.185602      task-clock (msec)          (100.00%)
+     2.605793001                  6      context-switches           (100.00%)
+     2.605793001                  0      cpu-migrations             (100.00%)
+     2.605793001                  0      page-faults              
+     2.605793001    <not supported>      cycles                   
+     2.605793001    <not supported>      stalled-cycles-frontend  
+     2.605793001    <not supported>      stalled-cycles-backend   
+     2.605793001    <not supported>      instructions             
+     2.605793001    <not supported>      branches                 
+     2.605793001    <not supported>      branch-misses            
+     2.705899119         100.106193      task-clock (msec)          (100.00%)
+     2.705899119                  2      context-switches           (100.00%)
+     2.705899119                  0      cpu-migrations             (100.00%)
+     2.705899119                  0      page-faults              
+     2.705899119    <not supported>      cycles                   
+     2.705899119    <not supported>      stalled-cycles-frontend  
+     2.705899119    <not supported>      stalled-cycles-backend   
+     2.705899119    <not supported>      instructions             
+     2.705899119    <not supported>      branches                 
+     2.705899119    <not supported>      branch-misses            
+     2.806045240         100.146305      task-clock (msec)          (100.00%)
+     2.806045240                 37      context-switches           (100.00%)
+     2.806045240                  0      cpu-migrations             (100.00%)
+     2.806045240                  0      page-faults              
+     2.806045240    <not supported>      cycles                   
+     2.806045240    <not supported>      stalled-cycles-frontend  
+     2.806045240    <not supported>      stalled-cycles-backend   
+     2.806045240    <not supported>      instructions             
+     2.806045240    <not supported>      branches                 
+     2.806045240    <not supported>      branch-misses            
