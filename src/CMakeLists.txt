@@ -14,6 +14,7 @@ file(GLOB SOURCES "*.c")
 
 add_subdirectory (tool_hw_description)
 add_subdirectory (tool_kernel_generator)
+add_subdirectory (tool_monitor_memory_bandwidth)
 add_subdirectory (tool_oprofile)
 add_subdirectory (common)
 add_subdirectory (benchmark_multiply)

@@ -23,6 +23,8 @@ private:
 
     void parse_and_label_instructions();
 
+    void parse_and_label_instructions_custom();
+
     void calcul_flop();
 
     int Get_register_source();
@@ -34,9 +36,12 @@ private:
     std::ifstream mFile_template_end   ;
     std::ifstream mFile_template_freq   ;
 
+
+
 public:
     KG_parameters *mParameters;
     std::string mRegister_name;
+    std::vector <string> mRegister_list;
     unsigned mPrevious_target_register;
     unsigned mRegister_max=0;
     std::string mPrefix;

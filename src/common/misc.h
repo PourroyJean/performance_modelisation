@@ -17,7 +17,7 @@ extern struct timeval start_time, end_time;
 
 void print_times(char *s);
 
-//#define OP_DEBUG 1
+#define OP_DEBUG 1
 #ifdef  OP_DEBUG
     #define DEBUG cout << "_DEBUG_  "
 #else

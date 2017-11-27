@@ -30,7 +30,7 @@ while getopts hc:n:t:f:l: opt; do
   esac
 done
 shift $(($OPTIND - 1))  ### extra parameters are not meant to be leveraged, but they remain available as $*
-if [ -c "${c}" -o -z "${np}" ]; then usage; fi
+#if [ -c "${c}" -o -z "${np}" ]; then usage; fi
 
 set -v
 set -x
@@ -69,8 +69,9 @@ mkdir -p $d
 
 fsroot=`echo $fs |cut -f 2 -d /`
 ln -s /nfs/pourroy/code/THESE/performance_modelisation/build/bin/tool_kernel_generator/* $d    ### custom cases (case, data and journal files available in <case>)
-cp -s /nfs/pourroy/code/THESE/performance_modelisation/build/a.out $d    ### custom cases (case, data and journal files available in <case>)
-cp /nfs/pourroy/code/THESE/performance_modelisation/build/assembly $d    ### custom cases (case, data and journal files available in <case>)
+cp -s /nfs/pourroy/code/THESE/performance_modelisation/build/a.out $d
+cp /nfs/pourroy/code/THESE/performance_modelisation/build/assembly $d
+cp /nfs/pourroy/code/THESE/performance_modelisation/build/assembly_fluent_like_sedan $d
 
 
 # cd TO WORK DIRECTORY
@@ -154,7 +155,9 @@ echo "RUN THE BENCH NOW" >>myoutput
 #/usr/bin/time -p ./kg -P double -W 128 -U 4 -L 100000000 -O mmmmmm  >& myoutput
 #perf stat  ./kg -P double -W 256 -U 8 -L 10000000 -O mmmmmmmmmm -B 2 >& myoutput
 #    ./kg -P single  -W 64 -U 8 -L 1000000 -O mmmmmmmmmm -B 0 >& myoutput
-    mygflops.sh ./assembly >& myoutput
+#    mygflops.sh ./assembly >& myoutput
+#    mygflops.sh ./kg_bench_concurrent_kg.sh  |& tee myoutput
+    ./assembly >& myoutput
 
 
 

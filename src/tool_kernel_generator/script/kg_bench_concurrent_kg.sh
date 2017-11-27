@@ -3,12 +3,16 @@
 
 
 #CPU 0, 1, 2 .... MAX
-NB_BENCH=16
-BENCH="assembly"
+NB_BENCH=16 #TOTAL
+
+BENCH="a.out"
+BENCH="assembly_fluent_like_sedan"
+
 NEXT_SOCKET=18
+NEXT_SOCKET=`numactl --hardware | grep "node 1" | head -n 1 | awk '{print $4}'`
 
 
-printf "Launching on {"
+printf "Launching $BENCH on {"
 for ((i=0; i<($NB_BENCH / 2); i++)); do
     printf "$i,  "
     ./$BENCH $i  | grep "Running" &

@@ -14,25 +14,25 @@ include_directories(../common)
 
 
 #add_library(lib_kg kg_parameters.cpp kg_misc.cpp kg_generators.cpp kg_executor.cpp)
-#add_executable(kg kg_main.cxx kg_parameters.cpp kg_misc.cpp kg_generators.cpp kg_executor.cpp)
+add_executable(mmb monitormembw.c)
 
 #target_link_libraries(kg misc)
 
 
-#set_target_properties( kg
-#        PROPERTIES
-#        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tool_kernel_generator"
-#)
+set_target_properties(mmb
+        PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/tool_monitor_memory_bandwidth"
+)
 
 
 file(GLOB MMB_COPY_FILES
-        "script/*.py"
+#        "script/*.py"
         "script/*.sh"
 #        "kg_template_start.cpp"
         )
 
 
-file(COPY ${KG_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_monitor_memory/)
+file(COPY ${MMB_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_monitor_memory_bandwidth/)
 
 
 

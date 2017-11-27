@@ -5,7 +5,7 @@ function main() {
 SCRIPT=`realpath $0`
 SCRIPTPATH=`dirname $SCRIPT`
 #gre0
-gre_fluent
+gre_kg
 #gre6
 }
 
@@ -23,31 +23,31 @@ gre_fluent
 ###########################################################################
 
 
-function gre_fluent() {
+function gre_kg() {
 lfsz=32
-ppn=16
+ppn=1
 resetcond
 
 declare -A part_cpu_pairs=(
-            [4110]=skl
-            [5117]=skl
-#            [6126]=gre3_all
-            [6130]=skl
-#            [6150]=skl
+                [4110]=skl
+#                [5117]=skl
+                [6130]=skl
 #            [6138]=skl
 #            [6148]=skl
-            [8160]=skl
+#            [6150]=skl
+#                [8160]=skl
 )
 
 
-#for key in ${!part_cpu_pairs[@]}; do
-for key in 4110 5117 6150 8160; do
+for key in ${!part_cpu_pairs[@]}; do
+#for key in 4110 5117 6150 8160; do
+#for key in 4110 ; do
 #    echo ${key} ${part_cpu_pairs[${key}]}
 
     CPU=${key}
 #    PART=${part_cpu_pairs[${key}]}
     PART=skl
-    n=16
+    n=1
 
     echo $CPU "  "  $PART
 
@@ -61,16 +61,17 @@ for key in 4110 5117 6150 8160; do
     ### FEATURE ###
     fTURBO="turbo off"
 #    fMONITOR="monitormembw; monitorflops"
-#    fMONITOR="monitorflops;"
+    fMONITOR="monitorflops;"
+#    fMONITOR="monitorflops; monitorfreq;  no collectl"
 #    fHYPERT="disable cpus = smt"
-    fFREQ="cap cpu freq=2.0Ghz"
+    fFREQ="cap cpu freq=1.5Ghz"
     setfeat "$fFREQ ; $fTURBO ; $fMONITOR ; $fHYPERT"
 
 
     #########
     ## RUN ##
     #########
-    sbatch  $SCRIPTPATH/kg_run_slurm.sh -n $n -t 1 -f /nfs -l ${CPU}_SINGLE_512
+    sbatch  $SCRIPTPATH/kg_run_slurm.sh -n $n -t 1 -f /nfs -l ${CPU}_KG_256
 
 
     #setcond # Pour lancer 1 job par 1. Un wait.

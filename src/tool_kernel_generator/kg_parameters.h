@@ -4,21 +4,25 @@
 #include <map>
 #include <string>
 
-enum {
-    SCALAR, SSE, AVX, ADD, MUL, FMA
-};
+using namespace std;
 
-static const std::string Parameter[] = {"SCALAR", "SSE", "AVX", "ADD", "MUL", "FMA"};
-static std::map<int, std::string> mapParameter = {{SCALAR, "SCALAR"},
+#include <vector>
+
+
+enum KG_INST_PRECISION  {SINGLE=32, DOUBLE=64};
+enum KG_INST_WIDTH      {SCALAR=1, SSE, AVX2, AVX512};
+
+
+//static const std::string Parameter[] = {"SCALAR", "SSE", "AVX", "ADD", "MUL", "FMA"};
+static std::map<int, std::string> map_INST_WIDTH = {{SCALAR, "SCALAR"},
                                                   {SSE,    "SSE"},
-                                                  {AVX,    "AVX"},
-                                                  {ADD,    "ADD"},
-                                                  {MUL,    "MUL"},
-                                                  {FMA,    "FMA"}};
+                                                  {AVX2,    "AVX2"},
+                                                  {AVX512,  "AVX512"}};
 
 class KG_parameters {
 public:
     int         P_WIDTH;
+    vector<int>*P_WIDTH_CUSTOM;
     std::string P_OPERATIONS;
     int         P_BIND;
     bool        P_DEPENDENCY;
