@@ -58,4 +58,5 @@ double mygettime();
 uint64_t rdtsc();
 
 
+
 #endif //PERFORMANCE_MODELISATION_KG_MISC_H
