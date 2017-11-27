@@ -21,11 +21,12 @@ void KG_generators::generate_assembly() {
 
     string smallestRegisterName = "xmm";
 
+    //TODO : remetre l'initialisation des registre xmm
     //-- KERNEL INIT
     mFile_assembly_src << "\t\t //Initialisation opérandes à 1\n";
-    mFile_assembly_src << "\t\t \"mov     $1,    %%rbx; \"\n";
-    mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName << "0;\"" << "  //operand 1;\n";
-    mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName << "1;\"" << "  //operand 2;\n\n";
+//    mFile_assembly_src << "\t\t \"mov     $1,    %%rbx; \"\n";
+//    mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName << "0;\"" << "  //operand 1;\n";
+//    mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName << "1;\"" << "  //operand 2;\n\n";
 
     if (mParameters->P_COUNT) {
         mFile_assembly_src << "\t\t //Initialisation compteur\n";
@@ -76,9 +77,9 @@ void KG_generators::generate_source() {
     mFile_assembly_src << "int P_COUNT = " << mParameters->P_COUNT << ";\n";
     mFile_assembly_src << "int P_UNROLLING = " << mParameters->P_UNROLLING << ";\n";
     mFile_assembly_src << "int CPU_BIND = " << mParameters->P_BIND << ";\n";
-    mFile_assembly_src << "int FLOP_SP_PER_LOOP = " << mFLOP_SP  << ";\n";
-    mFile_assembly_src << "int FLOP_DP_PER_LOOP = " << mFLOP_DP  << ";\n";
-    mFile_assembly_src << "bool is_check_freq = " << std::boolalpha << mParameters->P_FREQUENCY  << ";\n";
+    mFile_assembly_src << "int FLOP_SP_PER_LOOP = " << mFLOP_SP << ";\n";
+    mFile_assembly_src << "int FLOP_DP_PER_LOOP = " << mFLOP_DP << ";\n";
+    mFile_assembly_src << "bool is_check_freq = " << std::boolalpha << mParameters->P_FREQUENCY << ";\n";
 
 
     //Template_START + LOOP_ASSEMBLY + Template_END
@@ -96,7 +97,9 @@ void KG_generators::generate_source() {
 
 
 int KG_generators::Get_register_source() {
+    //TODO: on genere ca 				"vaddsd %%xmm0, %%xmm1, %%xmm2; " on veut ca 				"vaddsd %%xmm0, %%xmm2, %%xmm2; "
     if (mParameters->P_DEPENDENCY) {
+        return mPrevious_target_register +1;
         return mPrevious_target_register;
     } else {
         return 1;
@@ -145,8 +148,6 @@ void KG_generators::generate_instructions() {
     }
 
 
-
-
 }
 
 
@@ -171,7 +172,7 @@ void KG_generators::parse_and_label_instructions() {
     if (mParameters->P_WIDTH == 64) {
         //Scalar
         mSuffix = "s";
-        flop_per_inst =1;
+        flop_per_inst = 1;
     } else {
         mSuffix = "p";
         flop_per_inst = mParameters->P_WIDTH / size_register;
@@ -189,49 +190,133 @@ void KG_generators::parse_and_label_instructions() {
     }
 
 
-
     int flop = 0;
     //generate the instructions vector
     for (auto op: mParameters->P_OPERATIONS) {
         if (op == 'a') {
             mOperations_set->push_back("add");
             flop += flop_per_inst;
-        }
-        else if (op == 'm') {
+        } else if (op == 'm') {
             mOperations_set->push_back("mul");
             flop += flop_per_inst;
-        }
-        else if (op == 'f') {
+        } else if (op == 'f') {
             mOperations_set->push_back("fmadd231");
             flop += flop_per_inst * 2;
-        }
-        else {
+        } else {
             cout << "ERROR PARSING INSTRUCTION";
-            exit (1);
+            exit(1);
         }
     }
 
     flop *= mParameters->P_UNROLLING;
 
     if (!mParameters->P_PRECISION.compare("single")) {
-        mFLOP_SP = flop ;
+        mFLOP_SP = flop;
     } else {
-        mFLOP_DP = flop ;
+        mFLOP_DP = flop;
     }
 
 }
 
 
+void KG_generators::parse_and_label_instructions_custom() {
+    DEBUG << "-- Init Generator register, prefix, suffix, and precision \n";
+
+    //only [v]addpd instructions supported
+    mPrefix = "v";
+
+//    int flop_per_inst = 0;
+
+    //vaddp[s,d]
+//    int size_register = 0;
+    if (!mParameters->P_PRECISION.compare("single")) {
+        mPrecision = "s";
+//        size_register = 32;
+    } else {
+        mPrecision = "d";
+//        size_register = 64;
+    }
+
+    for (int i = 0; i < mParameters->P_OPERATIONS.size(); ++i) {
+
+        char op = mParameters->P_OPERATIONS[i];
+        int width = (*mParameters->P_WIDTH_CUSTOM)[i];
+        DEBUG << "_op_ " << op << " " << width << endl;
+
+
+        if (op == 'a') {
+            mOperations_set->push_back("add");
+//            flop += flop_per_inst;
+        } else if (op == 'm') {
+            mOperations_set->push_back("mul");
+//            flop += flop_per_inst;
+        } else if (op == 'f') {
+            mOperations_set->push_back("fmadd231");
+//            flop += flop_per_inst * 2;
+        } else {
+            cout << "ERROR PARSING INSTRUCTION";
+            exit(1);
+        }
+
+
+        if (width == 64 || width == 128) {
+            mRegister_list.push_back("xmm");
+        }
+        if (width == 256) {
+            mRegister_list.push_back("ymm");
+        }
+        if (width == 512) {
+            mRegister_list.push_back("zmm");
+        }
+    }
+
+
+    if (mParameters->P_WIDTH == 64) {
+        //Scalar
+        mSuffix = "s";
+//        flop_per_inst =1;
+    } else {
+        mSuffix = "p";
+//        flop_per_inst = mParameters->P_WIDTH / size_register;
+    }
+
+
+    int flop = 0;
+
+    flop *= mParameters->P_UNROLLING;
+
+    if (!mParameters->P_PRECISION.compare("single")) {
+        mFLOP_SP = flop;
+    } else {
+        mFLOP_DP = flop;
+    }
+
+
+    DEBUG << "Operation list: \n";
+    for (auto o: *mOperations_set) {
+        DEBUG << o << endl;
+    }
+
+
+    DEBUG << "Register list: \n";
+    for (auto r: mRegister_list) {
+        DEBUG << r << endl;
+    }
+
+}
+
 
 void KG_generators::Generate_code() {
     DEBUG << "-- Generating assembly...\n";
 
+
+    (mParameters->P_WIDTH_CUSTOM) ?
+    parse_and_label_instructions_custom() :
     parse_and_label_instructions();
 
     generate_instructions();
 
     generate_source();
-
 
 
     return;
@@ -245,8 +330,7 @@ KG_generators::KG_generators(KG_parameters *param) :
         mSuffix("s"),
         mPrecision("d"),
         mFLOP_SP(0),
-        mFLOP_DP(0)
-{
+        mFLOP_DP(0) {
 
     mOperations_set = new vector<string>();
     mFile_template_start.open(FILE_TEMPLATE_START, std::ios_base::binary);
@@ -255,7 +339,8 @@ KG_generators::KG_generators(KG_parameters *param) :
     mFile_assembly_src.open(FILE_ASM_SOURCE_GENERATED, std::ios_base::binary);
 
 
-    if (!(mFile_assembly_src.is_open() && mFile_template_end.is_open() && mFile_template_start.is_open() && mFile_template_freq.is_open() )) {
+    if (!(mFile_assembly_src.is_open() && mFile_template_end.is_open() && mFile_template_start.is_open() &&
+          mFile_template_freq.is_open())) {
         cerr << "Error opening one of these files: \n";
         cerr << FILE_TEMPLATE_START << endl;
         cerr << FILE_TEMPLATE_END << endl;

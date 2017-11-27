@@ -16,6 +16,7 @@ using namespace std;
 KG_parameters::KG_parameters() {
     //By default use the parameters located in the tool_feq_misch.h file
     P_WIDTH = PARAM_WIDTH;
+    P_WIDTH_CUSTOM = NULL;
     P_OPERATIONS = PARAM_OPERATIONS;
     P_BIND = PARAM_BIND;
     P_DEPENDENCY = PARAM_DEPENDENCY;
@@ -44,9 +45,10 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
     string cwd(buff);
     HOME_DIR = cwd;
 
-    const char *const short_opts = "W:O:B:D:P:L:U:F:S:A:C:vhG";
+    const char *const short_opts = "W:w:O:B:D:P:L:U:F:S:A:C:vhG";
     const option long_opts[] = {
             {"width",      required_argument, nullptr, 'W'},
+            {"width_cust", required_argument, nullptr, 'w'},
             {"operations", required_argument, nullptr, 'O'},
             {"bind",       required_argument, nullptr, 'B'},
             {"dependency", required_argument, nullptr, 'D'},
@@ -65,6 +67,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
 
     char option;
     string tmp_str;
+    int tmp_int;
     while ((option = getopt_long(argc, argv, short_opts, long_opts, nullptr)) != -1) {
         int ioptarg;
         switch (option) {
@@ -79,6 +82,21 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                 break;
             case 'O':
                 P_OPERATIONS = optarg;
+                break;
+            case 'w':
+                tmp_str = optarg;
+                P_WIDTH_CUSTOM = new vector<int>();
+
+                for (auto op: tmp_str) {
+
+                    tmp_int = atoi(&op);
+                    if (tmp_int >= 1 && tmp_int <= 4) {
+                        P_WIDTH_CUSTOM->push_back(tmp_int);
+                    } else {
+                        printf("/!\\ WRONG CUSTOM WIDTH VALUE %s\n", optarg);
+                        exit(EXIT_FAILURE);
+                    }
+                }
                 break;
             case 'B':
                 if ((atoi(optarg) >= 0) && (4096 >= atoi(optarg))) {
@@ -204,7 +222,8 @@ void KG_parameters::check_operations() {
 
 
 void KG_parameters::parameter_summary() {
-    cout << "\t -W (width)            " << this->P_WIDTH << endl;
+    cout << "\t -W (gobal width)      " << this->P_WIDTH << endl;
+    cout << "\t -w (custom width)     " ; if(P_WIDTH_CUSTOM) for (int i : *this->P_WIDTH_CUSTOM) cout << i; cout << endl;
     cout << "\t -O <operationsl list> " << this->P_OPERATIONS << endl;
     cout << "\t -B (core binding)     " << this->P_BIND << endl;
     cout << "\t -D (op dependency)    " << std::boolalpha << this->P_DEPENDENCY << endl;
@@ -223,11 +242,12 @@ void KG_parameters::parameter_summary() {
 void KG_parameters::help() {
     cout << endl;
     cout << "This tool should be launched with the following parameters ([] = default):\n";
-    cout << "\t -W, --width            ["<< PARAM_WIDTH<< "] / 64 128 256 512" << endl;
-    cout << "\t -O, --operations-list  ["<< PARAM_OPERATIONS"] / ADD=a MUL=m FMA=f" << endl;
+    cout << "\t -W, --width            [" << PARAM_WIDTH << "] / 64 128 256 512" << endl;
+    cout << "\t -w, --width_cust       [11111] / 1(scalar), 2 (SSE/128), 3 (AVX/256), 4(AVX/512)" << endl;
+    cout << "\t -O, --operations-list  [" << PARAM_OPERATIONS"] / ADD=a MUL=m FMA=f" << endl;
     cout << "\t -B,--binding           [no binding] / 0 1 2 ... NbCore\n";
-    cout << "\t -D,--dependency        ["<< boolalpha <<  PARAM_DEPENDENCY<< "] / true false\n";
-    cout << "\t -P,--precision         [" << PARAM_PRECISION <<"] / single double\n";
+    cout << "\t -D,--dependency        [" << boolalpha << PARAM_DEPENDENCY << "] / true false\n";
+    cout << "\t -P,--precision         [" << PARAM_PRECISION << "] / single double\n";
     cout << "\t -L,--loopsize          [" << PARAM_LOOP_SIZE << "]\n";
     cout << "\t -U,--unrolling         [" << PARAM_UNROLLING << "]\n";
     cout << "\t -F,--frequency         [" << PARAM_FREQUENCY << "] check the frequency of the core\n";
@@ -248,5 +268,9 @@ void KG_parameters::check_arguments() {
         this->parameter_summary();
     };
 
+    if (P_WIDTH_CUSTOM && P_WIDTH_CUSTOM->size() != P_OPERATIONS.length()) {
+        printf("/!\\ WRONG CUSTOM WIDTH SIZE\n");
+        exit(EXIT_FAILURE);
+    }
     check_operations();
 }
