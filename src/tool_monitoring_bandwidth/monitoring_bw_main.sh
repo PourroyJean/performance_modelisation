@@ -261,43 +261,35 @@ shift $((${OPTIND} - 1)) ## shift options
   #== Check/Set arguments ==#
 [[ $# -gt 1 ]] && error "${SCRIPT_NAME}: Too many arguments" && usage 1>&2 && exit 2
 
-_EVENT_BW_READ="uncore_imc_0/cas_count_read/
-                uncore_imc_1/cas_count_read/,
-                uncore_imc_2/cas_count_read/,
-                uncore_imc_3/cas_count_read/,
-                uncore_imc_4/cas_count_read/,
-                uncore_imc_5/cas_count_read/"
-
-_EVENT_BW_WRITE="uncore_imc_0/cas_count_write/
-                 uncore_imc_1/cas_count_write/,
-                 uncore_imc_2/cas_count_write/,
-                 uncore_imc_3/cas_count_write/,
-                 uncore_imc_4/cas_count_write/,
-                 uncore_imc_5/cas_count_write/"
+_EVENT_BW_READ="uncore_imc_0/cas_count_read/,uncore_imc_1/cas_count_read/,uncore_imc_2/cas_count_read/,uncore_imc_3/cas_count_read/,uncore_imc_4/cas_count_read/,uncore_imc_5/cas_count_read/"
+_EVENT_BW_WRITE="uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_write/,uncore_imc_2/cas_count_write/,uncore_imc_3/cas_count_write/,uncore_imc_4/cas_count_write/,uncore_imc_5/cas_count_write/"
 
 
 _TOKEN='JANNOT'
 _PID=0
 _CMD_PERF="perf stat -a "
 _LOG='-o log'
-_INTERVALLE='-I 100'
+_EVENTS="-e ${_EVENT_BW_WRITE},${_EVENT_BW_READ}"
+_INTERVALLE='-I 1000'
+
+
 
 
 
 re='^[0-9]+$'
 if [ "$1" == "start" ]; then
     info "_START standalone"
-    bash -c "sudo  $_CMD_PERF $_LOG $_INTERVALLE" &
+    bash -c "  $_CMD_PERF $_LOG $_EVENTS $_INTERVALLE" &
 
 elif  [ "$1" == "stop" ]; then
     info "_STOP standalone"
-    _PID=`ps aux |  grep "perf stat" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
+    _PID=`ps aux |  grep "perf stat -a" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
     echo    "Mon PID est $_PID"
-    sudo kill -kill $_PID
+    kill -kill $_PID
 
-    _PID=`ps aux |  grep "perf stat" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
-    echo    "Mon PID est $_PID"
-    sudo kill -kill $_PID
+    #_PID=`ps aux |  grep "perf stat -a" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
+    #echo    "Mon PID est $_PID"
+    #kill -kill $_PID
 
 
 
