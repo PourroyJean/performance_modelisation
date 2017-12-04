@@ -1,276 +1,204 @@
-     1.000750806               3.58 MiB  uncore_imc_0/cas_count_read/                                   
-     1.000750806               3.72 MiB  uncore_imc_1/cas_count_read/                                   
-     1.000750806               3.52 MiB  uncore_imc_2/cas_count_read/                                   
-     1.000750806               3.48 MiB  uncore_imc_3/cas_count_read/                                   
-     1.000750806               3.45 MiB  uncore_imc_4/cas_count_read/                                   
-     1.000750806               3.45 MiB  uncore_imc_5/cas_count_read/                                   
-     2.001201361               1.59 MiB  uncore_imc_0/cas_count_read/                                   
-     2.001201361               1.64 MiB  uncore_imc_1/cas_count_read/                                   
-     2.001201361               1.56 MiB  uncore_imc_2/cas_count_read/                                   
-     2.001201361               1.61 MiB  uncore_imc_3/cas_count_read/                                   
-     2.001201361               1.60 MiB  uncore_imc_4/cas_count_read/                                   
-     2.001201361               1.61 MiB  uncore_imc_5/cas_count_read/                                   
-     3.001760907               1.19 MiB  uncore_imc_0/cas_count_read/                                   
-     3.001760907               1.27 MiB  uncore_imc_1/cas_count_read/                                   
-     3.001760907               1.15 MiB  uncore_imc_2/cas_count_read/                                   
-     3.001760907               1.15 MiB  uncore_imc_3/cas_count_read/                                   
-     3.001760907               1.13 MiB  uncore_imc_4/cas_count_read/                                   
-     3.001760907               1.17 MiB  uncore_imc_5/cas_count_read/                                   
-     4.002309235               0.98 MiB  uncore_imc_0/cas_count_read/                                   
-     4.002309235               1.02 MiB  uncore_imc_1/cas_count_read/                                   
-     4.002309235               0.94 MiB  uncore_imc_2/cas_count_read/                                   
-     4.002309235               0.93 MiB  uncore_imc_3/cas_count_read/                                   
-     4.002309235               0.92 MiB  uncore_imc_4/cas_count_read/                                   
-     4.002309235               0.95 MiB  uncore_imc_5/cas_count_read/                                   
-     5.002860676               2.94 MiB  uncore_imc_0/cas_count_read/                                   
-     5.002860676               3.05 MiB  uncore_imc_1/cas_count_read/                                   
-     5.002860676               2.89 MiB  uncore_imc_2/cas_count_read/                                   
-     5.002860676               2.87 MiB  uncore_imc_3/cas_count_read/                                   
-     5.002860676               2.81 MiB  uncore_imc_4/cas_count_read/                                   
-     5.002860676               2.82 MiB  uncore_imc_5/cas_count_read/                                   
-     6.003297745             902.67 MiB  uncore_imc_0/cas_count_read/                                   
-     6.003297745             903.36 MiB  uncore_imc_1/cas_count_read/                                   
-     6.003297745             903.02 MiB  uncore_imc_2/cas_count_read/                                   
-     6.003297745             801.20 MiB  uncore_imc_3/cas_count_read/                                   
-     6.003297745             800.77 MiB  uncore_imc_4/cas_count_read/                                   
-     6.003297745             801.48 MiB  uncore_imc_5/cas_count_read/                                   
-     7.003750883           5,008.36 MiB  uncore_imc_0/cas_count_read/                                   
-     7.003750883           5,010.96 MiB  uncore_imc_1/cas_count_read/                                   
-     7.003750883           5,008.70 MiB  uncore_imc_2/cas_count_read/                                   
-     7.003750883           4,473.13 MiB  uncore_imc_3/cas_count_read/                                   
-     7.003750883           4,472.00 MiB  uncore_imc_4/cas_count_read/                                   
-     7.003750883           4,472.89 MiB  uncore_imc_5/cas_count_read/                                   
-     8.004199317           7,965.10 MiB  uncore_imc_0/cas_count_read/                                   
-     8.004199317           7,966.12 MiB  uncore_imc_1/cas_count_read/                                   
-     8.004199317           7,965.14 MiB  uncore_imc_2/cas_count_read/                                   
-     8.004199317           7,624.56 MiB  uncore_imc_3/cas_count_read/                                   
-     8.004199317           7,623.60 MiB  uncore_imc_4/cas_count_read/                                   
-     8.004199317           7,623.86 MiB  uncore_imc_5/cas_count_read/                                   
-     9.004731854          10,898.57 MiB  uncore_imc_0/cas_count_read/                                   
-     9.004731854          10,900.25 MiB  uncore_imc_1/cas_count_read/                                   
-     9.004731854          10,899.84 MiB  uncore_imc_2/cas_count_read/                                   
-     9.004731854          10,894.69 MiB  uncore_imc_3/cas_count_read/                                   
-     9.004731854          10,894.37 MiB  uncore_imc_4/cas_count_read/                                   
-     9.004731854          10,893.79 MiB  uncore_imc_5/cas_count_read/                                   
-    10.005260206          10,922.89 MiB  uncore_imc_0/cas_count_read/                                   
-    10.005260206          10,923.24 MiB  uncore_imc_1/cas_count_read/                                   
-    10.005260206          10,923.34 MiB  uncore_imc_2/cas_count_read/                                   
-    10.005260206          10,918.57 MiB  uncore_imc_3/cas_count_read/                                   
-    10.005260206          10,918.19 MiB  uncore_imc_4/cas_count_read/                                   
-    10.005260206          10,917.04 MiB  uncore_imc_5/cas_count_read/                                   
-    11.005852726          11,310.00 MiB  uncore_imc_0/cas_count_read/                                   
-    11.005852726          11,311.19 MiB  uncore_imc_1/cas_count_read/                                   
-    11.005852726          11,310.81 MiB  uncore_imc_2/cas_count_read/                                   
-    11.005852726          11,304.47 MiB  uncore_imc_3/cas_count_read/                                   
-    11.005852726          11,304.25 MiB  uncore_imc_4/cas_count_read/                                   
-    11.005852726          11,303.40 MiB  uncore_imc_5/cas_count_read/                                   
-    12.006398557          10,706.60 MiB  uncore_imc_0/cas_count_read/                                   
-    12.006398557          10,707.44 MiB  uncore_imc_1/cas_count_read/                                   
-    12.006398557          10,706.81 MiB  uncore_imc_2/cas_count_read/                                   
-    12.006398557          10,703.28 MiB  uncore_imc_3/cas_count_read/                                   
-    12.006398557          10,702.38 MiB  uncore_imc_4/cas_count_read/                                   
-    12.006398557          10,701.18 MiB  uncore_imc_5/cas_count_read/                                   
-    13.006947137          12,071.96 MiB  uncore_imc_0/cas_count_read/                                   
-    13.006947137          12,072.46 MiB  uncore_imc_1/cas_count_read/                                   
-    13.006947137          12,072.78 MiB  uncore_imc_2/cas_count_read/                                   
-    13.006947137          12,067.24 MiB  uncore_imc_3/cas_count_read/                                   
-    13.006947137          12,066.12 MiB  uncore_imc_4/cas_count_read/                                   
-    13.006947137          12,066.04 MiB  uncore_imc_5/cas_count_read/                                   
-    14.007551630          10,088.05 MiB  uncore_imc_0/cas_count_read/                                   
-    14.007551630          10,089.24 MiB  uncore_imc_1/cas_count_read/                                   
-    14.007551630          10,089.03 MiB  uncore_imc_2/cas_count_read/                                   
-    14.007551630          10,085.35 MiB  uncore_imc_3/cas_count_read/                                   
-    14.007551630          10,084.35 MiB  uncore_imc_4/cas_count_read/                                   
-    14.007551630          10,083.59 MiB  uncore_imc_5/cas_count_read/                                   
-    15.008129404          12,685.79 MiB  uncore_imc_0/cas_count_read/                                   
-    15.008129404          12,686.09 MiB  uncore_imc_1/cas_count_read/                                   
-    15.008129404          12,685.54 MiB  uncore_imc_2/cas_count_read/                                   
-    15.008129404          12,680.07 MiB  uncore_imc_3/cas_count_read/                                   
-    15.008129404          12,680.12 MiB  uncore_imc_4/cas_count_read/                                   
-    15.008129404          12,678.65 MiB  uncore_imc_5/cas_count_read/                                   
-    16.008749307          10,079.69 MiB  uncore_imc_0/cas_count_read/                                   
-    16.008749307          10,081.19 MiB  uncore_imc_1/cas_count_read/                                   
-    16.008749307          10,079.81 MiB  uncore_imc_2/cas_count_read/                                   
-    16.008749307          10,076.74 MiB  uncore_imc_3/cas_count_read/                                   
-    16.008749307          10,075.71 MiB  uncore_imc_4/cas_count_read/                                   
-    16.008749307          10,074.68 MiB  uncore_imc_5/cas_count_read/                                   
-    17.009232011          12,125.46 MiB  uncore_imc_0/cas_count_read/                                   
-    17.009232011          12,124.69 MiB  uncore_imc_1/cas_count_read/                                   
-    17.009232011          12,124.21 MiB  uncore_imc_2/cas_count_read/                                   
-    17.009232011          12,119.37 MiB  uncore_imc_3/cas_count_read/                                   
-    17.009232011          12,118.42 MiB  uncore_imc_4/cas_count_read/                                   
-    17.009232011          12,117.86 MiB  uncore_imc_5/cas_count_read/                                   
-    18.009769328          10,593.19 MiB  uncore_imc_0/cas_count_read/                                   
-    18.009769328          10,593.90 MiB  uncore_imc_1/cas_count_read/                                   
-    18.009769328          10,594.20 MiB  uncore_imc_2/cas_count_read/                                   
-    18.009769328          10,590.19 MiB  uncore_imc_3/cas_count_read/                                   
-    18.009769328          10,589.47 MiB  uncore_imc_4/cas_count_read/                                   
-    18.009769328          10,588.56 MiB  uncore_imc_5/cas_count_read/                                   
-    19.010238799          11,551.57 MiB  uncore_imc_0/cas_count_read/                                   
-    19.010238799          11,551.91 MiB  uncore_imc_1/cas_count_read/                                   
-    19.010238799          11,551.66 MiB  uncore_imc_2/cas_count_read/                                   
-    19.010238799          11,547.88 MiB  uncore_imc_3/cas_count_read/                                   
-    19.010238799          11,546.05 MiB  uncore_imc_4/cas_count_read/                                   
-    19.010238799          11,545.28 MiB  uncore_imc_5/cas_count_read/                                   
-    20.010783912          11,004.10 MiB  uncore_imc_0/cas_count_read/                                   
-    20.010783912          11,004.75 MiB  uncore_imc_1/cas_count_read/                                   
-    20.010783912          11,004.69 MiB  uncore_imc_2/cas_count_read/                                   
-    20.010783912          11,000.05 MiB  uncore_imc_3/cas_count_read/                                   
-    20.010783912          10,998.82 MiB  uncore_imc_4/cas_count_read/                                   
-    20.010783912          10,998.67 MiB  uncore_imc_5/cas_count_read/                                   
-    21.011361063          11,022.28 MiB  uncore_imc_0/cas_count_read/                                   
-    21.011361063          11,022.83 MiB  uncore_imc_1/cas_count_read/                                   
-    21.011361063          11,021.94 MiB  uncore_imc_2/cas_count_read/                                   
-    21.011361063          11,018.18 MiB  uncore_imc_3/cas_count_read/                                   
-    21.011361063          11,017.35 MiB  uncore_imc_4/cas_count_read/                                   
-    21.011361063          11,016.02 MiB  uncore_imc_5/cas_count_read/                                   
-    22.011933308          11,870.23 MiB  uncore_imc_0/cas_count_read/                                   
-    22.011933308          11,870.86 MiB  uncore_imc_1/cas_count_read/                                   
-    22.011933308          11,870.50 MiB  uncore_imc_2/cas_count_read/                                   
-    22.011933308          11,865.98 MiB  uncore_imc_3/cas_count_read/                                   
-    22.011933308          11,865.07 MiB  uncore_imc_4/cas_count_read/                                   
-    22.011933308          11,864.75 MiB  uncore_imc_5/cas_count_read/                                   
-    23.012450072          10,302.42 MiB  uncore_imc_0/cas_count_read/                                   
-    23.012450072          10,303.65 MiB  uncore_imc_1/cas_count_read/                                   
-    23.012450072          10,303.24 MiB  uncore_imc_2/cas_count_read/                                   
-    23.012450072          10,299.69 MiB  uncore_imc_3/cas_count_read/                                   
-    23.012450072          10,298.51 MiB  uncore_imc_4/cas_count_read/                                   
-    23.012450072          10,297.83 MiB  uncore_imc_5/cas_count_read/                                   
-    24.013004219          12,563.04 MiB  uncore_imc_0/cas_count_read/                                   
-    24.013004219          12,563.43 MiB  uncore_imc_1/cas_count_read/                                   
-    24.013004219          12,563.16 MiB  uncore_imc_2/cas_count_read/                                   
-    24.013004219          12,558.14 MiB  uncore_imc_3/cas_count_read/                                   
-    24.013004219          12,557.01 MiB  uncore_imc_4/cas_count_read/                                   
-    24.013004219          12,557.12 MiB  uncore_imc_5/cas_count_read/                                   
-    25.013591203          10,043.16 MiB  uncore_imc_0/cas_count_read/                                   
-    25.013591203          10,044.30 MiB  uncore_imc_1/cas_count_read/                                   
-    25.013591203          10,043.65 MiB  uncore_imc_2/cas_count_read/                                   
-    25.013591203          10,040.21 MiB  uncore_imc_3/cas_count_read/                                   
-    25.013591203          10,039.31 MiB  uncore_imc_4/cas_count_read/                                   
-    25.013591203          10,038.46 MiB  uncore_imc_5/cas_count_read/                                   
-    26.013915503          11,794.48 MiB  uncore_imc_0/cas_count_read/                                   
-    26.013915503          11,794.14 MiB  uncore_imc_1/cas_count_read/                                   
-    26.013915503          11,793.64 MiB  uncore_imc_2/cas_count_read/                                   
-    26.013915503          11,788.81 MiB  uncore_imc_3/cas_count_read/                                   
-    26.013915503          11,787.19 MiB  uncore_imc_4/cas_count_read/                                   
-    26.013915503          11,786.59 MiB  uncore_imc_5/cas_count_read/                                   
-    27.014294473           1,427.29 MiB  uncore_imc_0/cas_count_read/                                   
-    27.014294473           1,427.66 MiB  uncore_imc_1/cas_count_read/                                   
-    27.014294473           1,427.44 MiB  uncore_imc_2/cas_count_read/                                   
-    27.014294473           1,430.19 MiB  uncore_imc_3/cas_count_read/                                   
-    27.014294473           1,430.13 MiB  uncore_imc_4/cas_count_read/                                   
-    27.014294473           1,429.94 MiB  uncore_imc_5/cas_count_read/                                   
-    28.014658590           1,566.03 MiB  uncore_imc_0/cas_count_read/                                   
-    28.014658590           1,566.42 MiB  uncore_imc_1/cas_count_read/                                   
-    28.014658590           1,565.97 MiB  uncore_imc_2/cas_count_read/                                   
-    28.014658590           1,568.08 MiB  uncore_imc_3/cas_count_read/                                   
-    28.014658590           1,568.21 MiB  uncore_imc_4/cas_count_read/                                   
-    28.014658590           1,568.15 MiB  uncore_imc_5/cas_count_read/                                   
-    29.015016573           1,302.21 MiB  uncore_imc_0/cas_count_read/                                   
-    29.015016573           1,302.43 MiB  uncore_imc_1/cas_count_read/                                   
-    29.015016573           1,302.10 MiB  uncore_imc_2/cas_count_read/                                   
-    29.015016573           1,303.91 MiB  uncore_imc_3/cas_count_read/                                   
-    29.015016573           1,303.95 MiB  uncore_imc_4/cas_count_read/                                   
-    29.015016573           1,303.97 MiB  uncore_imc_5/cas_count_read/                                   
-    30.015431709           1,281.64 MiB  uncore_imc_0/cas_count_read/                                   
-    30.015431709           1,281.80 MiB  uncore_imc_1/cas_count_read/                                   
-    30.015431709           1,281.44 MiB  uncore_imc_2/cas_count_read/                                   
-    30.015431709           1,277.96 MiB  uncore_imc_3/cas_count_read/                                   
-    30.015431709           1,277.85 MiB  uncore_imc_4/cas_count_read/                                   
-    30.015431709           1,277.89 MiB  uncore_imc_5/cas_count_read/                                   
-    31.015957428           1,129.69 MiB  uncore_imc_0/cas_count_read/                                   
-    31.015957428           1,130.04 MiB  uncore_imc_1/cas_count_read/                                   
-    31.015957428           1,129.75 MiB  uncore_imc_2/cas_count_read/                                   
-    31.015957428           1,124.91 MiB  uncore_imc_3/cas_count_read/                                   
-    31.015957428           1,124.50 MiB  uncore_imc_4/cas_count_read/                                   
-    31.015957428           1,124.83 MiB  uncore_imc_5/cas_count_read/                                   
-    32.016431701           1,131.26 MiB  uncore_imc_0/cas_count_read/                                   
-    32.016431701           1,131.58 MiB  uncore_imc_1/cas_count_read/                                   
-    32.016431701           1,131.43 MiB  uncore_imc_2/cas_count_read/                                   
-    32.016431701           1,126.48 MiB  uncore_imc_3/cas_count_read/                                   
-    32.016431701           1,126.05 MiB  uncore_imc_4/cas_count_read/                                   
-    32.016431701           1,126.48 MiB  uncore_imc_5/cas_count_read/                                   
-    33.016942509           1,272.71 MiB  uncore_imc_0/cas_count_read/                                   
-    33.016942509           1,273.14 MiB  uncore_imc_1/cas_count_read/                                   
-    33.016942509           1,272.74 MiB  uncore_imc_2/cas_count_read/                                   
-    33.016942509           1,269.55 MiB  uncore_imc_3/cas_count_read/                                   
-    33.016942509           1,269.17 MiB  uncore_imc_4/cas_count_read/                                   
-    33.016942509           1,269.56 MiB  uncore_imc_5/cas_count_read/                                   
-    34.017426953           1,227.18 MiB  uncore_imc_0/cas_count_read/                                   
-    34.017426953           1,227.28 MiB  uncore_imc_1/cas_count_read/                                   
-    34.017426953           1,227.12 MiB  uncore_imc_2/cas_count_read/                                   
-    34.017426953           1,223.23 MiB  uncore_imc_3/cas_count_read/                                   
-    34.017426953           1,223.07 MiB  uncore_imc_4/cas_count_read/                                   
-    34.017426953           1,223.13 MiB  uncore_imc_5/cas_count_read/                                   
-    35.017921478             219.32 MiB  uncore_imc_0/cas_count_read/                                   
-    35.017921478             220.06 MiB  uncore_imc_1/cas_count_read/                                   
-    35.017921478             219.35 MiB  uncore_imc_2/cas_count_read/                                   
-    35.017921478             214.38 MiB  uncore_imc_3/cas_count_read/                                   
-    35.017921478             213.99 MiB  uncore_imc_4/cas_count_read/                                   
-    35.017921478             213.96 MiB  uncore_imc_5/cas_count_read/                                   
-    36.018524297               3.81 MiB  uncore_imc_0/cas_count_read/                                   
-    36.018524297               3.92 MiB  uncore_imc_1/cas_count_read/                                   
-    36.018524297               3.72 MiB  uncore_imc_2/cas_count_read/                                   
-    36.018524297               3.69 MiB  uncore_imc_3/cas_count_read/                                   
-    36.018524297               3.64 MiB  uncore_imc_4/cas_count_read/                                   
-    36.018524297               3.67 MiB  uncore_imc_5/cas_count_read/                                   
-    37.019078911               1.53 MiB  uncore_imc_0/cas_count_read/                                   
-    37.019078911               1.61 MiB  uncore_imc_1/cas_count_read/                                   
-    37.019078911               1.43 MiB  uncore_imc_2/cas_count_read/                                   
-    37.019078911               1.42 MiB  uncore_imc_3/cas_count_read/                                   
-    37.019078911               1.39 MiB  uncore_imc_4/cas_count_read/                                   
-    37.019078911               1.44 MiB  uncore_imc_5/cas_count_read/                                   
-    38.019668576               1.48 MiB  uncore_imc_0/cas_count_read/                                   
-    38.019668576               1.56 MiB  uncore_imc_1/cas_count_read/                                   
-    38.019668576               1.41 MiB  uncore_imc_2/cas_count_read/                                   
-    38.019668576               1.42 MiB  uncore_imc_3/cas_count_read/                                   
-    38.019668576               1.40 MiB  uncore_imc_4/cas_count_read/                                   
-    38.019668576               1.45 MiB  uncore_imc_5/cas_count_read/                                   
-    39.020201225               1.22 MiB  uncore_imc_0/cas_count_read/                                   
-    39.020201225               1.27 MiB  uncore_imc_1/cas_count_read/                                   
-    39.020201225               1.14 MiB  uncore_imc_2/cas_count_read/                                   
-    39.020201225               1.15 MiB  uncore_imc_3/cas_count_read/                                   
-    39.020201225               1.14 MiB  uncore_imc_4/cas_count_read/                                   
-    39.020201225               1.19 MiB  uncore_imc_5/cas_count_read/                                   
-    40.020739645               4.04 MiB  uncore_imc_0/cas_count_read/                                   
-    40.020739645               4.06 MiB  uncore_imc_1/cas_count_read/                                   
-    40.020739645               3.93 MiB  uncore_imc_2/cas_count_read/                                   
-    40.020739645               3.84 MiB  uncore_imc_3/cas_count_read/                                   
-    40.020739645               3.83 MiB  uncore_imc_4/cas_count_read/                                   
-    40.020739645               3.83 MiB  uncore_imc_5/cas_count_read/                                   
-    41.021233451              11.24 MiB  uncore_imc_0/cas_count_read/                                   
-    41.021233451              11.52 MiB  uncore_imc_1/cas_count_read/                                   
-    41.021233451              11.24 MiB  uncore_imc_2/cas_count_read/                                   
-    41.021233451              11.05 MiB  uncore_imc_3/cas_count_read/                                   
-    41.021233451              10.84 MiB  uncore_imc_4/cas_count_read/                                   
-    41.021233451              10.84 MiB  uncore_imc_5/cas_count_read/                                   
-    42.021738778               2.18 MiB  uncore_imc_0/cas_count_read/                                   
-    42.021738778               2.27 MiB  uncore_imc_1/cas_count_read/                                   
-    42.021738778               2.11 MiB  uncore_imc_2/cas_count_read/                                   
-    42.021738778               2.15 MiB  uncore_imc_3/cas_count_read/                                   
-    42.021738778               2.12 MiB  uncore_imc_4/cas_count_read/                                   
-    42.021738778               2.17 MiB  uncore_imc_5/cas_count_read/                                   
-    43.022250655               1.49 MiB  uncore_imc_0/cas_count_read/                                   
-    43.022250655               1.59 MiB  uncore_imc_1/cas_count_read/                                   
-    43.022250655               1.41 MiB  uncore_imc_2/cas_count_read/                                   
-    43.022250655               1.43 MiB  uncore_imc_3/cas_count_read/                                   
-    43.022250655               1.39 MiB  uncore_imc_4/cas_count_read/                                   
-    43.022250655               1.46 MiB  uncore_imc_5/cas_count_read/                                   
-    44.022804475               2.18 MiB  uncore_imc_0/cas_count_read/                                   
-    44.022804475               2.25 MiB  uncore_imc_1/cas_count_read/                                   
-    44.022804475               2.07 MiB  uncore_imc_2/cas_count_read/                                   
-    44.022804475               2.08 MiB  uncore_imc_3/cas_count_read/                                   
-    44.022804475               2.08 MiB  uncore_imc_4/cas_count_read/                                   
-    44.022804475               2.13 MiB  uncore_imc_5/cas_count_read/                                   
-    45.023343355               3.14 MiB  uncore_imc_0/cas_count_read/                                   
-    45.023343355               3.23 MiB  uncore_imc_1/cas_count_read/                                   
-    45.023343355               3.05 MiB  uncore_imc_2/cas_count_read/                                   
-    45.023343355               2.99 MiB  uncore_imc_3/cas_count_read/                                   
-    45.023343355               2.97 MiB  uncore_imc_4/cas_count_read/                                   
-    45.023343355               2.99 MiB  uncore_imc_5/cas_count_read/                                   
-    46.023885447               3.17 MiB  uncore_imc_0/cas_count_read/                                   
-    46.023885447               3.28 MiB  uncore_imc_1/cas_count_read/                                   
-    46.023885447               3.10 MiB  uncore_imc_2/cas_count_read/                                   
-    46.023885447               3.08 MiB  uncore_imc_3/cas_count_read/                                   
-    46.023885447               3.01 MiB  uncore_imc_4/cas_count_read/                                   
-    46.023885447               3.04 MiB  uncore_imc_5/cas_count_read/                                   
+     1.000733250,1.56,MiB,uncore_imc_0/cas_count_read/,1996300787,100.00,,,,
+     1.000733250,1.64,MiB,uncore_imc_1/cas_count_read/,1996293228,100.00,,,,
+     1.000733250,1.48,MiB,uncore_imc_2/cas_count_read/,1996289500,100.00,,,,
+     1.000733250,1.53,MiB,uncore_imc_3/cas_count_read/,1996282712,100.00,,,,
+     1.000733250,1.47,MiB,uncore_imc_4/cas_count_read/,1996299126,100.00,,,,
+     1.000733250,1.50,MiB,uncore_imc_5/cas_count_read/,1996280248,100.00,,,,
+     2.001208085,1.37,MiB,uncore_imc_0/cas_count_read/,1996299386,100.00,,,,
+     2.001208085,1.45,MiB,uncore_imc_1/cas_count_read/,1996289598,100.00,,,,
+     2.001208085,1.29,MiB,uncore_imc_2/cas_count_read/,1996281341,100.00,,,,
+     2.001208085,1.33,MiB,uncore_imc_3/cas_count_read/,1996272237,100.00,,,,
+     2.001208085,1.30,MiB,uncore_imc_4/cas_count_read/,1996262706,100.00,,,,
+     2.001208085,1.35,MiB,uncore_imc_5/cas_count_read/,1996253029,100.00,,,,
+     3.001585692,3528.82,MiB,uncore_imc_0/cas_count_read/,1996188408,100.00,,,,
+     3.001585692,3531.77,MiB,uncore_imc_1/cas_count_read/,1996185390,100.00,,,,
+     3.001585692,3530.08,MiB,uncore_imc_2/cas_count_read/,1996184269,100.00,,,,
+     3.001585692,3153.35,MiB,uncore_imc_3/cas_count_read/,1996181013,100.00,,,,
+     3.001585692,3152.81,MiB,uncore_imc_4/cas_count_read/,1996178091,100.00,,,,
+     3.001585692,3153.39,MiB,uncore_imc_5/cas_count_read/,1996175981,100.00,,,,
+     4.002072523,5712.99,MiB,uncore_imc_0/cas_count_read/,1996195236,100.00,,,,
+     4.002072523,5716.38,MiB,uncore_imc_1/cas_count_read/,1996194579,100.00,,,,
+     4.002072523,5714.34,MiB,uncore_imc_2/cas_count_read/,1996195247,100.00,,,,
+     4.002072523,5205.12,MiB,uncore_imc_3/cas_count_read/,1996194974,100.00,,,,
+     4.002072523,5204.17,MiB,uncore_imc_4/cas_count_read/,1996194452,100.00,,,,
+     4.002072523,5205.75,MiB,uncore_imc_5/cas_count_read/,1996193718,100.00,,,,
+     5.002671693,9936.56,MiB,uncore_imc_0/cas_count_read/,1996237647,100.00,,,,
+     5.002671693,9937.28,MiB,uncore_imc_1/cas_count_read/,1996239732,100.00,,,,
+     5.002671693,9937.40,MiB,uncore_imc_2/cas_count_read/,1996242259,100.00,,,,
+     5.002671693,9849.77,MiB,uncore_imc_3/cas_count_read/,1996245738,100.00,,,,
+     5.002671693,9850.30,MiB,uncore_imc_4/cas_count_read/,1996247352,100.00,,,,
+     5.002671693,9849.36,MiB,uncore_imc_5/cas_count_read/,1996248731,100.00,,,,
+     6.003141996,12660.63,MiB,uncore_imc_0/cas_count_read/,1996248790,100.00,,,,
+     6.003141996,12660.78,MiB,uncore_imc_1/cas_count_read/,1996247532,100.00,,,,
+     6.003141996,12659.85,MiB,uncore_imc_2/cas_count_read/,1996247505,100.00,,,,
+     6.003141996,12655.15,MiB,uncore_imc_3/cas_count_read/,1996246651,100.00,,,,
+     6.003141996,12655.41,MiB,uncore_imc_4/cas_count_read/,1996245798,100.00,,,,
+     6.003141996,12655.75,MiB,uncore_imc_5/cas_count_read/,1996244719,100.00,,,,
+     7.003675026,10345.42,MiB,uncore_imc_0/cas_count_read/,1996252472,100.00,,,,
+     7.003675026,10346.55,MiB,uncore_imc_1/cas_count_read/,1996253625,100.00,,,,
+     7.003675026,10346.46,MiB,uncore_imc_2/cas_count_read/,1996255224,100.00,,,,
+     7.003675026,10343.21,MiB,uncore_imc_3/cas_count_read/,1996256202,100.00,,,,
+     7.003675026,10343.54,MiB,uncore_imc_4/cas_count_read/,1996257166,100.00,,,,
+     7.003675026,10343.32,MiB,uncore_imc_5/cas_count_read/,1996257696,100.00,,,,
+     8.004145468,11957.76,MiB,uncore_imc_0/cas_count_read/,1996255688,100.00,,,,
+     8.004145468,11957.50,MiB,uncore_imc_1/cas_count_read/,1996255075,100.00,,,,
+     8.004145468,11957.28,MiB,uncore_imc_2/cas_count_read/,1996254915,100.00,,,,
+     8.004145468,11953.24,MiB,uncore_imc_3/cas_count_read/,1996254416,100.00,,,,
+     8.004145468,11953.03,MiB,uncore_imc_4/cas_count_read/,1996254037,100.00,,,,
+     8.004145468,11952.45,MiB,uncore_imc_5/cas_count_read/,1996253316,100.00,,,,
+     9.004682222,11049.15,MiB,uncore_imc_0/cas_count_read/,1996258227,100.00,,,,
+     9.004682222,11049.83,MiB,uncore_imc_1/cas_count_read/,1996258862,100.00,,,,
+     9.004682222,11049.36,MiB,uncore_imc_2/cas_count_read/,1996260024,100.00,,,,
+     9.004682222,11046.33,MiB,uncore_imc_3/cas_count_read/,1996260939,100.00,,,,
+     9.004682222,11046.48,MiB,uncore_imc_4/cas_count_read/,1996261751,100.00,,,,
+     9.004682222,11044.96,MiB,uncore_imc_5/cas_count_read/,1996262551,100.00,,,,
+    10.006924689,11204.66,MiB,uncore_imc_0/cas_count_read/,1996610066,100.00,,,,
+    10.006924689,11205.31,MiB,uncore_imc_1/cas_count_read/,1996610055,100.00,,,,
+    10.006924689,11204.56,MiB,uncore_imc_2/cas_count_read/,1996610599,100.00,,,,
+    10.006924689,11201.05,MiB,uncore_imc_3/cas_count_read/,1996610807,100.00,,,,
+    10.006924689,11200.81,MiB,uncore_imc_4/cas_count_read/,1996612377,100.00,,,,
+    10.006924689,11199.98,MiB,uncore_imc_5/cas_count_read/,1996612265,100.00,,,,
+    11.007846830,11751.04,MiB,uncore_imc_0/cas_count_read/,1996654691,100.00,,,,
+    11.007846830,11751.71,MiB,uncore_imc_1/cas_count_read/,1996655105,100.00,,,,
+    11.007846830,11751.26,MiB,uncore_imc_2/cas_count_read/,1996656046,100.00,,,,
+    11.007846830,11747.33,MiB,uncore_imc_3/cas_count_read/,1996656825,100.00,,,,
+    11.007846830,11747.46,MiB,uncore_imc_4/cas_count_read/,1996657602,100.00,,,,
+    11.007846830,11747.26,MiB,uncore_imc_5/cas_count_read/,1996658119,100.00,,,,
+    12.008780753,10474.98,MiB,uncore_imc_0/cas_count_read/,1996698415,100.00,,,,
+    12.008780753,10475.24,MiB,uncore_imc_1/cas_count_read/,1996698442,100.00,,,,
+    12.008780753,10474.66,MiB,uncore_imc_2/cas_count_read/,1996698664,100.00,,,,
+    12.008780753,10470.59,MiB,uncore_imc_3/cas_count_read/,1996698681,100.00,,,,
+    12.008780753,10470.63,MiB,uncore_imc_4/cas_count_read/,1996698853,100.00,,,,
+    12.008780753,10469.66,MiB,uncore_imc_5/cas_count_read/,1996698772,100.00,,,,
+    13.009720543,12491.11,MiB,uncore_imc_0/cas_count_read/,1996729368,100.00,,,,
+    13.009720543,12491.56,MiB,uncore_imc_1/cas_count_read/,1996730276,100.00,,,,
+    13.009720543,12491.06,MiB,uncore_imc_2/cas_count_read/,1996731147,100.00,,,,
+    13.009720543,12487.09,MiB,uncore_imc_3/cas_count_read/,1996731900,100.00,,,,
+    13.009720543,12486.93,MiB,uncore_imc_4/cas_count_read/,1996732794,100.00,,,,
+    13.009720543,12487.00,MiB,uncore_imc_5/cas_count_read/,1996733264,100.00,,,,
+    14.010606176,10191.52,MiB,uncore_imc_0/cas_count_read/,1996753081,100.00,,,,
+    14.010606176,10192.26,MiB,uncore_imc_1/cas_count_read/,1996753472,100.00,,,,
+    14.010606176,10192.71,MiB,uncore_imc_2/cas_count_read/,1996754118,100.00,,,,
+    14.010606176,10189.05,MiB,uncore_imc_3/cas_count_read/,1996754643,100.00,,,,
+    14.010606176,10188.52,MiB,uncore_imc_4/cas_count_read/,1996755224,100.00,,,,
+    14.010606176,10187.60,MiB,uncore_imc_5/cas_count_read/,1996755532,100.00,,,,
+    15.010968272,12063.77,MiB,uncore_imc_0/cas_count_read/,1996715503,100.00,,,,
+    15.010968272,12064.12,MiB,uncore_imc_1/cas_count_read/,1996713614,100.00,,,,
+    15.010968272,12062.93,MiB,uncore_imc_2/cas_count_read/,1996711920,100.00,,,,
+    15.010968272,12058.07,MiB,uncore_imc_3/cas_count_read/,1996710108,100.00,,,,
+    15.010968272,12057.53,MiB,uncore_imc_4/cas_count_read/,1996708305,100.00,,,,
+    15.010968272,12057.11,MiB,uncore_imc_5/cas_count_read/,1996706439,100.00,,,,
+    16.011471260,8507.42,MiB,uncore_imc_0/cas_count_read/,1996675525,100.00,,,,
+    16.011471260,8507.84,MiB,uncore_imc_1/cas_count_read/,1996675902,100.00,,,,
+    16.011471260,8508.74,MiB,uncore_imc_2/cas_count_read/,1996676740,100.00,,,,
+    16.011471260,8504.47,MiB,uncore_imc_3/cas_count_read/,1996677523,100.00,,,,
+    16.011471260,8505.50,MiB,uncore_imc_4/cas_count_read/,1996678064,100.00,,,,
+    16.011471260,8505.61,MiB,uncore_imc_5/cas_count_read/,1996678610,100.00,,,,
+    17.012102571,12504.31,MiB,uncore_imc_0/cas_count_read/,1996667242,100.00,,,,
+    17.012102571,12505.01,MiB,uncore_imc_1/cas_count_read/,1996667551,100.00,,,,
+    17.012102571,12504.57,MiB,uncore_imc_2/cas_count_read/,1996668353,100.00,,,,
+    17.012102571,12501.72,MiB,uncore_imc_3/cas_count_read/,1996669023,100.00,,,,
+    17.012102571,12501.78,MiB,uncore_imc_4/cas_count_read/,1996669762,100.00,,,,
+    17.012102571,12501.28,MiB,uncore_imc_5/cas_count_read/,1996670386,100.00,,,,
+    18.012715831,9947.85,MiB,uncore_imc_0/cas_count_read/,1996658054,100.00,,,,
+    18.012715831,9948.61,MiB,uncore_imc_1/cas_count_read/,1996658381,100.00,,,,
+    18.012715831,9948.72,MiB,uncore_imc_2/cas_count_read/,1996659214,100.00,,,,
+    18.012715831,9945.10,MiB,uncore_imc_3/cas_count_read/,1996659881,100.00,,,,
+    18.012715831,9945.37,MiB,uncore_imc_4/cas_count_read/,1996660361,100.00,,,,
+    18.012715831,9945.06,MiB,uncore_imc_5/cas_count_read/,1996660832,100.00,,,,
+    19.013239835,12193.62,MiB,uncore_imc_0/cas_count_read/,1996644497,100.00,,,,
+    19.013239835,12193.80,MiB,uncore_imc_1/cas_count_read/,1996644161,100.00,,,,
+    19.013239835,12193.64,MiB,uncore_imc_2/cas_count_read/,1996644178,100.00,,,,
+    19.013239835,12189.88,MiB,uncore_imc_3/cas_count_read/,1996644008,100.00,,,,
+    19.013239835,12190.55,MiB,uncore_imc_4/cas_count_read/,1996643923,100.00,,,,
+    19.013239835,12190.59,MiB,uncore_imc_5/cas_count_read/,1996643764,100.00,,,,
+    20.013792658,10206.22,MiB,uncore_imc_0/cas_count_read/,1996628238,100.00,,,,
+    20.013792658,10207.83,MiB,uncore_imc_1/cas_count_read/,1996628510,100.00,,,,
+    20.013792658,10208.03,MiB,uncore_imc_2/cas_count_read/,1996628968,100.00,,,,
+    20.013792658,10202.80,MiB,uncore_imc_3/cas_count_read/,1996629532,100.00,,,,
+    20.013792658,10203.07,MiB,uncore_imc_4/cas_count_read/,1996630005,100.00,,,,
+    20.013792658,10202.64,MiB,uncore_imc_5/cas_count_read/,1996630420,100.00,,,,
+    21.014305936,10463.70,MiB,uncore_imc_0/cas_count_read/,1996615464,100.00,,,,
+    21.014305936,10464.50,MiB,uncore_imc_1/cas_count_read/,1996615507,100.00,,,,
+    21.014305936,10463.40,MiB,uncore_imc_2/cas_count_read/,1996615550,100.00,,,,
+    21.014305936,10456.88,MiB,uncore_imc_3/cas_count_read/,1996615347,100.00,,,,
+    21.014305936,10457.66,MiB,uncore_imc_4/cas_count_read/,1996615283,100.00,,,,
+    21.014305936,10456.02,MiB,uncore_imc_5/cas_count_read/,1996615159,100.00,,,,
+    22.014846493,10176.13,MiB,uncore_imc_0/cas_count_read/,1996600619,100.00,,,,
+    22.014846493,10177.16,MiB,uncore_imc_1/cas_count_read/,1996601062,100.00,,,,
+    22.014846493,10177.15,MiB,uncore_imc_2/cas_count_read/,1996601572,100.00,,,,
+    22.014846493,10174.52,MiB,uncore_imc_3/cas_count_read/,1996602044,100.00,,,,
+    22.014846493,10174.42,MiB,uncore_imc_4/cas_count_read/,1996602560,100.00,,,,
+    22.014846493,10174.40,MiB,uncore_imc_5/cas_count_read/,1996602984,100.00,,,,
+    23.015203019,10422.29,MiB,uncore_imc_0/cas_count_read/,1996583312,100.00,,,,
+    23.015203019,10422.22,MiB,uncore_imc_1/cas_count_read/,1996582099,100.00,,,,
+    23.015203019,10420.94,MiB,uncore_imc_2/cas_count_read/,1996580992,100.00,,,,
+    23.015203019,10415.55,MiB,uncore_imc_3/cas_count_read/,1996579792,100.00,,,,
+    23.015203019,10415.61,MiB,uncore_imc_4/cas_count_read/,1996578610,100.00,,,,
+    23.015203019,10414.53,MiB,uncore_imc_5/cas_count_read/,1996577378,100.00,,,,
+    24.015530509,1291.79,MiB,uncore_imc_0/cas_count_read/,1996556435,100.00,,,,
+    24.015530509,1292.27,MiB,uncore_imc_1/cas_count_read/,1996555240,100.00,,,,
+    24.015530509,1291.68,MiB,uncore_imc_2/cas_count_read/,1996554154,100.00,,,,
+    24.015530509,1294.34,MiB,uncore_imc_3/cas_count_read/,1996552983,100.00,,,,
+    24.015530509,1294.05,MiB,uncore_imc_4/cas_count_read/,1996551805,100.00,,,,
+    24.015530509,1293.89,MiB,uncore_imc_5/cas_count_read/,1996550573,100.00,,,,
+    25.015987365,1498.78,MiB,uncore_imc_0/cas_count_read/,1996539023,100.00,,,,
+    25.015987365,1498.97,MiB,uncore_imc_1/cas_count_read/,1996538353,100.00,,,,
+    25.015987365,1498.75,MiB,uncore_imc_2/cas_count_read/,1996537818,100.00,,,,
+    25.015987365,1500.96,MiB,uncore_imc_3/cas_count_read/,1996537197,100.00,,,,
+    25.015987365,1500.87,MiB,uncore_imc_4/cas_count_read/,1996536569,100.00,,,,
+    25.015987365,1500.67,MiB,uncore_imc_5/cas_count_read/,1996535901,100.00,,,,
+    26.016479658,1419.63,MiB,uncore_imc_0/cas_count_read/,1996528694,100.00,,,,
+    26.016479658,1419.80,MiB,uncore_imc_1/cas_count_read/,1996528015,100.00,,,,
+    26.016479658,1419.51,MiB,uncore_imc_2/cas_count_read/,1996527431,100.00,,,,
+    26.016479658,1422.84,MiB,uncore_imc_3/cas_count_read/,1996526781,100.00,,,,
+    26.016479658,1422.79,MiB,uncore_imc_4/cas_count_read/,1996526138,100.00,,,,
+    26.016479658,1422.82,MiB,uncore_imc_5/cas_count_read/,1996525463,100.00,,,,
+    27.016936832,1352.86,MiB,uncore_imc_0/cas_count_read/,1996513101,100.00,,,,
+    27.016936832,1353.03,MiB,uncore_imc_1/cas_count_read/,1996512431,100.00,,,,
+    27.016936832,1352.86,MiB,uncore_imc_2/cas_count_read/,1996511887,100.00,,,,
+    27.016936832,1349.56,MiB,uncore_imc_3/cas_count_read/,1996511286,100.00,,,,
+    27.016936832,1349.47,MiB,uncore_imc_4/cas_count_read/,1996513656,100.00,,,,
+    27.016936832,1349.57,MiB,uncore_imc_5/cas_count_read/,1996513073,100.00,,,,
+    28.017425274,1301.15,MiB,uncore_imc_0/cas_count_read/,1996506861,100.00,,,,
+    28.017425274,1301.54,MiB,uncore_imc_1/cas_count_read/,1996506213,100.00,,,,
+    28.017425274,1301.38,MiB,uncore_imc_2/cas_count_read/,1996505671,100.00,,,,
+    28.017425274,1296.80,MiB,uncore_imc_3/cas_count_read/,1996505072,100.00,,,,
+    28.017425274,1296.25,MiB,uncore_imc_4/cas_count_read/,1996504459,100.00,,,,
+    28.017425274,1296.67,MiB,uncore_imc_5/cas_count_read/,1996503820,100.00,,,,
+    29.017908297,1253.75,MiB,uncore_imc_0/cas_count_read/,1996496710,100.00,,,,
+    29.017908297,1254.18,MiB,uncore_imc_1/cas_count_read/,1996496086,100.00,,,,
+    29.017908297,1253.82,MiB,uncore_imc_2/cas_count_read/,1996495546,100.00,,,,
+    29.017908297,1248.44,MiB,uncore_imc_3/cas_count_read/,1996494949,100.00,,,,
+    29.017908297,1247.98,MiB,uncore_imc_4/cas_count_read/,1996494955,100.00,,,,
+    29.017908297,1248.44,MiB,uncore_imc_5/cas_count_read/,1996494829,100.00,,,,
+    30.018321113,1170.06,MiB,uncore_imc_0/cas_count_read/,1996484650,100.00,,,,
+    30.018321113,1170.65,MiB,uncore_imc_1/cas_count_read/,1996484039,100.00,,,,
+    30.018321113,1170.15,MiB,uncore_imc_2/cas_count_read/,1996483511,100.00,,,,
+    30.018321113,1163.96,MiB,uncore_imc_3/cas_count_read/,1996482916,100.00,,,,
+    30.018321113,1163.59,MiB,uncore_imc_4/cas_count_read/,1996482357,100.00,,,,
+    30.018321113,1163.87,MiB,uncore_imc_5/cas_count_read/,1996481779,100.00,,,,
+    31.018688274,1272.37,MiB,uncore_imc_0/cas_count_read/,1996469490,100.00,,,,
+    31.018688274,1272.81,MiB,uncore_imc_1/cas_count_read/,1996468869,100.00,,,,
+    31.018688274,1272.31,MiB,uncore_imc_2/cas_count_read/,1996468344,100.00,,,,
+    31.018688274,1264.91,MiB,uncore_imc_3/cas_count_read/,1996467787,100.00,,,,
+    31.018688274,1264.52,MiB,uncore_imc_4/cas_count_read/,1996467215,100.00,,,,
+    31.018688274,1264.76,MiB,uncore_imc_5/cas_count_read/,1996466613,100.00,,,,
+    32.019165917,59.61,MiB,uncore_imc_0/cas_count_read/,1996462198,100.00,,,,
+    32.019165917,59.83,MiB,uncore_imc_1/cas_count_read/,1996461564,100.00,,,,
+    32.019165917,59.47,MiB,uncore_imc_2/cas_count_read/,1996461021,100.00,,,,
+    32.019165917,58.49,MiB,uncore_imc_3/cas_count_read/,1996460432,100.00,,,,
+    32.019165917,58.38,MiB,uncore_imc_4/cas_count_read/,1996459857,100.00,,,,
+    32.019165917,58.30,MiB,uncore_imc_5/cas_count_read/,1996459266,100.00,,,,
+    33.019617100,1.07,MiB,uncore_imc_0/cas_count_read/,1996453646,100.00,,,,
+    33.019617100,1.14,MiB,uncore_imc_1/cas_count_read/,1996453047,100.00,,,,
+    33.019617100,1.04,MiB,uncore_imc_2/cas_count_read/,1996452836,100.00,,,,
+    33.019617100,1.04,MiB,uncore_imc_3/cas_count_read/,1996452437,100.00,,,,
+    33.019617100,1.01,MiB,uncore_imc_4/cas_count_read/,1996451690,100.00,,,,
+    33.019617100,1.02,MiB,uncore_imc_5/cas_count_read/,1996450925,100.00,,,,
+    34.020018284,5.35,MiB,uncore_imc_0/cas_count_read/,1996442218,100.00,,,,
+    34.020018284,5.41,MiB,uncore_imc_1/cas_count_read/,1996441632,100.00,,,,
+    34.020018284,5.21,MiB,uncore_imc_2/cas_count_read/,1996441147,100.00,,,,
+    34.020018284,5.14,MiB,uncore_imc_3/cas_count_read/,1996440610,100.00,,,,
+    34.020018284,5.10,MiB,uncore_imc_4/cas_count_read/,1996440702,100.00,,,,
+    34.020018284,5.14,MiB,uncore_imc_5/cas_count_read/,1996439989,100.00,,,,

@@ -267,7 +267,7 @@ _EVENT_BW_WRITE="uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_write/,unc
 
 _TOKEN='JANNOT'
 _PID=0
-_CMD_PERF="perf stat -a -x,  "
+_CMD_PERF="perf stat -a "
 _LOG='-o log'
 _EVENTS="-e ${_EVENT_BW_WRITE},${_EVENT_BW_READ}"
 _INTERVALLE='-I 1000'
@@ -279,7 +279,10 @@ _INTERVALLE='-I 1000'
 re='^[0-9]+$'
 if [ "$1" == "start" ]; then
     info "_START standalone"
-    bash -c "  $_CMD_PERF $_LOG $_EVENTS $_INTERVALLE" &
+    bash -c "  $_CMD_PERFcase uyes in
+    esac
+    
+     $_LOG $_EVENTS $_INTERVALLE" &
 
 elif  [ "$1" == "stop" ]; then
     info "_STOP standalone"
