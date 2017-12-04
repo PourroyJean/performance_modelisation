@@ -1,74 +1,26 @@
-# started on Tue Nov 28 10:45:31 2017
+# started on Mon Dec  4 14:23:58 2017
 
-     1.002286615 0.23 MiB uncore_imc_0/cas_count_read/ 1999610718 100.00    
-     1.002286615 0.20 MiB uncore_imc_0/cas_count_write/ 1999592489 100.00    
-     1.002286615 0.24 MiB uncore_imc_1/cas_count_read/ 1999569379 100.00    
-     1.002286615 0.21 MiB uncore_imc_1/cas_count_write/ 1999557697 100.00    
-     1.002286615 0.22 MiB uncore_imc_2/cas_count_read/ 1999524987 100.00    
-     1.002286615 0.18 MiB uncore_imc_2/cas_count_write/ 1999513076 100.00    
-     1.002286615 0.22 MiB uncore_imc_3/cas_count_read/ 1999491693 100.00    
-     1.002286615 0.20 MiB uncore_imc_3/cas_count_write/ 1999479853 100.00    
-     1.002286615 0.21 MiB uncore_imc_4/cas_count_read/ 1999458949 100.00    
-     1.002286615 0.19 MiB uncore_imc_4/cas_count_write/ 1999447157 100.00    
-     1.002286615 0.20 MiB uncore_imc_5/cas_count_read/ 1999425252 100.00    
-     1.002286615 0.17 MiB uncore_imc_5/cas_count_write/ 1999414865 100.00    
-     2.004126077 0.42 MiB uncore_imc_0/cas_count_read/ 1999274934 100.00    
-     2.004126077 0.42 MiB uncore_imc_0/cas_count_write/ 1999265330 100.00    
-     2.004126077 0.43 MiB uncore_imc_1/cas_count_read/ 1999254606 100.00    
-     2.004126077 0.45 MiB uncore_imc_1/cas_count_write/ 1999248954 100.00    
-     2.004126077 0.42 MiB uncore_imc_2/cas_count_read/ 1999232550 100.00    
-     2.004126077 0.43 MiB uncore_imc_2/cas_count_write/ 1999227006 100.00    
-     2.004126077 0.38 MiB uncore_imc_3/cas_count_read/ 1999216320 100.00    
-     2.004126077 0.43 MiB uncore_imc_3/cas_count_write/ 1999210502 100.00    
-     2.004126077 0.39 MiB uncore_imc_4/cas_count_read/ 1999208256 100.00    
-     2.004126077 0.43 MiB uncore_imc_4/cas_count_write/ 1999203624 100.00    
-     2.004126077 0.38 MiB uncore_imc_5/cas_count_read/ 1999193148 100.00    
-     2.004126077 0.38 MiB uncore_imc_5/cas_count_write/ 1999187841 100.00    
-     3.006339088 0.20 MiB uncore_imc_0/cas_count_read/ 1999429215 100.00    
-     3.006339088 0.16 MiB uncore_imc_0/cas_count_write/ 1999421847 100.00    
-     3.006339088 0.20 MiB uncore_imc_1/cas_count_read/ 1999413814 100.00    
-     3.006339088 0.16 MiB uncore_imc_1/cas_count_write/ 1999409688 100.00    
-     3.006339088 0.19 MiB uncore_imc_2/cas_count_read/ 1999398238 100.00    
-     3.006339088 0.16 MiB uncore_imc_2/cas_count_write/ 1999394324 100.00    
-     3.006339088 0.18 MiB uncore_imc_3/cas_count_read/ 1999387022 100.00    
-     3.006339088 0.16 MiB uncore_imc_3/cas_count_write/ 1999383100 100.00    
-     3.006339088 0.19 MiB uncore_imc_4/cas_count_read/ 1999375874 100.00    
-     3.006339088 0.16 MiB uncore_imc_4/cas_count_write/ 1999371843 100.00    
-     3.006339088 0.18 MiB uncore_imc_5/cas_count_read/ 1999364415 100.00    
-     3.006339088 0.14 MiB uncore_imc_5/cas_count_write/ 1999360838 100.00    
-     4.006926494 2.46 MiB uncore_imc_0/cas_count_read/ 1998681472 100.00    
-     4.006926494 4.40 MiB uncore_imc_0/cas_count_write/ 1998677151 100.00    
-     4.006926494 2.50 MiB uncore_imc_1/cas_count_read/ 1998671688 100.00    
-     4.006926494 4.45 MiB uncore_imc_1/cas_count_write/ 1998669296 100.00    
-     4.006926494 2.47 MiB uncore_imc_2/cas_count_read/ 1998661240 100.00    
-     4.006926494 4.39 MiB uncore_imc_2/cas_count_write/ 1998658648 100.00    
-     4.006926494 2.30 MiB uncore_imc_3/cas_count_read/ 1998653763 100.00    
-     4.006926494 4.32 MiB uncore_imc_3/cas_count_write/ 1998650980 100.00    
-     4.006926494 2.31 MiB uncore_imc_4/cas_count_read/ 1998645937 100.00    
-     4.006926494 4.31 MiB uncore_imc_4/cas_count_write/ 1998643420 100.00    
-     4.006926494 2.30 MiB uncore_imc_5/cas_count_read/ 1998638506 100.00    
-     4.006926494 4.26 MiB uncore_imc_5/cas_count_write/ 1998636045 100.00    
-     5.007721580 0.30 MiB uncore_imc_0/cas_count_read/ 1998324800 100.00    
-     5.007721580 0.25 MiB uncore_imc_0/cas_count_write/ 1998320720 100.00    
-     5.007721580 0.30 MiB uncore_imc_1/cas_count_read/ 1998316050 100.00    
-     5.007721580 0.26 MiB uncore_imc_1/cas_count_write/ 1998313818 100.00    
-     5.007721580 0.29 MiB uncore_imc_2/cas_count_read/ 1998307169 100.00    
-     5.007721580 0.27 MiB uncore_imc_2/cas_count_write/ 1998304798 100.00    
-     5.007721580 0.28 MiB uncore_imc_3/cas_count_read/ 1998300453 100.00    
-     5.007721580 0.25 MiB uncore_imc_3/cas_count_write/ 1998298070 100.00    
-     5.007721580 0.28 MiB uncore_imc_4/cas_count_read/ 1998293823 100.00    
-     5.007721580 0.26 MiB uncore_imc_4/cas_count_write/ 1998291415 100.00    
-     5.007721580 0.26 MiB uncore_imc_5/cas_count_read/ 1998286831 100.00    
-     5.007721580 0.24 MiB uncore_imc_5/cas_count_write/ 1998284492 100.00    
-     5.217795280 0.03 MiB uncore_imc_0/cas_count_read/ 1735131824 100.00    
-     5.217795280 0.03 MiB uncore_imc_0/cas_count_write/ 1735127694 100.00    
-     5.217795280 0.03 MiB uncore_imc_1/cas_count_read/ 1735123422 100.00    
-     5.217795280 0.03 MiB uncore_imc_1/cas_count_write/ 1735121368 100.00    
-     5.217795280 0.03 MiB uncore_imc_2/cas_count_read/ 1735115909 100.00    
-     5.217795280 0.03 MiB uncore_imc_2/cas_count_write/ 1735113967 100.00    
-     5.217795280 0.02 MiB uncore_imc_3/cas_count_read/ 1735110327 100.00    
-     5.217795280 0.02 MiB uncore_imc_3/cas_count_write/ 1735108256 100.00    
-     5.217795280 0.03 MiB uncore_imc_4/cas_count_read/ 1735104602 100.00    
-     5.217795280 0.03 MiB uncore_imc_4/cas_count_write/ 1735102456 100.00    
-     5.217795280 0.02 MiB uncore_imc_5/cas_count_read/ 1735098713 100.00    
-     5.217795280 0.02 MiB uncore_imc_5/cas_count_write/ 1735096814 100.00    
+     1.000625521,0.59,MiB,uncore_imc_0/cas_count_write/,1996130574,100.00,,,,
+     1.000625521,0.59,MiB,uncore_imc_1/cas_count_write/,1996155058,100.00,,,,
+     1.000625521,0.56,MiB,uncore_imc_2/cas_count_write/,1996154103,100.00,,,,
+     1.000625521,0.59,MiB,uncore_imc_3/cas_count_write/,1996154833,100.00,,,,
+     1.000625521,0.58,MiB,uncore_imc_4/cas_count_write/,1996154083,100.00,,,,
+     1.000625521,0.55,MiB,uncore_imc_5/cas_count_write/,1996154652,100.00,,,,
+     1.000625521,1.73,MiB,uncore_imc_0/cas_count_read/,1996149186,100.00,,,,
+     1.000625521,1.83,MiB,uncore_imc_1/cas_count_read/,1996132387,100.00,,,,
+     1.000625521,1.61,MiB,uncore_imc_2/cas_count_read/,1996115634,100.00,,,,
+     1.000625521,1.68,MiB,uncore_imc_3/cas_count_read/,1996099037,100.00,,,,
+     1.000625521,1.64,MiB,uncore_imc_4/cas_count_read/,1996082673,100.00,,,,
+     1.000625521,1.70,MiB,uncore_imc_5/cas_count_read/,1996064874,100.00,,,,
+     2.000937789,1.71,MiB,uncore_imc_0/cas_count_write/,1996074733,100.00,,,,
+     2.000937789,1.72,MiB,uncore_imc_1/cas_count_write/,1996082940,100.00,,,,
+     2.000937789,1.72,MiB,uncore_imc_2/cas_count_write/,1996077062,100.00,,,,
+     2.000937789,1.73,MiB,uncore_imc_3/cas_count_write/,1996071722,100.00,,,,
+     2.000937789,1.73,MiB,uncore_imc_4/cas_count_write/,1996066424,100.00,,,,
+     2.000937789,1.71,MiB,uncore_imc_5/cas_count_write/,1996061414,100.00,,,,
+     2.000937789,2.74,MiB,uncore_imc_0/cas_count_read/,1996053646,100.00,,,,
+     2.000937789,2.80,MiB,uncore_imc_1/cas_count_read/,1996039846,100.00,,,,
+     2.000937789,2.69,MiB,uncore_imc_2/cas_count_read/,1996025987,100.00,,,,
+     2.000937789,2.78,MiB,uncore_imc_3/cas_count_read/,1996012593,100.00,,,,
+     2.000937789,2.78,MiB,uncore_imc_4/cas_count_read/,1995999195,100.00,,,,
+     2.000937789,2.79,MiB,uncore_imc_5/cas_count_read/,1995985373,100.00,,,,
