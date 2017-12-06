@@ -9,7 +9,6 @@
  perf stat -o log  -a -e cpu-clock,cpu-migrations,page-faults -I 100 sleep 10
 
 
-exit
 
 
 #perf stat -a -e cpu-clock,cpu-migrations,page-faults -I 100 sleep 2
