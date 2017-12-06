@@ -143,10 +143,12 @@ rc_assert() { [[ $rc -ne 0 ]] && error "${*} (RC=$rc)"; }
 SCRIPT_HEADSIZE=$(grep -sn "^# END_OF_HEADER" ${0} | head -1 | cut -f1 -d:)
 SCRIPT_ID="$(scriptinfo | grep script_id | tr -s ' ' | cut -d' ' -f3)"
 SCRIPT_NAME="$(basename ${0})" # scriptname without path
-SCRIPT_UNIQ="${SCRIPT_NAME%.*}.${SCRIPT_ID}.${HOSTNAME%%.*}"
+SCRIPT_UNIQ="${SCRIPT_NAME%.*}${SCRIPT_ID}.${HOSTNAME%%.*}"
 SCRIPT_UNIQ_DATED="${SCRIPT_UNIQ}.$(date "+%y%m%d%H%M%S").${$}"
 SCRIPT_DIR="$( cd $(dirname "$0") && pwd )" # script directory
+SCRIPT_PYTHON="$SCRIPT_DIR""/format_log.py"
 SCRIPT_DIR_TEMP="/tmp" # Make sure temporary folder is RW
+USER_PATH=`pwd`
 
 SCRIPT_TIMELOG_FLAG=0
 SCRIPT_TIMELOG_FORMAT="+%y/%m/%d@%H:%M:%S"
@@ -159,7 +161,8 @@ GNU_AWK_FLAG="$(awk --version 2>/dev/null | head -1 | grep GNU)"
 
 fileRC="${SCRIPT_DIR_TEMP}/${SCRIPT_UNIQ_DATED}.tmp.rc";
 fileLock="${SCRIPT_DIR_TEMP}/${SCRIPT_UNIQ}.lock"
-fileLog="/dev/null"
+fileLog="$USER_PATH/log_$SCRIPT_UNIQ_DATED"
+
 rc=0;
 
 countErr=0;
@@ -221,9 +224,16 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
 
 	#== manage options ==#
 	case "$OPTION" in
-		o ) fileLog="${OPTARG}"
+		o ) fileLog="$USER_PATH/${OPTARG}"
 			[[ "${OPTARG}" = *"DEFAULT" ]] && fileLog="$( echo ${OPTARG} | sed -e "s/DEFAULT/${SCRIPT_UNIQ_DATED}.log/g" )"
+            if [[ "${OPTARG:0:1}" == / || "${OPTARG:0:2}" == ~[/a-z] ]]
+            then
+                fileLog=${OPTARG}
+            else
+                fileLog="$USER_PATH/${OPTARG}"
+            fi
 			flagOptLog=1
+#			echo "FILE LOG option: $fileLog"
 		;;
 
 		t ) flagOptTimeLog=1
@@ -252,53 +262,134 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
 done
 shift $((${OPTIND} - 1)) ## shift options
 
-#============================
+#=======================================================================================================================
+#=======================================================================================================================
 #  MAIN SCRIPT
-#============================
+#=======================================================================================================================
+#=======================================================================================================================
+
+_TOKEN='JANNOT'
+_PID=0
+_CMD_PERF="perf stat -a -x,  "
+_LOG="-o $fileLog"
+_EVENT_BW_READ="uncore_imc_0/cas_count_read/,uncore_imc_1/cas_count_read/,uncore_imc_2/cas_count_read/,uncore_imc_3/cas_count_read/,uncore_imc_4/cas_count_read/,uncore_imc_5/cas_count_read/"
+_EVENT_BW_WRITE="uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_write/,uncore_imc_2/cas_count_write/,uncore_imc_3/cas_count_write/,uncore_imc_4/cas_count_write/,uncore_imc_5/cas_count_write/"
+_EVENTS="-e ${_EVENT_BW_WRITE},${_EVENT_BW_READ}"
+_PERF_RATE=100
+_LOG_FILE_PATH_SAVE="/tmp/yamb_log_file"
+_IS_DISPLAY_AVAILABLE=false
+
+
+
+#Param 1: path of the log file
+f_execute_python (){
+    if $_IS_DISPLAY_AVAILABLE ; then
+        info "Python script will read data from : $fileLog"
+        python $SCRIPT_PYTHON $fileLog
+
+    else
+        warning "No display has been found, you should try to < ssh -X > the node"
+    fi
+
+}
+
+f_start_monitoring (){
+    echo $fileLog > $_LOG_FILE_PATH_SAVE
+    bash -c "  $_CMD_PERF $_LOG $_EVENTS -I $_PERF_RATE" &
+
+}
+
+
+f_stop_monitoring (){
+    $fileLog=$(cat $_LOG_FILE_PATH_SAVE)
+    echo "OFF" > $_LOG_FILE_PATH_SAVE
+    _PID=`ps aux |  grep "perf stat -a" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
+    while [ ! -z $_PID ] ; do
+        info    "YAMB process found and killed (PID=$_PID)"
+        kill -kill $_PID
+        _PID=`ps aux |  grep "perf stat -a" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
+    done
+
+    f_execute_python
+}
+
+f_configure (){
+    if ! `python -c "import matplotlib.pyplot as plt;plt.figure()" 2&> /dev/null`  ; then
+        _IS_DISPLAY_AVAILABLE=false
+    else
+        _IS_DISPLAY_AVAILABLE=true
+    fi
+}
+
+f_print_configuration (){
+    echo ""
+    info "  _ SCRIPT PATH:          $SCRIPT_DIR/$SCRIPT_NAME"
+    info "  _ SCRIPT DIR:           $SCRIPT_DIR"
+    info "  _ PYTHON PARSER:        $SCRIPT_PYTHON"
+    info "  _ LOG FILE PATH:        $fileLog"
+    info "  _ IS DISPLAY AVAILABLE: $_IS_DISPLAY_AVAILABLE"
+    info "  _ COMMAND PERF:         $_CMD_PERF $_LOG $_EVENTS $_PERF_RATE"
+    info "  _ SAMPLE (every N ms):  $_PERF_RATE"
+    echo ""
+}
+
+f_check_start (){
+   if ! grep -q OFF "$_LOG_FILE_PATH_SAVE" ; then
+        error "YAMB is already launched"
+        exit -1
+    fi
+
+
+}
+
+
 
 [ $flagOptErr -eq 1 ] && usage 1>&2 && exit 1 ## print usage if option error and exit
 
   #== Check/Set arguments ==#
 [[ $# -gt 1 ]] && error "${SCRIPT_NAME}: Too many arguments" && usage 1>&2 && exit 2
 
-_EVENT_BW_READ="uncore_imc_0/cas_count_read/,uncore_imc_1/cas_count_read/,uncore_imc_2/cas_count_read/,uncore_imc_3/cas_count_read/,uncore_imc_4/cas_count_read/,uncore_imc_5/cas_count_read/"
-_EVENT_BW_WRITE="uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_write/,uncore_imc_2/cas_count_write/,uncore_imc_3/cas_count_write/,uncore_imc_4/cas_count_write/,uncore_imc_5/cas_count_write/"
 
 
-_TOKEN='JANNOT'
-_PID=0
-_CMD_PERF="perf stat -a -x,  "
-_LOG='-o log'
-_EVENTS="-e ${_EVENT_BW_WRITE},${_EVENT_BW_READ}"
-_INTERVALLE='-I 1000'
+info "---- CONFIGURATION ----"
+f_configure
+f_print_configuration
 
 
 
+#re='^[0-9]+$'
 
-
-re='^[0-9]+$'
+#----------
+#  START  -
+#----------
 if [ "$1" == "start" ]; then
-    info "_START standalone"
-    bash -c "  $_CMD_PERF $_LOG $_EVENTS $_INTERVALLE" &
-
-elif  [ "$1" == "stop" ]; then
-    info "_STOP standalone"
-    _PID=`ps aux |  grep "perf stat -a" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
-    echo    "Mon PID est $_PID"
-    kill -kill $_PID
-
-    #_PID=`ps aux |  grep "perf stat -a" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
-    #echo    "Mon PID est $_PID"
-    #kill -kill $_PID
-
+    info "-> ACTION START: standalone"
+    f_check_start
+    f_start_monitoring
 
 
 elif [ -x "$(command -v $1)" ]; then
-    info "_START monitoring $1"
+    info "-> ACTION START: monitor the following command: $1"
+    f_check_start
 
 elif [[ $1 =~ ^-?[0-9]+$ ]]; then
     info "_START monitoring for $1 seconds"
+    f_check_start
 
+
+#----------
+#   STOP  -
+#----------
+elif  [ "$1" == "stop" ]; then
+    info "ACTION _STOP "
+    is_yamb_running=$(cat $_LOG_FILE_PATH_SAVE)
+
+    if grep -q OFF "$_LOG_FILE_PATH_SAVE" ; then
+        error "YAMB was not launched..."
+        exit -1
+    fi
+
+    f_stop_monitoring
 else
     error "${SCRIPT_NAME}: Wrong argument" && usage 1>&2 && exit 2
 fi
@@ -339,3 +430,6 @@ scriptfinish ; } 2>&1 | tee ${fileLog}
   #=========#
 rc_restore
 exit $rc
+
+
+
