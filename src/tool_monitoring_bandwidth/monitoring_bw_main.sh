@@ -163,23 +163,30 @@ fileRC="${SCRIPT_DIR_TEMP}/${SCRIPT_UNIQ_DATED}.tmp.rc";
 fileLock="${SCRIPT_DIR_TEMP}/${SCRIPT_UNIQ}.lock"
 fileLog="$USER_PATH/log_$SCRIPT_UNIQ_DATED"
 
+_PYTHON_IMAGE_PATH=""
+
+
 rc=0;
 
 countErr=0;
 countWrn=0;
 
   #== option variables ==#
+flagOptAction=0
 flagOptErr=0
 flagOptLog=0
 flagOptTimeLog=0
+flagOptImage=0
 flagOptIgnoreLock=0
+flagOptImageRequired=0
+flagOptImageWithNoPath=0
 
 #============================
 #  PARSE OPTIONS WITH GETOPTS
 #============================
 
   #== set short options ==#
-SCRIPT_OPTS=':o:txhv-:'
+SCRIPT_OPTS=':a:o:i:txhv-:'
 
   #== set long options associated with short one ==#
 typeset -A ARRAY_OPTS
@@ -187,6 +194,7 @@ ARRAY_OPTS=(
 	[timelog]=t
 	[ignorelock]=x
 	[output]=o
+	[image]=i
 	[help]=h
 	[man]=h
 )
@@ -233,11 +241,20 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
                 fileLog="$USER_PATH/${OPTARG}"
             fi
 			flagOptLog=1
-#			echo "FILE LOG option: $fileLog"
 		;;
 
 		t ) flagOptTimeLog=1
 			SCRIPT_TIMELOG_FLAG=1
+		;;
+		i ) flagOptImageRequired=1
+            if [[ "${OPTARG:0:1}" == / || "${OPTARG:0:2}" == ~[/a-z] ]]
+            then
+                _PYTHON_IMAGE_PATH=${OPTARG}
+            else
+                _PYTHON_IMAGE_PATH="$USER_PATH/${OPTARG}"
+            fi
+            flagOptImageRequired=1
+
 		;;
 
 		x ) flagOptIgnoreLock=1
@@ -251,8 +268,13 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
 			exit 0
 		;;
 
-		: ) error "${SCRIPT_NAME}: -$OPTARG: option requires an argument"
-			flagOptErr=1
+		: ) echo HOOOOHOHOHO
+		    if  [ "$OPTARG" == "i" ] ; then
+                flagOptImageRequired=1
+		    else
+		        error "${SCRIPT_NAME}: -$OPTARG: option requires an argument"
+			    flagOptErr=1
+            fi
 		;;
 
 		? ) error "${SCRIPT_NAME}: -$OPTARG: unknown option"
@@ -270,32 +292,32 @@ shift $((${OPTIND} - 1)) ## shift options
 
 _TOKEN='JANNOT'
 _PID=0
-_CMD_PERF="perf stat -a -x,  "
-_LOG="-o $fileLog"
+
 _EVENT_BW_READ="uncore_imc_0/cas_count_read/,uncore_imc_1/cas_count_read/,uncore_imc_2/cas_count_read/,uncore_imc_3/cas_count_read/,uncore_imc_4/cas_count_read/,uncore_imc_5/cas_count_read/"
 _EVENT_BW_WRITE="uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_write/,uncore_imc_2/cas_count_write/,uncore_imc_3/cas_count_write/,uncore_imc_4/cas_count_write/,uncore_imc_5/cas_count_write/"
 _EVENTS="-e ${_EVENT_BW_WRITE},${_EVENT_BW_READ}"
+_PERF_PREFIX="perf stat -a -x,  "
 _PERF_RATE=100
+_PERF_LOG="-o $fileLog"
+_PERF_CMD="$_PERF_PREFIX $_PERF_LOG $_EVENTS -I $_PERF_RATE"
+
+
 _LOG_FILE_PATH_SAVE="/tmp/yamb_log_file"
 _IS_DISPLAY_AVAILABLE=false
-
-
+_PYTHON_CMD="python $SCRIPT_PYTHON"
 
 #Param 1: path of the log file
 f_execute_python (){
-    if $_IS_DISPLAY_AVAILABLE ; then
-        info "Python script will read data from : $fileLog"
-        python $SCRIPT_PYTHON $fileLog
 
-    else
-        warning "No display has been found, you should try to < ssh -X > the node"
-    fi
+    echo     "python $SCRIPT_PYTHON $fileLog $_PYTHON_IMAGE_CMD"
+    python $SCRIPT_PYTHON $fileLog $_PYTHON_IMAGE_CMD
+
 
 }
 
 f_start_monitoring (){
     echo $fileLog > $_LOG_FILE_PATH_SAVE
-    bash -c "  $_CMD_PERF $_LOG $_EVENTS -I $_PERF_RATE" &
+    bash -c " $_PERF_CMD " &
 
 }
 
@@ -314,11 +336,24 @@ f_stop_monitoring (){
 }
 
 f_configure (){
-    if ! `python -c "import matplotlib.pyplot as plt;plt.figure()" 2&> /dev/null`  ; then
+    if [[ $flagOptImageRequired -eq 1 ]]; then
+        info    "Python output to png file"
+        _PYTHON_IMAGE_CMD="-i $_PYTHON_IMAGE_PATH"
         _IS_DISPLAY_AVAILABLE=false
     else
-        _IS_DISPLAY_AVAILABLE=true
+        if `python -c "import matplotlib.pyplot as plt;plt.figure()" 2&> /dev/null`  ; then
+            info "Python will show the graph on the screen"
+            _IS_DISPLAY_AVAILABLE=true
+        else
+            warning "No display has been found (Hint: try to < ssh -X > the node)"
+            info    "Python output will be redirected in a png file"
+            _PYTHON_IMAGE_CMD="-i "
+            _IS_DISPLAY_AVAILABLE=false
+
+        fi
     fi
+
+
 }
 
 f_print_configuration (){
@@ -326,10 +361,12 @@ f_print_configuration (){
     info "  _ SCRIPT PATH:          $SCRIPT_DIR/$SCRIPT_NAME"
     info "  _ SCRIPT DIR:           $SCRIPT_DIR"
     info "  _ PYTHON PARSER:        $SCRIPT_PYTHON"
+    info "  _ PYTHON CMD:           $_PYTHON_CMD"
+    info "  _ PYTHON_IMAGE_CMD:     $_PYTHON_IMAGE_CMD"
+    info "  _ PRINT ON SCREEN:      $_IS_DISPLAY_AVAILABLE"
     info "  _ LOG FILE PATH:        $fileLog"
-    info "  _ IS DISPLAY AVAILABLE: $_IS_DISPLAY_AVAILABLE"
-    info "  _ COMMAND PERF:         $_CMD_PERF $_LOG $_EVENTS $_PERF_RATE"
     info "  _ SAMPLE (every N ms):  $_PERF_RATE"
+    info "  _ COMMAND PERF:         $_PERF_CMD"
     echo ""
 }
 
@@ -344,15 +381,45 @@ f_check_start (){
 
 
 
+#if [[ $flagOptImageRequired -eq 1 ]]; then
+#    if [[ $flagOptImageWithNoPath -eq 1 ]]; then
+#
+#    else
+#
+#    fi
+#
+#fi
+
+
+#_PYTHON_IMAGE_CMD=""
+#if [[ $flagOptImageRequired -eq 1 ]]; then
+#    _PYTHON_IMAGE_PATH="$fileLog"".png"
+#    info " Image required without path -> will use the log file name : $_PYTHON_IMAGE_PATH"
+#    !
+#
+#fi
+#
+#info $_PYTHON_CMD $fileLog $_PYTHON_IMAGE_CMD
+#info $_PYTHON_CMD $fileLog $_PYTHON_IMAGE_CMD
+#info $_PYTHON_CMD $fileLog $_PYTHON_IMAGE_CMD
+#info $_PYTHON_CMD $fileLog $_PYTHON_IMAGE_CMD
+
+
+
+
 [ $flagOptErr -eq 1 ] && usage 1>&2 && exit 1 ## print usage if option error and exit
 
   #== Check/Set arguments ==#
-[[ $# -gt 1 ]] && error "${SCRIPT_NAME}: Too many arguments" && usage 1>&2 && exit 2
+#[[ $# -gt 3 ]] && error "${SCRIPT_NAME}: Too many arguments" && usage 1>&2 && exit 2
 
 
 
 info "---- CONFIGURATION ----"
 f_configure
+
+
+
+
 f_print_configuration
 
 
