@@ -1,24 +1,71 @@
+# ------------------------------------------------------------------
+#                      YAMB Profiling Tool
+#
+#             Yet Another Memory Bandwidth Profiling Tool
+# ------------------------------------------------------------------
+#
+#   [Jean Pourroy]
+#   [Frederic Ciesielski]
+#   [Patrick Demichel]
+# ------------------------------------------------------------------
+# Source: https://github.com/PourroyJean/performance_modelisation
+# ------------------------------------------------------------------
+
+
 import numpy as np
 import sys
-import matplotlib.pyplot as plt
 import re
 import os.path
 import argparse
+import matplotlib,os
+
+
+
+r = os.system('python -c "import matplotlib.pyplot as plt;plt.figure()" 2&> /dev/null')
+if r != 0:
+    matplotlib.use('Agg')
+    import matplotlib.pyplot as plt
+else:
+    import matplotlib.pyplot as plt
 
 
 
 
-def check_configuration ():
 
-    if not len(sys.argv) == 2 :
-            print "Usage: ./format_log.py <log_file>"
-            sys.exit(-1)
+# sys.exit(-1)
+def parse_parameter ():
+    global path_log_file
+    global path_image_file
 
-    file_path=sys.argv[1]
+    parser = argparse.ArgumentParser(description='Generate a graph based on a log file gathered with YAMB profiling tool.')
+    parser.add_argument('path_log',
+                        help='log file where data are stored')
 
-    if not os.path.exists(file_path):
+    parser.add_argument('-i', '--image', dest='path_image', nargs='?', type=str, default="not_set",
+                        help='Print the graph to a .png file ')
+
+    parser.add_argument('--version', action='version', version='%(prog)s 0.2')
+
+    # read and set parameters
+    args = parser.parse_args()
+
+    #-- LOG --
+    path_log_file = args.path_log
+    if not os.path.exists(path_log_file):
         print "File does not exist"
         sys.exit(-1)
+
+    #-- IMAGE --
+    if args.path_image == "not_set":
+        # print "User wants a graphical output"
+        path_image_file=""
+    elif not args.path_image:
+        # print "User wants an image with the same name as the log file"
+            path_image_file=args.path_log+".png"
+    else:
+        # print "User wants an image with a specific name"
+        path_image_file=args.path_image
+
 
 
 
@@ -83,20 +130,23 @@ def parse_values (file_name):
 
 
 
+#--------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------
 
 
-
-#Check and some initialisation
-
-check_configuration()
-file_path=sys.argv[1]
-
+#Some init
+path_log_file   = ""
+path_image_file = ""
 np_array_read = np.empty((0,6), float)
 timing=np.empty([1,0])
 
+#Check
+parse_parameter()
+
 
 ## PARSE LOG FILES TO GET THE READ AND WRITE BANDWIDTH ##
-timing,y_Total_read, y_Total_write   = parse_values(file_path)
+timing,y_Total_read, y_Total_write   = parse_values(path_log_file)
 # print ("----- TIMING -------")
 # print timing
 # print ("----- READ -------")
@@ -142,7 +192,9 @@ plt.grid(True)
 
 
 
-plt.show()
-
-
+#Output: graphical or png file ?
+if path_image_file == "":
+    plt.show()
+else:
+    fig.savefig (str(path_image_file))
 
