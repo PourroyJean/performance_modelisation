@@ -19,8 +19,11 @@
 # HEADER
 #================================================================
 #% SYNOPSIS
-#+    ${SCRIPT_NAME} [-hv] [-o[file]] args ...
-#%
+#+    ${SCRIPT_NAME}    [-hv]
+#%                      --start             OPTIONS             #Standalone run: used to start the monitoring
+#%                      --stop                                  #Standalone run: used to stop the monitoring
+#%                      --sleep <time>      OPTIONS             #sleep <time> seconds while monitoring system wide
+#%                      OPTIONS --command   command args        #Monitoring a command
 #% DESCRIPTION
 #%    This is a script template
 #%    to start any good shell script.
@@ -162,8 +165,18 @@ GNU_AWK_FLAG="$(awk --version 2>/dev/null | head -1 | grep GNU)"
 fileRC="${SCRIPT_DIR_TEMP}/${SCRIPT_UNIQ_DATED}.tmp.rc";
 fileLock="${SCRIPT_DIR_TEMP}/${SCRIPT_UNIQ}.lock"
 fileLog="$USER_PATH/log_$SCRIPT_UNIQ_DATED"
+fileAnnotate=${fileLog}.annotate
 
 _PYTHON_IMAGE_PATH=""
+
+SLEEP_TIME=0
+
+#== Annotation ==#
+YAMB_ANNOTATE_LOG_FILE="/tmp/yamb_annotate_log_file"
+
+
+
+
 
 
 rc=0;
@@ -180,23 +193,33 @@ flagOptImage=0
 flagOptIgnoreLock=0
 flagOptImageRequired=0
 flagOptImageWithNoPath=0
+flagActionStart=0
+flagActionCommand=0
+flagActionSleep=0
+flagActionStop=0
+
 
 #============================
 #  PARSE OPTIONS WITH GETOPTS
 #============================
 
   #== set short options ==#
-SCRIPT_OPTS=':a:o:i:txhv-:'
+SCRIPT_OPTS=':a:o:i:w:x:thvyz-:'
 
   #== set long options associated with short one ==#
 typeset -A ARRAY_OPTS
 ARRAY_OPTS=(
 	[timelog]=t
-	[ignorelock]=x
+#	[ignorelock]=x
 	[output]=o
 	[image]=i
 	[help]=h
 	[man]=h
+
+    [sleep]=w
+	[command]=x
+	[start]=y
+	[stop]=z
 )
 
   #== parse options ==#
@@ -232,6 +255,35 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
 
 	#== manage options ==#
 	case "$OPTION" in
+        y )
+#            echo "START"
+            flagActionStart=1
+
+        ;;
+
+        z )
+#            echo "STOP"
+            flagActionStop=1
+        ;;
+
+        x )
+#            echo "COMMAND"
+            flagActionCommand=1
+
+        ;;
+
+        w )
+#            echo "SLEEP"
+            if [[ $OPTARG =~ ^-?[0-9]+$ ]]; then
+                SLEEP_TIME=$OPTARG
+            else
+                error "Sleep has to be used with a integer (number of second to sleep)"
+                exit -1
+            fi
+            flagActionSleep=1
+
+        ;;
+
 		o ) fileLog="$USER_PATH/${OPTARG}"
 			[[ "${OPTARG}" = *"DEFAULT" ]] && fileLog="$( echo ${OPTARG} | sed -e "s/DEFAULT/${SCRIPT_UNIQ_DATED}.log/g" )"
             if [[ "${OPTARG:0:1}" == / || "${OPTARG:0:2}" == ~[/a-z] ]]
@@ -240,6 +292,8 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
             else
                 fileLog="$USER_PATH/${OPTARG}"
             fi
+
+            fileAnnotate=${fileLog}.annotate
 			flagOptLog=1
 		;;
 
@@ -268,7 +322,7 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
 			exit 0
 		;;
 
-		: ) echo HOOOOHOHOHO
+		: )
 		    if  [ "$OPTARG" == "i" ] ; then
                 flagOptImageRequired=1
 		    else
@@ -283,6 +337,9 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
 	esac
 done
 shift $((${OPTIND} - 1)) ## shift options
+
+
+
 
 #=======================================================================================================================
 #=======================================================================================================================
@@ -305,26 +362,28 @@ _PERF_CMD="$_PERF_PREFIX $_PERF_LOG $_EVENTS -I $_PERF_RATE"
 _LOG_FILE_PATH_SAVE="/tmp/yamb_log_file"
 _IS_DISPLAY_AVAILABLE=false
 _PYTHON_CMD="python $SCRIPT_PYTHON"
+_PYTHON_IMAGE_CMD=""
+_PYTHON_ANNOTATE_CMD=""
 
-#Param 1: path of the log file
 f_execute_python (){
 
-    echo     "python $SCRIPT_PYTHON $fileLog $_PYTHON_IMAGE_CMD"
-    python $SCRIPT_PYTHON $fileLog $_PYTHON_IMAGE_CMD
 
-
+    _PYTHON_CMD="$SCRIPT_PYTHON --data $fileLog $_PYTHON_IMAGE_CMD $_PYTHON_ANNOTATE_CMD"
+    info "Python execution: $_PYTHON_CMD"
+    python $_PYTHON_CMD
 }
 
 f_start_monitoring (){
-    echo $fileLog > $_LOG_FILE_PATH_SAVE
+    #Save the log's path in a temporary file /tmp/yamb_log_file and remove previous run's information
+    echo "$fileLog  $(date +%s%N | cut -b1-13)" > $_LOG_FILE_PATH_SAVE
+    rm $YAMB_ANNOTATE_LOG_FILE 2&> /dev/null
     bash -c " $_PERF_CMD " &
-
 }
 
 
 f_stop_monitoring (){
-    $fileLog=$(cat $_LOG_FILE_PATH_SAVE)
-    echo "OFF" > $_LOG_FILE_PATH_SAVE
+    #Recover information from the running session
+    fileLog=$(cat $_LOG_FILE_PATH_SAVE | awk '{print $1}' )
     _PID=`ps aux |  grep "perf stat -a" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
     while [ ! -z $_PID ] ; do
         info    "YAMB process found and killed (PID=$_PID)"
@@ -332,26 +391,51 @@ f_stop_monitoring (){
         _PID=`ps aux |  grep "perf stat -a" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
     done
 
-    f_execute_python
+    #Annotation file: add the start date in the first line of the annotation file
+    fileAnnotate=${fileLog}.annotate
+    mv $YAMB_ANNOTATE_LOG_FILE $fileAnnotate  2> /dev/null
+
+    #-- PYTHON: annotation
+    if [  -f $fileAnnotate ]; then
+        echo "An annotation file was found: $fileAnnotate"
+        time_start=$(cat $_LOG_FILE_PATH_SAVE | awk '{print $2}' )
+        sed -i " 1 s/.*/& $time_start/" $fileLog
+        _PYTHON_ANNOTATE_CMD=" --annotate ${fileLog}.annotate "
+    fi
+
+    echo "OFF" > $_LOG_FILE_PATH_SAVE
+}
+
+
+f_sanity_check (){
+    if [ "$#" -ne 1 ] && [ "$1" == "--stop" ]; then
+        echo "stop has to be used without other options"
+        exit -1
+    fi
 }
 
 f_configure (){
+
+    #User wants to print the graph into a PNG file: no screen output
     if [[ $flagOptImageRequired -eq 1 ]]; then
         info    "Python output to png file"
         _PYTHON_IMAGE_CMD="-i $_PYTHON_IMAGE_PATH"
         _IS_DISPLAY_AVAILABLE=false
     else
+    #Is no option set: check if the display is available
         if `python -c "import matplotlib.pyplot as plt;plt.figure()" 2&> /dev/null`  ; then
             info "Python will show the graph on the screen"
             _IS_DISPLAY_AVAILABLE=true
         else
+    #If the display is not available: generate a picture with the same name as the log file
             warning "No display has been found (Hint: try to < ssh -X > the node)"
             info    "Python output will be redirected in a png file"
             _PYTHON_IMAGE_CMD="-i "
             _IS_DISPLAY_AVAILABLE=false
-
         fi
     fi
+
+
 
 
 }
@@ -360,103 +444,80 @@ f_print_configuration (){
     echo ""
     info "  _ SCRIPT PATH:          $SCRIPT_DIR/$SCRIPT_NAME"
     info "  _ SCRIPT DIR:           $SCRIPT_DIR"
-    info "  _ PYTHON PARSER:        $SCRIPT_PYTHON"
-    info "  _ PYTHON CMD:           $_PYTHON_CMD"
-    info "  _ PYTHON_IMAGE_CMD:     $_PYTHON_IMAGE_CMD"
     info "  _ PRINT ON SCREEN:      $_IS_DISPLAY_AVAILABLE"
     info "  _ LOG FILE PATH:        $fileLog"
+    info "  _ LOG ANNOTATE PATH:    $fileAnnotate"
     info "  _ SAMPLE (every N ms):  $_PERF_RATE"
     info "  _ COMMAND PERF:         $_PERF_CMD"
+    info "  _ PYTHON PARSER:        $SCRIPT_PYTHON"
     echo ""
 }
 
 f_check_start (){
    if ! grep -q OFF "$_LOG_FILE_PATH_SAVE" ; then
-        error "YAMB is already launched"
+        error "YAMB is already running"
         exit -1
     fi
-
-
 }
-
-
-
-#if [[ $flagOptImageRequired -eq 1 ]]; then
-#    if [[ $flagOptImageWithNoPath -eq 1 ]]; then
-#
-#    else
-#
-#    fi
-#
-#fi
-
-
-#_PYTHON_IMAGE_CMD=""
-#if [[ $flagOptImageRequired -eq 1 ]]; then
-#    _PYTHON_IMAGE_PATH="$fileLog"".png"
-#    info " Image required without path -> will use the log file name : $_PYTHON_IMAGE_PATH"
-#    !
-#
-#fi
-#
-#info $_PYTHON_CMD $fileLog $_PYTHON_IMAGE_CMD
-#info $_PYTHON_CMD $fileLog $_PYTHON_IMAGE_CMD
-#info $_PYTHON_CMD $fileLog $_PYTHON_IMAGE_CMD
-#info $_PYTHON_CMD $fileLog $_PYTHON_IMAGE_CMD
-
-
 
 
 [ $flagOptErr -eq 1 ] && usage 1>&2 && exit 1 ## print usage if option error and exit
 
-  #== Check/Set arguments ==#
-#[[ $# -gt 3 ]] && error "${SCRIPT_NAME}: Too many arguments" && usage 1>&2 && exit 2
 
 
 
+#----------
+#   INIT  -
+#----------
 info "---- CONFIGURATION ----"
+f_sanity_check $*
 f_configure
-
-
-
-
 f_print_configuration
 
 
 
-#re='^[0-9]+$'
 
 #----------
 #  START  -
+#   - Standalone
+#   - For a command
+#   - For a time
 #----------
-if [ "$1" == "start" ]; then
+if [[ ${flagActionStart} -eq 1 ]]; then
     info "-> ACTION START: standalone"
     f_check_start
     f_start_monitoring
 
-
-elif [ -x "$(command -v $1)" ]; then
+elif [[ ${flagActionCommand} -eq 1 ]]; then
+#elif [ -x "$(command -v $1)" ]; then
     info "-> ACTION START: monitor the following command: $1"
     f_check_start
 
-elif [[ $1 =~ ^-?[0-9]+$ ]]; then
-    info "_START monitoring for $1 seconds"
+
+elif [[ ${flagActionSleep} -eq 1 ]]; then
+#elif [[ $1 =~ ^-?[0-9]+$ ]]; then
+    info "_START monitoring for $SLEEP_TIME seconds"
     f_check_start
 
 
 #----------
 #   STOP  -
 #----------
-elif  [ "$1" == "stop" ]; then
+elif [[ ${flagActionStop} -eq 1 ]]; then
     info "ACTION _STOP "
     is_yamb_running=$(cat $_LOG_FILE_PATH_SAVE)
 
     if grep -q OFF "$_LOG_FILE_PATH_SAVE" ; then
-        error "YAMB was not launched..."
+        error "YAMB was not running..."
         exit -1
     fi
 
     f_stop_monitoring
+    f_execute_python
+
+
+
+
 else
     error "${SCRIPT_NAME}: Wrong argument" && usage 1>&2 && exit 2
 fi
@@ -497,6 +558,4 @@ scriptfinish ; } 2>&1 | tee ${fileLog}
   #=========#
 rc_restore
 exit $rc
-
-
 
