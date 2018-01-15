@@ -21,6 +21,7 @@ import matplotlib,os
 
 
 
+# Check if display is available
 r = os.system('python -c "import matplotlib.pyplot as plt;plt.figure()" 2&> /dev/null')
 if r != 0:
     matplotlib.use('Agg')
@@ -30,19 +31,39 @@ else:
 
 
 
+def check_color(color):
+    try:
+        # Converting 'deep sky blue' to 'deepskyblue'
+        color = color.replace(" ", "")
+        Color(color)
+        # if everything goes fine then return True
+        return color
+    except ValueError: # The color code was not found
+        return color
+
 
 
 # sys.exit(-1)
 def parse_parameter ():
     global path_log_file
     global path_image_file
+    global path_annotate_file
 
     parser = argparse.ArgumentParser(description='Generate a graph based on a log file gathered with YAMB profiling tool.')
-    parser.add_argument('path_log',
+    # parser.add_argument('path_log',
+    #                     help='log file where data are stored')
+
+    parser.add_argument('-d', '--data', dest='path_log', nargs='?', type=str, default="not_set",
                         help='log file where data are stored')
 
     parser.add_argument('-i', '--image', dest='path_image', nargs='?', type=str, default="not_set",
                         help='Print the graph to a .png file ')
+
+    # parser.add_argument('-k', '--kimage', dest='kpath_image', nargs='?', type=str, default="not_set",
+    #                     help='Print the grakk ')
+
+    parser.add_argument('-a', '--annotate', dest='path_annotate', nargs=1, type=str, default="not_set",
+                        help='This file will be used to annotate the graph')
 
     parser.add_argument('--version', action='version', version='%(prog)s 0.2')
 
@@ -52,7 +73,7 @@ def parse_parameter ():
     #-- LOG --
     path_log_file = args.path_log
     if not os.path.exists(path_log_file):
-        print "File does not exist"
+        print "File does not exist: " + path_log_file
         sys.exit(-1)
 
     #-- IMAGE --
@@ -67,11 +88,23 @@ def parse_parameter ():
         path_image_file=args.path_image
 
 
+    #--ANNOTATE
+    if not args.path_annotate == "not_set":
+        path_annotate_file= ''.join(str(e) for e in args.path_annotate)
+        if not os.path.exists(path_annotate_file):
+            print "Annotation file does not exist: " + path_annotate_file
+            path_annotate_file= "ezajjkalz"
+            sys.exit(-2)
+        # print "Annotate file specified " + path_annotate_file
+
+
+
 
 
 
 
 def parse_values (file_name):
+    global start_time
     arr = np.loadtxt(file_name, delimiter=',', usecols=(0, 1), skiprows=2 )
     type = np.loadtxt(file_name,dtype=str, delimiter=',', usecols=[3] )
     res_values_read = np.empty((0,6), float)
@@ -138,14 +171,17 @@ def parse_values (file_name):
 #Some init
 path_log_file   = ""
 path_image_file = ""
+path_annotate_file= ""
+start_time = 0
 np_array_read = np.empty((0,6), float)
 timing=np.empty([1,0])
 
-#Check
+
+#-- PARSING COMMAND LINE --
 parse_parameter()
 
 
-## PARSE LOG FILES TO GET THE READ AND WRITE BANDWIDTH ##
+##-- PARSE LOG FILES TO GET THE READ AND WRITE BANDWIDTH --
 timing,y_Total_read, y_Total_write   = parse_values(path_log_file)
 # print ("----- TIMING -------")
 # print timing
@@ -155,15 +191,12 @@ timing,y_Total_read, y_Total_write   = parse_values(path_log_file)
 # print ("------ WRITE -----")
 # print y_Total_write
 # print y_Total_write.shape
-
-
-
-## CALCULATING THE TOTAL BANDWIDTH
 y_Total    = np.add (y_Total_read,y_Total_write)
 
 
-## PLOT THE RESULTS
 
+
+## PLOT THE RESULTS
 bkgd_color='black'
 text_color='white'
 
@@ -182,6 +215,7 @@ title_font = {'fontname':'Arial', 'size':'20', 'color':'black', 'weight':'bold',
               'verticalalignment':'bottom'} # Bottom vertical alignment for more space
 axis_font = {'fontname':'Arial', 'size':'14', 'weight':'bold'}
 
+
 plt.gcf().set_facecolor('white')
 plt.xlabel("Time (second)", **axis_font)
 plt.ylabel("Bandwidth (Mib/second)", **axis_font)
@@ -189,6 +223,37 @@ plt.title ("MEMORY BANDWIDTH MONITORING", **title_font)
 plt.legend(loc=0,
            ncol=1, borderaxespad=0.)
 plt.grid(True)
+
+
+
+#-- Annotation: If an annotation file was provided, use it
+print path_annotate_file
+if os.path.exists(path_annotate_file):
+    print "GRAPH WILL BE ANNOTATED"
+
+    #Parse the annotation file into content
+    content=[]
+    with open(path_annotate_file, 'r') as f:
+        content = f.readlines ()
+    print path_annotate_file + " " + str(content)
+    time  = [int(x.split(' ')[0]) for x in content]
+    flag  = [x.split(' ')[1] for x in content]
+    color = [x.split(' ')[2][:-1] for x in content]
+
+    print time
+    #For each annotation: draw a vertical line with its label and color
+    with open(path_log_file, 'r') as f:
+        start_time = int(f.readline().split(' ')[-1])
+
+    for i in range (len(time)):
+        print str(time[i]) + " - " + flag[i] + " - " + color[i]
+        X=(time[i]-start_time)/1000
+        plt.axvline(x=X, linestyle='dashed', color='#425563')
+        try:
+            plt.text(X-0.1,max(y_Total)/2,flag[i],rotation=90, color=color[i], weight='bold')
+        except:
+            print "Something went wrong with annotation file: check the name of the color"
+
 
 
 
