@@ -247,7 +247,8 @@ if os.path.exists(path_annotate_file):
 
     for i in range (len(time)):
         print str(time[i]) + " - " + flag[i] + " - " + color[i]
-        X=(time[i]-start_time)/1000
+        X=(time[i]-start_time)/1000.0
+        print "       " + str(time[i]) + " - " + str(start_time) + " = " + str( X)
         plt.axvline(x=X, linestyle='dashed', color='#425563')
         try:
             plt.text(X-0.1,max(y_Total)/2,flag[i],rotation=90, color=color[i], weight='bold')
