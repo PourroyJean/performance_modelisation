@@ -1,29 +1,29 @@
-//
-// Created by Jean Pourroy on 12/01/2018.
-//
+/**
+    Thanks to http://www.jonathanbeard.io/tutorials/Mixed_C_C++
+ */
+#include <stdint.h>
 
-#ifndef PERFORMANCE_MODELISATION_CODE_ANNOTATION_H
-#define PERFORMANCE_MODELISATION_CODE_ANNOTATION_H
 
-#include <string.h>
-#include <iostream>
-#include <fstream>
+#ifdef __cplusplus
 
+#include <string>
 using namespace std;
-
-
-
-
 
 #define YAMB_ANNOTATE_LOG_FILE "/tmp/yamb_annotate_log_file"
 
-
-ofstream m_LOG_FILE;
-
-int yamb_annotate_set_event (string event_name, string color);
+#endif
 
 
 
 
+#ifdef __cplusplus
+extern "C" 
+{
+#endif
 
-#endif //PERFORMANCE_MODELISATION_CODE_ANNOTATION_H
+int yamb_annotate_set_event (char * event_name, char * color);
+
+#ifdef __cplusplus
+}
+#endif
+
