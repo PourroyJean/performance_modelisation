@@ -12,6 +12,9 @@ file(GLOB SOURCES "*.c")
 #add_executable(tool_cacheLineSize tool_cacheLineSize.c misc.c)
 #add_executable(tool_cacheSize tool_cacheSize.c misc.c)
 
+
+
+# CHANGE THIS
 add_subdirectory (tool_hw_description)
 add_subdirectory (tool_kernel_generator)
 add_subdirectory (tool_oprofile)
