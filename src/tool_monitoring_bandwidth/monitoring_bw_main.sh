@@ -150,7 +150,7 @@ SCRIPT_UNIQ="${SCRIPT_NAME%.*}${SCRIPT_ID}.${HOSTNAME%%.*}"
 SCRIPT_UNIQ_DATED="${SCRIPT_UNIQ}.$(date "+%y%m%d%H%M%S").${$}"
 SCRIPT_DIR="$( cd $(dirname "$0") && pwd )" # script directory
 SCRIPT_PYTHON="$SCRIPT_DIR""/format_log.py"
-SCRIPT_DIR_TEMP="/tmp" # Make sure temporary folder is RW
+DIR_TMP="/nfs/pourroy/tmp" # Make sure temporary folder is RW
 USER_PATH=`pwd`
 
 SCRIPT_TIMELOG_FLAG=0
@@ -162,17 +162,19 @@ EXEC_DATE=$(date "+%y%m%d%H%M%S")
 EXEC_ID=${$}
 GNU_AWK_FLAG="$(awk --version 2>/dev/null | head -1 | grep GNU)"
 
-fileRC="${SCRIPT_DIR_TEMP}/${SCRIPT_UNIQ_DATED}.tmp.rc";
-fileLock="${SCRIPT_DIR_TEMP}/${SCRIPT_UNIQ}.lock"
-fileLog="$USER_PATH/log_$SCRIPT_UNIQ_DATED"
-fileAnnotate=${fileLog}.annotate
+fileRC="${DIR_TMP}/${SCRIPT_UNIQ_DATED}.tmp.rc";
+fileLock="${DIR_TMP}/${SCRIPT_UNIQ}.lock"
+
+filebase="$USER_PATH/log_$SCRIPT_UNIQ_DATED"
+fileLog="${filebase}.perf.log"
+fileAnnotate="${filebase}.annotate"
 
 _PYTHON_IMAGE_PATH=""
 
 SLEEP_TIME=0
 
 #== Annotation ==#
-YAMB_ANNOTATE_LOG_FILE="/tmp/yamb_annotate_log_file"
+YAMB_ANNOTATE_LOG_FILE="${DIR_TMP}/yamb_annotate_log_file"
 
 
 
@@ -205,6 +207,7 @@ flagActionStop=0
 
   #== set short options ==#
 SCRIPT_OPTS=':a:o:i:w:x:thvyz-:'
+nb_arg=$#
 
   #== set long options associated with short one ==#
 typeset -A ARRAY_OPTS
@@ -284,16 +287,17 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
 
         ;;
 
-		o ) fileLog="$USER_PATH/${OPTARG}"
-			[[ "${OPTARG}" = *"DEFAULT" ]] && fileLog="$( echo ${OPTARG} | sed -e "s/DEFAULT/${SCRIPT_UNIQ_DATED}.log/g" )"
+		o ) filebase="$USER_PATH/${OPTARG}"
+			[[ "${OPTARG}" = *"DEFAULT" ]] && filebase="$( echo ${OPTARG} | sed -e "s/DEFAULT/${SCRIPT_UNIQ_DATED}.log/g" )"
             if [[ "${OPTARG:0:1}" == / || "${OPTARG:0:2}" == ~[/a-z] ]]
             then
-                fileLog=${OPTARG}
+                filebase=${OPTARG}
             else
-                fileLog="$USER_PATH/${OPTARG}"
+                filebase="$USER_PATH/${OPTARG}"
             fi
 
-            fileAnnotate=${fileLog}.annotate
+            fileLog=${filebase}.perf.log
+            fileAnnotate=${filebase}.annotate
 			flagOptLog=1
 		;;
 
@@ -354,36 +358,51 @@ _EVENT_BW_READ="uncore_imc_0/cas_count_read/,uncore_imc_1/cas_count_read/,uncore
 _EVENT_BW_WRITE="uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_write/,uncore_imc_2/cas_count_write/,uncore_imc_3/cas_count_write/,uncore_imc_4/cas_count_write/,uncore_imc_5/cas_count_write/"
 _EVENTS="-e ${_EVENT_BW_WRITE},${_EVENT_BW_READ}"
 _PERF_PREFIX="perf stat -a -x,  "
-_PERF_RATE=100
+_PERF_RATE=10
 _PERF_LOG="-o $fileLog"
 _PERF_CMD="$_PERF_PREFIX $_PERF_LOG $_EVENTS -I $_PERF_RATE"
 
 
-_LOG_FILE_PATH_SAVE="/tmp/yamb_log_file"
+_CONFIGURATION_FILE="${DIR_TMP}/yamb_configuration_file"
 _IS_DISPLAY_AVAILABLE=false
 _PYTHON_CMD="python $SCRIPT_PYTHON"
 _PYTHON_IMAGE_CMD=""
 _PYTHON_ANNOTATE_CMD=""
+_time_start=0
+_time_stop=0
 
 f_execute_python (){
 
 
     _PYTHON_CMD="$SCRIPT_PYTHON --data $fileLog $_PYTHON_IMAGE_CMD $_PYTHON_ANNOTATE_CMD"
     info "Python execution: $_PYTHON_CMD"
-    python $_PYTHON_CMD
+#    python $_PYTHON_CMD
+}
+
+f_optimise_annotation_file () {
+#   _time_start=1517334508659
+#   _time_stop=1517334509659
+    info "-- OPTIMISATION of Annotation file -- Start and stop : $_time_start $_time_stop"
+
+    index_start=`awk '{a[NR]=$0}END{for(i=0;i< NR;i++) if (a[i] > '$_time_start') { print i ; break }  }'  $fileAnnotate `
+    index_stop=` awk '{a[NR]=$0}END{for(i=NR;i>=1;i--) if (a[i] < '$_time_stop')  { print i ; break }  }'  $fileAnnotate `
+
+    info "-- OPTIMISATION of Annotation file -- We only keep lines between $index_start and $index_stop"
+    sed -n "$index_start,$index_stop p;$index_stop q" $fileAnnotate > ${fileAnnotate}.bis
+    mv ${fileAnnotate}.bis $fileAnnotate
 }
 
 f_start_monitoring (){
-    #Save the log's path in a temporary file /tmp/yamb_log_file and remove previous run's information
-    echo "$fileLog  $(date +%s%N | cut -b1-13)" > $_LOG_FILE_PATH_SAVE
-    rm $YAMB_ANNOTATE_LOG_FILE 2&> /dev/null
+    #Save the log's path in a temporary file ${DIR_TMP}/yamb_log_file and remove previous run's information
+    echo "$filebase  $(date +%s%N | cut -b1-13)" > $_CONFIGURATION_FILE
+#    rm $YAMB_ANNOTATE_LOG_FILE 2&> /dev/null
     bash -c " $_PERF_CMD " &
 }
 
 
 f_stop_monitoring (){
+    _time_stop=`date +%s%N | cut -b1-13`
     #Recover information from the running session
-    fileLog=$(cat $_LOG_FILE_PATH_SAVE | awk '{print $1}' )
     _PID=`ps aux |  grep "perf stat -a" | grep -v 'grep' | head -n 1  | awk '{ print $2}'`
     while [ ! -z $_PID ] ; do
         info    "YAMB process found and killed (PID=$_PID)"
@@ -392,23 +411,23 @@ f_stop_monitoring (){
     done
 
     #Annotation file: add the start date in the first line of the annotation file
-    fileAnnotate=${fileLog}.annotate
     mv $YAMB_ANNOTATE_LOG_FILE $fileAnnotate  2> /dev/null
 
     #-- PYTHON: annotation
     if [  -f $fileAnnotate ]; then
         echo "An annotation file was found: $fileAnnotate"
-        time_start=$(cat $_LOG_FILE_PATH_SAVE | awk '{print $2}' )
-        sed -i " 1 s/.*/& $time_start/" $fileLog
-        _PYTHON_ANNOTATE_CMD=" --annotate ${fileLog}.annotate "
+        _time_start=$(cat $_CONFIGURATION_FILE | awk '{print $2}' )
+        sed -i " 1 s/.*/& $_time_start/" $fileLog
+        _PYTHON_ANNOTATE_CMD=" --annotate ${fileAnnotate}"
+        f_optimise_annotation_file
     fi
 
-    echo "OFF" > $_LOG_FILE_PATH_SAVE
+    echo "OFF" > $_CONFIGURATION_FILE
 }
 
 
 f_sanity_check (){
-    if [ "$#" -ne 1 ] && [ "$1" == "--stop" ]; then
+    if [ "$nb_arg" -ne 1 ] && [[ ${flagActionStop} -eq 1 ]]; then
         echo "stop has to be used without other options"
         exit -1
     fi
@@ -435,6 +454,11 @@ f_configure (){
         fi
     fi
 
+    if [[ ${flagActionStop} -eq 1 ]]; then
+        filebase=$(cat $_CONFIGURATION_FILE | awk '{print $1}' )
+        fileLog=${filebase}.perf.log
+        fileAnnotate=${filebase}.annotate
+    fi
 
 
 
@@ -454,9 +478,11 @@ f_print_configuration (){
 }
 
 f_check_start (){
-   if ! grep -q OFF "$_LOG_FILE_PATH_SAVE" ; then
-        error "YAMB is already running"
-        exit -1
+    if [[ -e ${_CONFIGURATION_FILE} ]] ; then
+        if ! grep -q OFF "$_CONFIGURATION_FILE" ; then
+            error "YAMB is already running"
+            exit -1
+        fi
     fi
 }
 
@@ -470,8 +496,11 @@ f_check_start (){
 #   INIT  -
 #----------
 info "---- CONFIGURATION ----"
+
 f_sanity_check $*
+
 f_configure
+
 f_print_configuration
 
 
@@ -485,6 +514,9 @@ f_print_configuration
 #----------
 if [[ ${flagActionStart} -eq 1 ]]; then
     info "-> ACTION START: standalone"
+    rm $fileLog  2&> /dev/null
+    rm $fileAnnotate 2&> /dev/null
+
     f_check_start
     f_start_monitoring
 
@@ -505,9 +537,9 @@ elif [[ ${flagActionSleep} -eq 1 ]]; then
 #----------
 elif [[ ${flagActionStop} -eq 1 ]]; then
     info "ACTION _STOP "
-    is_yamb_running=$(cat $_LOG_FILE_PATH_SAVE)
+    is_yamb_running=$(cat $_CONFIGURATION_FILE)
 
-    if grep -q OFF "$_LOG_FILE_PATH_SAVE" ; then
+    if grep -q OFF "$_CONFIGURATION_FILE" ; then
         error "YAMB was not running..."
         exit -1
     fi
