@@ -38,21 +38,22 @@ int yamb_annotate_set_event(char *e, char *c) {
 
 
     m_LOG_FILE.close();
+
     return 0;
 }
 
 
 
 
-int main (){
-
-    yamb_annotate_set_event("-------", "red");
-    sleep (1);
-    yamb_annotate_set_event("+1", "blue");
-    sleep (1);
-    yamb_annotate_set_event("+1", "orange");
-    usleep (500000);
-    yamb_annotate_set_event("+0.5", "blue");
-
-}
+//int main (){
+//
+//    yamb_annotate_set_event("-------", "red");
+//    sleep (1);
+//    yamb_annotate_set_event("+1", "blue");
+//    sleep (1);
+//    yamb_annotate_set_event("+1", "orange");
+//    usleep (500000);
+//    yamb_annotate_set_event("+0.5", "blue");
+//
+//}
 

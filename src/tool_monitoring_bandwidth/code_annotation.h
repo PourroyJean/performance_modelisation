@@ -9,10 +9,10 @@
 #include <string>
 using namespace std;
 
-#define YAMB_ANNOTATE_LOG_FILE "/tmp/yamb_annotate_log_file"
 
 #endif
 
+#define YAMB_ANNOTATE_LOG_FILE "/nfs/pourroy/tmp/yamb_annotate_log_file"
 
 
 
