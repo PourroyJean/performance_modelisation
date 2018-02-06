@@ -18,7 +18,7 @@ import os.path
 import argparse
 import logging
 import matplotlib, os
-
+from math import log, sqrt, pow, fabs
 
 
 # --------------------------------------------------------------------------------------------
@@ -292,6 +292,13 @@ def parse_values(file_name):
     res_values_write = np.empty((0, 6), float)
     res_timing = np.empty([1, 0])
 
+    t1 = arr[0 + 0] [0]
+    t2 = arr[0 + 12][0]
+
+    # Get the sampling rate to scale the value gathered by perf
+    fact =  pow(10, round(log(t2-t1,10)))
+
+
     for sample in range(int(arr.shape[0] / 12)):
         line_number = sample * 12
 
@@ -316,10 +323,10 @@ def parse_values(file_name):
         # We add the raw at the bottom
         if "read" in type[line_number]:
             # print "1 - read", values
-            res_values_read = np.vstack((res_values_read, values))
+            res_values_read = np.vstack((res_values_read, [x / fact for x in values] ))
         if "write" in type[line_number]:
             # print "1 - write", values
-            res_values_write = np.vstack((res_values_write, values))
+            res_values_write = np.vstack((res_values_write, [x / fact for x in values]))
 
         values = []
         for imc in range(6):
@@ -327,10 +334,10 @@ def parse_values(file_name):
         # We add the raw at the bottom
         if "read" in type[line_number + 6]:
             # print "2 - read", values
-            res_values_read = np.vstack((res_values_read, values))
+            res_values_read = np.vstack((res_values_read, [x / fact for x in values]))
         if "write" in type[line_number + 6]:
             # print "2 - write", values
-            res_values_write = np.vstack((res_values_write, values))
+            res_values_write = np.vstack((res_values_write, [x / fact for x in values]))
 
     # print ("----- TIMING -------")
     # print (res_timing)
