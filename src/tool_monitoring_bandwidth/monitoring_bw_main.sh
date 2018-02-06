@@ -150,8 +150,9 @@ SCRIPT_UNIQ="${SCRIPT_NAME%.*}${SCRIPT_ID}.${HOSTNAME%%.*}"
 SCRIPT_UNIQ_DATED="${SCRIPT_UNIQ}.$(date "+%y%m%d%H%M%S").${$}"
 SCRIPT_DIR="$( cd $(dirname "$0") && pwd )" # script directory
 SCRIPT_PYTHON="$SCRIPT_DIR""/format_log.py"
-DIR_TMP="/nfs/pourroy/tmp" # Make sure temporary folder is RW
-USER_PATH=`pwd`
+DIR_TMP="/nfs/pourroy/tmp"                                  # Make sure temporary folder is RW
+YAMB_ANNOTATE_LOG_FILE="${DIR_TMP}/yamb_annotate_log_file"  # Make sure this file is the same as the one used in YAMB (code_annotation.h file)
+
 
 SCRIPT_TIMELOG_FLAG=0
 SCRIPT_TIMELOG_FORMAT="+%y/%m/%d@%H:%M:%S"
@@ -162,9 +163,14 @@ EXEC_DATE=$(date "+%y%m%d%H%M%S")
 EXEC_ID=${$}
 GNU_AWK_FLAG="$(awk --version 2>/dev/null | head -1 | grep GNU)"
 
+
+
+
 fileRC="${DIR_TMP}/${SCRIPT_UNIQ_DATED}.tmp.rc";
 fileLock="${DIR_TMP}/${SCRIPT_UNIQ}.lock"
 
+#Trace are generated in the current folder
+USER_PATH=`pwd`
 filebase="$USER_PATH/log_$SCRIPT_UNIQ_DATED"
 fileLog="${filebase}.perf.log"
 fileAnnotate="${filebase}.annotate"
@@ -174,7 +180,6 @@ _PYTHON_IMAGE_PATH=""
 SLEEP_TIME=0
 
 #== Annotation ==#
-YAMB_ANNOTATE_LOG_FILE="${DIR_TMP}/yamb_annotate_log_file"
 
 
 
@@ -372,30 +377,27 @@ _time_start=0
 _time_stop=0
 
 f_execute_python (){
-
-
     _PYTHON_CMD="$SCRIPT_PYTHON --data $fileLog $_PYTHON_IMAGE_CMD $_PYTHON_ANNOTATE_CMD"
     info "Python execution: $_PYTHON_CMD"
-#    python $_PYTHON_CMD
+    python $_PYTHON_CMD
 }
 
 f_optimise_annotation_file () {
-#   _time_start=1517334508659
-#   _time_stop=1517334509659
-    info "-- OPTIMISATION of Annotation file -- Start and stop : $_time_start $_time_stop"
-
+    # We are looking from annotation that append during the monitoring  ($_time_start and $_time_stop)
     index_start=`awk '{a[NR]=$0}END{for(i=0;i< NR;i++) if (a[i] > '$_time_start') { print i ; break }  }'  $fileAnnotate `
     index_stop=` awk '{a[NR]=$0}END{for(i=NR;i>=1;i--) if (a[i] < '$_time_stop')  { print i ; break }  }'  $fileAnnotate `
 
-    info "-- OPTIMISATION of Annotation file -- We only keep lines between $index_start and $index_stop"
-    sed -n "$index_start,$index_stop p;$index_stop q" $fileAnnotate > ${fileAnnotate}.bis
-    mv ${fileAnnotate}.bis $fileAnnotate
+    if [ -n "$index_start" ] && [ -n "$index_stop" ]; then
+        info "-- OPTIMISATION of Annotation file -- We only keep lines between $index_start and $index_stop"
+        sed -n "$index_start,$index_stop p;$index_stop q" $fileAnnotate > ${fileAnnotate}.bis
+        mv ${fileAnnotate}.bis $fileAnnotate
+    fi
 }
 
 f_start_monitoring (){
     #Save the log's path in a temporary file ${DIR_TMP}/yamb_log_file and remove previous run's information
     echo "$filebase  $(date +%s%N | cut -b1-13)" > $_CONFIGURATION_FILE
-#    rm $YAMB_ANNOTATE_LOG_FILE 2&> /dev/null
+    echo "bash -c " $_PERF_CMD " &"
     bash -c " $_PERF_CMD " &
 }
 
@@ -426,11 +428,18 @@ f_stop_monitoring (){
 }
 
 
+
+
+
 f_sanity_check (){
     if [ "$nb_arg" -ne 1 ] && [[ ${flagActionStop} -eq 1 ]]; then
         echo "stop has to be used without other options"
         exit -1
     fi
+
+     #== Check files ==#
+    check_cre_file "${YAMB_ANNOTATE_LOG_FILE}_test"  || (echo "Check the YAMB_ANNOTATE_LOG_FILE variable " && exit 3)
+
 }
 
 f_configure (){
@@ -463,6 +472,9 @@ f_configure (){
 
 
 }
+
+
+
 
 f_print_configuration (){
     echo ""
@@ -555,22 +567,14 @@ else
 fi
 
 
-
-
 exit
 
 
-  #== Check files ==#
-check_cre_file ${fileRC}  || exit 3
-check_cre_file ${fileLog} || exit 3
-if [[ ${flagOptIgnoreLock} -eq 0 ]]; then
-	[[ -e ${fileLock} ]] && error "${SCRIPT_NAME}: ${fileLock}: lock file detected" && exit 4
-	check_cre_file ${fileLock} || exit 4
-fi
 
   #== Create files ==#
 [[ "${fileLog}" != "/dev/null" ]] && touch ${fileLog} && fileLog="$( cd $(dirname "${fileLog}") && pwd )"/"$(basename ${fileLog})"
 [[ ! -e ${fileLock} ]] && echo "${EXEC_ID}" > ${fileLock}
+
 
   #== Main part ==#
   #===============#
