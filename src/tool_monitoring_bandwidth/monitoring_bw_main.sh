@@ -363,7 +363,7 @@ _EVENT_BW_READ="uncore_imc_0/cas_count_read/,uncore_imc_1/cas_count_read/,uncore
 _EVENT_BW_WRITE="uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_write/,uncore_imc_2/cas_count_write/,uncore_imc_3/cas_count_write/,uncore_imc_4/cas_count_write/,uncore_imc_5/cas_count_write/"
 _EVENTS="-e ${_EVENT_BW_WRITE},${_EVENT_BW_READ}"
 _PERF_PREFIX="perf stat -a -x,  "
-_PERF_RATE=10
+_PERF_RATE=100
 _PERF_LOG="-o $fileLog"
 _PERF_CMD="$_PERF_PREFIX $_PERF_LOG $_EVENTS -I $_PERF_RATE"
 

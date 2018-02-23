@@ -15,6 +15,7 @@ build
 build2
 cmake-build-debug
 
+test
 
 #NFS
 .fuse_*
