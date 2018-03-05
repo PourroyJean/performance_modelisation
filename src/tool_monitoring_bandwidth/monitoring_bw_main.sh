@@ -5,9 +5,9 @@
 #             Yet Another Memory Bandwidth Profiling Tool
 # ------------------------------------------------------------------
 #
-#   [Jean Pourroy]
-#   [Frederic Ciesielski]
-#   [Patrick Demichel]
+#   Author  [Jean Pourroy - jean.pourroy at g_:) _mail.com]
+#           [Frederic Ciesielski]
+#           [Patrick Demichel]
 # ------------------------------------------------------------------
 # Source: https://github.com/PourroyJean/performance_modelisation
 # ------------------------------------------------------------------
