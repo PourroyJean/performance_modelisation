@@ -2,6 +2,8 @@
 
 # ------------------------------------------------------------------
 #   Author  [Jean Pourroy - jean.pourroy at g_:) _mail.com]
+#           [Frederic Ciesielski]
+#           [Patrick Demichel]
 #
 #   Description: Bash file using to start/stop fixed_function for Skylake Architecture through /dev/msu/*msr interface
 #
@@ -16,12 +18,11 @@
 # ------------------------------------------------------------------
 
 VERSION=1.0
-USAGE="Usage: $0 {enable, disable, start, stop, check, read, reset}
+USAGE="Usage: $0 {enable, disable, start, stop, read, reset}
              - enable   enabling   fixed function from the global registers               A32_PERF_GLOBAL_CTRL
              - disable  disabling  fixed function counters from the global registers      IA32_PERF_GLOBAL_CTRL
              - start    setup and start the fixed function counters                       IA32_PERFEVTSEL
              - stop     stop the fixed function counters                                  IA32_PERFEVTSEL
-             - check    dump the fixed function configuration                             IA32_PERFEVTSEL
              - read     dump the  PMC counters                                            IA32_PMC
              - reset    set the value 0 in the PMC counters                               IA32_PMC\n"
 
@@ -137,20 +138,8 @@ function command_stop (){
     done
 
 }
-#
-#function command_check () {
-#
-#	echo "Printing out all fixed function configuration"
-#    echo "Config        fixed function_1     fixed function_2     fixed function_3     fixed function_4"
-#    for core in `seq 0 $MAXCORE`
-#    do
-#        v1=`$MSR_TOOS_DIR/rdmsr -p $core 0x186`
-#        v2=`$MSR_TOOS_DIR/rdmsr -p $core 0x187`
-#        v3=`$MSR_TOOS_DIR/rdmsr -p $core 0x188`
-#        v4=`$MSR_TOOS_DIR/rdmsr -p $core 0x189`
-#        printf "Core %02d : %10s %10s %10s %10s \n" $core  $v1  $v2  $v3  $v4
-#    done
-#}
+
+
 
 function command_read (){
     echo "Reading    Function_1  Function_2  Function_3"

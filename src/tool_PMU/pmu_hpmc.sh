@@ -2,6 +2,8 @@
 
 # ------------------------------------------------------------------
 #   Author  [Jean Pourroy - jean.pourroy at g_:) _mail.com]
+#           [Frederic Ciesielski]
+#           [Patrick Demichel]
 #
 #   Description: Bash file using to start/stop HPMC counters for Skylake Architecture through /dev/msu/*msr interface
 #
