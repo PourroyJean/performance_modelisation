@@ -65,5 +65,9 @@ src/PMU_research/uncore_pci/skylake_nda_information
 *.nls
 *.synctex.gz
 
+#Emacs temporary files
+*~
+\#*\#
+.\#*
 
 his_oprofile*
