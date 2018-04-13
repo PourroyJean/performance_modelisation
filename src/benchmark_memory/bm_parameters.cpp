@@ -10,6 +10,7 @@
 #include "misc.h"
 #include "bm_misc.h"
 #include <algorithm>
+#include "bm_benchmark.h"
 
 
 using namespace ez;
@@ -26,8 +27,7 @@ using namespace std;
 #endif
 
 
-
-void bm_parameters::print_configuration () {
+void bm_parameters::print_configuration() {
     printf("%20s    %-10s \n", "m_type", getValue(m_type).c_str());
     printf("%20s    %-10s \n", "m_mode", getValue(m_mode).c_str());
     printf("%20s    %-10d \n", "m_MAT_SIZE", m_MAT_SIZE);
@@ -37,17 +37,97 @@ void bm_parameters::print_configuration () {
     printf("%20s    %-10s \n", "m_display", getValue(m_DISP).c_str());
     printf("%20s    %-10d \n", "m_PID", m_PID);
 }
+
 int bm_parameters::init_arguments(int argc, const char *argv[]) {
     //Setup the command to parse
-    setup_parser (argc, argv);
+    setup_parser(argc, argv);
 
     //Parse and check the argument validity
     parse_arguments(argc, argv);
+
+    //Select the correct benchmark
+
+    //----- READ BENCHMARK -----
+    if (m_type == BENCH_TYPE::READ) {
+        if (m_mode == BENCH_MODE::NORMAL) {
+            if (m_UNROLL == UNROLL1) {
+                m_BENCHMARK = sum_read_unroll1;
+            } else if (m_UNROLL == UNROLL2) {
+                m_BENCHMARK = sum_read_unroll2;
+            } else if (m_UNROLL == UNROLL4) {
+                m_BENCHMARK = sum_read_unroll4;
+            } else if (m_UNROLL == UNROLL8) {
+                m_BENCHMARK = sum_read_unroll8;
+            }
+        }
+        if (m_mode == BENCH_MODE::SPECIAL) {
+            if (m_UNROLL == UNROLL1) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL2) {
+                m_BENCHMARK = sum_readspe_unroll2;
+            } else if (m_UNROLL == UNROLL4) {
+                m_BENCHMARK = sum_readspe_unroll4;
+            } else if (m_UNROLL == UNROLL8) {
+                m_BENCHMARK = sum_readspe_unroll8;
+            }
+        }
+
+        if (m_mode == BENCH_MODE::INDEXED) {
+            if (m_UNROLL == UNROLL1) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL2) {
+                m_BENCHMARK = sum_readind_unroll2;
+            } else if (m_UNROLL == UNROLL4) {
+                m_BENCHMARK = sum_readind_unroll4;
+            } else if (m_UNROLL == UNROLL8) {
+                m_BENCHMARK = sum_readind_unroll8;
+            }
+        }
+    }
+        //----- WRITE BENCHMARK -----
+    else if (m_type == BENCH_TYPE::WRITE) {
+        if (m_mode == BENCH_MODE::NORMAL) {
+            if (m_UNROLL == UNROLL1) {
+                m_BENCHMARK = sum_write_unroll1;
+            } else if (m_UNROLL == UNROLL2) {
+                m_BENCHMARK = sum_write_unroll2;
+            } else if (m_UNROLL == UNROLL4) {
+                m_BENCHMARK = sum_write_unroll4;
+            } else if (m_UNROLL == UNROLL8) {
+                m_BENCHMARK = sum_write_unroll8;
+            }
+        }
+        if (m_mode == BENCH_MODE::SPECIAL) {
+            if (m_UNROLL == UNROLL1) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL2) {
+                m_BENCHMARK = sum_writespe_unroll2;
+            } else if (m_UNROLL == UNROLL4) {
+                m_BENCHMARK = sum_writespe_unroll4;
+            } else if (m_UNROLL == UNROLL8) {
+                m_BENCHMARK = sum_writespe_unroll8;
+            }
+        }
+
+        if (m_mode == BENCH_MODE::INDEXED) {
+            if (m_UNROLL == UNROLL1) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL2) {
+                m_BENCHMARK = sum_writeind_unroll2;
+            } else if (m_UNROLL == UNROLL4) {
+                m_BENCHMARK = sum_writeind_unroll4;
+            } else if (m_UNROLL == UNROLL8) {
+                m_BENCHMARK = sum_writeind_unroll8;
+            }
+        }
+    }
 }
 
 int bm_parameters::setup_parser(int argc, const char *argv[]) {
-
-//    DEBUG << "ARGUMENT PARSING\n";
 
     opt.overview = "The unrolled version expect multiply of the unroll factor since this is a performance code we do not care loosing the last elements of the normal loop.";
     opt.syntax = "full [OPTIONS]";
@@ -72,7 +152,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--matrixsize" // Flag token.
     );
 
-//    init_uint64_parm(argc, argv, &MAT_OFFSET, "MAT_OFFSET");
     opt.add(
             "0", // Default.
             0, // Required?
@@ -83,7 +162,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--matrixoffset" // Flag token.
     );
 
-//    init_uint64_parm(argc, argv, &CPU_AFF, "CPU_AFF");
     opt.add(
             "0", // Default.
             0, // Required?
@@ -94,7 +172,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
 
-//    init_uint64_parm(argc, argv, &MEM_AFF, "MEM_AFF");
     opt.add(
             "0", // Default.
             0, // Required?
@@ -105,7 +182,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
 
-//    init_uint64_parm(argc, argv, &MAX_OPS, "MAX_OPS");
     opt.add(
             "1", // Default.
             0, // Required?
@@ -117,7 +193,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--maxops" // Flag token.
     );
 
-//    init_int_parm(argc, argv, &VERBOSE, "VERBOSE");
     opt.add(
             "1", // Default.
             0, // Required?
@@ -127,7 +202,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--verbose" // Flag token.
     );
 
-//    init_int_parm(argc, argv, &GHZ, "GHZ");
     opt.add(
             "0", // Default.
             0, // Required?
@@ -137,7 +211,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--ghz" // Flag token.
     );
 
-//    init_int_parm(argc, argv, &MIN_STRIDE, "MIN_STRIDE");
     opt.add(
             to_string(sizeof(BM_DATA_TYPE)).c_str(), // Default.
             0, // Required?
@@ -148,7 +221,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--minstride" // Flag token.
     );
 
-//    init_int_parm(argc, argv, &MAX_STRIDE, "MAX_STRIDE");
     opt.add(
             to_string(1024 * 8).c_str(), // Default.
             0, // Required?
@@ -159,7 +231,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--maxstride" // Flag token.
     );
 
-//    init_int_parm(argc, argv, &MAX_MEASURES, "MAX_MEASURES");
     opt.add(
             "2", // Default.
             0, // Required?
@@ -170,7 +241,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
 
-//    init_int_parm(argc, argv, &UNROLL, "UNROLL");
     opt.add(
             "1", // Default.
             0, // Required?
@@ -180,7 +250,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--unroll" // Flag token.
     );
 
-//    init_int_parm(argc, argv, &NUM_INDEX, "NUM_INDEX");
     opt.add(
             "1", // Default.
             0, // Required?
@@ -191,7 +260,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
 
-//    init_int_parm(argc, argv, &CACHE_LINE, "CACHE_LINE");
     opt.add(
             "128", // Default.
             0, // Required?
@@ -201,7 +269,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--cacheline" // Flag token.
     );
 
-//    init_double_parm(argc, argv, &MIN_LOG10, "MIN_LOG10");
     opt.add(
             "3.0", // Default.
             0, // Required?
@@ -211,7 +278,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--minlog" // Flag token.
     );
 
-//    init_double_parm(argc, argv, &MAX_LOG10, "MAX_LOG10");
     opt.add(
             "8.0", // Default.
             0, // Required?
@@ -222,7 +288,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
 
-//    init_int_with_str_parm(argc, argv, &MODE, "MODE", "READ", MODE_READ);
     opt.add(
             "0.1", // Default.
             0, // Required?
@@ -253,10 +318,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
 
-    //    init_int_with_str_parm(argc, argv, &DISP, "DISP", "BEST", DISP_BEST);
-    //    init_int_with_str_parm(argc, argv, &DISP, "DISP", "AVE", DISP_AVE);
-    //    init_int_with_str_parm(argc, argv, &DISP, "DISP", "TWO", DISP_TWO);
-    //    init_int_with_str_parm(argc, argv, &DISP, "DISP", "ALL", DISP_ALL);
     opt.add(
             getValue(BENCH_MODE::SPECIAL).c_str(), // Default.
             0, // Required?
@@ -311,17 +372,18 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     opt.get("--prefix")->getString(m_prefix);
 
     opt.get("--mode")->getString(tmp);
-    std::transform(tmp.begin(), tmp.end(),tmp.begin(), ::toupper);
+    std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::toupper);
     m_mode = getKey(tmp);
-    if (m_mode == -1 || (m_mode != BENCH_MODE::NORMAL && m_mode != BENCH_MODE::SPECIAL && m_mode != BENCH_MODE::INDEXED)){
+    if (m_mode == -1 ||
+        (m_mode != BENCH_MODE::NORMAL && m_mode != BENCH_MODE::SPECIAL && m_mode != BENCH_MODE::INDEXED)) {
         cout << "Error check the mode value (" << tmp << " " << m_mode << ") : can be NORMAL, SPECIAL, INDEXED\n";
         exit(EXIT_FAILURE);
     }
 
     opt.get("--type")->getString(tmp);
-    std::transform(tmp.begin(), tmp.end(),tmp.begin(), ::toupper);
+    std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::toupper);
     m_type = getKey(tmp);
-    if (m_type == -1 || (m_type != BENCH_TYPE::WRITE && m_type != BENCH_TYPE::READ)){
+    if (m_type == -1 || (m_type != BENCH_TYPE::WRITE && m_type != BENCH_TYPE::READ)) {
         cout << "Error check the type value (" << tmp << ") : can be READ or WRITE\n";
         exit(EXIT_FAILURE);
     }
@@ -337,34 +399,35 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
 
     opt.get("--display")->getString(tmp);
-    std::transform(tmp.begin(), tmp.end(),tmp.begin(), ::toupper);
+    std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::toupper);
     m_DISP = getKey(tmp);
-    if (m_DISP == -1 || (m_DISP != DISP_MODE::AVERAGE && m_DISP != DISP_MODE::BEST && m_DISP != DISP_MODE::ALL &&m_DISP != DISP_MODE::TWO)){
+    if (m_DISP == -1 || (m_DISP != DISP_MODE::AVERAGE && m_DISP != DISP_MODE::BEST && m_DISP != DISP_MODE::ALL &&
+                         m_DISP != DISP_MODE::TWO)) {
         cout << "Error check the display value (" << tmp << "): can be AVERAGE BEST ALL TWO\n";
         exit(EXIT_FAILURE);
     }
 
 
     opt.get("--ghz")->getInt(m_GHZ);
-    if (! (0.0 <= m_GHZ && m_GHZ <= 10.0)){
+    if (!(0.0 <= m_GHZ && m_GHZ <= 10.0)) {
         cout << "Error: please check the ghz argument: " << m_GHZ << ": should be between 0.1 and 10\n";
         exit(EXIT_FAILURE);
     }
 
     opt.get("--unit")->getString(tmp);  //ns cy gb
-    std::transform(tmp.begin(), tmp.end(),tmp.begin(), ::toupper);
+    std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::toupper);
     m_unit = getKey(tmp);
-    if (m_unit == -1 || (m_unit != DISP_UNIT::CY && m_unit != DISP_UNIT::GB &&m_unit != DISP_UNIT::NS)){
+    if (m_unit == -1 || (m_unit != DISP_UNIT::CY && m_unit != DISP_UNIT::GB && m_unit != DISP_UNIT::NS)) {
         cout << "Error check the unit value (" << tmp << ")\n";
         exit(EXIT_FAILURE);
-    }
-    else if (m_unit == DISP_UNIT::CY && m_GHZ == 0){
-        cout << "Error: if you want to display the result in cycle, please provide the frequency of your processor with --ghz\n";
+    } else if (m_unit == DISP_UNIT::CY && m_GHZ == 0) {
+        cout
+                << "Error: if you want to display the result in cycle, please provide the frequency of your processor with --ghz\n";
         exit(EXIT_FAILURE);
     }
 
 
-        opt.get("--cacheline")->getInt(m_CACHE_LINE);
+    opt.get("--cacheline")->getInt(m_CACHE_LINE);
     if (!((m_CACHE_LINE == 64) || (m_CACHE_LINE == 128))) {
         cout << "Error: please check the cache line size: " << m_CACHE_LINE << "\n";
         exit(EXIT_FAILURE);
@@ -389,10 +452,10 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
 
     opt.get("--minstride")->getInt(m_MIN_STRIDE);
-    m_MIN_STRIDE/=sizeof(BM_DATA_TYPE);
+    m_MIN_STRIDE /= sizeof(BM_DATA_TYPE);
 
     opt.get("--maxstride")->getInt(m_MAX_STRIDE);
-    m_MAX_STRIDE/=sizeof(BM_DATA_TYPE);
+    m_MAX_STRIDE /= sizeof(BM_DATA_TYPE);
 
     opt.get("--maxmeasures")->getInt(m_MAX_MEASURES);
 
@@ -427,6 +490,7 @@ int bm_parameters::getKey(string val) {
     }
     return -1;
 }
+
 string bm_parameters::getValue(int key) {
     for (map<int, string>::iterator it = mapParameter.begin(); it != mapParameter.end(); ++it) {
         if (it->first == key) return it->second;
