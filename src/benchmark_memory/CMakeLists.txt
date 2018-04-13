@@ -14,7 +14,7 @@ include_directories(../common)
 
 #add_library(lib_bm bm_parameters.cpp)
 
-add_executable(bm bm_main.cpp bm_parameters.cpp )
+add_executable(bm bm_main.cpp bm_parameters.cpp bm_benchmark.cpp)
 
 #target_link_libraries(kg misc)
 

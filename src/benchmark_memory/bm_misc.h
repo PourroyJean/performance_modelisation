@@ -12,5 +12,10 @@
 #define MIN_OPS_PER_SCAN 128     	/* we do not measure if less MIN_OPS_PER SCAN operations per loop */
 
 
+//TODO
+extern BM_DATA_TYPE *mat;  //THE matrix :)
+
+
+
 
 #endif //__bm_common_H__
