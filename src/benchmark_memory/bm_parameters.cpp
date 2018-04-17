@@ -36,6 +36,15 @@ void bm_parameters::print_configuration() {
     printf("%20s    %-10s \n", "m_unit", getValue(m_unit).c_str());
     printf("%20s    %-10s \n", "m_display", getValue(m_DISP).c_str());
     printf("%20s    %-10d \n", "m_PID", m_PID);
+
+    if (m_mode == BENCH_MODE::NORMAL) {
+        cout << "Normal mode: \n";
+        cout << "    [X] [ ] [ ] [ ] [X] [ ] [ ] [ ] [X]  ....   [ ]\n";
+        cout << "     |               |                           | \n";
+        cout << "     \\-- Stride S ---/                           | \n";
+        cout << "     \\------------------ Size K -----------------/      \n";
+        cout << "\n";
+    }
 }
 
 int bm_parameters::init_arguments(int argc, const char *argv[]) {
@@ -232,17 +241,28 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
     opt.add(
+            "0", // Default.
+            0, // Required?
+            1, // Number of args expected.
+            0, // Delimiter if expecting multiple args.
+            "only one stride measured", // Help description.
+            "--stride" // Flag token.
+    );
+
+
+
+    opt.add(
             "2", // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
-            "number of time the measure is taken we print only the best", // Help description.
-            "--maxmeasures" // Flag token.
+            "number of time the measure is taken", // Help description.
+            "--measure" // Flag token.
     );
 
 
     opt.add(
-            "1", // Default.
+            "2", // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -319,7 +339,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
 
 
     opt.add(
-            getValue(BENCH_MODE::SPECIAL).c_str(), // Default.
+            getValue(BENCH_MODE::NORMAL).c_str(), // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -331,7 +351,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
     opt.add(
-            getValue(BENCH_TYPE::WRITE).c_str(), // Default.
+            getValue(BENCH_TYPE::READ).c_str(), // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -361,11 +381,12 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         std::string usage;
         opt.getUsage(usage, 120, ezOptionParser::INTERLEAVE);
         std::cout << usage;
-        return 0;
+        exit (0);
     }
 
 
     string tmp;
+    int itmp;
 
     m_PID = getpid();
 
@@ -439,7 +460,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--matrixsize")->getInt(m_MAT_SIZE);
     m_MAT_SIZE += 1; //TODO WHY ?
-    m_MAT_SIZE *= (1024 * 1024);
+    m_MAT_SIZE *= (1024 * 1024); // 1 mb  == 1 * 1024 * 1024 byte
     if (!(m_MAT_SIZE >= 1024 * 1024)) {
         cout << "Error: please check the size of your matrix\n";
         exit(EXIT_FAILURE);
@@ -457,7 +478,14 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     opt.get("--maxstride")->getInt(m_MAX_STRIDE);
     m_MAX_STRIDE /= sizeof(BM_DATA_TYPE);
 
-    opt.get("--maxmeasures")->getInt(m_MAX_MEASURES);
+
+    opt.get("--stride")->getInt(itmp);
+    if (itmp > 0){
+        m_MIN_STRIDE=itmp / sizeof(BM_DATA_TYPE);
+        m_MAX_STRIDE=itmp / sizeof(BM_DATA_TYPE);
+    }
+
+    opt.get("--measure")->getInt(m_MAX_MEASURES);
 
     opt.get("--matrixoffset")->getInt(m_MAT_OFFSET);
 
