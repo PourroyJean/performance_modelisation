@@ -24,7 +24,7 @@ make
 
 Here is an example explaining how to use `kg`:
 ```
-cd performance_modelisation/buid/bin/tool_hw_description/kg
+cd performance_modelisation/buid/bin/tool_kernel_generator/kg
 ./kg
 ```
 
@@ -37,7 +37,7 @@ cd performance_modelisation/buid/bin/tool_hw_description/kg
 
 ## Authors
 
-* **[Jean Pourroy](https://www.linkedin.com/in/pourroyjean/)** - PHD strudent at ENS Paris Saclay - HPE
+* **[Jean Pourroy](https://www.linkedin.com/in/pourroyjean/)** - PHD student at ENS Paris Saclay - HPE
 * **[Fred]()** - Ninja
 * **[Dml]()** - Ninja
 
