@@ -87,7 +87,6 @@ public:
     int m_MAX_MEASURES = 2;
     int m_MAT_OFFSET = 0;
     int m_NUM_INDEX = 1;
-    int m_MAKE_UNAME = 1;
     double m_MIN_LOG10 = 3.0;
     double m_MAX_LOG10 = 8.0;
     double m_STEP_LOG10 = 0.1;
