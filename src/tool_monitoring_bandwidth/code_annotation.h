@@ -21,7 +21,7 @@ extern "C"
 {
 #endif
 
-int yamb_annotate_set_event (char * event_name, char * color);
+int yamb_annotate_set_event (const char * event_name,const char * color);
 
 #ifdef __cplusplus
 }
