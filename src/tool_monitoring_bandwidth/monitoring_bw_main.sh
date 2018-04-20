@@ -173,6 +173,8 @@ fileLock="${DIR_TMP}/${SCRIPT_UNIQ}.lock"
 USER_PATH=`pwd`
 filebase="$USER_PATH/log_$SCRIPT_UNIQ_DATED"
 fileLog="${filebase}.perf.log"
+fileLog_mem="${filebase}.perf.mem"
+fileLog_cache="${filebase}.perf.cache"
 fileAnnotate="${filebase}.annotate"
 
 _PYTHON_IMAGE_PATH=""
@@ -199,6 +201,7 @@ flagOptTimeLog=0
 flagOptImage=0
 flagOptIgnoreLock=0
 flagOptImageRequired=0
+flagOptCacheMonitoring=0
 flagOptImageWithNoPath=0
 flagActionStart=0
 flagActionCommand=0
@@ -211,7 +214,7 @@ flagActionStop=0
 #============================
 
   #== set short options ==#
-SCRIPT_OPTS=':a:o:i:w:x:thvyz-:'
+SCRIPT_OPTS=':a:o:i:w:x:cthvyz-:'
 nb_arg=$#
 
   #== set long options associated with short one ==#
@@ -223,6 +226,7 @@ ARRAY_OPTS=(
 	[image]=i
 	[help]=h
 	[man]=h
+	[cache]=c
 
     [sleep]=w
 	[command]=x
@@ -302,6 +306,8 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
             fi
 
             fileLog=${filebase}.perf.log
+            fileLog_mem=${filebase}.perf.mem
+            fileLog_cache=${filebase}.perf.cache
             fileAnnotate=${filebase}.annotate
 			flagOptLog=1
 		;;
@@ -318,6 +324,9 @@ while getopts ${SCRIPT_OPTS} OPTION ; do
             fi
             flagOptImageRequired=1
 
+		;;
+
+		c ) flagOptCacheMonitoring=1
 		;;
 
 		x ) flagOptIgnoreLock=1
@@ -361,11 +370,11 @@ _PID=0
 
 _EVENT_BW_READ="uncore_imc_0/cas_count_read/,uncore_imc_1/cas_count_read/,uncore_imc_2/cas_count_read/,uncore_imc_3/cas_count_read/,uncore_imc_4/cas_count_read/,uncore_imc_5/cas_count_read/"
 _EVENT_BW_WRITE="uncore_imc_0/cas_count_write/,uncore_imc_1/cas_count_write/,uncore_imc_2/cas_count_write/,uncore_imc_3/cas_count_write/,uncore_imc_4/cas_count_write/,uncore_imc_5/cas_count_write/"
+_EVENT_CACHE_MISSES="LLC-load-misses,LLC-store-misses,L1-dcache-load-misses"
 _EVENTS="-e ${_EVENT_BW_WRITE},${_EVENT_BW_READ}"
 _PERF_PREFIX="perf stat -a -x,  "
 _PERF_RATE=100
 _PERF_LOG="-o $fileLog"
-_PERF_CMD="$_PERF_PREFIX $_PERF_LOG $_EVENTS -I $_PERF_RATE"
 
 
 _CONFIGURATION_FILE="${DIR_TMP}/yamb_configuration_file"
@@ -373,11 +382,12 @@ _IS_DISPLAY_AVAILABLE=false
 _PYTHON_CMD="python $SCRIPT_PYTHON"
 _PYTHON_IMAGE_CMD=""
 _PYTHON_ANNOTATE_CMD=""
+_PYTHON_CACHE_CMD=""
 _time_start=0
 _time_stop=0
 
 f_execute_python (){
-    _PYTHON_CMD="$SCRIPT_PYTHON --data $fileLog $_PYTHON_IMAGE_CMD $_PYTHON_ANNOTATE_CMD"
+    _PYTHON_CMD="$SCRIPT_PYTHON --data $fileLog_mem $_PYTHON_IMAGE_CMD $_PYTHON_ANNOTATE_CMD $_PYTHON_CACHE_CMD"
     info "Python execution: $_PYTHON_CMD"
     python $_PYTHON_CMD
 }
@@ -424,9 +434,23 @@ f_stop_monitoring (){
         f_optimise_annotation_file
     fi
 
+    #-- Generating two output files for memory and cache log
+    cat $fileLog | grep -v LLC | grep -v L1 > $fileLog_mem
+    cat $fileLog | grep -v imc              > $fileLog_cache
+
+#    Check if cache was enabled or not
+    if [ "$(wc -l $fileLog_cache | awk '{print $1}')" -eq 2 ]; then
+        rm $fileLog_cache
+        flagOptCacheMonitoring=0
+    else
+        flagOptCacheMonitoring=1
+        echo "Cache log was enabled"
+        _PYTHON_CACHE_CMD=" --cache ${fileLog_cache}"
+    fi
+
+
     echo "OFF" > $_CONFIGURATION_FILE
 }
-
 
 
 
@@ -466,8 +490,18 @@ f_configure (){
     if [[ ${flagActionStop} -eq 1 ]]; then
         filebase=$(cat $_CONFIGURATION_FILE | awk '{print $1}' )
         fileLog=${filebase}.perf.log
+        fileLog_cache=${filebase}.perf.cache
+        fileLog_mem=${filebase}.perf.mem
         fileAnnotate=${filebase}.annotate
     fi
+
+    if [[ ${flagOptCacheMonitoring} -eq 1 ]]; then
+        _PERF_CMD="$_PERF_PREFIX $_PERF_LOG $_EVENTS,$_EVENT_CACHE_MISSES -I $_PERF_RATE"
+    else
+        _PERF_CMD="$_PERF_PREFIX $_PERF_LOG $_EVENTS -I $_PERF_RATE"
+    fi
+
+
 
 
 
@@ -482,6 +516,8 @@ f_print_configuration (){
     info "  _ SCRIPT DIR:           $SCRIPT_DIR"
     info "  _ PRINT ON SCREEN:      $_IS_DISPLAY_AVAILABLE"
     info "  _ LOG FILE PATH:        $fileLog"
+    info "  _ LOG FILE MEM:         $fileLog_mem"
+    info "  _ LOG FILE CACHE:       $fileLog_cache"
     info "  _ LOG ANNOTATE PATH:    $fileAnnotate"
     info "  _ SAMPLE (every N ms):  $_PERF_RATE"
     info "  _ COMMAND PERF:         $_PERF_CMD"
@@ -526,8 +562,10 @@ f_print_configuration
 #----------
 if [[ ${flagActionStart} -eq 1 ]]; then
     info "-> ACTION START: standalone"
-    rm $fileLog  2&> /dev/null
-    rm $fileAnnotate 2&> /dev/null
+    rm $fileLog         2&> /dev/null
+    rm $fileLog_mem     2&> /dev/null
+    rm $fileLog_cache   2&> /dev/null
+    rm $fileAnnotate    2&> /dev/null
 
     f_check_start
     f_start_monitoring
