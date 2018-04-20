@@ -13,7 +13,7 @@
 using namespace std;
 using namespace std::chrono;
 
-int yamb_annotate_set_event(char *e, char *c) {
+int yamb_annotate_set_event(const char *e, const char *c) {
 
     //C to C++ type
     std::string event_name = string(e);

@@ -7,15 +7,19 @@ file(GLOB SOURCES "*.cxx")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 
+add_library(libAnno SHARED IMPORTED)
+set_property(TARGET libAnno PROPERTY IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so")
+
 
 
 include_directories(../common)
+include_directories(../tool_monitoring_bandwidth/)
 
 
 #add_library(lib_bm bm_parameters.cpp)
 
 add_executable(bm bm_main.cpp bm_parameters.cpp bm_benchmark.cpp)
-
+target_link_libraries (bm "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so")
 #target_link_libraries(kg misc)
 
 
