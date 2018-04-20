@@ -13,6 +13,8 @@
 #include "misc.h"
 #include "bm_parameters.h"
 #include "bm_benchmark.h"
+#include "code_annotation.h"
+
 
 using namespace std;
 
@@ -107,11 +109,17 @@ int work(bm_parameters *p) {
         printf("_ %s K = %9lld", p->m_prefix.c_str(), istride);
 
 
+        string ping = "K = " + to_string(istride);
+        yamb_annotate_set_event(ping.c_str(), "blue");
+
+
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
             double gb;
             best_measure = BIG_VAL;
             worst_measure = 0;
             sum_measures = 0.0;
+            ping = "Stride : " + to_string(step*8);
+            yamb_annotate_set_event(ping.c_str(), "red");
             for (measure = 0; measure < p->m_MAX_MEASURES; measure++) {
                 double t;
 
