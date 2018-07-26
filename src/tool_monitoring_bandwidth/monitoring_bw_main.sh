@@ -388,7 +388,7 @@ _time_stop=0
 
 f_execute_python (){
     _PYTHON_CMD="$SCRIPT_PYTHON --data $fileLog_mem $_PYTHON_IMAGE_CMD $_PYTHON_ANNOTATE_CMD $_PYTHON_CACHE_CMD"
-    info "Python execution: $_PYTHON_CMD"
+    info "Python execution: python $_PYTHON_CMD"
     python $_PYTHON_CMD
 }
 
@@ -482,7 +482,7 @@ f_configure (){
     #If the display is not available: generate a picture with the same name as the log file
             warning "No display has been found (Hint: try to < ssh -X > the node)"
             info    "Python output will be redirected in a png file"
-            _PYTHON_IMAGE_CMD="-i "
+#            _PYTHON_IMAGE_CMD="-i " //todo uncomment this line
             _IS_DISPLAY_AVAILABLE=false
         fi
     fi
