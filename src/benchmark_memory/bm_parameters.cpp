@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cmath>
 #include "bm_benchmark.h"
+#include "bm_misc.h"
 
 
 using namespace ez;
@@ -36,6 +37,7 @@ void bm_parameters::print_configuration() {
     printf("  %-25s    %-10s \n", "Benchmark type", getValue(m_type).c_str());
     printf("  %-25s    %-10s \n", "Benchmark mode", getValue(m_mode).c_str());
     printf("  %-25s    %-10s \n", "Matrix size", convert_size(m_MAT_SIZE).c_str());
+    printf("  %-25s    %-10d \n", "Number of thread", mpi_size);
     printf("  %-25s    %-10s \n", "Memory page size", m_is_huge_pages ? "Huge Pages (2 MiB)" : "Default (4 KiB)");
     printf("  %-25s    %-10lu\n", "Number of element", m_MAT_NB_ELEM);
     printf("  %-25s    %-10d \n", "Number of manual unroll", m_UNROLL);
@@ -409,7 +411,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
 
 int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
-    DEBUG << " - PARSING -\n";
+    DEBUG_MPI << " - PARSING -\n";
     opt.parse(argc, argv);
 
 
@@ -496,7 +498,6 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     opt.get("--memaff")->getInt(m_MEM_AFF);
 
     opt.get("--matrixsize")->getULong(m_MAT_SIZE);
-    cout << "En byte: " << m_MAT_SIZE <<endl;
 
 //    m_MAT_SIZE += 1; //TODO WHY ?
     m_MAT_SIZE *= (1024 * 1024); // 1 mb  == 1 * 1024 * 1024 byte
@@ -568,7 +569,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     string line;
     std::istringstream f(pretty);
     while (std::getline(f, line)) {
-        DEBUG << line << std::endl;
+        DEBUG_MPI << line << std::endl;
     }
 }
 
