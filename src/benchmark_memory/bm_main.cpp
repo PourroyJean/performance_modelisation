@@ -38,7 +38,7 @@ double total_loops = 0.01; //TODO metre a 0
 
 BM_DATA_TYPE *mat;  //THE matrix :)
 bool WITH_MPI = false;
-
+bool IS_LOG = false;
 #define ADDR (0x0UL)
 
 
@@ -132,6 +132,9 @@ int main(int argc, const char *argv[]) {
     return (0);
 }
 
+#define LOG p->m_log_file
+// ? ( p->m_log_file ) :  (cout)
+
 int work(bm_parameters *p) {
     //Some init
     double log_max_index, time1, time2, ns_per_op, num_ops, best_measure, worst_measure, sum_measures;
@@ -142,14 +145,33 @@ int work(bm_parameters *p) {
     //Print header
     if (mpi_rank == 0) {
         printf("_ %s Stride  S   ->", p->m_prefix.c_str());
-        for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
+        if (p->m_is_log){
+            LOG << "-1," << flush;
+        }
 
-            if (p->m_DISP == DISP_MODE::AVERAGE) printf("%11d", step * 8);
-            if (p->m_DISP == DISP_MODE::BEST) printf("%11d", step * 8);
-            if (p->m_DISP == DISP_MODE::TWO) printf("%11d%11d", step * 8, step * 8);
-            if (p->m_DISP == DISP_MODE::ALL) printf("%11d%11d%11d", step * 8, step * 8, step * 8);
+        for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
+            char res_str [10];
+
+            if (p->m_DISP == DISP_MODE::AVERAGE) sprintf(res_str, "%11d", step * 8);
+            if (p->m_DISP == DISP_MODE::BEST) sprintf(res_str,"%11d", step * 8);
+            if (p->m_DISP == DISP_MODE::TWO) sprintf(res_str,"%11d%11d", step * 8, step * 8);
+            if (p->m_DISP == DISP_MODE::ALL) sprintf(res_str,"%11d%11d%11d", step * 8, step * 8, step * 8);
+            cout << res_str;
+            if(p->m_is_log) {
+                string s(res_str);
+                s.erase(remove(s.begin(), s.end(), ' '), s.end());
+
+                LOG << s  << flush;
+                if (step != p->m_MAX_STRIDE){
+                    LOG << ","<< flush;
+                }
+            }
+
         }
         printf("\n");
+        if (p->m_is_log){
+            LOG << '\n' << flush;
+        }
 
         printf("_ %s Value       ->", p->m_prefix.c_str());
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
@@ -173,11 +195,17 @@ int work(bm_parameters *p) {
 
         if (mpi_rank == 0) {
             printf("_ %s K = %10s", p->m_prefix.c_str(), convert_size(istride * 1024).c_str());
+
+            LOG << istride * 1024  << "," << flush;
+
             string ping = "K = " + convert_size(istride * 1024);
             yamb_annotate_set_event(ping.c_str(), "blue");
         }
 
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
+            if (step != p->m_MIN_STRIDE ){
+                LOG  << "," << flush;
+            }
             double gb;
             best_measure = BIG_VAL;
             worst_measure = 0;
@@ -228,6 +256,7 @@ int work(bm_parameters *p) {
 
             if (num_ops < BIG_VAL) {
 
+                char res_str [10];
 
                 //Print the best measure
                 ns_per_op = best_measure / num_ops;
@@ -236,7 +265,9 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
                 if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
                 if ((p->m_DISP == DISP_MODE::BEST || p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO)) {
-                    printf("%11.2f", ns_per_op);
+                    sprintf(res_str, "%11.2f", ns_per_op);
+                    cout << res_str;
+                    LOG  << ns_per_op << "" << flush;
                 }
 
                 //Print the worst measure
@@ -246,7 +277,9 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
                 if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
                 if (p->m_DISP == DISP_MODE::ALL) {
-                    printf("%11.2f", ns_per_op);
+                    sprintf(res_str, "%11.2f", ns_per_op);
+                    cout << res_str;
+                    LOG  << ns_per_op << "" << flush;
                 }
 
                 //Print the average measure
@@ -260,14 +293,18 @@ int work(bm_parameters *p) {
                     ns_per_op *= p->m_GHZ;
                 }
                 if (p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO || p->m_DISP == DISP_MODE::AVERAGE) {
-                    printf("%11.2f", ns_per_op);
+                    sprintf(res_str, "%11.2f", ns_per_op);
+                    cout << res_str;
+                    LOG  << ns_per_op << "" << flush;
                 }
             } else {
                 printf("%11s", "-");
+                LOG << "0";
             }
         }
 
         COUT_MPI << endl << flush;
+        LOG << "\n";
 //        exit(0);
     }
 }

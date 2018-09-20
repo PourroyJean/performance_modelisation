@@ -46,7 +46,11 @@ void bm_parameters::print_configuration() {
     printf("  %-25s    %-10d \n", "Cache line size", m_CACHE_LINE);
     printf("  %-25s    %-10s \n", "Stride range in byte", string( to_string(m_MIN_STRIDE) + " - " + to_string(m_MAX_STRIDE)).c_str());
     printf("  %-25s    %-10s \n", "Log range", string( to_string(m_MIN_LOG10) + " - " + to_string(m_MAX_LOG10)).c_str());
+    printf("  %-25s    %-10s \n", "Step Log", to_string(m_STEP_LOG10).c_str());
+
     printf("  %-25s    %-10s \n", "Memory range", string( (convert_size(min)) + " - " + (convert_size(max))).c_str());
+    printf("  %-25s    %-10s \n", "Save output ", m_is_log ? ("Output saved in " + m_log_file_name).c_str()  : "no output file");
+
 
 
     cout << endl;
@@ -156,9 +160,9 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     opt.syntax = "full [OPTIONS]";
     opt.example = "full -h\n\n";
     opt.footer = "dmlmem v0.1.4 Copyright (C) 2018 Jean Pourroy \nThis program is free and without warranty.\n";
-
+    string default_name = "_bench_";
     opt.add(
-            "_bench_", // Default.
+            default_name.c_str(), // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -397,6 +401,17 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--hugepages"    // Flag token.
     );
 
+
+    opt.add(
+            "", // Default.
+            1, // Required?
+            1, // Number of args expected.
+            0, // Delimiter if expecting multiple args.
+            "Log output value in a log file", // Help description.
+            "--output"    // Flag token.
+    );
+
+
     opt.add(
             "1", // Default.
             0, // Required?
@@ -558,6 +573,22 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     }
     else
         m_is_huge_pages=false;
+
+
+    if (opt.isSet("--output")){
+        m_is_log=true;
+        IS_LOG = true;
+        opt.get("--output")->getString(m_log_file_name);
+        if(m_log_file_name == ""){
+            m_log_file_name = m_prefix + "_log";
+        }
+        m_log_file.open(m_log_file_name, std::ios_base::binary);
+        m_log_file.clear();
+
+
+    }
+    else
+        m_is_log=false;
 
 
     opt.get("--steplog")->getDouble(m_STEP_LOG10);

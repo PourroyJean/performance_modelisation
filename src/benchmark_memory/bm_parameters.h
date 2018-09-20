@@ -91,7 +91,10 @@ public:
     double m_MAX_LOG10=8.0;
     double m_STEP_LOG10 = 0.1;
     bool m_is_huge_pages = false;
+    bool m_is_log = false;
     std::string m_prefix = "_bench_";
+    std::string m_log_file_name = "";
+    std::ofstream m_log_file;
 
     int init_arguments(int argc, const char *argv[]);
 

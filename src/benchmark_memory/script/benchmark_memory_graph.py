@@ -57,10 +57,6 @@ def main():
     len_first = len(file_txt[0])
     len_last = len(file_txt[-1])
 
-    print( file_txt )
-    log_file_array = np.loadtxt(file_txt, delimiter=',', dtype='float')
-
-#    exit (-1)
     log_file_array = 1
     if (len_first > len_last):
         log_file_array = np.loadtxt(file_txt[:-1], delimiter=',', dtype='float')
@@ -71,25 +67,26 @@ def main():
     # -- PARSING LOG FILE --
 
     # 1st step: recover the stride --> the first line
-    stride_array = log_file_array[0].astype(int)
+    stride_array = log_file_array[0].astype(int)[1:]
     print (" --- Stride :" + str(stride_array))
     log_file_array = np.delete(log_file_array, 0, axis=0)
 
     # 2nd step: recover the data set size --> the first column
     x_value_dataset_size = log_file_array[0:log_file_array.shape[0], 0].astype(int)
-    print (" ---  Data set (in MiB) : " + str(x_value_dataset_size))
+    print (" ---  Data set (in bit) : " + str(x_value_dataset_size))
 
     # 3nd step: get the values and generate the plot
     fig, ax = plt.subplots()  # create figure and axes
     #for each stride we draw a line
-    for i in range(1, len(stride_array)):
-        y_value = log_file_array[:, i]  # get the current line
+    for i in range(0, len(stride_array)):
+        y_value = log_file_array[:, i+1]  # get the column for the current stride
         y_value[y_value == 0] = np.nan  # replace 0 by nan to not plot not existing values
         ax.plot(x_value_dataset_size, y_value, label=str(stride_array[i]), linewidth=1)
 
 
-    ## -- PLOT THE RESULTS --
 
+
+    ## -- PLOT THE RESULTS --
 
     title_font = {'fontname': 'Arial', 'size': '20', 'color': 'black', 'weight': 'bold',
                   'verticalalignment': 'bottom'}
@@ -112,7 +109,27 @@ def main():
 
     plt.grid(True)
 
+    # https://en.wikichip.org/wiki/intel/xeon_gold/6148#Cache
+    #Input data are in kilobyte
+    cache_size = [32000,  1000000, 28000000]
+    cache_hauteur = [50,  150, 150]
+    cache_label = ["L1", "L2", "L3"]
+    for i in range(len(cache_size)):
+        print (i)
+        plt.axvline(x=cache_size[i], linestyle='-', color='red', linewidth=1)
+        plt.text(cache_size[i], cache_hauteur[i],
+             cache_label[i], rotation=90, color='red', weight='bold', horizontalalignment='right')
+
+
+
     plt.show()
+
+
+
+    # Vertical line
+
+
+
 
     exit(-1)
 
@@ -219,7 +236,7 @@ def parse_log_mem(filename):
     arr = np.delete(arr, 0, axis=0)
 
     x_value = arr[0:arr.shape[0], 0].astype(int)
-    print (" ---  Data set (in MiB) : " + str(x_value))
+    print (" ---  Data set (in bit) : " + str(x_value))
 
     fig, ax = plt.subplots()  # create figure and axes
     for i in range(1, len(stride_vector)):
