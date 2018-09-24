@@ -7,6 +7,11 @@
 
 using namespace std;
 
+
+extern std::stringstream black_hole;
+#define COUT_MPI ((mpi_rank == 0) ? std::cout : black_hole)
+
+
 bool is_Launched_with_mpirun (){
     int pid = getppid ();
     char* n = (char*)calloc(1024,sizeof(char));
