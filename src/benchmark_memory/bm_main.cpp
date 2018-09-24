@@ -153,9 +153,9 @@ int work(bm_parameters *p) {
     //Print header
     if (mpi_rank == 0) {
         printf("_ %s Stride  S   ->", p->m_prefix.c_str());
-        if (p->m_is_log){
-            LOG ("-1,");
-        }
+//        if (p->m_is_log){
+//            LOG ("-1,");
+//        }
 
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
             char res_str [10];
@@ -164,22 +164,22 @@ int work(bm_parameters *p) {
             if (p->m_DISP == DISP_MODE::BEST) sprintf(res_str,"%11d", step * 8);
             if (p->m_DISP == DISP_MODE::TWO) sprintf(res_str,"%11d%11d", step * 8, step * 8);
             if (p->m_DISP == DISP_MODE::ALL) sprintf(res_str,"%11d%11d%11d", step * 8, step * 8, step * 8);
-            cout << res_str;
+//            cout << res_str;
             if(p->m_is_log) {
                 string s(res_str);
                 s.erase(remove(s.begin(), s.end(), ' '), s.end());
 
-                LOG (s);
-                if (step != p->m_MAX_STRIDE){
-                    LOG(",");
-                }
+//                LOG (s);
+//                if (step != p->m_MAX_STRIDE){
+//                    LOG(",");
+//                }
             }
 
         }
         printf("\n");
-        if (p->m_is_log){
-            LOG ('\n');
-        }
+//        if (p->m_is_log){
+//            LOG ('\n');
+//        }
 
         printf("_ %s Value       ->", p->m_prefix.c_str());
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
@@ -204,24 +204,24 @@ int work(bm_parameters *p) {
         if (mpi_rank == 0) {
             printf("_ %s K = %10s", p->m_prefix.c_str(), convert_size(istride * 1024).c_str());
 
-            LOG(to_string(istride * 1024) + ",");
+//            LOG(to_string(istride * 1024) + ",");
 
             string ping = "K = " + convert_size(istride * 1024);
             yamb_annotate_set_event(ping.c_str(), "blue");
         }
 
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
-            if (step != p->m_MIN_STRIDE ){
-                LOG (",");
-            }
+//            if (step != p->m_MIN_STRIDE ){
+//                LOG (",");
+//            }
             double gb;
             best_measure = BIG_VAL;
             worst_measure = 0;
             sum_measures = 0.0;
-            if (mpi_rank == 0) {
-                string ping = "Stride : " + to_string(step * 8);
-                yamb_annotate_set_event(ping.c_str(), "red");
-            }
+//            if (mpi_rank == 0) {
+//                string ping = "Stride : " + to_string(step * 8);
+//                yamb_annotate_set_event(ping.c_str(), "red");
+//            }
             for (measure = 0; measure < p->m_MAX_MEASURES; measure++) {
                 double t;
 
@@ -242,11 +242,11 @@ int work(bm_parameters *p) {
                     if (repeat == 0)repeat = 1;
 
                     // --- BENCHMARK MEASURE ---
-                    MPI_BARRIER
+//                    MPI_BARRIER
                     time1 = get_micros();
                     num_ops = p->m_BENCHMARK(p, max_index, step, repeat, ops_per_scan);
                     time2 = get_micros();
-                    MPI_BARRIER
+//                    MPI_BARRIER
 
                     t = (time2 - time1) * 1000.0;
                     if (num_ops != 0)
@@ -275,7 +275,7 @@ int work(bm_parameters *p) {
                 if ((p->m_DISP == DISP_MODE::BEST || p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO)) {
                     sprintf(res_str, "%11.2f", ns_per_op);
                     cout << res_str;
-                    LOG (ns_per_op);
+//                    LOG (ns_per_op);
                 }
 
                 //Print the worst measure
@@ -287,7 +287,7 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_MODE::ALL) {
                     sprintf(res_str, "%11.2f", ns_per_op);
                     cout << res_str;
-                    LOG (ns_per_op);
+//                    LOG (ns_per_op);
                 }
 
                 //Print the average measure
@@ -303,16 +303,16 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO || p->m_DISP == DISP_MODE::AVERAGE) {
                     sprintf(res_str, "%11.2f", ns_per_op);
                     cout << res_str;
-                    LOG (ns_per_op);
+//                    LOG (ns_per_op);
                 }
             } else {
                 printf("%11s", "-");
-                LOG ("0");
+//                LOG ("0");
             }
         }
 
         COUT_MPI << endl << flush;
-        LOG("\n");
+//        LOG("\n");
     }
 }
 
