@@ -206,8 +206,8 @@ int work(bm_parameters *p) {
 
 //            LOG(to_string(istride * 1024) + ",");
 
-            string ping = "K = " + convert_size(istride * 1024);
-            yamb_annotate_set_event(ping.c_str(), "blue");
+//            string ping = "K = " + convert_size(istride * 1024);
+//            yamb_annotate_set_event(ping.c_str(), "blue");
         }
 
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
