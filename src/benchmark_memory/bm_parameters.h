@@ -92,8 +92,10 @@ public:
     double m_STEP_LOG10 = 0.1;
     bool m_is_huge_pages = false;
     bool m_is_log = false;
+    bool m_is_annotate = true;
     std::string m_prefix = "_bench_";
     std::string m_log_file_name = "";
+    std::string m_annotate_file_name = "";
     std::ofstream m_log_file;
 
     int init_arguments(int argc, const char *argv[]);
@@ -103,6 +105,8 @@ public:
     int parse_arguments(int argc, const char *argv[]);
 
     int setup_parser(int argc, const char *argv[]);
+
+    virtual ~bm_parameters();
 
 
 };
