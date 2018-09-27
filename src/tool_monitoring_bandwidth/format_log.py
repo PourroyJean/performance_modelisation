@@ -143,7 +143,7 @@ def main():
 
             # Vertical line
             plt.axvline(x=time, linestyle='dotted', color=color)
-            plt.text(time, get_y_location(flag) * (max(y_Total) / 4),
+            plt.text(time, get_y_location(color) * (max(y_Total) / 4),
                      flag, rotation=90, color=color, weight='bold', horizontalalignment='right')
 
     # ------------------------------------ OUTPUT  ----------------------------------------------
