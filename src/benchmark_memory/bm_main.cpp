@@ -38,7 +38,6 @@ double total_loops = 0.01; //TODO metre a 0
 
 BM_DATA_TYPE *mat;  //THE matrix :)
 bool WITH_MPI = false;
-bool IS_LOG = false;
 #define ADDR (0x0UL)
 
 
@@ -59,6 +58,9 @@ std::stringstream black_hole;
 #define MESS "NO MPI"
 #endif
 
+
+#define LOG( string, message )  if( p->m_is_log ) { string += message; }
+#define ANNOTATE( ping, color )  if( p->m_is_annotate ) { yamb_annotate_set_event(ping, color); }
 
 
 
@@ -132,30 +134,18 @@ int main(int argc, const char *argv[]) {
     return (0);
 }
 
-
-#define SET_LOG
-
-#ifdef SET_LOG
-#define LOG(message) p->m_log_file << message << flush
-#else
-#define LOG(message)
-#endif
-
-
-
-
 int work(bm_parameters *p) {
     //Some init
     double log_max_index, time1, time2, ns_per_op, num_ops, best_measure, worst_measure, sum_measures;
     uint64_t max_index;
     int step, measure;
+    string log_temporal = "";
+    string big_log = "";
 
     //Print header
     if (mpi_rank == 0) {
         printf("_ %s Stride  S   ->", p->m_prefix.c_str());
-//        if (p->m_is_log){
-//            LOG ("-1,");
-//        }
+        LOG(log_temporal, "-1,");
 
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
             char res_str [10];
@@ -164,22 +154,19 @@ int work(bm_parameters *p) {
             if (p->m_DISP == DISP_MODE::BEST) sprintf(res_str,"%11d", step * 8);
             if (p->m_DISP == DISP_MODE::TWO) sprintf(res_str,"%11d%11d", step * 8, step * 8);
             if (p->m_DISP == DISP_MODE::ALL) sprintf(res_str,"%11d%11d%11d", step * 8, step * 8, step * 8);
-//            cout << res_str;
+            cout << res_str;
             if(p->m_is_log) {
                 string s(res_str);
                 s.erase(remove(s.begin(), s.end(), ' '), s.end());
-
-//                LOG (s);
-//                if (step != p->m_MAX_STRIDE){
-//                    LOG(",");
-//                }
+                LOG(log_temporal, s);
+                if (step != p->m_MAX_STRIDE){
+                    LOG(log_temporal, ",");
+                }
             }
 
         }
         printf("\n");
-//        if (p->m_is_log){
-//            LOG ('\n');
-//        }
+        LOG(log_temporal, '\n');
 
         printf("_ %s Value       ->", p->m_prefix.c_str());
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
@@ -192,6 +179,7 @@ int work(bm_parameters *p) {
         printf("\n");
     }
 
+
     //Work
     for (log_max_index = p->m_MIN_LOG10; log_max_index < p->m_MAX_LOG10 + .0000001; log_max_index += p->m_STEP_LOG10) {
         max_index = (THEINT) (double) (exp(log_max_index * LOG10) + 0.5);
@@ -203,25 +191,21 @@ int work(bm_parameters *p) {
 
         if (mpi_rank == 0) {
             printf("_ %s K = %10s", p->m_prefix.c_str(), convert_size(istride * 1024).c_str());
-
-//            LOG(to_string(istride * 1024) + ",");
-
-//            string ping = "K = " + convert_size(istride * 1024);
-//            yamb_annotate_set_event(ping.c_str(), "blue");
+            LOG(log_temporal, to_string(istride * 1024) + ",");
+            ANNOTATE(string("K = " + convert_size(istride * 1024)).c_str(), "blue");
         }
 
         for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
-//            if (step != p->m_MIN_STRIDE ){
-//                LOG (",");
-//            }
+            if (step != p->m_MIN_STRIDE ){
+                LOG(log_temporal, ",");
+            }
             double gb;
             best_measure = BIG_VAL;
             worst_measure = 0;
             sum_measures = 0.0;
-//            if (mpi_rank == 0) {
-//                string ping = "Stride : " + to_string(step * 8);
-//                yamb_annotate_set_event(ping.c_str(), "red");
-//            }
+            if (mpi_rank == 0) {
+                ANNOTATE(string("Stride : " + to_string(step * 8)).c_str(), "red");
+            }
             for (measure = 0; measure < p->m_MAX_MEASURES; measure++) {
                 double t;
 
@@ -275,7 +259,7 @@ int work(bm_parameters *p) {
                 if ((p->m_DISP == DISP_MODE::BEST || p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO)) {
                     sprintf(res_str, "%11.2f", ns_per_op);
                     cout << res_str;
-//                    LOG (ns_per_op);
+                    LOG(log_temporal, ns_per_op);
                 }
 
                 //Print the worst measure
@@ -287,7 +271,7 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_MODE::ALL) {
                     sprintf(res_str, "%11.2f", ns_per_op);
                     cout << res_str;
-//                    LOG (ns_per_op);
+                    LOG(log_temporal, to_string(ns_per_op));
                 }
 
                 //Print the average measure
@@ -303,17 +287,25 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO || p->m_DISP == DISP_MODE::AVERAGE) {
                     sprintf(res_str, "%11.2f", ns_per_op);
                     cout << res_str;
-//                    LOG (ns_per_op);
+                    LOG(log_temporal, to_string(ns_per_op));
+
                 }
             } else {
                 printf("%11s", "-");
-//                LOG ("0");
+                LOG(log_temporal, "0");
             }
         }
 
         COUT_MPI << endl << flush;
-//        LOG("\n");
+        LOG(log_temporal, "\n");
+        LOG(big_log, log_temporal);
+        log_temporal = "";
     }
+    //Write to the file only at the end of the benchmark: performance matter
+    //Move this line above to be able to stop the benchmark while being able to get the output file
+    p->m_log_file << big_log << flush;
+
+
 }
 
 
