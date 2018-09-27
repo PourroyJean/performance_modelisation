@@ -42,7 +42,6 @@ extern std::stringstream black_hole;
 
 
 extern bool WITH_MPI;
-extern bool IS_LOG;
 
 bool is_Launched_with_mpirun ();
 
