@@ -2236,12 +2236,15 @@ _list: comma-delimited string
             if (g->isSet) {
                 if ((g->expectArgs != 0) && g->args.empty()) {
                     badOptions.push_back(*g->flags[0]);
+                    std::cout << "VIDE \n";
+
                     continue;
                 }
 
                 for (j = 0; j < (long int) g->args.size(); ++j) {
                     if ((g->expectArgs != -1) && (g->expectArgs != (long int) g->args[j]->size()))
                         badOptions.push_back(*g->flags[0]);
+                    std::cout << "MANQUE \n";
                 }
             }
         }
