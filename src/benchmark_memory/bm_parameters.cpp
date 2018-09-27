@@ -28,6 +28,9 @@ using namespace std;
 #define THETYPE double
 #endif
 
+#include <string>
+#include <code_annotation.h>
+extern string YAMB_ANNOTATE_LOG_FILE;
 
 void bm_parameters::print_configuration() {
 
@@ -49,7 +52,8 @@ void bm_parameters::print_configuration() {
     printf("  %-25s    %-10s \n", "Step Log", to_string(m_STEP_LOG10).c_str());
 
     printf("  %-25s    %-10s \n", "Memory range", string( (convert_size(min)) + " - " + (convert_size(max))).c_str());
-    printf("  %-25s    %-10s \n", "Save output ", m_is_log ? ("Output saved in " + m_log_file_name).c_str()  : "no output file");
+    printf("  %-25s    %-10s \n", "Save output ", m_is_log ? ("yes in : " + m_log_file_name).c_str()  : "no output file");
+    printf("  %-25s    %-10s \n", "Annotation file for YAMB", m_is_annotate ? ("yes in : " + m_annotate_file_name).c_str()  : "no");
 
 
 
@@ -405,10 +409,19 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     opt.add(
             "", // Default.
             1, // Required?
-            1, // Number of args expected.
+            2, // Number of args expected.
             0, // Delimiter if expecting multiple args.
             "Log output value in a log file", // Help description.
             "--output"    // Flag token.
+    );
+
+    opt.add(
+            "", // Default.
+            1, // Required?
+            1, // Number of args expected.
+            0, // Delimiter if expecting multiple args.
+            "Annotate the YAMB memory bandwidth graph", // Help description.
+            "--annotate"    // Flag token.
     );
 
 
@@ -577,10 +590,11 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     if (opt.isSet("--output")){
         m_is_log=true;
-        IS_LOG = true;
         opt.get("--output")->getString(m_log_file_name);
-        if(m_log_file_name == ""){
-            m_log_file_name = m_prefix + "_log";
+        //Check if the file name was given in argument, and is is not the next option (begin with --)
+        if(m_log_file_name == "" || ! strncmp(m_log_file_name.c_str(), string("--").c_str(), string("--").size())){
+            cout << "Error: please write the name of the output file\n";
+            exit(EXIT_FAILURE);
         }
         m_log_file.open(m_log_file_name, std::ios_base::binary);
         m_log_file.clear();
@@ -589,6 +603,21 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     }
     else
         m_is_log=false;
+
+
+    if (opt.isSet("--annotate")){
+        m_is_annotate=true;
+        opt.get("--annotate")->getString(m_annotate_file_name);
+        //Check if the file name was given in argument, and is is not the next option (begin with --)
+        if(m_annotate_file_name.empty() || ! strncmp(m_annotate_file_name.c_str(), string("--").c_str(), string("--").size())){
+            cout << "Error: please write the name of the annotate file\n";
+            exit(EXIT_FAILURE);
+        }
+        YAMB_ANNOTATE_LOG_FILE = m_annotate_file_name ;
+    }
+    else{
+        m_is_annotate=false;
+    }
 
 
     opt.get("--steplog")->getDouble(m_STEP_LOG10);
@@ -618,4 +647,10 @@ string bm_parameters::getValue(int key) {
     }
     cout << "Error : getValue (" << key << ")\n";
     exit(EXIT_FAILURE);
+}
+
+bm_parameters::~bm_parameters() {
+    if(m_log_file.is_open()){
+        m_log_file.close();
+    }
 }
