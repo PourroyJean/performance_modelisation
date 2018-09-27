@@ -10,7 +10,9 @@
 #include "misc.h"
 #include "bm_misc.h"
 #include <algorithm>
+#include <cmath>
 #include "bm_benchmark.h"
+#include "bm_misc.h"
 
 
 using namespace ez;
@@ -26,16 +28,36 @@ using namespace std;
 #define THETYPE double
 #endif
 
+#include <string>
+#include <code_annotation.h>
+extern string YAMB_ANNOTATE_LOG_FILE;
 
 void bm_parameters::print_configuration() {
-    printf("%20s    %-10s \n", "m_type", getValue(m_type).c_str());
-    printf("%20s    %-10s \n", "m_mode", getValue(m_mode).c_str());
-    printf("%20s    %-10d \n", "m_MAT_SIZE", m_MAT_SIZE);
-    printf("%20s    %-10d \n", "m_MAT_NB_ELEM", m_MAT_NB_ELEM);
-    printf("%20s    %-10d \n", "m_UNROLL", m_UNROLL);
-    printf("%20s    %-10s \n", "m_unit", getValue(m_unit).c_str());
-    printf("%20s    %-10s \n", "m_display", getValue(m_DISP).c_str());
-    printf("%20s    %-10d \n", "m_PID", m_PID);
+
+    size_t min = ((size_t) (double) (exp(m_MIN_LOG10 * LOG10) + 0.5)) * sizeof(BM_DATA_TYPE) / 1024;
+    size_t max = ((size_t) (double) (exp(m_MAX_LOG10 * LOG10) + 0.5)) * sizeof(BM_DATA_TYPE) / 1024;
+
+    printf("  %-25s    %-10s \n", "Benchmark type", getValue(m_type).c_str());
+    printf("  %-25s    %-10s \n", "Benchmark mode", getValue(m_mode).c_str());
+    printf("  %-25s    %-10s \n", "Matrix size", convert_size(m_MAT_SIZE).c_str());
+    printf("  %-25s    %-10d \n", "Number of thread", mpi_size);
+    printf("  %-25s    %-10s \n", "Memory page size", m_is_huge_pages ? "Huge Pages (2 MiB)" : "Default (4 KiB)");
+    printf("  %-25s    %-10lu\n", "Number of element", m_MAT_NB_ELEM);
+    printf("  %-25s    %-10d \n", "Number of manual unroll", m_UNROLL);
+    printf("  %-25s    %-10s \n", "Measure are displayed in ", getValue(m_unit).c_str());
+    printf("  %-25s    %-10s \n", "Measure represents the", getValue(m_DISP).c_str());
+    printf("  %-25s    %-10d \n", "Cache line size", m_CACHE_LINE);
+    printf("  %-25s    %-10s \n", "Stride range in byte", string( to_string(m_MIN_STRIDE) + " - " + to_string(m_MAX_STRIDE)).c_str());
+    printf("  %-25s    %-10s \n", "Log range", string( to_string(m_MIN_LOG10) + " - " + to_string(m_MAX_LOG10)).c_str());
+    printf("  %-25s    %-10s \n", "Step Log", to_string(m_STEP_LOG10).c_str());
+
+    printf("  %-25s    %-10s \n", "Memory range", string( (convert_size(min)) + " - " + (convert_size(max))).c_str());
+    printf("  %-25s    %-10s \n", "Save output ", m_is_log ? ("yes in : " + m_log_file_name).c_str()  : "no output file");
+    printf("  %-25s    %-10s \n", "Annotation file for YAMB", m_is_annotate ? ("yes in : " + m_annotate_file_name).c_str()  : "no");
+
+
+
+    cout << endl;
 
     if (m_mode == BENCH_MODE::NORMAL) {
         cout << "Normal mode: \n";
@@ -142,9 +164,9 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     opt.syntax = "full [OPTIONS]";
     opt.example = "full -h\n\n";
     opt.footer = "dmlmem v0.1.4 Copyright (C) 2018 Jean Pourroy \nThis program is free and without warranty.\n";
-
+    string default_name = "_bench_";
     opt.add(
-            "_bench_", // Default.
+            default_name.c_str(), // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -157,7 +179,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
-            "Matrix size in meg", // Help description.
+            "Matrix size in Mib", // Help description.
             "--matrixsize" // Flag token.
     );
 
@@ -225,7 +247,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
-            "smallest stride size used ( number of THETYPEs )\n"
+            "smallest stride size used in byte\n"
                     "if  (MIN_STRIDE==MAX_STRIDE) you have a constant stride", // Help description.
             "--minstride" // Flag token.
     );
@@ -235,7 +257,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
-            "biggest  stride size used ( number of THETYPEs )\n"
+            "biggest stride size used in byte\n"
                     "if  (MIN_STRIDE==MAX_STRIDE) you have a constant stride", // Help description.
             "--maxstride" // Flag token.
     );
@@ -262,7 +284,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
 
 
     opt.add(
-            "2", // Default.
+            "1", // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -281,7 +303,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
 
 
     opt.add(
-            "128", // Default.
+            "64", // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -290,7 +312,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
     opt.add(
-            "3.0", // Default.
+            "3", // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -299,13 +321,25 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
     opt.add(
-            "8.0", // Default.
+            "15", // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
             "log10 of maximal  vector size used", // Help description.
             "--maxlog" // Flag token.
     );
+
+    opt.add(
+            "0", // Default.
+            0, // Required?
+            1, // Number of args expected.
+            0, // Delimiter if expecting multiple args.
+            "only one stride measured", // Help description.
+            "--log" // Flag token.
+    );
+
+
+
 
 
     opt.add(
@@ -350,6 +384,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--mode" // Flag token.
     );
 
+
     opt.add(
             getValue(BENCH_TYPE::READ).c_str(), // Default.
             0, // Required?
@@ -360,6 +395,36 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "--type" // Flag token.
     );
 
+
+    opt.add(
+            "false", // Default.
+            0, // Required?
+            0, // Number of args expected.
+            0, // Delimiter if expecting multiple args.
+            "Use huge pages", // Help description.
+            "--hugepages"    // Flag token.
+    );
+
+
+    opt.add(
+            "", // Default.
+            1, // Required?
+            2, // Number of args expected.
+            0, // Delimiter if expecting multiple args.
+            "Log output value in a log file", // Help description.
+            "--output"    // Flag token.
+    );
+
+    opt.add(
+            "", // Default.
+            1, // Required?
+            1, // Number of args expected.
+            0, // Delimiter if expecting multiple args.
+            "Annotate the YAMB memory bandwidth graph", // Help description.
+            "--annotate"    // Flag token.
+    );
+
+
     opt.add(
             "1", // Default.
             0, // Required?
@@ -369,11 +434,12 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "-h"    // Flag token.
     );
 
+
 }
 
 int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
-    DEBUG << " - PARSING -\n";
+    DEBUG_MPI << " - PARSING -\n";
     opt.parse(argc, argv);
 
 
@@ -387,6 +453,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     string tmp;
     int itmp;
+    double dtmp;
 
     m_PID = getpid();
 
@@ -458,14 +525,15 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--memaff")->getInt(m_MEM_AFF);
 
-    opt.get("--matrixsize")->getInt(m_MAT_SIZE);
-    m_MAT_SIZE += 1; //TODO WHY ?
+    opt.get("--matrixsize")->getULong(m_MAT_SIZE);
+
+//    m_MAT_SIZE += 1; //TODO WHY ?
     m_MAT_SIZE *= (1024 * 1024); // 1 mb  == 1 * 1024 * 1024 byte
     if (!(m_MAT_SIZE >= 1024 * 1024)) {
-        cout << "Error: please check the size of your matrix\n";
+        cout << "Error: please check the size of your matrix (" << m_MAT_SIZE << ")\n";
         exit(EXIT_FAILURE);
     };
-    m_MAT_NB_ELEM = m_MAT_SIZE / (sizeof(BM_DATA_TYPE));
+    m_MAT_NB_ELEM = size_t (size_t(m_MAT_SIZE) / (sizeof(BM_DATA_TYPE)));
 
 
     opt.get("--maxops")->getInt(m_MAX_OPS);
@@ -474,6 +542,10 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--minstride")->getInt(m_MIN_STRIDE);
     m_MIN_STRIDE /= sizeof(BM_DATA_TYPE);
+    if (m_MIN_STRIDE < 1){
+        cout <<"Error: please check the size of the minimum stride (" << m_MIN_STRIDE << " byte)\n";
+        exit(EXIT_FAILURE);
+    }
 
     opt.get("--maxstride")->getInt(m_MAX_STRIDE);
     m_MAX_STRIDE /= sizeof(BM_DATA_TYPE);
@@ -481,6 +553,10 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--stride")->getInt(itmp);
     if (itmp > 0){
+        if (itmp < 8){
+            cout <<"Error: please check the size of the stride (" << m_MIN_STRIDE << " byte)\n";
+            exit(EXIT_FAILURE);
+        }
         m_MIN_STRIDE=itmp / sizeof(BM_DATA_TYPE);
         m_MAX_STRIDE=itmp / sizeof(BM_DATA_TYPE);
     }
@@ -496,10 +572,56 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     };
 
     opt.get("--minlog")->getDouble(m_MIN_LOG10);
-
     opt.get("--maxlog")->getDouble(m_MAX_LOG10);
 
+    opt.get("--log")->getDouble(dtmp);
+    if (dtmp > 0){
+        m_MIN_LOG10=dtmp;
+        m_MAX_LOG10=dtmp;
+    }
+
+
+    if (opt.isSet("--hugepages")){
+        m_is_huge_pages=true;
+    }
+    else
+        m_is_huge_pages=false;
+
+
+    if (opt.isSet("--output")){
+        m_is_log=true;
+        opt.get("--output")->getString(m_log_file_name);
+        //Check if the file name was given in argument, and is is not the next option (begin with --)
+        if(m_log_file_name == "" || ! strncmp(m_log_file_name.c_str(), string("--").c_str(), string("--").size())){
+            cout << "Error: please write the name of the output file\n";
+            exit(EXIT_FAILURE);
+        }
+        m_log_file.open(m_log_file_name, std::ios_base::binary);
+        m_log_file.clear();
+
+
+    }
+    else
+        m_is_log=false;
+
+
+    if (opt.isSet("--annotate")){
+        m_is_annotate=true;
+        opt.get("--annotate")->getString(m_annotate_file_name);
+        //Check if the file name was given in argument, and is is not the next option (begin with --)
+        if(m_annotate_file_name.empty() || ! strncmp(m_annotate_file_name.c_str(), string("--").c_str(), string("--").size())){
+            cout << "Error: please write the name of the annotate file\n";
+            exit(EXIT_FAILURE);
+        }
+        YAMB_ANNOTATE_LOG_FILE = m_annotate_file_name ;
+    }
+    else{
+        m_is_annotate=false;
+    }
+
+
     opt.get("--steplog")->getDouble(m_STEP_LOG10);
+
 
 
     string pretty;
@@ -507,7 +629,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     string line;
     std::istringstream f(pretty);
     while (std::getline(f, line)) {
-        DEBUG << line << std::endl;
+        DEBUG_MPI << line << std::endl;
     }
 }
 
@@ -525,4 +647,10 @@ string bm_parameters::getValue(int key) {
     }
     cout << "Error : getValue (" << key << ")\n";
     exit(EXIT_FAILURE);
+}
+
+bm_parameters::~bm_parameters() {
+    if(m_log_file.is_open()){
+        m_log_file.close();
+    }
 }
