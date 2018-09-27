@@ -59,6 +59,9 @@ std::stringstream black_hole;
 #endif
 
 
+#define LOG( string, message )  if( p->m_is_log ) { string += message; }
+#define ANNOTATE( ping, color )  if( p->m_is_annotate ) { yamb_annotate_set_event(ping, color); }
+
 
 
 
@@ -130,10 +133,6 @@ int main(int argc, const char *argv[]) {
 
     return (0);
 }
-
-
-#define LOG( string, message )  if( p->m_is_log ) { string += message; }
-#define ANNOTATE( ping, color )  if( p->m_is_annotate ) { yamb_annotate_set_event(ping, color); }
 
 int work(bm_parameters *p) {
     //Some init
