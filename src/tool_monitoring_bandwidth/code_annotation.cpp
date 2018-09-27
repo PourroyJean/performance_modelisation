@@ -13,6 +13,9 @@
 using namespace std;
 using namespace std::chrono;
 
+string YAMB_ANNOTATE_LOG_FILE = "/nfs/pourroy/tmp/yamb_annotate_log_file";
+
+//TODO: séparer cette fonction en 3: start, ping et stop pour réduire l'overhead
 int yamb_annotate_set_event(const char *e, const char *c) {
 
     //C to C++ type
