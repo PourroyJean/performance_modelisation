@@ -11,6 +11,10 @@
 # Source: https://github.com/PourroyJean/performance_modelisation
 # ------------------------------------------------------------------
 
+
+
+
+
 from __future__ import \
     print_function  # https://stackoverflow.com/questions/493386/how-to-print-without-newline-or-space
 
@@ -37,12 +41,24 @@ _cache_size = [32000, 1000000, 28000000]
 _cache_label = ["L1", "L2", "L3"]
 _cache_hauteur = [50, 150, 150]  # hauteur d'affichage du label en BG/s
 
+annot = []
+ax = []
+sc = []
+sc_l = []
+names = np.array(list("ABCDEFGHIJKLMNO"))
+fig = []
 
 # --------------------------------------------------------------------------------------------
 # ------------------------------------ MAIN --------------------------------------------------
 # --------------------------------------------------------------------------------------------
 
 def main():
+    global annot
+    global ax
+    global sc
+    global sc_l
+    global fig
+    global names
     is_screen_available()
 
     # -- PARSING COMMAND LINE --
@@ -63,9 +79,16 @@ def main():
 
     # -- PARSING LOG FILE --
 
+
     # 1st step: recover the stride --> the first line
     stride_array = log_file_array[0].astype(int)[1:]
-    print(" --- Stride :" + str(stride_array))
+
+    #TODO Generate a gradient with more than 255 colors
+    if stride_array.shape[0] > 65000 :
+        logging.error("Plotting more than 65000 strides is not yet supported" + _fileLog_mem)
+        sys.exit(-1)
+
+    print(" --- Stride (" + str(stride_array.shape[0]) + "): " + str(stride_array))
     log_file_array = np.delete(log_file_array, 0, axis=0)
 
     # 2nd step: recover the data set size --> the first column
@@ -81,17 +104,33 @@ def main():
     contour_color = 'white'
 
     # Get the values and generate the plot
+    COLOR=[]
+    if stride_array.shape[0] < 255 :
+        COLOR=["#11{val}33".format(val=hex(255-i)[2:].zfill(2)) for i in range(0, 256, int(256/stride_array.shape[0]))]
+    else :
+        COLOR=["#11{val}".format(val=hex(65536-i)[4:].zfill(4)) for i in range(0, 65536, 1)]
 
-    # for each stride we draw a line
+    names_l = []
+    # for each stride we draw a curve
     for i in range(0, len(stride_array)):
         y_value = log_file_array[:, i + 1]  # get the column for the current stride
         y_value[y_value == 0] = np.nan  # replace 0 by nan to not plot not existing values
         y_value[y_value > 10000] = np.nan  # replace 0 by nan to not plot not existing values
         # if (i % 2 == 0):
-        ax.plot(x_value_dataset_size, y_value, label=str(stride_array[i]), linewidth=1)
+        ax.plot(x_value_dataset_size, y_value, 'ro', label=str(stride_array[i]), linestyle='-', linewidth=1, color=COLOR[i])
+        sc_l.extend([ax.scatter(x_value_dataset_size, y_value)])
+        # sc = plt.scatter(x,y,c=c, s=100, cmap=cmap, norm=norm)
+
         # else:
         # ax.plot(x_value_dataset_size, y_value, label=str(str(stride_array[i]) + "bw"), linewidth=1, linestyle='-')
 
+        names_l.append(str(stride_array[i]))
+        annot = ax.annotate("", xy=(0,0), xytext=(20,20),textcoords="offset points",
+                            bbox=dict(boxstyle="round", fc="w"),
+                            arrowprops=dict(arrowstyle="->"))
+        annot.set_visible(False)
+    names = np.array(names_l)
+    print (names)
     ## -- DRAWING VERTICAL LINES FOR CACHE L1 L2 L3 --
     if _is_cache:
         print(' --- Cache size : ', end='')
@@ -107,15 +146,23 @@ def main():
     plt.title("Bench_mem - " + str(os.path.basename(_fileLog_mem)), **title_font)
 
     plt.xscale('log')
-    ax.legend(title="Size of stride (MB)", loc=0,
+    ax.legend(title="Size of stride (byte)", loc=0,
               ncol=2, borderaxespad=0.)
     plt.gcf().set_facecolor(contour_color)
+
+
+    # x_v = [10, 100, 1000, 10000, 100000, 1000000, 100000000, 10000000000,100000000000]
+    # x_l = ['10byte', '100byte', '1Kb', '10Kb', '100Kb', '1Mb', '10Mb', '10000000000', '1Gb', '10Gb']
+    # plt.xticks(x_v,x_l)
+
 
     ax = fig.add_subplot(1, 1, 1)
     for spine in ax.spines:
         ax.spines[spine].set_color('#C6C9CA')
 
     plt.grid(True)
+    fig.canvas.mpl_connect("motion_notify_event", hover)
+
 
     # Output: graphical or png file ?
     if _screen:
@@ -183,6 +230,40 @@ def str2bool(v):
         return False
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
+
+
+
+def update_annot(ind, sc):
+    global names
+    global sc_l
+    pos = sc.get_offsets()[ind["ind"][0]]
+    annot.xy = pos
+    text = "{}, {}".format(" ".join(list(map(str,ind["ind"]))),
+                           " ".join([names[n] for n in ind["ind"]]))
+    annot.set_text(text)
+    # annot.get_bbox_patch().set_facecolor(cmap(norm(c[ind["ind"][0]])))
+    annot.get_bbox_patch().set_alpha(0.4)
+
+
+def hover(event):
+    global fig
+    global names
+    vis = annot.get_visible()
+    if event.inaxes == ax:
+        for i in  range (0,len(sc_l)) :
+            sc = sc_l[i]
+
+            cont, ind = sc.contains(event)
+            if cont:
+                print (" Stride = " + names[i])
+                # update_annot(ind, sc)
+                # annot.set_visible(True)
+                # fig.canvas.draw_idle()
+            # else:
+            #     if vis:
+            #         annot.set_visible(False)
+            #         fig.canvas.draw_idle()
+
 
 
 if __name__ == "__main__":

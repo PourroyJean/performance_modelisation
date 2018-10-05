@@ -2487,7 +2487,7 @@ _list: comma-delimited string
                     } else {
                         for (k = 0; k < (long int) g->args.size(); ++k) {
                             for (j = 0; j < (long int) g->args[k]->size() - 1; ++j) {
-                                sprintf(tmp, "aaaaa %s%c", g->args[k]->at(j)->c_str(), g->delim);
+                                sprintf(tmp, "%s%c ", g->args[k]->at(j)->c_str(), g->delim);
                                 out += tmp;
                             }
                             sprintf(tmp, "%-10s", g->args[k]->back()->c_str());

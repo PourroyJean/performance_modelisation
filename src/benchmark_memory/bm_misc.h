@@ -38,6 +38,7 @@ extern int mpi_rank;
 extern int mpi_size;
 extern std::stringstream black_hole;
 #define COUT_MPI ((mpi_rank == 0) ? std::cout : black_hole)
+#define COUT ((SCREEN_OUTPUT) ? std::cout : black_hole)
 #define DEBUG_MPI ((mpi_rank == 0) ? DEBUG : black_hole)
 
 
