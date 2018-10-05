@@ -25,6 +25,8 @@ enum BENCH_TYPE {
     READ = 0, WRITE
 };
 
+
+
 enum BENCH_MODE {
     NORMAL = 10, SPECIAL, INDEXED,
 };
@@ -35,6 +37,10 @@ enum DISP_MODE {
 
 enum DISP_UNIT {
     NS = 1000, GB, CY
+};
+
+enum BENCH_STRIDE {
+    ODD = 10000, EVEN
 };
 
 static std::map<int, std::string> mapParameter = {{READ,    "READ"},
@@ -49,6 +55,8 @@ static std::map<int, std::string> mapParameter = {{READ,    "READ"},
                                                   {NS,      "NS"},
                                                   {GB,      "GB"},
                                                   {CY,      "CY"},
+                                                  {ODD,       "ODD"},
+                                                  {EVEN,      "EVEN"},
 };
 
 
@@ -84,6 +92,8 @@ public:
     int m_MAX_OPS = 1;
     int m_MIN_STRIDE = sizeof(BM_DATA_TYPE);// = sizeof(THETYPE);
     int m_MAX_STRIDE = 1024 * 8;
+    int m_STRIDE_MODE = BENCH_STRIDE ::EVEN;
+    vector <int> m_STRIDE_LIST;
     int m_MAX_MEASURES = 2;
     int m_MAT_OFFSET = 0;
     int m_NUM_INDEX = 1;
@@ -107,6 +117,8 @@ public:
     int setup_parser(int argc, const char *argv[]);
 
     virtual ~bm_parameters();
+
+    bm_parameters ();
 
 
 };
