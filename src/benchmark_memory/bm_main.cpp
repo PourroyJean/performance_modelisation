@@ -11,6 +11,7 @@
 #include "bm_misc.h"
 #include <sys/shm.h>        // Large parge
 #include <unistd.h>
+#include <iterator>
 
 
 #include <sys/shm.h>
@@ -103,6 +104,13 @@ int main(int argc, const char *argv[]) {
     init_mat(my_parameters);
 
     COUT_MPI << "\n ---------------- BENCHMARK ----------------\n";
+    if( my_parameters->m_is_log ) {
+        stringstream ss;
+        std::copy( argv+1, argv+argc, ostream_iterator<const char*>( ss, " " ) ) ;
+        my_parameters->m_log_file << "#This was launch with : " << ss.str() << flush;
+
+    }
+
 
     MPI_BARRIER
     start_time = get_micros();
@@ -143,7 +151,6 @@ int work(bm_parameters *p) {
     string log_temporal = "";
     string big_log = "";
     char res_str[100];
-
 
 
     //Print header
