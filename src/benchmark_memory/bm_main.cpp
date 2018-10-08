@@ -13,7 +13,6 @@
 #include <unistd.h>
 
 
-
 #include <sys/shm.h>
 
 #include "misc.h"
@@ -41,10 +40,6 @@ bool WITH_MPI = false;
 #define ADDR (0x0UL)
 
 
-
-
-
-
 int shmid = -2;
 int mpi_rank = 0;
 int mpi_size = 1;
@@ -59,16 +54,18 @@ std::stringstream black_hole;
 #endif
 
 
-#define LOG( string, message )  if( p->m_is_log ) { string += message; }
-#define ANNOTATE( ping, color )  if( p->m_is_annotate ) { yamb_annotate_set_event(ping, color); }
+#define LOG(string, message)  if( p->m_is_log ) { string += message; }
+#define ANNOTATE(ping, color)  if( p->m_is_annotate ) { yamb_annotate_set_event(ping, color); }
 
-
-
+#define SCREEN_OUTPUT false
 
 int main(int argc, const char *argv[]) {
-    fclose (stderr);
+    fclose(stderr);
     double tot, band;
     double start_time, end_time = 0.0;
+
+//    cout.rdbuf(NULL);
+
 
     char **m_argv = (char **) argv;
 //    strdup(*argv);
@@ -87,6 +84,7 @@ int main(int argc, const char *argv[]) {
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
     DEBUG << "Hello world from processor "  << mpi_rank << "out of " << mpi_size << "processors\n";
 #endif
+
 
     bm_parameters *my_parameters;
 
@@ -138,39 +136,40 @@ int work(bm_parameters *p) {
     //Some init
     double log_max_index, time1, time2, ns_per_op, num_ops, best_measure, worst_measure, sum_measures;
     uint64_t max_index;
-    int step, measure;
+    int  measure;
     string log_temporal = "";
     string big_log = "";
+    char res_str[100];
+
+
 
     //Print header
     if (mpi_rank == 0) {
         printf("_ %s Stride  S   ->", p->m_prefix.c_str());
         LOG(log_temporal, "-1,");
 
-        for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
-            char res_str [10];
+        for (int stride : p->m_STRIDE_LIST) {
+            char res_str[10];
 
-            if (p->m_DISP == DISP_MODE::AVERAGE) sprintf(res_str, "%11d", step * 8);
-            if (p->m_DISP == DISP_MODE::BEST) sprintf(res_str,"%11d", step * 8);
-            if (p->m_DISP == DISP_MODE::TWO) sprintf(res_str,"%11d%11d", step * 8, step * 8);
-            if (p->m_DISP == DISP_MODE::ALL) sprintf(res_str,"%11d%11d%11d", step * 8, step * 8, step * 8);
-            cout << res_str;
-            if(p->m_is_log) {
+            if (p->m_DISP == DISP_MODE::AVERAGE) sprintf(res_str, "%11d", stride);
+            if (p->m_DISP == DISP_MODE::BEST) sprintf(res_str, "%11d", stride);
+            if (p->m_DISP == DISP_MODE::TWO) sprintf(res_str, "%11d%11d", stride, stride);
+            if (p->m_DISP == DISP_MODE::ALL) sprintf(res_str, "%11d%11d%11d", stride, stride, stride);
+            COUT << res_str;
+            if (p->m_is_log) {
                 string s(res_str);
                 s.erase(remove(s.begin(), s.end(), ' '), s.end());
                 LOG(log_temporal, s);
-                if (step != p->m_MAX_STRIDE){
+                if (stride != p->m_MAX_STRIDE) {
                     LOG(log_temporal, ",");
                 }
             }
-
         }
         printf("\n");
         LOG(log_temporal, '\n');
 
         printf("_ %s Value       ->", p->m_prefix.c_str());
-        for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
-
+        for (int stride : p->m_STRIDE_LIST) {
             if (p->m_DISP == DISP_MODE::AVERAGE) printf("%11s", "AVERAGE");
             if (p->m_DISP == DISP_MODE::BEST) printf("%11s", "BEST");
             if (p->m_DISP == DISP_MODE::TWO) printf("%11s%11s", "BEST", "AVERAGE");
@@ -195,8 +194,8 @@ int work(bm_parameters *p) {
             ANNOTATE(string("K = " + convert_size(istride * 1024)).c_str(), "blue");
         }
 
-        for (step = p->m_MIN_STRIDE; step <= p->m_MAX_STRIDE; step *= 2) {
-            if (step != p->m_MIN_STRIDE ){
+        for (int stride : p->m_STRIDE_LIST) {
+            if (stride != p->m_MIN_STRIDE) {
                 LOG(log_temporal, ",");
             }
             double gb;
@@ -204,7 +203,7 @@ int work(bm_parameters *p) {
             worst_measure = 0;
             sum_measures = 0.0;
             if (mpi_rank == 0) {
-                ANNOTATE(string("Stride : " + to_string(step * 8)).c_str(), "red");
+                ANNOTATE(string("Stride : " + to_string(stride)).c_str(), "red");
             }
             for (measure = 0; measure < p->m_MAX_MEASURES; measure++) {
                 double t;
@@ -218,7 +217,8 @@ int work(bm_parameters *p) {
 
 
                 int repeat;
-                THEINT ops_per_scan = max_index / step;
+                int stride_nb_elem = stride / sizeof(BM_DATA_TYPE);
+                THEINT ops_per_scan = max_index / stride_nb_elem;
                 if (ops_per_scan < MIN_OPS_PER_SCAN) {
                     num_ops = BIG_VAL;
                 } else {
@@ -228,7 +228,7 @@ int work(bm_parameters *p) {
                     // --- BENCHMARK MEASURE ---
 //                    MPI_BARRIER
                     time1 = get_micros();
-                    num_ops = p->m_BENCHMARK(p, max_index, step, repeat, ops_per_scan);
+                    num_ops = p->m_BENCHMARK(p, max_index, stride_nb_elem, repeat, ops_per_scan);
                     time2 = get_micros();
 //                    MPI_BARRIER
 
@@ -248,7 +248,6 @@ int work(bm_parameters *p) {
 
             if (num_ops < BIG_VAL) {
 
-                char res_str [10];
 
                 //Print the best measure
                 ns_per_op = best_measure / num_ops;
@@ -258,7 +257,7 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
                 if ((p->m_DISP == DISP_MODE::BEST || p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO)) {
                     sprintf(res_str, "%11.2f", ns_per_op);
-                    cout << res_str;
+                    COUT << res_str;
                     LOG(log_temporal, ns_per_op);
                 }
 
@@ -270,7 +269,7 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
                 if (p->m_DISP == DISP_MODE::ALL) {
                     sprintf(res_str, "%11.2f", ns_per_op);
-                    cout << res_str;
+                    COUT << res_str;
                     LOG(log_temporal, to_string(ns_per_op));
                 }
 
@@ -286,12 +285,13 @@ int work(bm_parameters *p) {
                 }
                 if (p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO || p->m_DISP == DISP_MODE::AVERAGE) {
                     sprintf(res_str, "%11.2f", ns_per_op);
-                    cout << res_str;
+                    COUT << res_str;
                     LOG(log_temporal, to_string(ns_per_op));
 
                 }
             } else {
-                printf("%11s", "-");
+                sprintf(res_str, "%11s", "-");
+                COUT << res_str;
                 LOG(log_temporal, "0");
             }
         }
