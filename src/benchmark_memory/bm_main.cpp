@@ -14,6 +14,7 @@
 
 
 #include <sys/shm.h>
+#include <iomanip>
 
 #include "misc.h"
 #include "bm_parameters.h"
@@ -57,7 +58,9 @@ std::stringstream black_hole;
 #define LOG(string, message)  if( p->m_is_log ) { string += message; }
 #define ANNOTATE(ping, color)  if( p->m_is_annotate ) { yamb_annotate_set_event(ping, color); }
 
-#define SCREEN_OUTPUT false
+//#define SCREEN_OUTPUT false
+#define SCREEN_OUTPUT true
+
 
 int main(int argc, const char *argv[]) {
     fclose(stderr);
@@ -136,7 +139,7 @@ int work(bm_parameters *p) {
     //Some init
     double log_max_index, time1, time2, ns_per_op, num_ops, best_measure, worst_measure, sum_measures;
     uint64_t max_index;
-    int  measure;
+    int measure;
     string log_temporal = "";
     string big_log = "";
     char res_str[100];
@@ -256,9 +259,13 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
                 if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
                 if ((p->m_DISP == DISP_MODE::BEST || p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO)) {
-                    sprintf(res_str, "%11.2f", ns_per_op);
+                    stringstream ss;
+                    ss << fixed << setprecision(2) << ns_per_op;
+                    float a;
+                    ss >> a;
+                    sprintf(res_str, "%11.2f", a);
                     COUT << res_str;
-                    LOG(log_temporal, ns_per_op);
+                    LOG(log_temporal, ss.str());
                 }
 
                 //Print the worst measure
@@ -268,9 +275,13 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
                 if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
                 if (p->m_DISP == DISP_MODE::ALL) {
-                    sprintf(res_str, "%11.2f", ns_per_op);
+                    stringstream ss;
+                    ss << fixed << setprecision(2) << ns_per_op;
+                    float a;
+                    ss >> a;
+                    sprintf(res_str, "%11.2f", a);
                     COUT << res_str;
-                    LOG(log_temporal, to_string(ns_per_op));
+                    LOG(log_temporal, ss.str());
                 }
 
                 //Print the average measure
@@ -284,9 +295,13 @@ int work(bm_parameters *p) {
                     ns_per_op *= p->m_GHZ;
                 }
                 if (p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO || p->m_DISP == DISP_MODE::AVERAGE) {
-                    sprintf(res_str, "%11.2f", ns_per_op);
+                    stringstream ss;
+                    ss << fixed << setprecision(2) << ns_per_op;
+                    float a;
+                    ss >> a;
+                    sprintf(res_str, "%11.2f", a);
                     COUT << res_str;
-                    LOG(log_temporal, to_string(ns_per_op));
+                    LOG(log_temporal, ss.str());
 
                 }
             } else {
