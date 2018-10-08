@@ -30,6 +30,7 @@ using namespace std;
 
 #include <string>
 #include <code_annotation.h>
+
 extern string YAMB_ANNOTATE_LOG_FILE;
 
 void bm_parameters::print_configuration() {
@@ -47,14 +48,17 @@ void bm_parameters::print_configuration() {
     printf("  %-25s    %-10s \n", "Measure are displayed in ", getValue(m_unit).c_str());
     printf("  %-25s    %-10s \n", "Measure represents the", getValue(m_DISP).c_str());
     printf("  %-25s    %-10d \n", "Cache line size", m_CACHE_LINE);
-    printf("  %-25s    %-10s \n", "Stride range in byte", string( to_string(m_MIN_STRIDE) + " - " + to_string(m_MAX_STRIDE)).c_str());
-    printf("  %-25s    %-10s \n", "Log range", string( to_string(m_MIN_LOG10) + " - " + to_string(m_MAX_LOG10)).c_str());
+    printf("  %-25s    %-10s \n", "Stride range in byte",
+           string(to_string(m_MIN_STRIDE) + " - " + to_string(m_MAX_STRIDE) + " mode " +
+                  getValue(m_STRIDE_MODE).c_str()).c_str());
+    printf("  %-25s    %-10s \n", "Log range", string(to_string(m_MIN_LOG10) + " - " + to_string(m_MAX_LOG10)).c_str());
     printf("  %-25s    %-10s \n", "Step Log", to_string(m_STEP_LOG10).c_str());
 
-    printf("  %-25s    %-10s \n", "Memory range", string( (convert_size(min)) + " - " + (convert_size(max))).c_str());
-    printf("  %-25s    %-10s \n", "Save output ", m_is_log ? ("yes in : " + m_log_file_name).c_str()  : "no output file");
-    printf("  %-25s    %-10s \n", "Annotation file for YAMB", m_is_annotate ? ("yes in : " + m_annotate_file_name).c_str()  : "no");
-
+    printf("  %-25s    %-10s \n", "Memory range", string((convert_size(min)) + " - " + (convert_size(max))).c_str());
+    printf("  %-25s    %-10s \n", "Save output ",
+           m_is_log ? ("yes in : " + m_log_file_name).c_str() : "no output file");
+    printf("  %-25s    %-10s \n", "Annotation file for YAMB",
+           m_is_annotate ? ("yes in : " + m_annotate_file_name).c_str() : "no");
 
 
     cout << endl;
@@ -76,8 +80,9 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
     //Parse and check the argument validity
     parse_arguments(argc, argv);
 
-    //Select the correct benchmark
 
+
+    //Select the correct benchmark
     //----- READ BENCHMARK -----
     if (m_type == BENCH_TYPE::READ) {
         if (m_mode == BENCH_MODE::NORMAL) {
@@ -266,11 +271,19 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "0", // Default.
             0, // Required?
             1, // Number of args expected.
-            0, // Delimiter if expecting multiple args.
+            ',', // Delimiter if expecting multiple args.
             "only one stride measured", // Help description.
             "--stride" // Flag token.
     );
 
+    opt.add(
+            getValue(BENCH_STRIDE::ODD).c_str(), // Default.
+            1, // Required?
+            1, // Number of args expected.
+            0, // Delimiter if expecting multiple args.
+            "Odd or even stride", // Help description.
+            "--stridemode" // Flag token.
+    );
 
 
     opt.add(
@@ -337,9 +350,6 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "only one stride measured", // Help description.
             "--log" // Flag token.
     );
-
-
-
 
 
     opt.add(
@@ -447,7 +457,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         std::string usage;
         opt.getUsage(usage, 120, ezOptionParser::INTERLEAVE);
         std::cout << usage;
-        exit (0);
+        exit(0);
     }
 
 
@@ -533,7 +543,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         cout << "Error: please check the size of your matrix (" << m_MAT_SIZE << ")\n";
         exit(EXIT_FAILURE);
     };
-    m_MAT_NB_ELEM = size_t (size_t(m_MAT_SIZE) / (sizeof(BM_DATA_TYPE)));
+    m_MAT_NB_ELEM = size_t(size_t(m_MAT_SIZE) / (sizeof(BM_DATA_TYPE)));
 
 
     opt.get("--maxops")->getInt(m_MAX_OPS);
@@ -542,8 +552,8 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--minstride")->getInt(m_MIN_STRIDE);
     m_MIN_STRIDE /= sizeof(BM_DATA_TYPE);
-    if (m_MIN_STRIDE < 1){
-        cout <<"Error: please check the size of the minimum stride (" << m_MIN_STRIDE << " byte)\n";
+    if (m_MIN_STRIDE < 1) {
+        cout << "Error: please check the size of the minimum stride (" << m_MIN_STRIDE << " byte)\n";
         exit(EXIT_FAILURE);
     }
 
@@ -551,15 +561,50 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     m_MAX_STRIDE /= sizeof(BM_DATA_TYPE);
 
 
-    opt.get("--stride")->getInt(itmp);
-    if (itmp > 0){
-        if (itmp < 8){
-            cout <<"Error: please check the size of the stride (" << m_MIN_STRIDE << " byte)\n";
+
+    if(opt.isSet("--stride")){
+        vector<vector<int>> v;
+        opt.get("--stride")->getMultiInts(v);
+
+        if ( v.size() == 0 ){
+            cout << "Error: please enter a stride in byte separated by ',' character\n";
+            exit(EXIT_FAILURE);
+
+        }
+        m_STRIDE_LIST = v.at(0);
+        sort(m_STRIDE_LIST.begin(), m_STRIDE_LIST.end());
+
+        if ( m_STRIDE_LIST.at(0) < 8){
+            cout << "Error: please enter a stride in byte (must be >= 8)\n";
             exit(EXIT_FAILURE);
         }
-        m_MIN_STRIDE=itmp / sizeof(BM_DATA_TYPE);
-        m_MAX_STRIDE=itmp / sizeof(BM_DATA_TYPE);
+        m_MIN_STRIDE = m_STRIDE_LIST[0];
+        m_MAX_STRIDE = m_STRIDE_LIST[m_STRIDE_LIST.size() - 1];
     }
+
+
+    opt.get("--stridemode")->getString(tmp);
+    std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::toupper);
+    m_STRIDE_MODE = getKey(tmp);
+    if (m_STRIDE_MODE == -1 ||
+        (m_STRIDE_MODE != BENCH_STRIDE::EVEN && m_STRIDE_MODE != BENCH_STRIDE::ODD)) {
+        cout << "Error check the stride mode value (" << tmp << " " << m_STRIDE_MODE << ") : can be ODD or EVEN\n";
+        exit(EXIT_FAILURE);
+    }
+
+    if( ! opt.isSet("--stride")) {
+        //Generate the stride list
+        for (int step = m_MIN_STRIDE; step <= m_MAX_STRIDE; step = ((step * 2))) {
+            //Stride de step element
+            //converti en byte
+            //décallage si impaire
+            m_STRIDE_LIST.push_back((step * sizeof(BM_DATA_TYPE)) + ((m_STRIDE_MODE == BENCH_STRIDE::ODD) ? 0 : +7));
+        }
+        m_MIN_STRIDE = m_STRIDE_LIST[0];
+        m_MAX_STRIDE = m_STRIDE_LIST[m_STRIDE_LIST.size() - 1];
+    }
+
+
 
     opt.get("--measure")->getInt(m_MAX_MEASURES);
 
@@ -575,24 +620,23 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     opt.get("--maxlog")->getDouble(m_MAX_LOG10);
 
     opt.get("--log")->getDouble(dtmp);
-    if (dtmp > 0){
-        m_MIN_LOG10=dtmp;
-        m_MAX_LOG10=dtmp;
+    if (dtmp > 0) {
+        m_MIN_LOG10 = dtmp;
+        m_MAX_LOG10 = dtmp;
     }
 
 
-    if (opt.isSet("--hugepages")){
-        m_is_huge_pages=true;
-    }
-    else
-        m_is_huge_pages=false;
+    if (opt.isSet("--hugepages")) {
+        m_is_huge_pages = true;
+    } else
+        m_is_huge_pages = false;
 
 
-    if (opt.isSet("--output")){
-        m_is_log=true;
+    if (opt.isSet("--output")) {
+        m_is_log = true;
         opt.get("--output")->getString(m_log_file_name);
         //Check if the file name was given in argument, and is is not the next option (begin with --)
-        if(m_log_file_name == "" || ! strncmp(m_log_file_name.c_str(), string("--").c_str(), string("--").size())){
+        if (m_log_file_name == "" || !strncmp(m_log_file_name.c_str(), string("--").c_str(), string("--").size())) {
             cout << "Error: please write the name of the output file\n";
             exit(EXIT_FAILURE);
         }
@@ -600,28 +644,26 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         m_log_file.clear();
 
 
-    }
-    else
-        m_is_log=false;
+    } else
+        m_is_log = false;
 
 
-    if (opt.isSet("--annotate")){
-        m_is_annotate=true;
+    if (opt.isSet("--annotate")) {
+        m_is_annotate = true;
         opt.get("--annotate")->getString(m_annotate_file_name);
         //Check if the file name was given in argument, and is is not the next option (begin with --)
-        if(m_annotate_file_name.empty() || ! strncmp(m_annotate_file_name.c_str(), string("--").c_str(), string("--").size())){
+        if (m_annotate_file_name.empty() ||
+            !strncmp(m_annotate_file_name.c_str(), string("--").c_str(), string("--").size())) {
             cout << "Error: please write the name of the annotate file\n";
             exit(EXIT_FAILURE);
         }
-        YAMB_ANNOTATE_LOG_FILE = m_annotate_file_name ;
-    }
-    else{
-        m_is_annotate=false;
+        YAMB_ANNOTATE_LOG_FILE = m_annotate_file_name;
+    } else {
+        m_is_annotate = false;
     }
 
 
     opt.get("--steplog")->getDouble(m_STEP_LOG10);
-
 
 
     string pretty;
@@ -649,8 +691,12 @@ string bm_parameters::getValue(int key) {
     exit(EXIT_FAILURE);
 }
 
+bm_parameters::bm_parameters() : m_STRIDE_LIST() {
+
+}
+
 bm_parameters::~bm_parameters() {
-    if(m_log_file.is_open()){
+    if (m_log_file.is_open()) {
         m_log_file.close();
     }
 }
