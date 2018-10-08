@@ -82,9 +82,9 @@ def main():
 
     log_file_array = 1
     if (len_first > len_last):
-        log_file_array = np.loadtxt(file_txt[:-1], delimiter=',', dtype='float')
+        log_file_array = np.loadtxt(file_txt[:-1], delimiter=',', dtype='float', comments='#')
     else:
-        log_file_array = np.loadtxt(file_txt, delimiter=',', dtype='float')
+        log_file_array = np.loadtxt(file_txt, delimiter=',', dtype='float', comments='#')
 
     # -- PARSING LOG FILE --
 
