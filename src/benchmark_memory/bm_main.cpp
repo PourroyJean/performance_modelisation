@@ -59,8 +59,8 @@ std::stringstream black_hole;
 #define LOG(string, message)  if( p->m_is_log ) { string += message; }
 #define ANNOTATE(ping, color)  if( p->m_is_annotate ) { yamb_annotate_set_event(ping, color); }
 
-//#define SCREEN_OUTPUT false
-#define SCREEN_OUTPUT true
+#define SCREEN_OUTPUT false
+//#define SCREEN_OUTPUT true
 
 
 int main(int argc, const char *argv[]) {
