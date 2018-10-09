@@ -92,6 +92,7 @@ int main(int argc, const char *argv[]) {
 
     bm_parameters *my_parameters;
 
+
     //Parse argument, initiliaze the argument structure and print the configuration
     COUT_MPI << "\n ------------- CONFIGURATION --------------\n";
     my_parameters = new bm_parameters();
@@ -107,7 +108,7 @@ int main(int argc, const char *argv[]) {
     if( my_parameters->m_is_log ) {
         stringstream ss;
         std::copy( argv+1, argv+argc, ostream_iterator<const char*>( ss, " " ) ) ;
-        my_parameters->m_log_file << "#This was launch with : " << ss.str() << flush;
+        my_parameters->m_log_file << "#This was launch with : " << ss.str() << endl << flush;
 
     }
 
@@ -187,7 +188,6 @@ int work(bm_parameters *p) {
         }
         printf("\n");
     }
-
 
     //Work
     for (log_max_index = p->m_MIN_LOG10; log_max_index < p->m_MAX_LOG10 + .0000001; log_max_index += p->m_STEP_LOG10) {
