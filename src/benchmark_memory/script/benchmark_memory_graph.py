@@ -168,7 +168,8 @@ def main():
     if _is_annotate:
         _fig.canvas.mpl_connect("motion_notify_event", hover)
 
-    # exit(-1)
+    # No negatives values
+    plt.ylim(ymin=0)
 
     # Output: graphical or png file ?
     if _screen:
@@ -178,6 +179,8 @@ def main():
     else:
         logging.info(" Output = " + _path_image_file)
         plt.savefig(str(_path_image_file))
+
+
 
 
 # --------------------------------------------------------------------------------------------
