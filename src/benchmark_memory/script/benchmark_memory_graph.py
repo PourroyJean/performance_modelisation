@@ -82,9 +82,9 @@ def main():
 
     log_file_array = 1
     if (len_first > len_last):
-        log_file_array = np.loadtxt(file_txt[:-1], delimiter=',', dtype='float')
+        log_file_array = np.loadtxt(file_txt[:-1], delimiter=',', dtype='float', comments='#')
     else:
-        log_file_array = np.loadtxt(file_txt, delimiter=',', dtype='float')
+        log_file_array = np.loadtxt(file_txt, delimiter=',', dtype='float', comments='#')
 
     # -- PARSING LOG FILE --
 
@@ -128,10 +128,10 @@ def main():
         # - We generate a box which will be used when the cursor is on the point
         if _is_annotate:
             _sc_l.extend([_ax.scatter(x_value_dataset_size, y_value, color=COLOR[i])])
-            annot = _ax.annotate("", xy=(0, 0), xytext=(20, 20), textcoords="offset points",
-                                 bbox=dict(boxstyle="round", fc="w"),
-                                 arrowprops=dict(arrowstyle="->"))
-            annot.set_visible(False)
+            # annot = _ax.annotate("", xy=(0, 0), xytext=(20, 20), textcoords="offset points",
+            #                      bbox=dict(boxstyle="round", fc="w"),
+            #                      arrowprops=dict(arrowstyle="->"))
+            # annot.set_visible(False)
 
 
     ## -- DRAWING VERTICAL LINES FOR CACHE L1 L2 L3 --
@@ -168,7 +168,8 @@ def main():
     if _is_annotate:
         _fig.canvas.mpl_connect("motion_notify_event", hover)
 
-    # exit(-1)
+    # No negatives values
+    plt.ylim(ymin=0)
 
     # Output: graphical or png file ?
     if _screen:
@@ -178,6 +179,8 @@ def main():
     else:
         logging.info(" Output = " + _path_image_file)
         plt.savefig(str(_path_image_file))
+
+
 
 
 # --------------------------------------------------------------------------------------------
@@ -259,21 +262,21 @@ def hover(event):
     global names
     global _stride_array
     global _ax
-    vis = annot.get_visible()
+    # vis = annot.get_visible()
     if event.inaxes == _ax:
         for i in range(0, len(_sc_l)):
             sc = _sc_l[i]
-
             cont, ind = sc.contains(event)
             if cont:
                 print(" Stride = " + str(_stride_array[i]))
-                update_annot(ind, sc, str(_stride_array[i]))
-                annot.set_visible(True)
-                _fig.canvas.draw_idle()
-            else:
-                if vis:
-                    annot.set_visible(False)
-                    _fig.canvas.draw_idle()
+                # TODO remettre
+                # update_annot(ind, sc, str(_stride_array[i]))
+                # annot.set_visible(True)
+                # _fig.canvas.draw_idle()
+            # else:
+            #     if vis:
+            #         annot.set_visible(False)
+            #         _fig.canvas.draw_idle()
 
 
 

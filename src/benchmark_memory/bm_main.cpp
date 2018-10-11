@@ -11,9 +11,11 @@
 #include "bm_misc.h"
 #include <sys/shm.h>        // Large parge
 #include <unistd.h>
+#include <iterator>
 
 
 #include <sys/shm.h>
+#include <iomanip>
 
 #include "misc.h"
 #include "bm_parameters.h"
@@ -43,6 +45,7 @@ bool WITH_MPI = false;
 int shmid = -2;
 int mpi_rank = 0;
 int mpi_size = 1;
+bool is_I_LOG = false;
 
 std::stringstream black_hole;
 
@@ -54,10 +57,7 @@ std::stringstream black_hole;
 #endif
 
 
-#define LOG(string, message)  if( p->m_is_log ) { string += message; }
-#define ANNOTATE(ping, color)  if( p->m_is_annotate ) { yamb_annotate_set_event(ping, color); }
 
-#define SCREEN_OUTPUT false
 
 int main(int argc, const char *argv[]) {
     fclose(stderr);
@@ -82,11 +82,12 @@ int main(int argc, const char *argv[]) {
     MPI_Init(&argc, &m_argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
-    DEBUG << "Hello world from processor "  << mpi_rank << "out of " << mpi_size << "processors\n";
+    DEBUG << "Hello world from processor "  << mpi_rank << "out of " << mpi_size << "processors\n" << flush;
 #endif
 
 
     bm_parameters *my_parameters;
+
 
     //Parse argument, initiliaze the argument structure and print the configuration
     COUT_MPI << "\n ------------- CONFIGURATION --------------\n";
@@ -99,7 +100,20 @@ int main(int argc, const char *argv[]) {
     //Matrice initialisation
     init_mat(my_parameters);
 
+
+    is_I_LOG = (mpi_rank == 0 && my_parameters->m_is_log );
+    if (is_I_LOG) {
+        my_parameters->m_log_file.open(my_parameters->m_log_file_name, std::ios_base::binary);
+        my_parameters->m_log_file.clear();
+        stringstream ss;
+        std::copy(argv + 1, argv + argc, ostream_iterator<const char *>(ss, " "));
+        my_parameters->m_log_file << "#This was launch with : " << ss.str() << endl << flush;
+
+    }
+
     COUT_MPI << "\n ---------------- BENCHMARK ----------------\n";
+
+
 
     MPI_BARRIER
     start_time = get_micros();
@@ -125,8 +139,12 @@ int main(int argc, const char *argv[]) {
     } else {
         free(mat);
     }
+    if (is_I_LOG) {
+        my_parameters->m_log_file.close();
+    }
 
-    MPI_FINALIZE
+
+        MPI_FINALIZE
 
 
     return (0);
@@ -136,17 +154,16 @@ int work(bm_parameters *p) {
     //Some init
     double log_max_index, time1, time2, ns_per_op, num_ops, best_measure, worst_measure, sum_measures;
     uint64_t max_index;
-    int  measure;
+    int measure;
     string log_temporal = "";
     string big_log = "";
     char res_str[100];
 
 
-
     //Print header
     if (mpi_rank == 0) {
         printf("_ %s Stride  S   ->", p->m_prefix.c_str());
-        LOG(log_temporal, "-1,");
+        LOG_MPI(log_temporal, "-1,");
 
         for (int stride : p->m_STRIDE_LIST) {
             char res_str[10];
@@ -159,14 +176,14 @@ int work(bm_parameters *p) {
             if (p->m_is_log) {
                 string s(res_str);
                 s.erase(remove(s.begin(), s.end(), ' '), s.end());
-                LOG(log_temporal, s);
+                LOG_MPI(log_temporal, s);
                 if (stride != p->m_MAX_STRIDE) {
-                    LOG(log_temporal, ",");
+                    LOG_MPI(log_temporal, ",");
                 }
             }
         }
         printf("\n");
-        LOG(log_temporal, '\n');
+        LOG_MPI(log_temporal, '\n');
 
         printf("_ %s Value       ->", p->m_prefix.c_str());
         for (int stride : p->m_STRIDE_LIST) {
@@ -177,7 +194,6 @@ int work(bm_parameters *p) {
         }
         printf("\n");
     }
-
 
     //Work
     for (log_max_index = p->m_MIN_LOG10; log_max_index < p->m_MAX_LOG10 + .0000001; log_max_index += p->m_STEP_LOG10) {
@@ -190,13 +206,13 @@ int work(bm_parameters *p) {
 
         if (mpi_rank == 0) {
             printf("_ %s K = %10s", p->m_prefix.c_str(), convert_size(istride * 1024).c_str());
-            LOG(log_temporal, to_string(istride * 1024) + ",");
+            LOG_MPI(log_temporal, to_string(istride * 1024) + ",");
             ANNOTATE(string("K = " + convert_size(istride * 1024)).c_str(), "blue");
         }
 
         for (int stride : p->m_STRIDE_LIST) {
             if (stride != p->m_MIN_STRIDE) {
-                LOG(log_temporal, ",");
+                LOG_MPI(log_temporal, ",");
             }
             double gb;
             best_measure = BIG_VAL;
@@ -256,9 +272,13 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
                 if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
                 if ((p->m_DISP == DISP_MODE::BEST || p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO)) {
-                    sprintf(res_str, "%11.2f", ns_per_op);
+                    stringstream ss;
+                    ss << fixed << setprecision(2) << ns_per_op;
+                    float a;
+                    ss >> a;
+                    sprintf(res_str, "%11.2f", a);
                     COUT << res_str;
-                    LOG(log_temporal, ns_per_op);
+                    LOG_MPI(log_temporal, ss.str());
                 }
 
                 //Print the worst measure
@@ -268,9 +288,13 @@ int work(bm_parameters *p) {
                 if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
                 if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
                 if (p->m_DISP == DISP_MODE::ALL) {
-                    sprintf(res_str, "%11.2f", ns_per_op);
+                    stringstream ss;
+                    ss << fixed << setprecision(2) << ns_per_op;
+                    float a;
+                    ss >> a;
+                    sprintf(res_str, "%11.2f", a);
                     COUT << res_str;
-                    LOG(log_temporal, to_string(ns_per_op));
+                    LOG_MPI(log_temporal, ss.str());
                 }
 
                 //Print the average measure
@@ -284,26 +308,32 @@ int work(bm_parameters *p) {
                     ns_per_op *= p->m_GHZ;
                 }
                 if (p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO || p->m_DISP == DISP_MODE::AVERAGE) {
-                    sprintf(res_str, "%11.2f", ns_per_op);
+                    stringstream ss;
+                    ss << fixed << setprecision(2) << ns_per_op;
+                    float a;
+                    ss >> a;
+                    sprintf(res_str, "%11.2f", a);
                     COUT << res_str;
-                    LOG(log_temporal, to_string(ns_per_op));
+                    LOG_MPI(log_temporal, ss.str());
 
                 }
             } else {
                 sprintf(res_str, "%11s", "-");
                 COUT << res_str;
-                LOG(log_temporal, "0");
+                LOG_MPI(log_temporal, "0");
             }
         }
 
         COUT_MPI << endl << flush;
-        LOG(log_temporal, "\n");
-        LOG(big_log, log_temporal);
+        LOG_MPI(log_temporal, "\n");
+        LOG_MPI(big_log, log_temporal);
         log_temporal = "";
     }
     //Write to the file only at the end of the benchmark: performance matter
     //Move this line above to be able to stop the benchmark while being able to get the output file
-    p->m_log_file << big_log << flush;
+    if (is_I_LOG){
+        p->m_log_file << big_log << flush;
+    }
 
 
 }

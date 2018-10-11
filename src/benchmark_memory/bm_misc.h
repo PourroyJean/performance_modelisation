@@ -36,10 +36,17 @@ extern BM_DATA_TYPE *mat;  //THE matrix :)
 
 extern int mpi_rank;
 extern int mpi_size;
+extern bool is_I_LOG;
 extern std::stringstream black_hole;
 #define COUT_MPI ((mpi_rank == 0) ? std::cout : black_hole)
 #define COUT ((SCREEN_OUTPUT) ? std::cout : black_hole)
 #define DEBUG_MPI ((mpi_rank == 0) ? DEBUG : black_hole)
+#define LOG_MPI(string, message)  if( is_I_LOG ) { string += message; }
+#define ANNOTATE(ping, color)  if( p->m_is_annotate ) { yamb_annotate_set_event(ping, color); }
+
+//#define SCREEN_OUTPUT false
+#define SCREEN_OUTPUT true
+
 
 
 extern bool WITH_MPI;
