@@ -64,11 +64,7 @@ int main(int argc, const char *argv[]) {
     double tot, band;
     double start_time, end_time = 0.0;
 
-//    cout.rdbuf(NULL);
-
-
     char **m_argv = (char **) argv;
-//    strdup(*argv);
 
 #ifdef  COMPILED_WITH_MPI
     if ( ! is_Launched_with_mpirun()){
