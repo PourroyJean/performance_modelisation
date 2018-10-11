@@ -640,10 +640,6 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
             cout << "Error: please write the name of the output file\n";
             exit(EXIT_FAILURE);
         }
-        m_log_file.open(m_log_file_name, std::ios_base::binary);
-        m_log_file.clear();
-
-
     } else
         m_is_log = false;
 
