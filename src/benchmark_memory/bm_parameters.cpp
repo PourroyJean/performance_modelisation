@@ -161,6 +161,7 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
             }
         }
     }
+    return 0;
 }
 
 int bm_parameters::setup_parser(int argc, const char *argv[]) {
@@ -444,7 +445,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "-h"    // Flag token.
     );
 
-
+    return 0;
 }
 
 int bm_parameters::parse_arguments(int argc, const char *argv[]) {
@@ -669,6 +670,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     while (std::getline(f, line)) {
         DEBUG_MPI << line << std::endl;
     }
+    return 0;
 }
 
 
