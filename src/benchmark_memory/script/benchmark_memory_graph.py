@@ -67,6 +67,7 @@ def main():
     global _is_annotate
     global _is_cache
     global _stride_array
+    global _title
     is_screen_available()
 
 
@@ -76,15 +77,29 @@ def main():
     # -- OPEN LOG FILE --
 
     # we check if the last line is full (could not be if the program was stopped)
+    _title = open(_fileLog_mem).readline()
     file_txt = open(_fileLog_mem, 'rt').readlines()
     len_first = len(file_txt[1])
     len_last = len(file_txt[-1])
+
+    i = 0
+    res = ""
+    for word in _title.split():
+        cr = ""
+        if (i >= 7):
+            cr = "\n"
+            i = 0
+        res += word + " " +  cr
+        i = i + 1
+    _title = res
 
     log_file_array = 1
     if (len_first > len_last):
         log_file_array = np.loadtxt(file_txt[:-1], delimiter=',', dtype='float', comments='#')
     else:
         log_file_array = np.loadtxt(file_txt, delimiter=',', dtype='float', comments='#')
+
+
 
     # -- PARSING LOG FILE --
 
@@ -102,7 +117,7 @@ def main():
     ## -- PLOT THE RESULTS --
     _fig, _ax = plt.subplots()  # create figure and axes
 
-    title_font = {'fontname': 'Arial', 'size': '20', 'color': 'black', 'weight': 'bold',
+    title_font = {'fontname': 'Arial', 'size': '15', 'color': 'black',
                   'verticalalignment': 'bottom'}
     axis_font = {'fontname': 'Arial', 'size': '14', 'weight': 'bold'}
     contour_color = 'white'
@@ -145,7 +160,7 @@ def main():
 
     plt.xlabel("Data set size", **axis_font)
     plt.ylabel("Bandwidth (GBs/s)", **axis_font)
-    plt.title("Bench_mem - " + str(os.path.basename(_fileLog_mem)), **title_font)
+    plt.title("Bench_mem - " + str(os.path.basename(_fileLog_mem) + str("\n") + _title), **title_font)
 
     plt.xscale('log')
     _ax.legend(title="Size of stride (byte)", loc=0,
