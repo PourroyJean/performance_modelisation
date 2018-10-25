@@ -25,7 +25,7 @@
 
 using namespace std;
 
-BM_DATA_TYPE *data_alloc_spe(size_t size);
+void data_alloc_spe(size_t size);
 
 void init_mat(bm_parameters *p);
 
@@ -39,7 +39,6 @@ double total_loops = 0.01; //TODO metre a 0
 
 BM_DATA_TYPE *mat;  //THE matrix :)
 bool WITH_MPI = false;
-#define ADDR (0x0UL)
 
 
 int shmid = -2;
@@ -55,8 +54,6 @@ std::stringstream black_hole;
 #else
 #define MESS "NO MPI"
 #endif
-
-
 
 
 int main(int argc, const char *argv[]) {
@@ -96,8 +93,7 @@ int main(int argc, const char *argv[]) {
     //Matrice initialisation
     init_mat(my_parameters);
 
-
-    is_I_LOG = (mpi_rank == 0 && my_parameters->m_is_log );
+    is_I_LOG = (mpi_rank == 0 && my_parameters->m_is_log);
     if (is_I_LOG) {
         my_parameters->m_log_file.open(my_parameters->m_log_file_name, std::ios_base::binary);
         my_parameters->m_log_file.clear();
@@ -132,6 +128,12 @@ int main(int argc, const char *argv[]) {
     //Release the memory:
     if (my_parameters->m_is_huge_pages) {
         shmctl(shmid, IPC_RMID, NULL);
+        if (shmdt((const void *) mat) != 0) {
+            COUT << "HUGE_PAGE: Detach failure\n";
+            shmctl(shmid, IPC_RMID, NULL);
+            exit(4);
+        }
+        shmctl(shmid, IPC_RMID, NULL);
     } else {
         free(mat);
     }
@@ -140,7 +142,7 @@ int main(int argc, const char *argv[]) {
     }
 
 
-        MPI_FINALIZE
+    MPI_FINALIZE
 
 
     return (0);
@@ -215,7 +217,11 @@ int work(bm_parameters *p) {
             worst_measure = 0;
             sum_measures = 0.0;
             if (mpi_rank == 0) {
-                ANNOTATE(string("Stride : " + to_string(stride)).c_str(), "red");
+                string s = "1";
+                if (mpi_size > 1) {
+                    s = to_string(mpi_size);
+                }
+                ANNOTATE(string("Stride : " + to_string(stride) + " nb_proc(" + s + ")").c_str(), "red");
             }
             for (measure = 0; measure < p->m_MAX_MEASURES; measure++) {
                 double t;
@@ -327,11 +333,10 @@ int work(bm_parameters *p) {
     }
     //Write to the file only at the end of the benchmark: performance matter
     //Move this line above to be able to stop the benchmark while being able to get the output file
-    if (is_I_LOG){
+    if (is_I_LOG) {
         p->m_log_file << big_log << flush;
     }
-
-
+    return 0;
 }
 
 
@@ -342,19 +347,59 @@ int work(bm_parameters *p) {
 //   then for write count 2 per operation    read+write
 //
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-BM_DATA_TYPE *data_alloc_spe(size_t size) {
+
+// Thanks to Linus Torvald : https://github.com/torvalds/linux/blob/master/tools/testing/selftests/vm/hugepage-shm.c
+#ifdef __ia64__
+#define ADDR (void *)(0x8000000000000000UL)
+#define SHMAT_FLAGS (SHM_RND)
+#else
+#define ADDR (void *)(0x0UL)
+#define SHMAT_FLAGS (0)
+#endif
+
+
+void data_alloc_spe(size_t size) {
     BM_DATA_TYPE **data;
-    void *p;
-//    len >>= 24;
-//    len++;
-//    len <<= 24; //align 16MB
-    shmid = shmget(IPC_PRIVATE, size, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
-    cout << "\n SHMID  " << shmid << endl;
-    assert(shmid >= 0);
-    p = (ui64 *) shmat(shmid, (void *) ADDR, SHM_RND);
-    *data = (BM_DATA_TYPE *) p;
-    assert(*data != (void *) (-1ULL));
-    return *data;
+    MPI_BARRIER
+
+
+    cout << flush;
+    shmid = shmget(IPC_PRIVATE, size, SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_R | SHM_W);
+    if (shmid == -1) {
+        DEBUG << "ERROR on shmget " << std::strerror(errno) << '\n';
+        exit(1);
+    } else {
+        DEBUG << "SHMID  " << shmid << endl;
+    }
+
+
+#ifdef  COMPILED_WITH_MPI
+    //Est ce que tout le monde a son shmid
+    int local = 1;
+    if (shmid == -1){
+        local =0;
+    }
+    int global = 0;
+    MPI_Allreduce(&local, &global, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
+    cout << "MON GLOBAL " << global << endl;
+    if(global == mpi_size){
+        cout << "\n ALL OK\n";
+    }
+    else{
+        cout << "\n PAS ALL OK\n";
+        shmctl(shmid, IPC_RMID, NULL);
+    }
+#endif
+
+
+    //shmat return 0xfffff if failed, equal to (char *) -1
+    mat = (BM_DATA_TYPE *) shmat(shmid, ADDR, SHMAT_FLAGS);
+    if ((char * ) mat == (char *)-1) {
+        DEBUG << "Shared memory attach failure\n";
+        shmctl(shmid, IPC_RMID, NULL);
+        exit(2);
+    }
+
 }
 
 void init_mat(bm_parameters *p) {
@@ -367,11 +412,11 @@ void init_mat(bm_parameters *p) {
 //    set_affinity(MEM_AFF); //TODO
 
     if (p->m_is_huge_pages) {
-        mat_for_free = (BM_DATA_TYPE *) data_alloc_spe(p->m_MAT_SIZE);
+        data_alloc_spe(p->m_MAT_SIZE);
     } else {
-        mat_for_free = (BM_DATA_TYPE *) malloc(p->m_MAT_SIZE);
+        mat = (BM_DATA_TYPE *) malloc(p->m_MAT_SIZE);
     }
-
+    mat_for_free = mat;
     assert(mat_for_free != NULL);
 
 
