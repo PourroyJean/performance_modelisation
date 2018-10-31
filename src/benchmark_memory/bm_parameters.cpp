@@ -94,18 +94,29 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
                 m_BENCHMARK = sum_read_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_read_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
         if (m_mode == BENCH_MODE::SPECIAL) {
             if (m_UNROLL == UNROLL1) {
-                cout << "\nERROR: Not yet implemented\n";
-                exit(-1);
+                m_BENCHMARK = sum_read_unroll1; //without unrolling it is the same as normal mode
             } else if (m_UNROLL == UNROLL2) {
                 m_BENCHMARK = sum_readspe_unroll2;
             } else if (m_UNROLL == UNROLL4) {
                 m_BENCHMARK = sum_readspe_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_readspe_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                m_BENCHMARK = sum_readspe_unroll16;
+            } else if (m_UNROLL == UNROLL32) {
+                m_BENCHMARK = sum_readspe_unroll32;
+            }else if (m_UNROLL == UNROLL64) {
+                m_BENCHMARK = sum_readspe_unroll64;
             }
         }
 
@@ -119,6 +130,12 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
                 m_BENCHMARK = sum_readind_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_readind_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
     }
@@ -133,31 +150,47 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
                 m_BENCHMARK = sum_write_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_write_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
         if (m_mode == BENCH_MODE::SPECIAL) {
             if (m_UNROLL == UNROLL1) {
-                cout << "\nERROR: Not yet implemented\n";
-                exit(-1);
+                m_BENCHMARK = sum_write_unroll1;
             } else if (m_UNROLL == UNROLL2) {
                 m_BENCHMARK = sum_writespe_unroll2;
             } else if (m_UNROLL == UNROLL4) {
                 m_BENCHMARK = sum_writespe_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_writespe_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
 
         if (m_mode == BENCH_MODE::INDEXED) {
             if (m_UNROLL == UNROLL1) {
-                cout << "\nERROR: Not yet implemented\n";
-                exit(-1);
+                m_BENCHMARK = sum_write_unroll1;
             } else if (m_UNROLL == UNROLL2) {
                 m_BENCHMARK = sum_writeind_unroll2;
             } else if (m_UNROLL == UNROLL4) {
                 m_BENCHMARK = sum_writeind_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_writeind_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
     }
@@ -489,8 +522,9 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
 
     opt.get("--unroll")->getInt(m_UNROLL);
-    if (!((m_UNROLL == UNROLL1) || (m_UNROLL == UNROLL2) || (m_UNROLL == UNROLL4) || (m_UNROLL == UNROLL8))) {
-        cout << "Error: please check the unroll argument: " << m_UNROLL << ": can be 1, 2, 4, 8\n";
+    if (!((m_UNROLL == UNROLL1) || (m_UNROLL == UNROLL2) || (m_UNROLL == UNROLL4) || (m_UNROLL == UNROLL8) ||
+          (m_UNROLL == UNROLL16) || (m_UNROLL == UNROLL32) || (m_UNROLL == UNROLL64))) {
+        cout << "Error: please check the unroll argument: " << m_UNROLL << ": can be 1, 2, 4, 8, 16, 32, 64 \n";
         exit(EXIT_FAILURE);
     };
 
@@ -562,12 +596,11 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     m_MAX_STRIDE /= sizeof(BM_DATA_TYPE);
 
 
-
-    if(opt.isSet("--stride")){
+    if (opt.isSet("--stride")) {
         vector<vector<int>> v;
         opt.get("--stride")->getMultiInts(v);
 
-        if ( v.size() == 0 ){
+        if (v.size() == 0) {
             cout << "Error: please enter a stride in byte separated by ',' character\n";
             exit(EXIT_FAILURE);
 
@@ -575,7 +608,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         m_STRIDE_LIST = v.at(0);
         sort(m_STRIDE_LIST.begin(), m_STRIDE_LIST.end());
 
-        if ( m_STRIDE_LIST.at(0) < 8){
+        if (m_STRIDE_LIST.at(0) < 8) {
             cout << "Error: please enter a stride in byte (must be >= 8)\n";
             exit(EXIT_FAILURE);
         }
@@ -593,7 +626,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if( ! opt.isSet("--stride")) {
+    if (!opt.isSet("--stride")) {
         //Generate the stride list
         for (int step = m_MIN_STRIDE; step <= m_MAX_STRIDE; step = ((step * 2))) {
             //Stride de step element
@@ -604,7 +637,6 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         m_MIN_STRIDE = m_STRIDE_LIST[0];
         m_MAX_STRIDE = m_STRIDE_LIST[m_STRIDE_LIST.size() - 1];
     }
-
 
 
     opt.get("--measure")->getInt(m_MAX_MEASURES);
