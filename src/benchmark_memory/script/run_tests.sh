@@ -101,6 +101,28 @@ test_mpi_L3_scaling (){
     done
 }
 
+ test_L3_miss (){
+#Processors:      ( 0 80 ) ( 1 81 ) ( 2 82 ) ...
+    export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19"
+
+    large_page="--hugepages"  #TO BET SET
+    large_page=""  #TO BET SET
+#    6.0 == 7.6 MiB
+#    6.8 == 48.1 MiB
+    LOG_LIST=`seq 6.0 0.02 6.8`
+    for log in $LOG_LIST  ; do
+        printf "($log) = "
+        perf_file="test_L3_perf_log"
+        band=`perf stat -e cache-misses -o $perf_file ./bin/benchmark_memory/bm --steplog 0.10 --unroll 2 --type read --cacheline 64 --prefix out --stride 64 --matrixsize 100 --measure 500 --log $log $large_page |  grep "out K" | awk '{printf $5 ; printf "MB ";  printf $7}'`
+        misses=`cat  $perf_file | grep cache-misses |  awk '{print $1}'`
+        echo  " $band $misses"
+#        band_tot=`echo $band | awk -v nbc=$nb_core '{ print $2*nbc }'`
+#        echo "$band  -- Total = $band_tot -- Cores used : $core_list"
+    done
+}
+
+
+
 
 
 test_jean (){
@@ -114,9 +136,10 @@ test_jean (){
         nb_core=$((`echo $core_list | grep -o "," | wc -l` + 1))
         printf "($nb_core) = "
 
-        band=`(set -x; mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll 2 --type read --cacheline 64 --prefix out_stride_LONG --stride 64 --output out --matrixsize 1000 --measure 4 --log 8.11 | grep Bandwidth)`
+#        band=`(set -x; mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll 2 --type read --cacheline 64 --prefix out_stride_LONG --stride 64 --output out --matrixsize 1000 --measure 4 --log 8.11 | grep Bandwidth)`
+        band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll 2 --type read --cacheline 64 --prefix out_stride_LONG --stride 64 --output out --matrixsize 1000 --measure 4 --log 8.11 | grep Bandwidth`
         band_tot=`echo $band | awk -v nbc=$nb_core '{ print $2*nbc }'`
-        echo "$band  -- Total = $band_tot -- Cores used : $core_list"
+        echo "$band  -- Total = $band_tot -- Cores used : $I_MPI_PIN_PROCESSOR_LIST"
         core_list="$core_list,"
     done
 }
@@ -134,7 +157,7 @@ test_jean (){
 test_bw_staturation (){
 #Processors:      ( 0 80 ) ( 1 81 ) ( 2 82 ) ...
     export PIN_CORE_LIST="0 18 11 4 6 5 7 10 19 13 14 8 15 17 3 2 1 9 16 12" #unsorted
-    export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19" #sorted
+    export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19"
     large_page="--hugepages"  #TO BET SET
     core_list=
     for core_test in $PIN_CORE_LIST  ; do
@@ -142,20 +165,41 @@ test_bw_staturation (){
         export I_MPI_PIN_PROCESSOR_LIST="$core_list"
         nb_core=$((`echo $core_list | grep -o "," | wc -l` + 1))
         printf "($nb_core) = "
+#        band=`(set -x; mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --steplog 0.10 --unroll 2 --type read --cacheline 64 --prefix out_stride_LONG --stride 64 --matrixsize 1000 --measure 4 --log 8.11 $large_page | grep Bandwidth)`
         band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --steplog 0.10 --unroll 2 --type read --cacheline 64 --prefix out_stride_LONG --stride 64 --matrixsize 1000 --measure 4 --log 8.11 $large_page | grep Bandwidth`
         band_tot=`echo $band | awk -v nbc=$nb_core '{ print $2*nbc }'`
-        echo "$band  -- Total = $band_tot -- Cores used : $core_list"
+        echo "$band  -- Total = $band_tot -- Cores used : $I_MPI_PIN_PROCESSOR_LIST"
         core_list="$core_list,"
     done
 }
 
+test_prefetch_particular_stride (){
+    stride_list="71760,74288,77168,85936,86512,92656,97424"
+#    stride_list="74288,97424"
+    stride_list="73704,98304"
+    stride_list="71760"
+    #98304 meilleur avec prefetch
+ ./bin/benchmark_memory/bm --steplog 0.01 --unroll 2 --type read --cacheline 64 --stride $stride_list --output out --measure 1000 --matrixsize 50
+}
 
 
+
+test_unrolling_special (){
+
+    unrolling_list="1 2 4 8 16 32 64"
+    for UNROLL in $unrolling_list ; do
+        ./bin/benchmark_memory/bm  --type read --cacheline 64 --prefix out_stride_LONG --output out_$UNROLL --matrixsize 500 --unroll $UNROLL  --steplog 0.01 --mode special --stride 8
+    done
+
+}
+
+
+out_1 out_2 out_4 out_8 out_16 out_32 out_64
+
+#test_mpi_scaling
 #test_mpi_L3_scaling
-test_bw_staturation
+#test_bw_staturation
 #test_jean
-
-
-
-
-
+#test_L3_miss
+#test_prefetch_particular_stride
+test_unrolling_special
