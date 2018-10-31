@@ -163,6 +163,7 @@ def main():
     plt.title("Bench_mem - " + str(os.path.basename(_fileLog_mem) + str("\n") + _title), **title_font)
 
     plt.xscale('log')
+    # TODO param this
     _ax.legend(title="Size of stride (byte)", loc=0,
                ncol=2, borderaxespad=0.)
     plt.gcf().set_facecolor(contour_color)
@@ -184,6 +185,11 @@ def main():
 
     # No negatives values
     plt.ylim(ymin=0)
+    x1,x2,y1,y2 = plt.axis()
+    plt.axis((x1,x2,0,450))
+
+
+
 
     # Output: graphical or png file ?
     if _screen:
