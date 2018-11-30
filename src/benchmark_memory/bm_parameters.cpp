@@ -81,6 +81,25 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
     parse_arguments(argc, argv);
 
 
+    //If the LOG_STEP is null we try to find the highest value
+    if (m_STEP_LOG10 == 0) {
+        double max_log = 2;
+        do{
+            uint64_t max_index  = (THEINT) (double) (exp(max_log * LOG10) + 0.5);
+            if (max_index > m_MAT_NB_ELEM) {
+                max_log -= 0.01;
+                break;
+            }
+            max_log += 0.01;
+
+        }while (true);
+
+        m_MIN_LOG10 = max_log;
+        m_MAX_LOG10 = max_log;
+        m_STEP_LOG10 = 99999;
+    }
+
+
 
     //Select the correct benchmark
     //----- READ BENCHMARK -----
@@ -115,7 +134,7 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
                 m_BENCHMARK = sum_readspe_unroll16;
             } else if (m_UNROLL == UNROLL32) {
                 m_BENCHMARK = sum_readspe_unroll32;
-            }else if (m_UNROLL == UNROLL64) {
+            } else if (m_UNROLL == UNROLL64) {
                 m_BENCHMARK = sum_readspe_unroll64;
             }
         }
@@ -194,6 +213,7 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
             }
         }
     }
+
     return 0;
 }
 
@@ -570,11 +590,12 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--memaff")->getInt(m_MEM_AFF);
 
-    opt.get("--matrixsize")->getULong(m_MAT_SIZE);
+    double size;
+    opt.get("--matrixsize")->getDouble(size);
 
 //    m_MAT_SIZE += 1; //TODO WHY ?
-    m_MAT_SIZE *= (1024 * 1024); // 1 mb  == 1 * 1024 * 1024 byte
-    if (!(m_MAT_SIZE >= 1024 * 1024)) {
+    m_MAT_SIZE = size*(1024 * 1024); // 1 mb  == 1 * 1024 * 1024 byte
+    if (!(m_MAT_SIZE >=  1024)) {
         cout << "Error: please check the size of your matrix (" << m_MAT_SIZE << ")\n";
         exit(EXIT_FAILURE);
     };
@@ -693,7 +714,6 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
 
     opt.get("--steplog")->getDouble(m_STEP_LOG10);
-
 
     string pretty;
     opt.configPrint(pretty);
