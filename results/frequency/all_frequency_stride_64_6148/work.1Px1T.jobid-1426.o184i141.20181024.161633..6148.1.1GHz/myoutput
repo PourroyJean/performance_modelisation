@@ -1,0 +1,177 @@
+
+ ------------- CONFIGURATION --------------
+_DEBUG_   - PARSING -
+_DEBUG_  
+_DEBUG_                    -h    1          (default value)
+_DEBUG_            --annotate               (default value)
+_DEBUG_           --cacheline    64        
+_DEBUG_              --cpuaff    0          (default value)
+_DEBUG_             --display    AVERAGE    (default value)
+_DEBUG_                 --ghz    0          (default value)
+_DEBUG_           --hugepages    false      (default value)
+_DEBUG_               --index    1          (default value)
+_DEBUG_                 --log    0          (default value)
+_DEBUG_        --matrixoffset    0          (default value)
+_DEBUG_          --matrixsize    2000      
+_DEBUG_              --maxlog    15         (default value)
+_DEBUG_              --maxops    1          (default value)
+_DEBUG_           --maxstride    8192       (default value)
+_DEBUG_             --measure    2          (default value)
+_DEBUG_              --memaff    0          (default value)
+_DEBUG_              --minlog    3          (default value)
+_DEBUG_           --minstride    8          (default value)
+_DEBUG_                --mode    NORMAL     (default value)
+_DEBUG_              --output    out_TEST  
+_DEBUG_              --prefix    out       
+_DEBUG_             --steplog    0.05      
+_DEBUG_              --stride    64        
+_DEBUG_          --stridemode    ODD        (default value)
+_DEBUG_                --type    read      
+_DEBUG_                --unit    GB         (default value)
+_DEBUG_              --unroll    2         
+_DEBUG_             --verbose    1          (default value)
+
+-- The following configuration will be used for the benchmark:
+  Benchmark type               READ       
+  Benchmark mode               NORMAL     
+  Matrix size                  2.0 GiB    
+  Number of thread             1          
+  Memory page size             Default (4 KiB) 
+  Number of element            262144000 
+  Number of manual unroll      2          
+  Measure are displayed in     GB         
+  Measure represents the       AVERAGE    
+  Cache line size              64         
+  Stride range in byte         64 - 64 mode ODD 
+  Log range                    3.000000 - 15.000000 
+  Step Log                     0.050000   
+  Memory range                 7.0 Byte - 7.1 TiB 
+  Save output                  yes in : out_TEST 
+  Annotation file for YAMB     no         
+
+Normal mode: 
+    [X] [ ] [ ] [ ] [X] [ ] [ ] [ ] [X]  ....   [ ]
+     |               |                           | 
+     \-- Stride S ---/                           | 
+     \------------------ Size K -----------------/      
+
+
+ ---------------- BENCHMARK ----------------
+_ out Stride  S   ->         64
+_ out Value       ->    AVERAGE
+_ out K =    7.0 KiB          -
+_ out K =    8.0 KiB      38.15
+_ out K =    9.0 KiB      37.83
+_ out K =   11.0 KiB      34.96
+_ out K =   12.0 KiB      35.44
+_ out K =   13.0 KiB      37.20
+_ out K =   15.0 KiB      36.04
+_ out K =   17.0 KiB      35.66
+_ out K =   19.0 KiB      35.48
+_ out K =   22.0 KiB      34.91
+_ out K =   24.0 KiB      35.79
+_ out K =   27.0 KiB      35.71
+_ out K =   31.0 KiB      34.39
+_ out K =   34.0 KiB      35.45
+_ out K =   39.0 KiB      34.71
+_ out K =   43.0 KiB      35.65
+_ out K =   49.0 KiB      35.08
+_ out K =   55.0 KiB      35.05
+_ out K =   62.0 KiB      34.88
+_ out K =   69.0 KiB      35.23
+_ out K =   78.0 KiB      34.95
+_ out K =   87.0 KiB      34.57
+_ out K =   98.0 KiB      34.50
+_ out K =  110.0 KiB      34.62
+_ out K =  123.0 KiB      35.09
+_ out K =  138.0 KiB      34.30
+_ out K =  155.0 KiB      34.58
+_ out K =  174.0 KiB      35.10
+_ out K =  196.0 KiB      34.90
+_ out K =  220.0 KiB      34.02
+_ out K =  247.0 KiB      34.87
+_ out K =  277.0 KiB      34.88
+_ out K =  311.0 KiB      34.87
+_ out K =  348.0 KiB      34.02
+_ out K =  391.0 KiB      34.90
+_ out K =  439.0 KiB      34.90
+_ out K =  492.0 KiB      33.96
+_ out K =  553.0 KiB      34.82
+_ out K =  620.0 KiB      34.79
+_ out K =  696.0 KiB      26.66
+_ out K =  781.0 KiB      20.42
+_ out K =  876.0 KiB      19.27
+_ out K =  983.0 KiB      18.86
+_ out K =    1.1 MiB      18.17
+_ out K =    1.2 MiB      16.73
+_ out K =    1.4 MiB      16.46
+_ out K =    1.5 MiB      15.28
+_ out K =    1.7 MiB      14.01
+_ out K =    1.9 MiB      13.07
+_ out K =    2.1 MiB      12.86
+_ out K =    2.4 MiB      13.12
+_ out K =    2.7 MiB      13.36
+_ out K =    3.0 MiB      13.30
+_ out K =    3.4 MiB      13.16
+_ out K =    3.8 MiB      13.21
+_ out K =    4.3 MiB      13.20
+_ out K =    4.8 MiB      13.12
+_ out K =    5.4 MiB      13.20
+_ out K =    6.1 MiB      13.20
+_ out K =    6.8 MiB      13.19
+_ out K =    7.6 MiB      13.14
+_ out K =    8.6 MiB      13.18
+_ out K =    9.6 MiB      13.13
+_ out K =   10.8 MiB      13.15
+_ out K =   12.1 MiB      13.13
+_ out K =   13.6 MiB      13.09
+_ out K =   15.2 MiB      13.12
+_ out K =   17.1 MiB      13.10
+_ out K =   19.2 MiB      13.21
+_ out K =   21.5 MiB      13.14
+_ out K =   24.1 MiB      13.13
+_ out K =   27.1 MiB      13.09
+_ out K =   30.4 MiB      13.18
+_ out K =   34.1 MiB      12.84
+_ out K =   38.2 MiB      12.53
+_ out K =   42.9 MiB      12.18
+_ out K =   48.1 MiB      11.93
+_ out K =   54.0 MiB      11.68
+_ out K =   60.6 MiB      11.39
+_ out K =   68.0 MiB      11.20
+_ out K =   76.3 MiB      11.04
+_ out K =   85.6 MiB      10.91
+_ out K =   96.0 MiB      10.82
+_ out K =  107.8 MiB      10.72
+_ out K =  120.9 MiB      10.63
+_ out K =  135.7 MiB      10.52
+_ out K =  152.2 MiB      10.47
+_ out K =  170.8 MiB      10.39
+_ out K =  191.6 MiB      10.33
+_ out K =  215.0 MiB      10.27
+_ out K =  241.3 MiB      10.22
+_ out K =  270.7 MiB      10.20
+_ out K =  303.7 MiB      10.16
+_ out K =  340.8 MiB      10.12
+_ out K =  382.4 MiB      10.10
+_ out K =  429.0 MiB      10.07
+_ out K =  481.4 MiB      10.05
+_ out K =  540.1 MiB      10.03
+_ out K =  606.0 MiB      10.01
+_ out K =  680.0 MiB      10.00
+_ out K =  762.9 MiB       9.98
+_ out K =  856.0 MiB       9.97
+_ out K =  960.5 MiB       9.96
+_ out K =    1.1 GiB       9.95
+_ out K =    1.2 GiB       9.94
+_ out K =    1.3 GiB       9.93
+_ out K =    1.5 GiB       9.93
+_ out K =    1.7 GiB       9.91
+_ out K =    1.9 GiB       9.91
+
+ ---------------- RESULTS ----------------
+                Name    out        
+        Total micros    4117732.000000 
+         Total Loops    714525636.010000 
+         Performance    5.762889   ns/loop
+           Bandwidth    11.105541  GB/s
