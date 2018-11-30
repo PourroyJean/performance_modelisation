@@ -1,0 +1,841 @@
+000000000041def0 <_Z20sum_readspe_unroll32P13bm_parametersyiiy>:
+push   %r12
+push   %r13
+push   %r14
+push   %r15
+push   %rbx
+sub    $0x1d0,%rsp
+mov    %ecx,%r10d
+vxorpd %xmm31,%xmm31,%xmm31
+xor    %ecx,%ecx
+vmovapd %xmm31,%xmm5
+vmovapd %xmm5,%xmm4
+vmovapd %xmm4,%xmm21
+vmovapd %xmm21,%xmm20
+vmovapd %xmm20,%xmm19
+vmovapd %xmm19,%xmm18
+vmovapd %xmm18,%xmm17
+vmovapd %xmm17,%xmm16
+vmovapd %xmm16,%xmm15
+vmovapd %xmm15,%xmm14
+vmovapd %xmm14,%xmm13
+vmovapd %xmm13,%xmm12
+vmovapd %xmm12,%xmm11
+vmovapd %xmm11,%xmm10
+vmovapd %xmm10,%xmm9
+vmovapd %xmm9,%xmm8
+vmovapd %xmm8,%xmm3
+vmovapd %xmm3,%xmm1
+vmovapd %xmm1,%xmm7
+vmovapd %xmm7,%xmm6
+vmovapd %xmm6,%xmm30
+vmovapd %xmm30,%xmm29
+vmovapd %xmm29,%xmm28
+vmovapd %xmm28,%xmm27
+vmovapd %xmm27,%xmm26
+vmovapd %xmm26,%xmm25
+movslq %edx,%r9
+vmovapd %xmm25,%xmm24
+shl    $0x5,%edx
+vmovapd %xmm24,%xmm23
+movslq %edx,%rsi
+vmovsd 0x1d34c(%rip),%xmm0        # 43b300 <_ZN17_INTERNAL4111b5c8St19piecewise_constructE+0x1198>
+
+vmovsd 0x1d332(%rip),%xmm22        # 43b2f0 <_ZN17_INTERNAL4111b5c8St19piecewise_constructE+0x1188>
+
+vmovsd 0x1d332(%rip),%xmm2        # 43b2f8 <_ZN17_INTERNAL4111b5c8St19piecewise_constructE+0x1190>
+
+test   %r10d,%r10d
+jle    41ed47 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xe57>
+imul   $0xffffffffffffffa8,%r9,%r11
+mov    0x2292e6(%rip),%rdx        # 6472c0 <mat>
+lea    0x0(,%rsi,8),%rax
+
+mov    %rax,0xb8(%rsp)
+
+lea    (%r11,%rsi,8),%rax
+imul   $0xffffffffffffffb0,%r9,%r11
+shr    $0x5,%r8
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r8,%rdi
+mov    %r11,0xb0(%rsp)
+
+and    $0xfffffffffffffffe,%rdi
+imul   $0xffffffffffffffb8,%r9,%r11
+add    %rdx,%rax
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0xa8(%rsp)
+
+mov    %r9,%r11
+shl    $0x6,%r11
+neg    %r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0xa0(%rsp)
+
+imul   $0xffffffffffffffc8,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x98(%rsp)
+
+imul   $0xffffffffffffffd0,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x90(%rsp)
+
+imul   $0xffffffffffffffd8,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x88(%rsp)
+
+mov    %r9,%r11
+shl    $0x5,%r11
+neg    %r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x158(%rsp)
+
+imul   $0xffffffffffffffe8,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x80(%rsp)
+
+mov    %r9,%r11
+shl    $0x4,%r11
+neg    %r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x78(%rsp)
+lea    0x0(,%r9,8),%r11
+
+neg    %r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x70(%rsp)
+mov    %r9,%r11
+shl    $0x8,%r11
+neg    %r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x150(%rsp)
+
+imul   $0xffffffffffffff08,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x68(%rsp)
+imul   $0xffffffffffffff10,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x60(%rsp)
+imul   $0xffffffffffffff18,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x58(%rsp)
+imul   $0xffffffffffffff20,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x50(%rsp)
+imul   $0xffffffffffffff28,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x48(%rsp)
+imul   $0xffffffffffffff30,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x148(%rsp)
+
+imul   $0xffffffffffffff38,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x140(%rsp)
+
+imul   $0xffffffffffffff40,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x138(%rsp)
+
+imul   $0xffffffffffffff48,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x40(%rsp)
+imul   $0xffffffffffffff50,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x130(%rsp)
+
+imul   $0xffffffffffffff58,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x38(%rsp)
+imul   $0xffffffffffffff60,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x30(%rsp)
+imul   $0xffffffffffffff68,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x128(%rsp)
+
+imul   $0xffffffffffffff70,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x28(%rsp)
+imul   $0xffffffffffffff78,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x120(%rsp)
+
+mov    %r9,%r11
+shl    $0x7,%r11
+neg    %r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x118(%rsp)
+
+imul   $0xffffffffffffff88,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x110(%rsp)
+
+imul   $0xffffffffffffff90,%r9,%r11
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+mov    %r11,0x20(%rsp)
+imul   $0xffffffffffffff98,%r9,%r11
+imul   $0xffffffffffffffa0,%r9,%r9
+lea    (%r11,%rsi,8),%r11
+add    %rdx,%r11
+lea    (%r9,%rsi,8),%r9
+add    %r9,%rdx
+mov    %r11,0x108(%rsp)
+
+test   %r8,%r8
+jne    41e294 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0x3a4>
+mov    $0x1,%ecx
+cmp    $0x1,%r10d
+jbe    41ed47 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xe57>
+test   %r8,%r8
+jne    41e294 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0x3a4>
+inc    %ecx
+cmp    %r10d,%ecx
+jb     41e283 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0x393>
+jmpq   41ed47 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xe57>
+vmovsd %xmm3,0xd0(%rsp)
+
+mov    %rdx,0x170(%rsp)
+
+mov    %rax,0xc8(%rsp)
+
+mov    %rdi,0x168(%rsp)
+
+mov    %r8,0x100(%rsp)
+
+mov    %ecx,0x10(%rsp)
+mov    %rsi,0x178(%rsp)
+
+mov    %r10d,0x18(%rsp)
+xor    %r14d,%r14d
+cmpq   $0x2,0x100(%rsp)
+
+jb     41ee0a <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xf1a>
+mov    0x168(%rsp),%r9
+
+xor    %r13d,%r13d
+vxorpd %xmm3,%xmm3,%xmm3
+vmovsd %xmm2,%xmm3,%xmm2
+vmovsd %xmm0,%xmm3,%xmm0
+vmovupd %xmm2,(%rsp)
+vmovsd %xmm31,%xmm3,%xmm2
+vmovsd 0xd0(%rsp),%xmm31
+
+vmovsd %xmm22,%xmm3,%xmm22
+mov    %r9,0x160(%rsp)
+
+vmovsd %xmm5,%xmm3,%xmm5
+vmovsd %xmm23,0xc0(%rsp)
+
+vmovsd %xmm4,%xmm3,%xmm4
+mov    0x20(%rsp),%r10
+vmovsd %xmm21,%xmm3,%xmm21
+mov    0x28(%rsp),%r9
+vmovsd %xmm20,%xmm3,%xmm20
+mov    0x30(%rsp),%r12
+vmovsd %xmm19,%xmm3,%xmm19
+mov    0x38(%rsp),%r8
+vmovsd %xmm18,%xmm3,%xmm18
+mov    0x40(%rsp),%r11
+vmovsd %xmm17,%xmm3,%xmm17
+mov    0x48(%rsp),%rax
+vmovsd %xmm16,%xmm3,%xmm16
+mov    0x50(%rsp),%rdx
+vmovsd %xmm15,%xmm3,%xmm15
+mov    0x58(%rsp),%rcx
+vmovsd %xmm14,%xmm3,%xmm14
+mov    0x60(%rsp),%rbx
+vmovsd %xmm13,%xmm3,%xmm13
+mov    0x68(%rsp),%rsi
+vmovsd %xmm12,%xmm3,%xmm12
+mov    0x178(%rsp),%rdi
+
+vmovsd %xmm11,%xmm3,%xmm11
+vmovsd %xmm10,%xmm3,%xmm10
+vmovsd %xmm9,%xmm3,%xmm9
+vmovsd %xmm8,%xmm3,%xmm8
+vmovsd %xmm31,%xmm3,%xmm31
+vmovupd (%rsp),%xmm3
+mov    0x150(%rsp),%r15
+
+add    $0x2,%r14
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%rsi,%r13,8),%r15
+vaddpd %xmm23,%xmm0,%xmm0
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%rbx,%r13,8),%r15
+vaddpd %xmm23,%xmm22,%xmm22
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%rcx,%r13,8),%r15
+vaddpd %xmm23,%xmm3,%xmm3
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%rdx,%r13,8),%r15
+vaddpd %xmm23,%xmm2,%xmm2
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%rax,%r13,8),%r15
+vaddpd %xmm23,%xmm5,%xmm5
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x148(%rsp),%r15
+
+vaddpd %xmm23,%xmm4,%xmm4
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x140(%rsp),%r15
+
+vaddpd %xmm23,%xmm21,%xmm21
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x138(%rsp),%r15
+
+vaddpd %xmm23,%xmm20,%xmm20
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r11,%r13,8),%r15
+vaddpd %xmm23,%xmm19,%xmm19
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x130(%rsp),%r15
+
+vaddpd %xmm23,%xmm18,%xmm18
+lea    (%r15,%r13,8),%r15
+nopl   0x0(%rax)
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r8,%r13,8),%r15
+vaddpd %xmm23,%xmm17,%xmm17
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r12,%r13,8),%r15
+vaddpd %xmm23,%xmm16,%xmm16
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+nopl   0x0(%rax)
+mov    0x128(%rsp),%r15
+
+vaddpd %xmm23,%xmm15,%xmm15
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r9,%r13,8),%r15
+vaddpd %xmm23,%xmm14,%xmm14
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x120(%rsp),%r15
+
+vaddpd %xmm23,%xmm13,%xmm13
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x118(%rsp),%r15
+
+vaddpd %xmm23,%xmm12,%xmm12
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x110(%rsp),%r15
+
+vaddpd %xmm23,%xmm11,%xmm11
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r10,%r13,8),%r15
+vaddpd %xmm23,%xmm10,%xmm10
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x108(%rsp),%r15
+
+vaddpd %xmm23,%xmm9,%xmm9
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x170(%rsp),%r15
+
+vaddpd %xmm23,%xmm8,%xmm8
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+lea    0x0(%r13,%rdi,2),%r13
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+vaddpd %xmm23,%xmm31,%xmm31
+cmp    0x168(%rsp),%r14
+
+jb     41e3b9 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0x4c9>
+vmovupd %xmm3,(%rsp)
+vunpckhpd %xmm31,%xmm31,%xmm3
+mov    0x168(%rsp),%rax
+
+vaddsd %xmm3,%xmm31,%xmm31
+vunpckhpd %xmm8,%xmm8,%xmm3
+lea    0x1(%rax),%rdx
+vmovsd %xmm31,0xd0(%rsp)
+
+vaddsd %xmm3,%xmm8,%xmm8
+vunpckhpd %xmm9,%xmm9,%xmm31
+vunpckhpd %xmm10,%xmm10,%xmm3
+vaddsd %xmm31,%xmm9,%xmm9
+vaddsd %xmm3,%xmm10,%xmm10
+vunpckhpd %xmm11,%xmm11,%xmm31
+vunpckhpd %xmm12,%xmm12,%xmm3
+vaddsd %xmm31,%xmm11,%xmm11
+vaddsd %xmm3,%xmm12,%xmm12
+vunpckhpd %xmm13,%xmm13,%xmm31
+vunpckhpd %xmm14,%xmm14,%xmm3
+vaddsd %xmm31,%xmm13,%xmm13
+vaddsd %xmm3,%xmm14,%xmm14
+vunpckhpd %xmm15,%xmm15,%xmm31
+vunpckhpd %xmm16,%xmm16,%xmm3
+vaddsd %xmm31,%xmm15,%xmm15
+vaddsd %xmm3,%xmm16,%xmm16
+vunpckhpd %xmm17,%xmm17,%xmm31
+vunpckhpd %xmm18,%xmm18,%xmm3
+vaddsd %xmm31,%xmm17,%xmm17
+vaddsd %xmm3,%xmm18,%xmm18
+vunpckhpd %xmm19,%xmm19,%xmm31
+vunpckhpd %xmm20,%xmm20,%xmm3
+vaddsd %xmm31,%xmm19,%xmm19
+vaddsd %xmm3,%xmm20,%xmm20
+vunpckhpd %xmm21,%xmm21,%xmm31
+vunpckhpd %xmm4,%xmm4,%xmm3
+vaddsd %xmm31,%xmm21,%xmm21
+vaddsd %xmm3,%xmm4,%xmm4
+vunpckhpd %xmm5,%xmm5,%xmm31
+vunpckhpd %xmm2,%xmm2,%xmm3
+vaddsd %xmm31,%xmm5,%xmm5
+vaddsd %xmm3,%xmm2,%xmm31
+vmovupd (%rsp),%xmm2
+vunpckhpd %xmm2,%xmm2,%xmm3
+vmovsd 0xc0(%rsp),%xmm23
+
+vaddsd %xmm3,%xmm2,%xmm2
+vunpckhpd %xmm22,%xmm22,%xmm3
+mov    0x160(%rsp),%r9
+
+vaddsd %xmm3,%xmm22,%xmm22
+vunpckhpd %xmm0,%xmm0,%xmm3
+vaddsd %xmm3,%xmm0,%xmm0
+cmp    0x100(%rsp),%rdx
+
+ja     41e9e5 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xaf5>
+mov    %r9,%r14
+neg    %r9
+imul   0xb8(%rsp),%r14
+
+mov    0x150(%rsp),%r8
+
+xor    %edx,%edx
+mov    0x60(%rsp),%r13
+mov    0x58(%rsp),%rcx
+mov    0x148(%rsp),%rax
+
+lea    (%r8,%r14,1),%rbx
+mov    0x68(%rsp),%rsi
+lea    0x0(%r13,%r14,1),%rdi
+mov    0x50(%rsp),%r12
+mov    0x140(%rsp),%r15
+
+lea    (%rax,%r14,1),%r13
+mov    0x130(%rsp),%rax
+
+lea    (%rsi,%r14,1),%r8
+mov    %rbx,0xe0(%rsp)
+
+lea    (%rcx,%r14,1),%rbx
+mov    0x138(%rsp),%rcx
+
+lea    (%r12,%r14,1),%rsi
+mov    %rdi,0xe8(%rsp)
+
+lea    (%r15,%r14,1),%rdi
+mov    0x38(%rsp),%r15
+mov    0x48(%rsp),%r11
+lea    (%rcx,%r14,1),%r12
+mov    %r12,0xd8(%rsp)
+
+lea    (%rax,%r14,1),%rcx
+mov    0x28(%rsp),%rax
+lea    (%r15,%r14,1),%r12
+add    0x100(%rsp),%r9
+
+lea    (%r11,%r14,1),%r10
+mov    0x40(%rsp),%r11
+mov    %r10,0xf8(%rsp)
+
+lea    (%rax,%r14,1),%r15
+mov    0x120(%rsp),%rax
+
+mov    %r15,0x1c0(%rsp)
+
+lea    (%r11,%r14,1),%r10
+mov    %r10,0xf0(%rsp)
+
+mov    0x30(%rsp),%r11
+lea    (%rax,%r14,1),%r15
+mov    0x118(%rsp),%rax
+
+mov    %r15,0x1b0(%rsp)
+
+mov    0x128(%rsp),%r10
+
+add    %r14,%r11
+lea    (%rax,%r14,1),%r15
+mov    0x110(%rsp),%rax
+
+mov    %r15,0x1c8(%rsp)
+
+add    %r14,%r10
+mov    %r9,0x160(%rsp)
+
+mov    %r10,0x198(%rsp)
+
+lea    (%rax,%r14,1),%r15
+mov    %r15,0x1b8(%rsp)
+
+mov    0x20(%rsp),%rax
+mov    0x108(%rsp),%r15
+
+mov    %r11,0x1a0(%rsp)
+
+mov    %r12,0x180(%rsp)
+
+add    %r14,%rax
+mov    %r13,0x1a8(%rsp)
+
+add    %r14,%r15
+add    0x170(%rsp),%r14
+
+mov    %r14,0x188(%rsp)
+
+mov    %r15,0x190(%rsp)
+
+vmovsd 0xd0(%rsp),%xmm3
+
+mov    0xf0(%rsp),%r13
+
+mov    0xd8(%rsp),%r12
+
+mov    0xf8(%rsp),%r11
+
+mov    0xe8(%rsp),%r9
+
+mov    0xe0(%rsp),%r10
+
+mov    %rdx,%r14
+mov    0x1a8(%rsp),%r15
+
+inc    %rdx
+vaddsd (%r10,%r14,8),%xmm0,%xmm0
+vaddsd (%r8,%r14,8),%xmm22,%xmm22
+vaddsd (%r15,%r14,8),%xmm21,%xmm21
+vaddsd (%r9,%r14,8),%xmm2,%xmm2
+vaddsd (%rbx,%r14,8),%xmm31,%xmm31
+vaddsd (%rsi,%r14,8),%xmm5,%xmm5
+vaddsd (%r11,%r14,8),%xmm4,%xmm4
+vaddsd (%rdi,%r14,8),%xmm20,%xmm20
+vaddsd (%r12,%r14,8),%xmm19,%xmm19
+vaddsd 0x0(%r13,%r14,8),%xmm18,%xmm18
+
+vaddsd (%rcx,%r14,8),%xmm17,%xmm17
+vaddsd (%rax,%r14,8),%xmm9,%xmm9
+mov    0x180(%rsp),%r15
+
+vaddsd (%r15,%r14,8),%xmm16,%xmm16
+mov    0x1a0(%rsp),%r15
+
+vaddsd (%r15,%r14,8),%xmm15,%xmm15
+mov    0x198(%rsp),%r15
+
+vaddsd (%r15,%r14,8),%xmm14,%xmm14
+mov    0x1c0(%rsp),%r15
+
+vaddsd (%r15,%r14,8),%xmm13,%xmm13
+mov    0x1b0(%rsp),%r15
+
+vaddsd (%r15,%r14,8),%xmm12,%xmm12
+mov    0x1c8(%rsp),%r15
+
+vaddsd (%r15,%r14,8),%xmm11,%xmm11
+mov    0x1b8(%rsp),%r15
+
+vaddsd (%r15,%r14,8),%xmm10,%xmm10
+mov    0x190(%rsp),%r15
+
+vaddsd (%r15,%r14,8),%xmm8,%xmm8
+mov    0x188(%rsp),%r15
+
+vaddsd (%r15,%r14,8),%xmm3,%xmm3
+add    0x178(%rsp),%r14
+
+cmp    0x160(%rsp),%rdx
+
+jb     41e8d5 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0x9e5>
+vmovsd %xmm3,0xd0(%rsp)
+
+cmpq   $0x2,0x100(%rsp)
+
+jb     41ee02 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xf12>
+mov    0x168(%rsp),%r9
+
+xor    %r14d,%r14d
+vxorpd %xmm3,%xmm3,%xmm3
+xor    %r13d,%r13d
+mov    %r9,0x160(%rsp)
+
+vmovsd %xmm1,%xmm3,%xmm1
+mov    0x70(%rsp),%r10
+vmovsd %xmm7,%xmm3,%xmm7
+mov    0x78(%rsp),%r9
+vmovsd %xmm6,%xmm3,%xmm6
+mov    0x80(%rsp),%r12
+
+vmovsd %xmm30,%xmm3,%xmm30
+mov    0x88(%rsp),%r8
+
+vmovsd %xmm29,%xmm3,%xmm29
+mov    0x90(%rsp),%r11
+
+vmovsd %xmm28,%xmm3,%xmm28
+mov    0x98(%rsp),%rax
+
+vmovsd %xmm27,%xmm3,%xmm27
+mov    0xa0(%rsp),%rdx
+
+vmovsd %xmm26,%xmm3,%xmm26
+mov    0xa8(%rsp),%rcx
+
+vmovsd %xmm25,%xmm3,%xmm25
+mov    0xb0(%rsp),%rbx
+
+vmovsd %xmm24,%xmm3,%xmm24
+mov    0xc8(%rsp),%rsi
+
+vmovsd %xmm23,%xmm3,%xmm3
+mov    0x178(%rsp),%rdi
+
+add    $0x2,%r14
+lea    (%rsi,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%rbx,%r13,8),%r15
+vaddpd %xmm23,%xmm1,%xmm1
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%rcx,%r13,8),%r15
+vaddpd %xmm23,%xmm7,%xmm7
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%rdx,%r13,8),%r15
+vaddpd %xmm23,%xmm6,%xmm6
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%rax,%r13,8),%r15
+vaddpd %xmm23,%xmm30,%xmm30
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r11,%r13,8),%r15
+vaddpd %xmm23,%xmm29,%xmm29
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r8,%r13,8),%r15
+vaddpd %xmm23,%xmm28,%xmm28
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+mov    0x158(%rsp),%r15
+
+vaddpd %xmm23,%xmm27,%xmm27
+lea    (%r15,%r13,8),%r15
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r12,%r13,8),%r15
+vaddpd %xmm23,%xmm26,%xmm26
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r9,%r13,8),%r15
+vaddpd %xmm23,%xmm25,%xmm25
+vmovsd (%r15),%xmm23
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+lea    (%r10,%r13,8),%r15
+vaddpd %xmm23,%xmm24,%xmm24
+vmovsd (%r15),%xmm23
+lea    0x0(%r13,%rdi,2),%r13
+vmovhpd (%r15,%rdi,8),%xmm23,%xmm23
+vaddpd %xmm23,%xmm3,%xmm3
+nop
+cmp    0x168(%rsp),%r14
+
+jb     41ea85 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xb95>
+vunpckhpd %xmm3,%xmm3,%xmm23
+mov    0x160(%rsp),%r9
+
+vaddsd %xmm23,%xmm3,%xmm23
+vunpckhpd %xmm24,%xmm24,%xmm3
+vaddsd %xmm3,%xmm24,%xmm24
+vunpckhpd %xmm25,%xmm25,%xmm3
+vaddsd %xmm3,%xmm25,%xmm25
+vunpckhpd %xmm26,%xmm26,%xmm3
+vaddsd %xmm3,%xmm26,%xmm26
+vunpckhpd %xmm27,%xmm27,%xmm3
+vaddsd %xmm3,%xmm27,%xmm27
+vunpckhpd %xmm28,%xmm28,%xmm3
+vaddsd %xmm3,%xmm28,%xmm28
+vunpckhpd %xmm29,%xmm29,%xmm3
+vaddsd %xmm3,%xmm29,%xmm29
+vunpckhpd %xmm30,%xmm30,%xmm3
+vaddsd %xmm3,%xmm30,%xmm30
+vunpckhpd %xmm6,%xmm6,%xmm3
+vaddsd %xmm3,%xmm6,%xmm6
+vunpckhpd %xmm7,%xmm7,%xmm3
+vaddsd %xmm3,%xmm7,%xmm7
+vunpckhpd %xmm1,%xmm1,%xmm3
+vaddsd %xmm3,%xmm1,%xmm1
+xor    %r13d,%r13d
+lea    0x1(%r9),%rax
+xor    %r14d,%r14d
+cmp    0x100(%rsp),%rax
+
+ja     41ed2a <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xe3a>
+mov    %r9,%r12
+neg    %r9
+imul   0xb8(%rsp),%r12
+
+mov    0xc8(%rsp),%r11
+
+mov    0xb0(%rsp),%r10
+
+mov    0xa8(%rsp),%r8
+
+mov    0xa0(%rsp),%rdi
+
+add    %r12,%r11
+mov    0x98(%rsp),%rsi
+
+add    %r12,%r10
+mov    0x90(%rsp),%rbx
+
+add    %r12,%r8
+mov    0x88(%rsp),%rcx
+
+add    %r12,%rdi
+mov    0x158(%rsp),%rdx
+
+add    %r12,%rsi
+mov    0x80(%rsp),%rax
+
+add    %r12,%rbx
+mov    0x78(%rsp),%r15
+add    %r12,%rcx
+add    0x100(%rsp),%r9
+
+add    %r12,%rdx
+add    %r12,%rax
+add    %r12,%r15
+add    0x70(%rsp),%r12
+nopl   0x0(%rax,%rax,1)
+
+nopl   0x0(%rax)
+inc    %r13
+vaddsd (%r11,%r14,8),%xmm1,%xmm1
+vaddsd (%r10,%r14,8),%xmm7,%xmm7
+vaddsd (%r8,%r14,8),%xmm6,%xmm6
+vaddsd (%rdi,%r14,8),%xmm30,%xmm30
+vaddsd (%rsi,%r14,8),%xmm29,%xmm29
+vaddsd (%rbx,%r14,8),%xmm28,%xmm28
+vaddsd (%rcx,%r14,8),%xmm27,%xmm27
+vaddsd (%rdx,%r14,8),%xmm26,%xmm26
+vaddsd (%rax,%r14,8),%xmm25,%xmm25
+vaddsd (%r15,%r14,8),%xmm24,%xmm24
+vaddsd (%r12,%r14,8),%xmm23,%xmm23
+add    0x178(%rsp),%r14
+
+cmp    %r9,%r13
+jb     41ecd0 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xde0>
+mov    0x10(%rsp),%eax
+inc    %eax
+mov    %eax,0x10(%rsp)
+cmp    0x18(%rsp),%eax
+jb     41e2ce <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0x3de>
+vmovsd 0xd0(%rsp),%xmm3
+
+vaddsd %xmm22,%xmm0,%xmm0
+vaddsd %xmm31,%xmm2,%xmm2
+vaddsd %xmm4,%xmm5,%xmm4
+vaddsd %xmm20,%xmm21,%xmm5
+vaddsd %xmm18,%xmm19,%xmm18
+vaddsd %xmm16,%xmm17,%xmm16
+vaddsd %xmm14,%xmm15,%xmm14
+vaddsd %xmm12,%xmm13,%xmm12
+vaddsd %xmm10,%xmm11,%xmm10
+vaddsd %xmm8,%xmm9,%xmm8
+vaddsd %xmm1,%xmm3,%xmm1
+vaddsd %xmm6,%xmm7,%xmm3
+vaddsd %xmm29,%xmm30,%xmm29
+vaddsd %xmm27,%xmm28,%xmm27
+vaddsd %xmm25,%xmm26,%xmm25
+vaddsd %xmm23,%xmm24,%xmm23
+vaddsd %xmm2,%xmm0,%xmm22
+vaddsd %xmm5,%xmm4,%xmm20
+vaddsd %xmm16,%xmm18,%xmm17
+vaddsd %xmm12,%xmm14,%xmm13
+vaddsd %xmm8,%xmm10,%xmm9
+vaddsd %xmm3,%xmm1,%xmm6
+vaddsd %xmm27,%xmm29,%xmm28
+vaddsd %xmm23,%xmm25,%xmm24
+vaddsd %xmm20,%xmm22,%xmm21
+vaddsd %xmm13,%xmm17,%xmm15
+vaddsd %xmm6,%xmm9,%xmm7
+vaddsd %xmm24,%xmm28,%xmm11
+vaddsd %xmm15,%xmm21,%xmm19
+vaddsd %xmm11,%xmm7,%xmm26
+vaddsd %xmm26,%xmm19,%xmm0
+add    $0x1d0,%rsp
+pop    %rbx
+pop    %r15
+pop    %r14
+pop    %r13
+pop    %r12
+retq
+xor    %r9d,%r9d
+jmpq   41ec22 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xd32>
+xor    %r9d,%r9d
+cmpq   $0x1,0x100(%rsp)
+
+jae    41e731 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0x841>
+jmp    41ee02 <_Z20sum_readspe_unroll32P13bm_parametersyiiy+0xf12>
+xchg   %ax,%ax

@@ -1,0 +1,85 @@
+000000000041d020 <_Z19sum_readspe_unroll2P13bm_parametersyiiy>:
+  41d020:	41 55                	push   %r13
+  41d022:	41 56                	push   %r14
+  41d024:	41 57                	push   %r15
+  41d026:	53                   	push   %rbx
+  41d027:	41 89 ca             	mov    %ecx,%r10d
+  41d02a:	4c 63 da             	movslq %edx,%r11
+  41d02d:	03 d2                	add    %edx,%edx
+  41d02f:	c5 e1 57 db          	vxorpd %xmm3,%xmm3,%xmm3
+  41d033:	48 63 ca             	movslq %edx,%rcx
+  41d036:	c5 f9 28 d3          	vmovapd %xmm3,%xmm2
+  41d03a:	45 85 d2             	test   %r10d,%r10d
+  41d03d:	0f 8e e8 00 00 00    	jle    41d12b <_Z19sum_readspe_unroll2P13bm_parametersyiiy+0x10b>
+  41d043:	4c 89 da             	mov    %r11,%rdx
+  41d046:	33 f6                	xor    %esi,%esi
+  41d048:	48 c1 e2 04          	shl    $0x4,%rdx
+  41d04c:	c5 f1 57 c9          	vxorpd %xmm1,%xmm1,%xmm1
+  41d050:	49 c1 e3 03          	shl    $0x3,%r11
+  41d054:	48 f7 da             	neg    %rdx
+  41d057:	49 f7 db             	neg    %r11
+  41d05a:	4c 8d 0c cd 00 00 00 	lea    0x0(,%rcx,8),%r9
+  41d061:	00
+  41d062:	49 d1 e8             	shr    %r8
+  41d065:	c5 f9 28 c1          	vmovapd %xmm1,%xmm0
+  41d069:	4c 89 c7             	mov    %r8,%rdi
+  41d06c:	48 8b 05 4d a2 22 00 	mov    0x22a24d(%rip),%rax        # 6472c0 <mat>
+  41d073:	48 8d 14 ca          	lea    (%rdx,%rcx,8),%rdx
+  41d077:	48 83 e7 fe          	and    $0xfffffffffffffffe,%rdi
+  41d07b:	4d 8d 1c cb          	lea    (%r11,%rcx,8),%r11
+  41d07f:	48 03 d0             	add    %rax,%rdx
+  41d082:	49 03 c3             	add    %r11,%rax
+  41d085:	4d 85 c0             	test   %r8,%r8
+  41d088:	74 7e                	je     41d108 <_Z19sum_readspe_unroll2P13bm_parametersyiiy+0xe8>
+  41d08a:	49 83 f8 02          	cmp    $0x2,%r8
+  41d08e:	0f 82 a3 00 00 00    	jb     41d137 <_Z19sum_readspe_unroll2P13bm_parametersyiiy+0x117>
+  41d094:	45 33 db             	xor    %r11d,%r11d
+  41d097:	49 89 fd             	mov    %rdi,%r13
+  41d09a:	33 db                	xor    %ebx,%ebx
+  41d09c:	49 83 c3 02          	add    $0x2,%r11
+  41d0a0:	4c 8d 34 da          	lea    (%rdx,%rbx,8),%r14
+  41d0a4:	c4 c1 7b 10 26       	vmovsd (%r14),%xmm4
+  41d0a9:	4c 8d 3c d8          	lea    (%rax,%rbx,8),%r15
+  41d0ad:	c4 c1 7b 10 37       	vmovsd (%r15),%xmm6
+  41d0b2:	48 8d 1c 4b          	lea    (%rbx,%rcx,2),%rbx
+  41d0b6:	c4 c1 59 16 2c ce    	vmovhpd (%r14,%rcx,8),%xmm4,%xmm5
+  41d0bc:	c4 c1 49 16 3c cf    	vmovhpd (%r15,%rcx,8),%xmm6,%xmm7
+  41d0c2:	c5 f1 58 cd          	vaddpd %xmm5,%xmm1,%xmm1
+  41d0c6:	c5 f9 58 c7          	vaddpd %xmm7,%xmm0,%xmm0
+  41d0ca:	4c 3b df             	cmp    %rdi,%r11
+  41d0cd:	72 cd                	jb     41d09c <_Z19sum_readspe_unroll2P13bm_parametersyiiy+0x7c>
+  41d0cf:	33 db                	xor    %ebx,%ebx
+  41d0d1:	4d 8d 75 01          	lea    0x1(%r13),%r14
+  41d0d5:	45 33 db             	xor    %r11d,%r11d
+  41d0d8:	4d 3b f0             	cmp    %r8,%r14
+  41d0db:	77 2b                	ja     41d108 <_Z19sum_readspe_unroll2P13bm_parametersyiiy+0xe8>
+  41d0dd:	4d 89 ee             	mov    %r13,%r14
+  41d0e0:	49 f7 dd             	neg    %r13
+  41d0e3:	4d 0f af f1          	imul   %r9,%r14
+  41d0e7:	4d 03 e8             	add    %r8,%r13
+  41d0ea:	4e 8d 3c 32          	lea    (%rdx,%r14,1),%r15
+  41d0ee:	4c 03 f0             	add    %rax,%r14
+  41d0f1:	48 ff c3             	inc    %rbx
+  41d0f4:	c4 81 63 58 1c df    	vaddsd (%r15,%r11,8),%xmm3,%xmm3
+  41d0fa:	c4 81 6b 58 14 de    	vaddsd (%r14,%r11,8),%xmm2,%xmm2
+  41d100:	4c 03 d9             	add    %rcx,%r11
+  41d103:	49 3b dd             	cmp    %r13,%rbx
+  41d106:	72 e9                	jb     41d0f1 <_Z19sum_readspe_unroll2P13bm_parametersyiiy+0xd1>
+  41d108:	ff c6                	inc    %esi
+  41d10a:	41 3b f2             	cmp    %r10d,%esi
+  41d10d:	0f 82 72 ff ff ff    	jb     41d085 <_Z19sum_readspe_unroll2P13bm_parametersyiiy+0x65>
+  41d113:	c5 f9 15 e0          	vunpckhpd %xmm0,%xmm0,%xmm4
+  41d117:	c5 f1 15 e9          	vunpckhpd %xmm1,%xmm1,%xmm5
+  41d11b:	c5 fb 58 c4          	vaddsd %xmm4,%xmm0,%xmm0
+  41d11f:	c5 f3 58 cd          	vaddsd %xmm5,%xmm1,%xmm1
+  41d123:	c5 fb 58 d2          	vaddsd %xmm2,%xmm0,%xmm2
+  41d127:	c5 f3 58 db          	vaddsd %xmm3,%xmm1,%xmm3
+  41d12b:	c5 e3 58 c2          	vaddsd %xmm2,%xmm3,%xmm0
+  41d12f:	5b                   	pop    %rbx
+  41d130:	41 5f                	pop    %r15
+  41d132:	41 5e                	pop    %r14
+  41d134:	41 5d                	pop    %r13
+  41d136:	c3                   	retq
+  41d137:	45 33 ed             	xor    %r13d,%r13d
+  41d13a:	eb 93                	jmp    41d0cf <_Z19sum_readspe_unroll2P13bm_parametersyiiy+0xaf>
+  41d13c:	0f 1f 40 00          	nopl   0x0(%rax)

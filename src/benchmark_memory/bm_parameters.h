@@ -64,6 +64,9 @@ static std::map<int, std::string> mapParameter = {{READ,    "READ"},
 #define UNROLL2    2
 #define UNROLL4    4
 #define UNROLL8    8
+#define UNROLL16   16
+#define UNROLL32   32
+#define UNROLL64   64
 
 class bm_parameters {
 private:

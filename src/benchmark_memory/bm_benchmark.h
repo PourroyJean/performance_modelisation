@@ -20,6 +20,9 @@ BM_DATA_TYPE sum_read_unroll8  (bm_parameters *p, THEINT max_index, int step, in
 BM_DATA_TYPE sum_readspe_unroll2  (bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
 BM_DATA_TYPE sum_readspe_unroll4  (bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
 BM_DATA_TYPE sum_readspe_unroll8  (bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+BM_DATA_TYPE sum_readspe_unroll16  (bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+BM_DATA_TYPE sum_readspe_unroll32  (bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+BM_DATA_TYPE sum_readspe_unroll64  (bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
 
 BM_DATA_TYPE sum_readind_unroll2  (bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
 BM_DATA_TYPE sum_readind_unroll4  (bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
