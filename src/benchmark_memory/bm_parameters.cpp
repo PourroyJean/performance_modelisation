@@ -81,6 +81,25 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
     parse_arguments(argc, argv);
 
 
+    //If the LOG_STEP is null we try to find the highest value
+    if (m_STEP_LOG10 == 0) {
+        double max_log = 2;
+        do{
+            uint64_t max_index  = (THEINT) (double) (exp(max_log * LOG10) + 0.5);
+            if (max_index > m_MAT_NB_ELEM) {
+                max_log -= 0.01;
+                break;
+            }
+            max_log += 0.01;
+
+        }while (true);
+
+        m_MIN_LOG10 = max_log;
+        m_MAX_LOG10 = max_log;
+        m_STEP_LOG10 = 99999;
+    }
+
+
 
     //Select the correct benchmark
     //----- READ BENCHMARK -----
@@ -94,18 +113,29 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
                 m_BENCHMARK = sum_read_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_read_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
         if (m_mode == BENCH_MODE::SPECIAL) {
             if (m_UNROLL == UNROLL1) {
-                cout << "\nERROR: Not yet implemented\n";
-                exit(-1);
+                m_BENCHMARK = sum_read_unroll1; //without unrolling it is the same as normal mode
             } else if (m_UNROLL == UNROLL2) {
                 m_BENCHMARK = sum_readspe_unroll2;
             } else if (m_UNROLL == UNROLL4) {
                 m_BENCHMARK = sum_readspe_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_readspe_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                m_BENCHMARK = sum_readspe_unroll16;
+            } else if (m_UNROLL == UNROLL32) {
+                m_BENCHMARK = sum_readspe_unroll32;
+            } else if (m_UNROLL == UNROLL64) {
+                m_BENCHMARK = sum_readspe_unroll64;
             }
         }
 
@@ -119,6 +149,12 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
                 m_BENCHMARK = sum_readind_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_readind_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
     }
@@ -133,34 +169,52 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
                 m_BENCHMARK = sum_write_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_write_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
         if (m_mode == BENCH_MODE::SPECIAL) {
             if (m_UNROLL == UNROLL1) {
-                cout << "\nERROR: Not yet implemented\n";
-                exit(-1);
+                m_BENCHMARK = sum_write_unroll1;
             } else if (m_UNROLL == UNROLL2) {
                 m_BENCHMARK = sum_writespe_unroll2;
             } else if (m_UNROLL == UNROLL4) {
                 m_BENCHMARK = sum_writespe_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_writespe_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
 
         if (m_mode == BENCH_MODE::INDEXED) {
             if (m_UNROLL == UNROLL1) {
-                cout << "\nERROR: Not yet implemented\n";
-                exit(-1);
+                m_BENCHMARK = sum_write_unroll1;
             } else if (m_UNROLL == UNROLL2) {
                 m_BENCHMARK = sum_writeind_unroll2;
             } else if (m_UNROLL == UNROLL4) {
                 m_BENCHMARK = sum_writeind_unroll4;
             } else if (m_UNROLL == UNROLL8) {
                 m_BENCHMARK = sum_writeind_unroll8;
+            } else if (m_UNROLL == UNROLL16) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
+            } else if (m_UNROLL == UNROLL64) {
+                cout << "\nERROR: Not yet implemented\n";
+                exit(-1);
             }
         }
     }
+
+    return 0;
 }
 
 int bm_parameters::setup_parser(int argc, const char *argv[]) {
@@ -444,7 +498,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
             "-h"    // Flag token.
     );
 
-
+    return 0;
 }
 
 int bm_parameters::parse_arguments(int argc, const char *argv[]) {
@@ -488,8 +542,9 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
 
     opt.get("--unroll")->getInt(m_UNROLL);
-    if (!((m_UNROLL == UNROLL1) || (m_UNROLL == UNROLL2) || (m_UNROLL == UNROLL4) || (m_UNROLL == UNROLL8))) {
-        cout << "Error: please check the unroll argument: " << m_UNROLL << ": can be 1, 2, 4, 8\n";
+    if (!((m_UNROLL == UNROLL1) || (m_UNROLL == UNROLL2) || (m_UNROLL == UNROLL4) || (m_UNROLL == UNROLL8) ||
+          (m_UNROLL == UNROLL16) || (m_UNROLL == UNROLL32) || (m_UNROLL == UNROLL64))) {
+        cout << "Error: please check the unroll argument: " << m_UNROLL << ": can be 1, 2, 4, 8, 16, 32, 64 \n";
         exit(EXIT_FAILURE);
     };
 
@@ -535,11 +590,12 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--memaff")->getInt(m_MEM_AFF);
 
-    opt.get("--matrixsize")->getULong(m_MAT_SIZE);
+    double size;
+    opt.get("--matrixsize")->getDouble(size);
 
 //    m_MAT_SIZE += 1; //TODO WHY ?
-    m_MAT_SIZE *= (1024 * 1024); // 1 mb  == 1 * 1024 * 1024 byte
-    if (!(m_MAT_SIZE >= 1024 * 1024)) {
+    m_MAT_SIZE = size*(1024 * 1024); // 1 mb  == 1 * 1024 * 1024 byte
+    if (!(m_MAT_SIZE >=  1024)) {
         cout << "Error: please check the size of your matrix (" << m_MAT_SIZE << ")\n";
         exit(EXIT_FAILURE);
     };
@@ -561,12 +617,11 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     m_MAX_STRIDE /= sizeof(BM_DATA_TYPE);
 
 
-
-    if(opt.isSet("--stride")){
+    if (opt.isSet("--stride")) {
         vector<vector<int>> v;
         opt.get("--stride")->getMultiInts(v);
 
-        if ( v.size() == 0 ){
+        if (v.size() == 0) {
             cout << "Error: please enter a stride in byte separated by ',' character\n";
             exit(EXIT_FAILURE);
 
@@ -574,7 +629,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         m_STRIDE_LIST = v.at(0);
         sort(m_STRIDE_LIST.begin(), m_STRIDE_LIST.end());
 
-        if ( m_STRIDE_LIST.at(0) < 8){
+        if (m_STRIDE_LIST.at(0) < 8) {
             cout << "Error: please enter a stride in byte (must be >= 8)\n";
             exit(EXIT_FAILURE);
         }
@@ -592,7 +647,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if( ! opt.isSet("--stride")) {
+    if (!opt.isSet("--stride")) {
         //Generate the stride list
         for (int step = m_MIN_STRIDE; step <= m_MAX_STRIDE; step = ((step * 2))) {
             //Stride de step element
@@ -603,7 +658,6 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         m_MIN_STRIDE = m_STRIDE_LIST[0];
         m_MAX_STRIDE = m_STRIDE_LIST[m_STRIDE_LIST.size() - 1];
     }
-
 
 
     opt.get("--measure")->getInt(m_MAX_MEASURES);
@@ -661,7 +715,6 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--steplog")->getDouble(m_STEP_LOG10);
 
-
     string pretty;
     opt.configPrint(pretty);
     string line;
@@ -669,6 +722,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
     while (std::getline(f, line)) {
         DEBUG_MPI << line << std::endl;
     }
+    return 0;
 }
 
 

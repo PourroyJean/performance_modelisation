@@ -43,7 +43,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 # source https://en.wikichip.org/wiki/intel/xeon_gold/6148#Cache
 _cache_size = [32000, 1000000, 28000000]
 _cache_label = ["L1", "L2", "L3"]
-_cache_hauteur = [50, 150, 150]  # hauteur d'affichage du label en GB/s
+_cache_hauteur = [50, 70, 70]  # hauteur d'affichage du label en GB/s
 
 _stride_array = []
 annot = []
@@ -67,6 +67,7 @@ def main():
     global _is_annotate
     global _is_cache
     global _stride_array
+    global _title
     is_screen_available()
 
 
@@ -76,15 +77,29 @@ def main():
     # -- OPEN LOG FILE --
 
     # we check if the last line is full (could not be if the program was stopped)
+    _title = open(_fileLog_mem).readline()
     file_txt = open(_fileLog_mem, 'rt').readlines()
-    len_first = len(file_txt[0])
+    len_first = len(file_txt[1])
     len_last = len(file_txt[-1])
+
+    i = 0
+    res = ""
+    for word in _title.split():
+        cr = ""
+        if (i >= 7):
+            cr = "\n"
+            i = 0
+        res += word + " " +  cr
+        i = i + 1
+    _title = res
 
     log_file_array = 1
     if (len_first > len_last):
         log_file_array = np.loadtxt(file_txt[:-1], delimiter=',', dtype='float', comments='#')
     else:
         log_file_array = np.loadtxt(file_txt, delimiter=',', dtype='float', comments='#')
+
+
 
     # -- PARSING LOG FILE --
 
@@ -95,15 +110,14 @@ def main():
 
     print(" --- Stride (" + str(nb_of_stride) + "): " +  str(_stride_array[:3]) + ((" ... " + str(_stride_array[-3:])) if nb_of_stride > 3 else ''))
     log_file_array = np.delete(log_file_array, 0, axis=0)
-
     # 2nd step: recover the data set size --> the first column
     x_value_dataset_size = log_file_array[0:log_file_array.shape[0], 0].astype(int)
-    print(" --- Data set (in bit) : " + str(x_value_dataset_size[:3]) + ((" ... " + str(x_value_dataset_size[-3:] ) if len(x_value_dataset_size) > 3 else '')))
+    print(" --- Data set in bit (" + str(len(x_value_dataset_size)) + ")" + str(x_value_dataset_size[:3]) + ((" ... " + str(x_value_dataset_size[-3:] ) if len(x_value_dataset_size) > 3 else '')))
 
     ## -- PLOT THE RESULTS --
     _fig, _ax = plt.subplots()  # create figure and axes
 
-    title_font = {'fontname': 'Arial', 'size': '20', 'color': 'black', 'weight': 'bold',
+    title_font = {'fontname': 'Arial', 'size': '15', 'color': 'black',
                   'verticalalignment': 'bottom'}
     axis_font = {'fontname': 'Arial', 'size': '14', 'weight': 'bold'}
     contour_color = 'white'
@@ -146,9 +160,10 @@ def main():
 
     plt.xlabel("Data set size", **axis_font)
     plt.ylabel("Bandwidth (GBs/s)", **axis_font)
-    plt.title("Bench_mem - " + str(os.path.basename(_fileLog_mem)), **title_font)
+    plt.title("Bench_mem - " + str(os.path.basename(_fileLog_mem) + str("\n") + _title), **title_font)
 
     plt.xscale('log')
+    # TODO param this
     _ax.legend(title="Size of stride (byte)", loc=0,
                ncol=2, borderaxespad=0.)
     plt.gcf().set_facecolor(contour_color)
@@ -170,6 +185,11 @@ def main():
 
     # No negatives values
     plt.ylim(ymin=0)
+    x1,x2,y1,y2 = plt.axis()
+    plt.axis((x1,x2,0,450))
+
+
+
 
     # Output: graphical or png file ?
     if _screen:

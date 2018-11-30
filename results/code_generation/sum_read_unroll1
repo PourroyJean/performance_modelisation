@@ -1,0 +1,61 @@
+000000000041cb60 <_Z16sum_read_unroll1P13bm_parametersyiiy>:
+  41cb60:	41 57                	push   %r15
+  41cb62:	53                   	push   %rbx
+  41cb63:	4d 89 c1             	mov    %r8,%r9
+  41cb66:	41 89 c8             	mov    %ecx,%r8d
+  41cb69:	48 63 d2             	movslq %edx,%rdx
+  41cb6c:	c5 f9 57 c0          	vxorpd %xmm0,%xmm0,%xmm0
+  41cb70:	45 85 c0             	test   %r8d,%r8d
+  41cb73:	0f 8e 9b 00 00 00    	jle    41cc14 <_Z16sum_read_unroll1P13bm_parametersyiiy+0xb4>
+  41cb79:	4c 89 c9             	mov    %r9,%rcx
+  41cb7c:	48 8d 3c d5 00 00 00 	lea    0x0(,%rdx,8),%rdi
+  41cb83:	00
+  41cb84:	48 89 f8             	mov    %rdi,%rax
+  41cb87:	33 f6                	xor    %esi,%esi
+  41cb89:	48 f7 d8             	neg    %rax
+  41cb8c:	48 83 e1 fe          	and    $0xfffffffffffffffe,%rcx
+  41cb90:	c5 f1 57 c9          	vxorpd %xmm1,%xmm1,%xmm1
+  41cb94:	48 8d 04 d0          	lea    (%rax,%rdx,8),%rax
+  41cb98:	48 03 05 21 a7 22 00 	add    0x22a721(%rip),%rax        # 6472c0 <mat>
+  41cb9f:	4d 85 c9             	test   %r9,%r9
+  41cba2:	76 5d                	jbe    41cc01 <_Z16sum_read_unroll1P13bm_parametersyiiy+0xa1>
+  41cba4:	49 83 f9 02          	cmp    $0x2,%r9
+  41cba8:	72 6e                	jb     41cc18 <_Z16sum_read_unroll1P13bm_parametersyiiy+0xb8>
+  41cbaa:	45 33 d2             	xor    %r10d,%r10d
+  41cbad:	49 89 cb             	mov    %rcx,%r11
+  41cbb0:	33 db                	xor    %ebx,%ebx
+  41cbb2:	49 83 c2 02          	add    $0x2,%r10
+  41cbb6:	4c 8d 3c d8          	lea    (%rax,%rbx,8),%r15
+  41cbba:	c4 c1 7b 10 17       	vmovsd (%r15),%xmm2
+  41cbbf:	48 8d 1c 53          	lea    (%rbx,%rdx,2),%rbx
+  41cbc3:	c4 c1 69 16 1c d7    	vmovhpd (%r15,%rdx,8),%xmm2,%xmm3
+  41cbc9:	c5 f1 58 cb          	vaddpd %xmm3,%xmm1,%xmm1
+  41cbcd:	4c 3b d1             	cmp    %rcx,%r10
+  41cbd0:	72 e0                	jb     41cbb2 <_Z16sum_read_unroll1P13bm_parametersyiiy+0x52>
+  41cbd2:	33 db                	xor    %ebx,%ebx
+  41cbd4:	4d 8d 7b 01          	lea    0x1(%r11),%r15
+  41cbd8:	45 33 d2             	xor    %r10d,%r10d
+  41cbdb:	4d 3b f9             	cmp    %r9,%r15
+  41cbde:	77 21                	ja     41cc01 <_Z16sum_read_unroll1P13bm_parametersyiiy+0xa1>
+  41cbe0:	4d 89 df             	mov    %r11,%r15
+  41cbe3:	49 f7 db             	neg    %r11
+  41cbe6:	4c 0f af ff          	imul   %rdi,%r15
+  41cbea:	4c 03 f8             	add    %rax,%r15
+  41cbed:	4d 03 d9             	add    %r9,%r11
+  41cbf0:	48 ff c3             	inc    %rbx
+  41cbf3:	c4 81 7b 58 04 d7    	vaddsd (%r15,%r10,8),%xmm0,%xmm0
+  41cbf9:	4c 03 d2             	add    %rdx,%r10
+  41cbfc:	49 3b db             	cmp    %r11,%rbx
+  41cbff:	72 ef                	jb     41cbf0 <_Z16sum_read_unroll1P13bm_parametersyiiy+0x90>
+  41cc01:	ff c6                	inc    %esi
+  41cc03:	41 3b f0             	cmp    %r8d,%esi
+  41cc06:	72 97                	jb     41cb9f <_Z16sum_read_unroll1P13bm_parametersyiiy+0x3f>
+  41cc08:	c5 f1 15 d1          	vunpckhpd %xmm1,%xmm1,%xmm2
+  41cc0c:	c5 f3 58 ca          	vaddsd %xmm2,%xmm1,%xmm1
+  41cc10:	c5 f3 58 c0          	vaddsd %xmm0,%xmm1,%xmm0
+  41cc14:	5b                   	pop    %rbx
+  41cc15:	41 5f                	pop    %r15
+  41cc17:	c3                   	retq
+  41cc18:	45 33 db             	xor    %r11d,%r11d
+  41cc1b:	eb b5                	jmp    41cbd2 <_Z16sum_read_unroll1P13bm_parametersyiiy+0x72>
+  41cc1d:	0f 1f 00             	nopl   (%rax)
