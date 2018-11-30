@@ -362,15 +362,15 @@ void data_alloc_spe(size_t size) {
     BM_DATA_TYPE **data;
     MPI_BARRIER
 
-
     cout << flush;
     shmid = shmget(IPC_PRIVATE, size, SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_R | SHM_W);
+
     if (shmid == -1) {
         DEBUG << "ERROR on shmget " << std::strerror(errno) << '\n';
         exit(1);
-    } else {
-        DEBUG << "SHMID  " << shmid << endl;
     }
+
+//    DEBUG << "SHMID  " << shmid << endl;
 
 
 #ifdef  COMPILED_WITH_MPI
@@ -381,12 +381,11 @@ void data_alloc_spe(size_t size) {
     }
     int global = 0;
     MPI_Allreduce(&local, &global, 1, MPI_INT, MPI_SUM, MPI_COMM_WORLD);
-    cout << "MON GLOBAL " << global << endl;
     if(global == mpi_size){
-        cout << "\n ALL OK\n";
+//        COUT_MPI << "Huge Pages OK\n";
     }
     else{
-        cout << "\n PAS ALL OK\n";
+        cout << "\n Error shmget\n";
         shmctl(shmid, IPC_RMID, NULL);
     }
 #endif
@@ -394,7 +393,7 @@ void data_alloc_spe(size_t size) {
 
     //shmat return 0xfffff if failed, equal to (char *) -1
     mat = (BM_DATA_TYPE *) shmat(shmid, ADDR, SHMAT_FLAGS);
-    if ((char * ) mat == (char *)-1) {
+    if ((char *) mat == (char *) -1) {
         DEBUG << "Shared memory attach failure\n";
         shmctl(shmid, IPC_RMID, NULL);
         exit(2);
