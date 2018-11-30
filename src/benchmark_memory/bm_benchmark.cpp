@@ -77,7 +77,7 @@ BM_DATA_TYPE sum_read_unroll4(bm_parameters *p, THEINT max_index, int step, int 
     return (sum);
 }
 
-
+//
 BM_DATA_TYPE sum_read_unroll8(bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan) {
     THEINT steps, xstep = step * 8;
     BM_DATA_TYPE sum = 0;
@@ -113,6 +113,42 @@ BM_DATA_TYPE sum_read_unroll8(bm_parameters *p, THEINT max_index, int step, int 
     }
     return (sum);
 }
+//
+//BM_DATA_TYPE sum_read_unroll8(bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan) {
+//    THEINT steps, xstep = 8 * 8;
+//    BM_DATA_TYPE sum = 0;
+//    int rep;
+//    ops_per_scan /= 8;
+//    for (rep = 0; rep < repeat; rep++) {
+//        BM_DATA_TYPE *p1 = mat;
+//        BM_DATA_TYPE *p2 = p1 + 8;
+//        BM_DATA_TYPE *p3 = p2 + 8;
+//        BM_DATA_TYPE *p4 = p3 + 8;
+//        BM_DATA_TYPE *p5 = p4 + 8;
+//        BM_DATA_TYPE *p6 = p5 + 8;
+//        BM_DATA_TYPE *p7 = p6 + 8;
+//        BM_DATA_TYPE *p8 = p7 + 8;
+//        for (steps = 0; steps < ops_per_scan; steps++) {
+//            sum += *p1;
+//            p1 += xstep;
+//            sum += *p2;
+//            p2 += xstep;
+//            sum += *p3;
+//            p3 += xstep;
+//            sum += *p4;
+//            p4 += xstep;
+//            sum += *p5;
+//            p5 += xstep;
+//            sum += *p6;
+//            p6 += xstep;
+//            sum += *p7;
+//            p7 += xstep;
+//            sum += *p8;
+//            p8 += xstep;
+//        }
+//    }
+//    return (sum);
+//}
 
 // ------------ SPE
 
