@@ -21,7 +21,10 @@ std::string convert_size(size_t  size);
 
 void print_times(char *s);
 
+#ifndef OP_DEBUG
 #define OP_DEBUG 0
+#endif
+
 #ifdef  OP_DEBUG
     #define DEBUG cout << "_DEBUG_  "
 #else
