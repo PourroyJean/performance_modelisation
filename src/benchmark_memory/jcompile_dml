@@ -1,0 +1,14 @@
+. /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+. /opt/intel/impi/current/bin64/mpivars.sh
+export PATH=.:$PATH
+
+
+rm dmlmemmpi dmlmem
+
+
+icc -O3 dmlmem.cpp -o dmlmem -march=core-avx2
+#g++ -O3 dmlmem.cpp -o dmlmem -march=core-avx2
+
+
+
+#mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2

@@ -57,6 +57,9 @@ _fig = []
 # --------------------------------------------------------------------------------------------
 
 
+
+
+
 def main():
     global annot
     global _ax
@@ -112,6 +115,7 @@ def main():
     log_file_array = np.delete(log_file_array, 0, axis=0)
     # 2nd step: recover the data set size --> the first column
     x_value_dataset_size = log_file_array[0:log_file_array.shape[0], 0].astype(int)
+    # x_value_dataset_size = [i * 1000 for i in x_value_dataset_size]
     print(" --- Data set in bit (" + str(len(x_value_dataset_size)) + ")" + str(x_value_dataset_size[:3]) + ((" ... " + str(x_value_dataset_size[-3:] ) if len(x_value_dataset_size) > 3 else '')))
 
     ## -- PLOT THE RESULTS --
@@ -186,7 +190,7 @@ def main():
     # No negatives values
     plt.ylim(ymin=0)
     x1,x2,y1,y2 = plt.axis()
-    plt.axis((x1,x2,0,450))
+    plt.axis((x1,x2,0,3000))
 
 
 
