@@ -142,11 +142,12 @@ int main(int argc, char *argv[]) {
     }
 #pragma omp barrier
 
+
     cout << "There is " << nb_threads << " threads\n";
 
     mult_simple_omp(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
     cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS)
-	 << endl;
+    << endl;
     
   
     break;
@@ -158,7 +159,6 @@ int main(int argc, char *argv[]) {
 	<< endl;
 
    break;
-   //    mult_var(a, b, c);
   }
 
 }

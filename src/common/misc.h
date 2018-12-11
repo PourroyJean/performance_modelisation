@@ -8,9 +8,13 @@
 #include <sys/time.h> //taking time
 #include <time.h> //taking time
 #include <inttypes.h>
+#include <string>
 
 extern float TIME_ELAPSED;
 extern struct timeval start_time, end_time;
+
+std::string convert_size(size_t  size);
+
 
 #define TIC gettimeofday(&start_time, NULL);
 #define TOC gettimeofday(&end_time, NULL); TIME_ELAPSED = (end_time.tv_sec - start_time.tv_sec) * 1000000 + (end_time.tv_usec - start_time.tv_usec);
