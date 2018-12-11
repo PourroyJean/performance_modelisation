@@ -30,6 +30,7 @@ file(GLOB KG_COPY_FILES
         "script/*.sh"
         "kg_template_start.cpp"
         "kg_template_end.cpp"
+        "kg_template_frequency.cpp"
         )
 
 
