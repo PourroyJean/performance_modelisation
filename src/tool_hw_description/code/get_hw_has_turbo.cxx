@@ -15,7 +15,7 @@ void aloop(unsigned int n);
 uint64_t rdtsc();
 double mygettime();
 #
-main(int argc,char **argv)
+int main(int argc,char **argv)
 {
     int i, mycpu=0;
     unsigned int freq,time;
