@@ -142,7 +142,8 @@ int main(int argc, char *argv[]) {
     }
 #pragma omp barrier
 
-cout << "There is " << nb_threads << " threads\n";
+
+    cout << "There is " << nb_threads << " threads\n";
 
     mult_simple_omp(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
     cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS)
@@ -152,14 +153,12 @@ cout << "There is " << nb_threads << " threads\n";
     break;
     */
   case 4:
-    mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-    mult_KIJ(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-    mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-    cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS)
-	 << endl;
+   mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+   mult_KIJ(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+   cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS)
+	<< endl;
 
-    break;
-    //    mult_var(a, b, c);
+   break;
   }
 
 }
