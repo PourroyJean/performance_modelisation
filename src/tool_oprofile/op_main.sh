@@ -26,7 +26,8 @@ export OP_STOP_SCRIPT="$OP_DIR_PATH/op_stop.sh"
 export OP_ANALYSIS_SCRIPT="$OP_DIR_PATH/op_analysis.sh"
 export OP_LOG=false
 export OP_TMP_FILE="/tmp/op_tmp_log"
-export OP_PROGRAM=$(readlink -f "$1")      #Name of the program you want to profile
+export OP_PROGRAM=$(readlink -f "$1")     #Name of the program you want to profile
+export OP_PROGRAM_OPTION="${@:2}"
 
 #PROFILING
 export OP_SAMPLE_FREQ=10000000
@@ -36,7 +37,7 @@ export OP_FILE_SUMMARY="$OP_CURRENT_PATH/report_summary.txt"
 export OP_FILE_INST="$OP_CURRENT_PATH/report_instructions.txt"
 
 #Analysis
-export OP_MERGING_PROGRAM="$OP_DIR_PATH/merger"
+export OP_MERGING_PROGRAM="$OP_DIR_PATH/MERGER"
 export OP_OBJ_FILE="$OP_CURRENT_PATH/op_objdump.txt"
 export OP_MERGED_FILE="$OP_CURRENT_PATH/op_merged.txt"
 
@@ -75,8 +76,8 @@ echo "the profiler is now running..."
 
 
 printf "\n    ################ EXECUTION #######################\n"
-printf "Executing $OP_PROGRAM ... "
-$OP_PROGRAM
+printf "Executing $OP_PROGRAM $OP_PROGRAM_OPTION ... "
+$OP_PROGRAM $OP_PROGRAM_OPTION
 echo "END"
 
 
