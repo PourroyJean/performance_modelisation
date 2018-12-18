@@ -1,0 +1,6000 @@
+  295  which hostlist
+  296  vi jrunmem.spe
+  297  chmod 777 jrunmem.spe 
+  298  ./jrunmem.spe
+  299  ll
+  300  vi  membwstats.170125141724.o190i211.L4_256. 
+  301  ll
+  302  pwd
+  303  ll
+  304  ls -l
+  305  ll
+  306  cd ..
+  307  ll
+  308  cd 
+  309  pwd
+  310  ll
+  311  cd solveur/
+  312  ll
+  313  ll jr*
+  314  more jrun4X 
+  315  grep 70 j*
+  316  ll
+  317  grep 70 j*
+  318  cd lecture/
+  319  ./jone
+  320  cd ..
+  321  find .|grep jone
+  322  cd total
+  323  more jone
+  324  cd ..
+  325  cd solveur/
+  326  more jone
+  327  ./jone
+  328  squeue 
+  329  ll
+  330  rm ERR*
+  331  ll
+  332  cd ..
+  333  ls
+  334  cd dmlmem
+  335  ll
+  336  squeue 
+  337  ssh o190i211
+  338  ssh o190i211 "cd /opt/hpe;tar cvf - tools|gzip" >tools.gz
+  339  ll
+  340  find .|grep L4
+  341  cd lecture/
+  342  ll
+  343  more jcomp
+  344  ./jcomp
+  345  ll
+  346  cd
+  347  more jrun
+  348  ll
+  349  cd lecture
+  350  ll
+  351  more jrun1
+  352  more  /opt/hpe/tools/bin/start_monitormembw.local.sh
+  353  ll
+  354  ./jone
+  355  ll
+  356  history|grep jone
+  357  cd
+  358  cd solveur/
+  359  ./jone
+  360  squeue 
+  361  ssh o190i215
+  362  ./jone
+  363  squeue 
+  364  ssh o190i211
+  365  ll
+  366  cd dmlmem
+  367  ll
+  368  cd 
+  369  cd dmlmem
+  370  ll
+  371  cd lecture/
+  372  ll
+  373  more jrunmem.spe 
+  374  grep wait */j*
+  375  more 
+  376  more ring/jnexts
+  377  more jrun1
+  378  cd
+  379  cd solveur/
+  380  more jrun1
+  381  cd /opt/hpe/
+  382  ll
+  383  cd tools/
+  384  ll
+  385  cd src
+  386  ll
+  387  cd monitormembw/
+  388  ll
+  389  cd INTEL/
+  390  ll
+  391  more monitormembw.c
+  392  grep perf */j*
+  393  ll
+  394  cd
+  395  grep perf */j*
+  396  cd lecture/
+  397  ls
+  398  ks -l
+  399  ls -l
+  400  cd lecture/
+  401  ls
+  402  cd ..
+  403  cd solveur/
+  404  ll
+  405  more jone
+  406  cp jone ../lecture/
+  407  cd ../lecture/
+  408  vi jone
+  409  ./jone
+  410  cp ../solveur/jsleep .
+  411  ./jone
+  412  squeue 
+  413  ssh o190i211
+  414  ls
+  415  cd solveur/
+  416  ls
+  417  ls -lrt
+  418  ll j*
+  419  more jone
+  420  more jone2
+  421  .:jone2
+  422  ./jone2
+  423  squeue 
+  424  scancel 193503
+  425  ll
+  426  ll op1*
+  427  ll
+  428  vi jone2
+  429  ./jone
+  430  squeue 
+  431  vi jone2
+  432  ./jone2
+  433  squeue 
+  434  scancel 193504 193505
+  435  squeue 
+  436  ll
+  437  ls -lrt
+  438  ll
+  439  ls -l
+  440  ll
+  441  cd dmlmem
+  442  cd lecture/
+  443  ll
+  444  vi jexp1
+  445  ./jexp1
+  446  chmod 777 jexp1
+  447  ./jexp1 
+  448  vi dmlmem.cpp
+  449  more jexp1 
+  450  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  451  . /opt/intel/impi/current/bin64/mpivars.sh
+  452  export PATH=.:$PATH
+  453  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  454  vi dmlmemmpi.cpp
+  455  more dmlmem.cpp 
+  456  vi dmlmemmpi.cpp 
+  457  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  458  ./jexp1
+  459  vi jexp1 
+  460  ./jexp1 
+  461  vi jexp1 
+  462  ./jexp1 
+  463  vi jexp1 
+  464  ./jexp1 
+  465  vi jexp1
+  466  ./jexp1 
+  467  vi jexp1
+  468  ./jexp1 
+  469  vi jexp1
+  470  more /proc/cpuinfo 
+  471  vi jexp1
+  472  ./jexp1
+  473  grep CACHE *.cpp
+  474  vi jexp1
+  475  ./jexp1
+  476  vi jexp1
+  477  ./jexp1
+  478  vi jexp1
+  479  ./jexp1
+  480  vi jexp1
+  481  ./jexp1
+  482  vi jexp1
+  483  ./jexp1
+  484  vi jexp1
+  485  ./jexp1
+  486  vi jexp1
+  487  ./jexp1
+  488  cd dmlmem
+  489  ls
+  490  cd lecture
+  491  ls
+  492  more jcomp
+  493  ./jcomp
+  494  ll */DML*
+  495  ls -l */DML*
+  496  ls -l../ */DML*
+  497  ls -l ../ */DML*
+  498  ls -l ../*/DML*
+  499  cp ../counters/DML.c .
+  500  vi dmlmem.cpp 
+  501  ./jcomp
+  502  vi jcomp
+  503  ./jcomp
+  504  ./dmlmem 1
+  505  ll j*
+  506  vi jrun1
+  507  vi jcoomp
+  508  vi jcomp
+  509  ./jcomp 
+  510  vi jcomp
+  511   ll j
+  512  ll j*
+  513  pwd
+  514  ll
+  515  pwd
+  516  ll
+  517  pwd
+  518  cd ..
+  519  cd
+  520  cd solveur/
+  521  cp jone2 ../dmlmem/lecture/
+  522  cp jone ../dmlmem/lecture/
+  523  cd ../dmlmem/lecture/
+  524  vi jone2
+  525  ./jone2
+  526  squeue 
+  527  cp ../../solveur/jsleep .
+  528  ./jone2
+  529  ll
+  530  squeue 
+  531  mkdir KEEP/
+  532  mv op* KEEP/
+  533  ll
+  534  mv membwstats.1701251* KEEP/
+  535  mv OBJ* KEEP/
+  536  mv OUT* KEEP/
+  537  ll
+  538  rm -rf epoch.job-0.20170125-12h1*
+  539  ll
+  540  squeue 
+  541  ssh 193547
+  542  ssh o186i127
+  543  cd dmlmem
+  544  ls
+  545  cd lecture/
+  546  ll
+  547  rm -rf epoch*
+  548  ll
+  549  rm OUT*
+  550  ll
+  551  rm out*
+  552  ./jexp1 
+  553  more /proc/cpuinfo 
+  554  vi jexp1 
+  555  ./jexp1 
+  556  ll
+  557  ls -l
+  558  pwd
+  559  ll
+  560  cd dmlmem
+  561  cd lecture/
+  562  ./jone
+  563  squeue 
+  564  ssh o190i211
+  565  bc -l
+  566  top
+  567  cd solveur/
+  568  ./jrun16nodes 
+  569  ll
+  570  cd KEEP/
+  571  ll
+  572  cd ..
+  573  ll
+  574  more  OUT.170201004714.3D_large_ok
+  575  cd KEEP/
+  576  ll
+  577  more OUT.160814175935.o184i023.3D_large_ok.16
+  578  cd ..
+  579  ll
+  580  more OUT.170201004714.3D_large_ok
+  581  ll
+  582  ll *.txt
+  583  more input_Helmholtz3D_medium_ok.txt
+  584  cp input_Helmholtz3D_medium_ok.txt input_Helmholtz3D_150_ok.txt
+  585  vi input_Helmholtz3D_150_ok.txt
+  586  vi jrun16nodes 
+  587  ./jrun16nodes 
+  588  ll
+  589  more  OUT.170201005512.3D_150_ok
+  590  ll 
+  591  rm PARAM_TD_*
+  592  ll
+  593  vi op4.170201005512.3D_150_ok
+  594  ll
+  595  more jrun16nodes 
+  596  MKL=/opt/intel/compilers_and_libraries_2017.1.132/linux/mkl/lib/intel64_lin/libmkl_avx2.so
+  597  objdump -d $MKL >OBJ
+  598  ./dmlv3 OBJ op2.170201005512.3D_150_ok >op4.170201005512.3D_150_ok
+  599  vi op4.170201005512.3D_150_ok
+  600  ll
+  601  ll op2*
+  602  vi op2.170201005512.3D_150_ok
+  603  squeue 
+  604  scancel gre0_all
+  605  cd
+  606  squeue 
+  607  cd solveur/
+  608  vi jrun
+  609  vi jone
+  610  ./jone
+  611  squeue 
+  612  vi machines 
+  613  more machines 
+  614  ll jrun*
+  615  more jrun2x
+  616  squeue 
+  617  scancel 193781
+  618  exit
+  619  cd solveur/
+  620  more jrun1
+  621  more jrun16nodes 
+  622  top
+  623  vi machines 
+  624  vi jrun16nodes 
+  625  rm .*
+  626  vi jrun16nodes 
+  627  top
+  628  cd /home/dml/solveur/epoch.job-0.20170201-00h35m
+  629  ll
+  630  top
+  631  ll
+  632  cd ..
+  633  ll
+  634  more OUT.170201003508.3D_large_ok
+  635  squeue 
+  636  ssh o186i140
+  637  cd solveur
+  638  squeue 
+  639  ssh o186i127
+  640  vmstat 1 10000
+  641  top
+  642  vmstat 1 10000
+  643  squeue 
+  644  ssh o190ii212
+  645  ssh o190i212
+  646  top
+  647  squeue 
+  648  ll
+  649  pwd
+  650  ll
+  651  cd solveur/
+  652  more jrun4X
+  653  ll
+  654  ll *.txt
+  655  cp input_Helmholtz3D_70_ok.txt input_Helmholtz3D_100_ok.txt
+  656  vi input_Helmholtz3D_100_ok.txt
+  657  ll
+  658  more jrun2x
+  659  more jrun2X
+  660  cp jrun2X jrun100_32nodes
+  661  vi jrun100_32nodes
+  662  ll OB*
+  663  ./jrun100_32nodes
+  664  ll
+  665  squeue 
+  666  ll
+  667  squeue 
+  668  ll
+  669  vi machines 
+  670  ll
+  671  ll j*
+  672  vi jrun2X
+  673  ./jrun2X
+  674  top
+  675  ls -l
+  676  ll
+  677  more /proc/cpuinfo 
+  678  ll
+  679  cd solveur/
+  680  ll
+  681  ll op*
+  682  ls -lrt op*
+  683  vi op3.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  684  ll
+  685  more jrun2X
+  686  MKL=/opt/intel/compilers_and_libraries_2017.1.132/linux/mkl/lib/intel64_lin/libmkl_avx2.so
+  687  objdump -d $MKL >OBJ
+  688  ./dmlv3      OBJ op2.170201013618.o190i211.3D_70_ok.4.MPI1NODE >op4.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  689  vi op4.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  690  vi jrun2X
+  691  ./jrun2X
+  692  ll
+  693  ls -lrt
+  694  vi op4.170201014927.o190i211.3D_70_ok.4.MPI1NODE
+  695  pwd
+  696  more op1.170201014927.o190i211.3D_70_ok.4.MPI1NODE
+  697  ll
+  698  vi jrun2X
+  699  ./jrun2X
+  700  ls -lrt
+  701  more OUT.170201014927.o190i211.3D_70_ok.4.MPI1NODE
+  702  ll
+  703  ls -lrt
+  704  more OUT.170201020259.o190i211.3D_70_ok.4.MPI1NODE
+  705  ll
+  706  ls -lrt
+  707  more op4.170201020259.o190i211.3D_70_ok.4.MPI1NODE
+  708  q
+  709  ll
+  710  top
+  711  vmstat 1 10000
+  712  ll
+  713  squeue 
+  714  ssh o190i212
+  715  ll
+  716  squeue 
+  717  cd solveur/
+  718  vi jone
+  719  ./jone
+  720  squeue 
+  721  ssh o190i211
+  722  ll
+  723  cd
+  724  cd solveur/
+  725  ll
+  726  cd KEEP/
+  727  ll
+  728  more  OUT.170108100941.o186i014.3D_large_ok.16
+  729  ll
+  730  more  OUT.170108102853.o186i014.3D_large_ok.16
+  731  more OUT.160721203741.o184i085.3D_medium_ok.16
+  732  ll
+  733  ll *.160721203741*
+  734  vi op4.160721203741.o184i086.3D_medium_ok.16
+  735  ll
+  736  squeue 
+  737  ssh o190i211
+  738  squeue 
+  739  ssh o186i140
+  740  cd
+  741  cd solveur/
+  742  ll
+  743  more jrun2X
+  744  ll
+  745  more  OUT.170201012107.o190i211.3D_100_ok.4.MPI1NODE
+  746  ll
+  747  more  OUT.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  748     
+  749  bc -l
+  750  squeue 
+  751  ssh o190i215
+  752  squeue 
+  753  ssh o186i126
+  754  cd lecture/
+  755  ls
+  756  ls -l
+  757  more jrun
+  758  ./jone
+  759  squeue 
+  760  ssh o190i211
+  761  i#
+  762  vi jone
+  763  ./jone
+  764  squeue 
+  765  vi machines
+  766  ll
+  767  cd
+  768  cd solveur/
+  769  vi machines 
+  770  squeue 
+  771  vi machines 
+  772  wc machines 
+  773  vi jrun16nodes 
+  774  ./jrun16nodes 
+  775  vi jrun16nodes
+  776  ./jrun16nodes 
+  777  vi jrun16nodes 
+  778  vi machines
+  779  ./jrun16nodes 
+  780  ll
+  781  squeue 
+  782  ssh o186i126
+  783  squeue 
+  784  ssh o190i211
+  785  cd solveur/
+  786  ls -lrt
+  787  ll
+  788  ls -lrt
+  789  more perf.170201095706.o190i211.3D_70_ko.4.MPI1NODE
+  790  ll
+  791  exit
+  792  cd solveur/
+  793  ll
+  794  ./jone
+  795  squeue 
+  796  ssh o190i211
+  797  squeue 
+  798  scancel 193781 193790
+  799  squeue 
+  800  cd 
+  801  cd sponge
+  802  ll
+  803  more keccak.c
+  804     more sponge.c 
+  805  more /proc/cpuinfo 
+  806  ll
+  807  cd dmlmem/lecture/
+  808  ll
+  809  more jexp1
+  810  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  811  . /opt/intel/impi/current/bin64/mpivars.sh
+  812  export PATH=.:$PATH
+  813  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  814  export I_MPI_PIN_PROCESSOR_LIST=5
+  815  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=GB MAX_MEASURES=40 CACHE_LINE=64  Ghz=2.9
+  816  BIN=dmlmemmpi
+  817  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=GB MAX_MEASURES=40 CACHE_LINE=64  Ghz=2.9
+  818  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=CY MAX_MEASURES=40 CACHE_LINE=64  Ghz=2.9
+  819  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=CY MAX_MEASURES=40 CACHE_LINE=64  GHZ=2.9
+  820  vi jexp1
+  821  ./jexp1 
+  822  vi jexp1
+  823  more /proc/cpuinfo 
+  824  vi jexp1
+  825  ./jexp1 
+  826  vi jexp1
+  827  ./jexp1 
+  828  vi jexp1
+  829  ./jexp1 
+  830  vi jexp1
+  831  ./jexp1 
+  832  vi dmlmemmpi.c
+  833  vi dmlmemmpi.cpp 
+  834  vi jexp1 
+  835  ./jexp1 
+  836  vi jexp1 
+  837  ./jexp1 
+  838  vi jexp1 
+  839  ./jexp1 
+  840  cd dmlmem/lecture/
+  841  ll
+  842  more jrun
+  843  ./jrun
+  844  ./jexp1 
+  845  vi jexp1
+  846  ./jexp1 
+  847  pwd
+  848  ll
+  849  cd solveur/
+  850  ls -lrt
+  851  more perf.170201095706.o190i211.3D_70_ko.4.MPI1NODE
+  852  ll
+  853  more  op1.170201090107.o190i211.3D_70_ok.4.MPI1NODE
+  854  cd
+  855  ls -lrt
+  856  cd cd sponge2016/
+  857  ll
+  858  cd  sponge2016/
+  859  ll
+  860  cd sponge
+  861  ll
+  862  more sponge.c
+  863   
+  864  cd
+  865  cd sponge
+  866  ll
+  867  more sponge.c
+  868  qll
+  869  ls
+  870  more keccak.c 
+  871   
+  872  grep KECC *.c
+  873  grep KECC *.h
+  874  cd
+  875  cd solveur/
+  876  ll
+  877  more op1*OK*
+  878  more op1*ok*
+  879  more op1*ko*
+  880  more op2*ok*|grep -v '^ '|head -n20
+  881  more op2*ko*|grep -v '^ '|head -n20
+  882  vi aa
+  883  more op4*ok*
+  884  vi dmlv3.c
+  885  cd ..
+  886  ll */dmlv4*
+  887  ll */dmlv3*
+  888  ls -lrt */dmlv3*
+  889  ls -lrt */dmlv3.c
+  890  cd solveur/
+  891  ll
+  892  vi dmlv3.c
+  893  g++ -O3 dmlv3.c -o dmlv3
+  894  vi dmlv3.c
+  895  g++ -O3 dmlv3.c -o dmlv3
+  896  ls -lrt
+  897  ./dmlv3 OBJ op2.170201090107.o190i211.3D_70_ok.4.MPI1NODE >op4.170201090107.o190i211.3D_70_ok.4.MPI1NODE
+  898  ./dmlv3 OBJ op2.170201091818.o190i211.3D_70_ko.4.MPI1NODE >op4.170201091818.o190i211.3D_70_ko.4.MPI1NODE 
+  899  vi op4*ok*
+  900  vi op4*ko*
+  901  cd d
+  902  cd dmlmem
+  903  ls
+  904  ls -lrt
+  905  ll
+  906  more jrun
+  907  ll
+  908  cd
+  909  cd dmlmem
+  910  ll
+  911  cd lecture/
+  912  ll
+  913  ls -lrt j*
+  914  more jexp1
+  915  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  916  . /opt/intel/impi/current/bin64/mpivars.sh
+  917  export PATH=.:$PATH
+  918  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  919  export I_MPI_PIN_PROCESSOR_LIST=5
+  920  more jone
+  921  vi jone
+  922  ./jone
+  923  squeue 
+  924  ssh o186i001
+  925  ./jone
+  926  sq
+  927  squeue 
+  928  ssh o186i126
+  929  cd solveur/
+  930  ls
+  931  ls -l
+  932  more op1*ok*
+  933  ll 
+  934  more input_Helmholtz3D_70_ok.txt
+  935  ll
+  936  more OUT*ok*
+  937  bc -l
+  938  more op2*ok*|grep -v '^ '|more
+  939  more op4*ok*
+  940  more jrun
+  941    
+  942  more /proc/cpuinfo 
+  943  top
+  944  cd dmlmem
+  945  cd lecture/
+  946  ./jexp1 
+  947  ll
+  948  cd 
+  949  cd
+  950  cd solveur/
+  951  more jrun 
+  952  ll
+  953  more perf.170201084724.o190i211.3D_70_ok.4.MPI1NODE
+  954  ll
+  955  cd solveur/
+  956  ls
+  957  more op1*ok*
+  958  more jrun
+  959  more op1*ok*
+  960  more OUT*ok*
+  961  ls -lrt
+  962  more  input_Helmholtz3D_70_ok.txt
+  963  more OUT*ok*
+  964  bc -l
+  965  more jrun 
+  966  more op1*ok*
+  967  more op2*ok*
+  968  more op2*ok*|grep -v "^ "|more
+  969  more op4*ok*
+  970  more op1*ok*
+  971  more op1*ko*
+  972  more op4*ko*
+  973  ll
+  974  more input_Helmholtz3D_70_ko.txt
+  975  more /proc/cpuinfo 
+  976  cd 
+  977  cd dmlmem
+  978  squeue 
+  979  more jone
+  980  cd lecture/
+  981  ll
+  982  more jone
+  983  ./joen
+  984  ./jone
+  985  squeue 
+  986  vi jone
+  987  ./jone
+  988  squeue 
+  989  ssh o186i148
+  990  cd ..
+  991  ls
+  992  cd hmalha/
+  993  ll
+  994  find .|grep op2
+  995  cd /ibnfs/
+  996  ls
+  997  cd hmalha/
+  998  ll
+  999  find .|grep op2
+ 1000  cd awe
+ 1001  cd /ibnfs/hmalha/
+ 1002  cd awe/
+ 1003  find .|grep op2
+ 1004  ls -l $(find .|grep op2)
+ 1005  cd ..
+ 1006  find .|grep op2
+ 1007  ls -lrt 
+ 1008  cd PROJECTS/
+ 1009  ls -lrt 
+ 1010  find .|grep op2
+ 1011  cd PAPER/paper/
+ 1012  ll
+ 1013  date
+ 1014  cd work.64Px1T.jobid-196020.o186i070.20170202.175200.e5-2697Av4.32ppn.TOFF.pmpi.IB
+ 1015  ll
+ 1016  more op2* |grep -v '^ '|more
+ 1017  ll
+ 1018  cd ..
+ 1019  ll
+ 1020  cd work.128Px1T.jobid-196023.o186i126.20170202.182228.e5-2697Av4.32ppn.TOFF.pmpi.IB
+ 1021  more op2* |grep -v '^ '|more
+ 1022  ll
+ 1023  more op1..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+ 1024  ll
+ 1025  ls -lrt
+ 1026  cp  op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 ~/
+ 1027  cd 
+ 1028  more op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+ 1029  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 op2
+ 1030  more op2
+ 1031  objdump -d /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 >OBJ
+ 1032  cd dmlmem/lecture
+ 1033  cp dml3.* ../..
+ 1034  cd
+ 1035  cd -
+ 1036  cp dmlv3* ../..
+ 1037  cd ../..
+ 1038  ./dmlv3 OBJ op2 >op4
+ 1039  vi op4
+ 1040  cd -
+ 1041  ll OBJ
+ 1042  ll
+ 1043  cd
+ 1044  ll OBJ
+ 1045  vi dmlv3.c 
+ 1046  gcc -O dmlv3.c -o dmlv3
+ 1047  g++ -O dmlv3.c -o dmlv3
+ 1048  ./dmlv3 OBJ op2 >op4
+ 1049  more op2
+ 1050  more op2|grep '^ '|more
+ 1051  more op2|grep '^ '|awk '{if($2>1000)print $0}'|more
+ 1052  more op2|grep '^ '|awk '{if($2>10000)print $0}'|more
+ 1053  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+ 1054  more op2|grep -v '^ '|more
+ 1055  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+ 1056  more op2|grep '^ '|awk '{if($2>100000){sum+=$1;print $0 $1}}'|more
+ 1057  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 $1}}'|more
+ 1058  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 sum}}'|more
+ 1059  more op2|grep -v '^ '|more
+ 1060* more op2|grep '^ '|if(
+ 1061  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|more
+ 1062  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum $0}'|more
+ 1063  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum ' ' $0}'|more
+ 1064  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+ 1065  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+ 1066  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}
+ 1067  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'
+ 1068  more op2
+ 1069  vi OBJ
+ 1070  history
+ 1071  info /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0
+ 1072  man info
+ 1073  unstrip
+ 1074  cd
+ 1075  ll
+ 1076  cd
+ 1077  mkdir unstrip
+ 1078  cd unstrip/
+ 1079  mv ../unstrip* .
+ 1080  ll
+ 1081  cat unstrip-64.tgz |gzip -d|tar xvf -
+ 1082  cd unstrip-64/
+ 1083  ll
+ 1084  ./unstrip 
+ 1085  history
+ 1086  cp /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 fluori
+ 1087  ll
+ 1088  ./unstrip fluori flunew
+ 1089  ./unstrip -f fluori _o flunew
+ 1090  ./unstrip -f fluori -o flunew
+ 1091  past Oiru Onew|more
+ 1092  paste Oiru Onew|more
+ 1093  mm
+ 1094  ll
+ 1095  objdump -S fluori | awk '/^[[:xdigit:]]+ <FUNCTION>:$/{flag=1;next}/^[[:xdigit:]]+ <.*>:$/{flag=0}flag'
+ 1096  ll
+ 1097  more generate-learn-binary.bash 
+ 1098  vi j1
+ 1099  chmod 777 j1
+ 1100  .:j1
+ 1101  ./j1
+ 1102  ./j1 fluori 
+ 1103  ./j1 fluori more j1
+ 1104  ll
+ 1105  more j1
+ 1106  ./j1 main fluori
+ 1107  history >>his
+ 1108  strings fluori 
+ 1109  more op2*
+ 1110  ll
+ 1111  cd
+ 1112  cd solveur/
+ 1113  more op2*
+ 1114  addr2line 
+ 1115  cd
+ 1116  cd unstrip/unstrip-64/
+ 1117  ll
+ 1118  addr2line fluori |more
+ 1119  man addr2line
+ 1120  man addr2line main
+ 1121  addr2line fluori main
+ 1122  addr2line main fluori 
+ 1123  addr2line main -e fluori 
+ 1124  addr2line 50e932 -e fluori 
+ 1125  man addr2line 
+ 1126  addr2line -f -e fluori 
+ 1127  addr2line -f -e fluori 0509fd0 
+ 1128  addr2line -f -e fluori 0x509fd0 
+ 1129  addr2line  -e fluori 0x509fd0 
+ 1130  addr2line  -e fluori 107080
+ 1131  addr2line  -e fluori 0x107080
+ 1132  addr2line  -b fluori 0x107080
+ 1133  addr2line  -b -f fluori 0x107080
+ 1134  addr2line  -b -e fluori 0x107080
+ 1135  addr2line   -e fluori 0x107080
+ 1136  cp fluori a.out
+ 1137  addr2line   0x107080
+ 1138  addr2line  
+ 1139  man mtrace
+ 1140  cd
+ 1141  more op2
+ 1142  ll
+ 1143  cd unstrip/unstrip-64/
+ 1144  ll
+ 1145  objdump -D Oori |more
+ 1146  objdump -D  flu|more
+ 1147  objdump -D  fluori|more
+ 1148  objdump -D  fluori >Dori
+ 1149  tail Dori
+ 1150  vi Dori
+ 1151  vi Oori
+ 1152  grep xmm Oori|more
+ 1153  grep xmm Oori|wc
+ 1154  grep xmm Oori|grep -v pxor|wc
+ 1155  grep xmm Oori|grep -v -e pxor -e movsd|wc
+ 1156  grep xmm Oori|grep -v -e pxor -e movsd|more
+ 1157  grep xmm Oori|grep -v -e pxor -e mov|wc
+ 1158  grep xmm Oori|grep -v -e pxor -e mov|more
+ 1159  ll
+ 1160  man elfdump
+ 1161  elfdump
+ 1162  dwarfdump
+ 1163  elfdump
+ 1164  gdb 
+ 1165  ll
+ 1166  readelf -a flunew|more
+ 1167  readelf -a flunew >elf1
+ 1168  vi elf1
+ 1169  more elf2
+ 1170  wc elf2
+ 1171  vi  elf2
+ 1172  vi elf1
+ 1173  more elf<1
+ 1174  more elf1
+ 1175  vi  elf1
+ 1176* 
+ 1177  sort -k2 elf3|more
+ 1178  more elf3
+ 1179  more elf1
+ 1180               
+ 1181  ll
+ 1182  objdump --full-contents  fluori|more
+ 1183  ldd fluori
+ 1184  otool
+ 1185  nm flupri
+ 1186  nm fluori
+ 1187  nm flunew
+ 1188  nm flunew|more
+ 1189  nm flunew|sort -n|more
+ 1190  nm flunew|sort -x|more
+ 1191  man sort
+ 1192  man scanelf 
+ 1193  scanelf
+ 1194  eu-nm
+ 1195  eu-nm fluori 
+ 1196  eu-nm flunew
+ 1197  eu-objdump -d fluori
+ 1198  eu-objdump -D fluori
+ 1199  eu-objdump -d fluori
+ 1200  gdb ./fluori
+ 1201  objdump -D -M fluori 
+ 1202  objdump -D fluori|more
+ 1203  objdump -d fluori|more
+ 1204  readelf -S
+ 1205  readelf -S fluori
+ 1206  ll
+ 1207  gdb ./fluori
+ 1208  ll
+ 1209  more Oori
+ 1210  ll
+ 1211  more Onew
+ 1212  cd
+ 1213  cd solveur/
+ 1214  ll
+ 1215  ./jone
+ 1216  squeue 
+ 1217  ssh o190i211
+ 1218  vi jone
+ 1219  ./jone
+ 1220  squeue 
+ 1221  ssh o190i211
+ 1222  ll
+ 1223  cd
+ 1224  cd unstrip/unstrip-64/
+ 1225  ll
+ 1226  more Oori
+ 1227  more Onew
+ 1228  ll
+ 1229  more Oori
+ 1230  cd
+ 1231  mkdir PHD
+ 1232  cd PHD
+ 1233  mkdir C++
+ 1234  cd C++/
+ 1235  vi p1.cpp
+ 1236  g++ p1.cpp -O -o p1
+ 1237  g++44 p1.cpp -O -o p1
+ 1238  g++ p1.cpp -O -o p1
+ 1239  g++ -std=c++0x p1.cpp -O -o p1
+ 1240  ./p1
+ 1241  history >>his
+ 1242  g++ -std=c++11 p1.cpp -O -o p1
+ 1243  ./p1
+ 1244  g++ -std=c++14 p1.cpp -O -o p1
+ 1245  g++ -std=c++11 p1.cpp -O -o p1
+ 1246  ./p1
+ 1247  vi p1.cpp
+ 1248  g++ -std=c++11 p1.cpp -O -o p1
+ 1249  vi p1.cpp
+ 1250  g++ -std=c++11 p1.cpp -O -o p1
+ 1251  ./p1
+ 1252  vi p2.cpp
+ 1253  g++ -std=c++11 p2.cpp -O -o p2
+ 1254  ./p2
+ 1255  more p2.cpp 
+ 1256  more p2.cpp
+ 1257  vi p3.cpp
+ 1258  g++ -std=c++11 p3.cpp -O -o p3
+ 1259  ./p3
+ 1260  cd ..
+ 1261  ll
+ 1262  mkdir oprofile
+ 1263  cd oprofile/
+ 1264  cp ~/unstrip/unstrip-64/Oori .
+ 1265  more Oori 
+ 1266  vi objdump_parsing.cpp
+ 1267  history
+ 1268   g++ -std=c++11   objdump_parsing.cpp 
+ 1269   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1270  ./p
+ 1271  ./p OOOO
+ 1272  ./p Oori
+ 1273  vi objdump_parsing.cpp
+ 1274   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1275  vi objdump_parsing.cpp
+ 1276   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1277  vi objdump_parsing.cpp
+ 1278   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1279  vi objdump_parsing.cpp
+ 1280   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1281  ./p Oori
+ 1282  de
+ 1283  de 
+ 1284  cd
+ 1285  cd solveur/
+ 1286  ls
+ 1287  ll
+ 1288  more op4.170201091818.o190i211.3D_70_ko.4.MPI1NODE
+ 1289  cd
+ 1290  cd PHD/
+ 1291  ll
+ 1292  cd oprofile/
+ 1293  ll
+ 1294  history >>his
+  335  ll
+  336  squeue 
+  337  ssh o190i211
+  338  ssh o190i211 "cd /opt/hpe;tar cvf - tools|gzip" >tools.gz
+  339  ll
+  340  find .|grep L4
+  341  cd lecture/
+  342  ll
+  343  more jcomp
+  344  ./jcomp
+  345  ll
+  346  cd
+  347  more jrun
+  348  ll
+  349  cd lecture
+  350  ll
+  351  more jrun1
+  352  more  /opt/hpe/tools/bin/start_monitormembw.local.sh
+  353  ll
+  354  ./jone
+  355  ll
+  356  history|grep jone
+  357  cd
+  358  cd solveur/
+  359  ./jone
+  360  squeue 
+  361  ssh o190i215
+  362  ./jone
+  363  squeue 
+  364  ssh o190i211
+  365  ll
+  366  cd dmlmem
+  367  ll
+  368  cd 
+  369  cd dmlmem
+  370  ll
+  371  cd lecture/
+  372  ll
+  373  more jrunmem.spe 
+  374  grep wait */j*
+  375  more 
+  376  more ring/jnexts
+  377  more jrun1
+  378  cd
+  379  cd solveur/
+  380  more jrun1
+  381  cd /opt/hpe/
+  382  ll
+  383  cd tools/
+  384  ll
+  385  cd src
+  386  ll
+  387  cd monitormembw/
+  388  ll
+  389  cd INTEL/
+  390  ll
+  391  more monitormembw.c
+  392  grep perf */j*
+  393  ll
+  394  cd
+  395  grep perf */j*
+  396  cd lecture/
+  397  ls
+  398  ks -l
+  399  ls -l
+  400  cd lecture/
+  401  ls
+  402  cd ..
+  403  cd solveur/
+  404  ll
+  405  more jone
+  406  cp jone ../lecture/
+  407  cd ../lecture/
+  408  vi jone
+  409  ./jone
+  410  cp ../solveur/jsleep .
+  411  ./jone
+  412  squeue 
+  413  ssh o190i211
+  414  ls
+  415  cd solveur/
+  416  ls
+  417  ls -lrt
+  418  ll j*
+  419  more jone
+  420  more jone2
+  421  .:jone2
+  422  ./jone2
+  423  squeue 
+  424  scancel 193503
+  425  ll
+  426  ll op1*
+  427  ll
+  428  vi jone2
+  429  ./jone
+  430  squeue 
+  431  vi jone2
+  432  ./jone2
+  433  squeue 
+  434  scancel 193504 193505
+  435  squeue 
+  436  ll
+  437  ls -lrt
+  438  ll
+  439  ls -l
+  440  ll
+  441  cd dmlmem
+  442  cd lecture/
+  443  ll
+  444  vi jexp1
+  445  ./jexp1
+  446  chmod 777 jexp1
+  447  ./jexp1 
+  448  vi dmlmem.cpp
+  449  more jexp1 
+  450  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  451  . /opt/intel/impi/current/bin64/mpivars.sh
+  452  export PATH=.:$PATH
+  453  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  454  vi dmlmemmpi.cpp
+  455  more dmlmem.cpp 
+  456  vi dmlmemmpi.cpp 
+  457  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  458  ./jexp1
+  459  vi jexp1 
+  460  ./jexp1 
+  461  vi jexp1 
+  462  ./jexp1 
+  463  vi jexp1 
+  464  ./jexp1 
+  465  vi jexp1
+  466  ./jexp1 
+  467  vi jexp1
+  468  ./jexp1 
+  469  vi jexp1
+  470  more /proc/cpuinfo 
+  471  vi jexp1
+  472  ./jexp1
+  473  grep CACHE *.cpp
+  474  vi jexp1
+  475  ./jexp1
+  476  vi jexp1
+  477  ./jexp1
+  478  vi jexp1
+  479  ./jexp1
+  480  vi jexp1
+  481  ./jexp1
+  482  vi jexp1
+  483  ./jexp1
+  484  vi jexp1
+  485  ./jexp1
+  486  vi jexp1
+  487  ./jexp1
+  488  cd dmlmem
+  489  ls
+  490  cd lecture
+  491  ls
+  492  more jcomp
+  493  ./jcomp
+  494  ll */DML*
+  495  ls -l */DML*
+  496  ls -l../ */DML*
+  497  ls -l ../ */DML*
+  498  ls -l ../*/DML*
+  499  cp ../counters/DML.c .
+  500  vi dmlmem.cpp 
+  501  ./jcomp
+  502  vi jcomp
+  503  ./jcomp
+  504  ./dmlmem 1
+  505  ll j*
+  506  vi jrun1
+  507  vi jcoomp
+  508  vi jcomp
+  509  ./jcomp 
+  510  vi jcomp
+  511   ll j
+  512  ll j*
+  513  pwd
+  514  ll
+  515  pwd
+  516  ll
+  517  pwd
+  518  cd ..
+  519  cd
+  520  cd solveur/
+  521  cp jone2 ../dmlmem/lecture/
+  522  cp jone ../dmlmem/lecture/
+  523  cd ../dmlmem/lecture/
+  524  vi jone2
+  525  ./jone2
+  526  squeue 
+  527  cp ../../solveur/jsleep .
+  528  ./jone2
+  529  ll
+  530  squeue 
+  531  mkdir KEEP/
+  532  mv op* KEEP/
+  533  ll
+  534  mv membwstats.1701251* KEEP/
+  535  mv OBJ* KEEP/
+  536  mv OUT* KEEP/
+  537  ll
+  538  rm -rf epoch.job-0.20170125-12h1*
+  539  ll
+  540  squeue 
+  541  ssh 193547
+  542  ssh o186i127
+  543  cd dmlmem
+  544  ls
+  545  cd lecture/
+  546  ll
+  547  rm -rf epoch*
+  548  ll
+  549  rm OUT*
+  550  ll
+  551  rm out*
+  552  ./jexp1 
+  553  more /proc/cpuinfo 
+  554  vi jexp1 
+  555  ./jexp1 
+  556  ll
+  557  ls -l
+  558  pwd
+  559  ll
+  560  cd dmlmem
+  561  cd lecture/
+  562  ./jone
+  563  squeue 
+  564  ssh o190i211
+  565  bc -l
+  566  top
+  567  cd solveur/
+  568  ./jrun16nodes 
+  569  ll
+  570  cd KEEP/
+  571  ll
+  572  cd ..
+  573  ll
+  574  more  OUT.170201004714.3D_large_ok
+  575  cd KEEP/
+  576  ll
+  577  more OUT.160814175935.o184i023.3D_large_ok.16
+  578  cd ..
+  579  ll
+  580  more OUT.170201004714.3D_large_ok
+  581  ll
+  582  ll *.txt
+  583  more input_Helmholtz3D_medium_ok.txt
+  584  cp input_Helmholtz3D_medium_ok.txt input_Helmholtz3D_150_ok.txt
+  585  vi input_Helmholtz3D_150_ok.txt
+  586  vi jrun16nodes 
+  587  ./jrun16nodes 
+  588  ll
+  589  more  OUT.170201005512.3D_150_ok
+  590  ll 
+  591  rm PARAM_TD_*
+  592  ll
+  593  vi op4.170201005512.3D_150_ok
+  594  ll
+  595  more jrun16nodes 
+  596  MKL=/opt/intel/compilers_and_libraries_2017.1.132/linux/mkl/lib/intel64_lin/libmkl_avx2.so
+  597  objdump -d $MKL >OBJ
+  598  ./dmlv3 OBJ op2.170201005512.3D_150_ok >op4.170201005512.3D_150_ok
+  599  vi op4.170201005512.3D_150_ok
+  600  ll
+  601  ll op2*
+  602  vi op2.170201005512.3D_150_ok
+  603  squeue 
+  604  scancel gre0_all
+  605  cd
+  606  squeue 
+  607  cd solveur/
+  608  vi jrun
+  609  vi jone
+  610  ./jone
+  611  squeue 
+  612  vi machines 
+  613  more machines 
+  614  ll jrun*
+  615  more jrun2x
+  616  squeue 
+  617  scancel 193781
+  618  exit
+  619  cd solveur/
+  620  more jrun1
+  621  more jrun16nodes 
+  622  top
+  623  vi machines 
+  624  vi jrun16nodes 
+  625  rm .*
+  626  vi jrun16nodes 
+  627  top
+  628  cd /home/dml/solveur/epoch.job-0.20170201-00h35m
+  629  ll
+  630  top
+  631  ll
+  632  cd ..
+  633  ll
+  634  more OUT.170201003508.3D_large_ok
+  635  squeue 
+  636  ssh o186i140
+  637  cd solveur
+  638  squeue 
+  639  ssh o186i127
+  640  vmstat 1 10000
+  641  top
+  642  vmstat 1 10000
+  643  squeue 
+  644  ssh o190ii212
+  645  ssh o190i212
+  646  top
+  647  squeue 
+  648  ll
+  649  pwd
+  650  ll
+  651  cd solveur/
+  652  more jrun4X
+  653  ll
+  654  ll *.txt
+  655  cp input_Helmholtz3D_70_ok.txt input_Helmholtz3D_100_ok.txt
+  656  vi input_Helmholtz3D_100_ok.txt
+  657  ll
+  658  more jrun2x
+  659  more jrun2X
+  660  cp jrun2X jrun100_32nodes
+  661  vi jrun100_32nodes
+  662  ll OB*
+  663  ./jrun100_32nodes
+  664  ll
+  665  squeue 
+  666  ll
+  667  squeue 
+  668  ll
+  669  vi machines 
+  670  ll
+  671  ll j*
+  672  vi jrun2X
+  673  ./jrun2X
+  674  top
+  675  ls -l
+  676  ll
+  677  more /proc/cpuinfo 
+  678  ll
+  679  cd solveur/
+  680  ll
+  681  ll op*
+  682  ls -lrt op*
+  683  vi op3.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  684  ll
+  685  more jrun2X
+  686  MKL=/opt/intel/compilers_and_libraries_2017.1.132/linux/mkl/lib/intel64_lin/libmkl_avx2.so
+  687  objdump -d $MKL >OBJ
+  688  ./dmlv3      OBJ op2.170201013618.o190i211.3D_70_ok.4.MPI1NODE >op4.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  689  vi op4.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  690  vi jrun2X
+  691  ./jrun2X
+  692  ll
+  693  ls -lrt
+  694  vi op4.170201014927.o190i211.3D_70_ok.4.MPI1NODE
+  695  pwd
+  696  more op1.170201014927.o190i211.3D_70_ok.4.MPI1NODE
+  697  ll
+  698  vi jrun2X
+  699  ./jrun2X
+  700  ls -lrt
+  701  more OUT.170201014927.o190i211.3D_70_ok.4.MPI1NODE
+  702  ll
+  703  ls -lrt
+  704  more OUT.170201020259.o190i211.3D_70_ok.4.MPI1NODE
+  705  ll
+  706  ls -lrt
+  707  more op4.170201020259.o190i211.3D_70_ok.4.MPI1NODE
+  708  q
+  709  ll
+  710  top
+  711  vmstat 1 10000
+  712  ll
+  713  squeue 
+  714  ssh o190i212
+  715  ll
+  716  squeue 
+  717  cd solveur/
+  718  vi jone
+  719  ./jone
+  720  squeue 
+  721  ssh o190i211
+  722  ll
+  723  cd
+  724  cd solveur/
+  725  ll
+  726  cd KEEP/
+  727  ll
+  728  more  OUT.170108100941.o186i014.3D_large_ok.16
+  729  ll
+  730  more  OUT.170108102853.o186i014.3D_large_ok.16
+  731  more OUT.160721203741.o184i085.3D_medium_ok.16
+  732  ll
+  733  ll *.160721203741*
+  734  vi op4.160721203741.o184i086.3D_medium_ok.16
+  735  ll
+  736  squeue 
+  737  ssh o190i211
+  738  squeue 
+  739  ssh o186i140
+  740  cd
+  741  cd solveur/
+  742  ll
+  743  more jrun2X
+  744  ll
+  745  more  OUT.170201012107.o190i211.3D_100_ok.4.MPI1NODE
+  746  ll
+  747  more  OUT.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  748     
+  749  bc -l
+  750  squeue 
+  751  ssh o190i215
+  752  squeue 
+  753  ssh o186i126
+  754  cd lecture/
+  755  ls
+  756  ls -l
+  757  more jrun
+  758  ./jone
+  759  squeue 
+  760  ssh o190i211
+  761  i#
+  762  vi jone
+  763  ./jone
+  764  squeue 
+  765  vi machines
+  766  ll
+  767  cd
+  768  cd solveur/
+  769  vi machines 
+  770  squeue 
+  771  vi machines 
+  772  wc machines 
+  773  vi jrun16nodes 
+  774  ./jrun16nodes 
+  775  vi jrun16nodes
+  776  ./jrun16nodes 
+  777  vi jrun16nodes 
+  778  vi machines
+  779  ./jrun16nodes 
+  780  ll
+  781  squeue 
+  782  ssh o186i126
+  783  squeue 
+  784  ssh o190i211
+  785  cd solveur/
+  786  ls -lrt
+  787  ll
+  788  ls -lrt
+  789  more perf.170201095706.o190i211.3D_70_ko.4.MPI1NODE
+  790  ll
+  791  exit
+  792  cd solveur/
+  793  ll
+  794  ./jone
+  795  squeue 
+  796  ssh o190i211
+  797  squeue 
+  798  scancel 193781 193790
+  799  squeue 
+  800  cd 
+  801  cd sponge
+  802  ll
+  803  more keccak.c
+  804     more sponge.c 
+  805  more /proc/cpuinfo 
+  806  ll
+  807  cd dmlmem/lecture/
+  808  ll
+  809  more jexp1
+  810  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  811  . /opt/intel/impi/current/bin64/mpivars.sh
+  812  export PATH=.:$PATH
+  813  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  814  export I_MPI_PIN_PROCESSOR_LIST=5
+  815  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=GB MAX_MEASURES=40 CACHE_LINE=64  Ghz=2.9
+  816  BIN=dmlmemmpi
+  817  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=GB MAX_MEASURES=40 CACHE_LINE=64  Ghz=2.9
+  818  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=CY MAX_MEASURES=40 CACHE_LINE=64  Ghz=2.9
+  819  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=CY MAX_MEASURES=40 CACHE_LINE=64  GHZ=2.9
+  820  vi jexp1
+  821  ./jexp1 
+  822  vi jexp1
+  823  more /proc/cpuinfo 
+  824  vi jexp1
+  825  ./jexp1 
+  826  vi jexp1
+  827  ./jexp1 
+  828  vi jexp1
+  829  ./jexp1 
+  830  vi jexp1
+  831  ./jexp1 
+  832  vi dmlmemmpi.c
+  833  vi dmlmemmpi.cpp 
+  834  vi jexp1 
+  835  ./jexp1 
+  836  vi jexp1 
+  837  ./jexp1 
+  838  vi jexp1 
+  839  ./jexp1 
+  840  cd dmlmem/lecture/
+  841  ll
+  842  more jrun
+  843  ./jrun
+  844  ./jexp1 
+  845  vi jexp1
+  846  ./jexp1 
+  847  pwd
+  848  ll
+  849  cd solveur/
+  850  ls -lrt
+  851  more perf.170201095706.o190i211.3D_70_ko.4.MPI1NODE
+  852  ll
+  853  more  op1.170201090107.o190i211.3D_70_ok.4.MPI1NODE
+  854  cd
+  855  ls -lrt
+  856  cd cd sponge2016/
+  857  ll
+  858  cd  sponge2016/
+  859  ll
+  860  cd sponge
+  861  ll
+  862  more sponge.c
+  863   
+  864  cd
+  865  cd sponge
+  866  ll
+  867  more sponge.c
+  868  qll
+  869  ls
+  870  more keccak.c 
+  871   
+  872  grep KECC *.c
+  873  grep KECC *.h
+  874  cd
+  875  cd solveur/
+  876  ll
+  877  more op1*OK*
+  878  more op1*ok*
+  879  more op1*ko*
+  880  more op2*ok*|grep -v '^ '|head -n20
+  881  more op2*ko*|grep -v '^ '|head -n20
+  882  vi aa
+  883  more op4*ok*
+  884  vi dmlv3.c
+  885  cd ..
+  886  ll */dmlv4*
+  887  ll */dmlv3*
+  888  ls -lrt */dmlv3*
+  889  ls -lrt */dmlv3.c
+  890  cd solveur/
+  891  ll
+  892  vi dmlv3.c
+  893  g++ -O3 dmlv3.c -o dmlv3
+  894  vi dmlv3.c
+  895  g++ -O3 dmlv3.c -o dmlv3
+  896  ls -lrt
+  897  ./dmlv3 OBJ op2.170201090107.o190i211.3D_70_ok.4.MPI1NODE >op4.170201090107.o190i211.3D_70_ok.4.MPI1NODE
+  898  ./dmlv3 OBJ op2.170201091818.o190i211.3D_70_ko.4.MPI1NODE >op4.170201091818.o190i211.3D_70_ko.4.MPI1NODE 
+  899  vi op4*ok*
+  900  vi op4*ko*
+  901  cd d
+  902  cd dmlmem
+  903  ls
+  904  ls -lrt
+  905  ll
+  906  more jrun
+  907  ll
+  908  cd
+  909  cd dmlmem
+  910  ll
+  911  cd lecture/
+  912  ll
+  913  ls -lrt j*
+  914  more jexp1
+  915  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  916  . /opt/intel/impi/current/bin64/mpivars.sh
+  917  export PATH=.:$PATH
+  918  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  919  export I_MPI_PIN_PROCESSOR_LIST=5
+  920  more jone
+  921  vi jone
+  922  ./jone
+  923  squeue 
+  924  ssh o186i001
+  925  ./jone
+  926  sq
+  927  squeue 
+  928  ssh o186i126
+  929  cd solveur/
+  930  ls
+  931  ls -l
+  932  more op1*ok*
+  933  ll 
+  934  more input_Helmholtz3D_70_ok.txt
+  935  ll
+  936  more OUT*ok*
+  937  bc -l
+  938  more op2*ok*|grep -v '^ '|more
+  939  more op4*ok*
+  940  more jrun
+  941    
+  942  more /proc/cpuinfo 
+  943  top
+  944  cd dmlmem
+  945  cd lecture/
+  946  ./jexp1 
+  947  ll
+  948  cd 
+  949  cd
+  950  cd solveur/
+  951  more jrun 
+  952  ll
+  953  more perf.170201084724.o190i211.3D_70_ok.4.MPI1NODE
+  954  ll
+  955  cd solveur/
+  956  ls
+  957  more op1*ok*
+  958  more jrun
+  959  more op1*ok*
+  960  more OUT*ok*
+  961  ls -lrt
+  962  more  input_Helmholtz3D_70_ok.txt
+  963  more OUT*ok*
+  964  bc -l
+  965  more jrun 
+  966  more op1*ok*
+  967  more op2*ok*
+  968  more op2*ok*|grep -v "^ "|more
+  969  more op4*ok*
+  970  more op1*ok*
+  971  more op1*ko*
+  972  more op4*ko*
+  973  ll
+  974  more input_Helmholtz3D_70_ko.txt
+  975  more /proc/cpuinfo 
+  976  cd 
+  977  cd dmlmem
+  978  squeue 
+  979  more jone
+  980  cd lecture/
+  981  ll
+  982  more jone
+  983  ./joen
+  984  ./jone
+  985  squeue 
+  986  vi jone
+  987  ./jone
+  988  squeue 
+  989  ssh o186i148
+  990  cd ..
+  991  ls
+  992  cd hmalha/
+  993  ll
+  994  find .|grep op2
+  995  cd /ibnfs/
+  996  ls
+  997  cd hmalha/
+  998  ll
+  999  find .|grep op2
+ 1000  cd awe
+ 1001  cd /ibnfs/hmalha/
+ 1002  cd awe/
+ 1003  find .|grep op2
+ 1004  ls -l $(find .|grep op2)
+ 1005  cd ..
+ 1006  find .|grep op2
+ 1007  ls -lrt 
+ 1008  cd PROJECTS/
+ 1009  ls -lrt 
+ 1010  find .|grep op2
+ 1011  cd PAPER/paper/
+ 1012  ll
+ 1013  date
+ 1014  cd work.64Px1T.jobid-196020.o186i070.20170202.175200.e5-2697Av4.32ppn.TOFF.pmpi.IB
+ 1015  ll
+ 1016  more op2* |grep -v '^ '|more
+ 1017  ll
+ 1018  cd ..
+ 1019  ll
+ 1020  cd work.128Px1T.jobid-196023.o186i126.20170202.182228.e5-2697Av4.32ppn.TOFF.pmpi.IB
+ 1021  more op2* |grep -v '^ '|more
+ 1022  ll
+ 1023  more op1..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+ 1024  ll
+ 1025  ls -lrt
+ 1026  cp  op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 ~/
+ 1027  cd 
+ 1028  more op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+ 1029  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 op2
+ 1030  more op2
+ 1031  objdump -d /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 >OBJ
+ 1032  cd dmlmem/lecture
+ 1033  cp dml3.* ../..
+ 1034  cd
+ 1035  cd -
+ 1036  cp dmlv3* ../..
+ 1037  cd ../..
+ 1038  ./dmlv3 OBJ op2 >op4
+ 1039  vi op4
+ 1040  cd -
+ 1041  ll OBJ
+ 1042  ll
+ 1043  cd
+ 1044  ll OBJ
+ 1045  vi dmlv3.c 
+ 1046  gcc -O dmlv3.c -o dmlv3
+ 1047  g++ -O dmlv3.c -o dmlv3
+ 1048  ./dmlv3 OBJ op2 >op4
+ 1049  more op2
+ 1050  more op2|grep '^ '|more
+ 1051  more op2|grep '^ '|awk '{if($2>1000)print $0}'|more
+ 1052  more op2|grep '^ '|awk '{if($2>10000)print $0}'|more
+ 1053  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+ 1054  more op2|grep -v '^ '|more
+ 1055  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+ 1056  more op2|grep '^ '|awk '{if($2>100000){sum+=$1;print $0 $1}}'|more
+ 1057  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 $1}}'|more
+ 1058  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 sum}}'|more
+ 1059  more op2|grep -v '^ '|more
+ 1060* more op2|grep '^ '|if(
+ 1061  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|more
+ 1062  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum $0}'|more
+ 1063  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum ' ' $0}'|more
+ 1064  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+ 1065  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+ 1066  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}
+ 1067  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'
+ 1068  more op2
+ 1069  vi OBJ
+ 1070  history
+ 1071  info /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0
+ 1072  man info
+ 1073  unstrip
+ 1074  cd
+ 1075  ll
+ 1076  cd
+ 1077  mkdir unstrip
+ 1078  cd unstrip/
+ 1079  mv ../unstrip* .
+ 1080  ll
+ 1081  cat unstrip-64.tgz |gzip -d|tar xvf -
+ 1082  cd unstrip-64/
+ 1083  ll
+ 1084  ./unstrip 
+ 1085  history
+ 1086  cp /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 fluori
+ 1087  ll
+ 1088  ./unstrip fluori flunew
+ 1089  ./unstrip -f fluori _o flunew
+ 1090  ./unstrip -f fluori -o flunew
+ 1091  past Oiru Onew|more
+ 1092  paste Oiru Onew|more
+ 1093  mm
+ 1094  ll
+ 1095  objdump -S fluori | awk '/^[[:xdigit:]]+ <FUNCTION>:$/{flag=1;next}/^[[:xdigit:]]+ <.*>:$/{flag=0}flag'
+ 1096  ll
+ 1097  more generate-learn-binary.bash 
+ 1098  vi j1
+ 1099  chmod 777 j1
+ 1100  .:j1
+ 1101  ./j1
+ 1102  ./j1 fluori 
+ 1103  ./j1 fluori more j1
+ 1104  ll
+ 1105  more j1
+ 1106  ./j1 main fluori
+ 1107  history >>his
+ 1108  strings fluori 
+ 1109  more op2*
+ 1110  ll
+ 1111  cd
+ 1112  cd solveur/
+ 1113  more op2*
+ 1114  addr2line 
+ 1115  cd
+ 1116  cd unstrip/unstrip-64/
+ 1117  ll
+ 1118  addr2line fluori |more
+ 1119  man addr2line
+ 1120  man addr2line main
+ 1121  addr2line fluori main
+ 1122  addr2line main fluori 
+ 1123  addr2line main -e fluori 
+ 1124  addr2line 50e932 -e fluori 
+ 1125  man addr2line 
+ 1126  addr2line -f -e fluori 
+ 1127  addr2line -f -e fluori 0509fd0 
+ 1128  addr2line -f -e fluori 0x509fd0 
+ 1129  addr2line  -e fluori 0x509fd0 
+ 1130  addr2line  -e fluori 107080
+ 1131  addr2line  -e fluori 0x107080
+ 1132  addr2line  -b fluori 0x107080
+ 1133  addr2line  -b -f fluori 0x107080
+ 1134  addr2line  -b -e fluori 0x107080
+ 1135  addr2line   -e fluori 0x107080
+ 1136  cp fluori a.out
+ 1137  addr2line   0x107080
+ 1138  addr2line  
+ 1139  man mtrace
+ 1140  cd
+ 1141  more op2
+ 1142  ll
+ 1143  cd unstrip/unstrip-64/
+ 1144  ll
+ 1145  objdump -D Oori |more
+ 1146  objdump -D  flu|more
+ 1147  objdump -D  fluori|more
+ 1148  objdump -D  fluori >Dori
+ 1149  tail Dori
+ 1150  vi Dori
+ 1151  vi Oori
+ 1152  grep xmm Oori|more
+ 1153  grep xmm Oori|wc
+ 1154  grep xmm Oori|grep -v pxor|wc
+ 1155  grep xmm Oori|grep -v -e pxor -e movsd|wc
+ 1156  grep xmm Oori|grep -v -e pxor -e movsd|more
+ 1157  grep xmm Oori|grep -v -e pxor -e mov|wc
+ 1158  grep xmm Oori|grep -v -e pxor -e mov|more
+ 1159  ll
+ 1160  man elfdump
+ 1161  elfdump
+ 1162  dwarfdump
+ 1163  elfdump
+ 1164  gdb 
+ 1165  ll
+ 1166  readelf -a flunew|more
+ 1167  readelf -a flunew >elf1
+ 1168  vi elf1
+ 1169  more elf2
+ 1170  wc elf2
+ 1171  vi  elf2
+ 1172  vi elf1
+ 1173  more elf<1
+ 1174  more elf1
+ 1175  vi  elf1
+ 1176* 
+ 1177  sort -k2 elf3|more
+ 1178  more elf3
+ 1179  more elf1
+ 1180               
+ 1181  ll
+ 1182  objdump --full-contents  fluori|more
+ 1183  ldd fluori
+ 1184  otool
+ 1185  nm flupri
+ 1186  nm fluori
+ 1187  nm flunew
+ 1188  nm flunew|more
+ 1189  nm flunew|sort -n|more
+ 1190  nm flunew|sort -x|more
+ 1191  man sort
+ 1192  man scanelf 
+ 1193  scanelf
+ 1194  eu-nm
+ 1195  eu-nm fluori 
+ 1196  eu-nm flunew
+ 1197  eu-objdump -d fluori
+ 1198  eu-objdump -D fluori
+ 1199  eu-objdump -d fluori
+ 1200  gdb ./fluori
+ 1201  objdump -D -M fluori 
+ 1202  objdump -D fluori|more
+ 1203  objdump -d fluori|more
+ 1204  readelf -S
+ 1205  readelf -S fluori
+ 1206  ll
+ 1207  gdb ./fluori
+ 1208  ll
+ 1209  more Oori
+ 1210  ll
+ 1211  more Onew
+ 1212  cd
+ 1213  cd solveur/
+ 1214  ll
+ 1215  ./jone
+ 1216  squeue 
+ 1217  ssh o190i211
+ 1218  vi jone
+ 1219  ./jone
+ 1220  squeue 
+ 1221  ssh o190i211
+ 1222  ll
+ 1223  cd
+ 1224  cd unstrip/unstrip-64/
+ 1225  ll
+ 1226  more Oori
+ 1227  more Onew
+ 1228  ll
+ 1229  more Oori
+ 1230  cd
+ 1231  mkdir PHD
+ 1232  cd PHD
+ 1233  mkdir C++
+ 1234  cd C++/
+ 1235  vi p1.cpp
+ 1236  g++ p1.cpp -O -o p1
+ 1237  g++44 p1.cpp -O -o p1
+ 1238  g++ p1.cpp -O -o p1
+ 1239  g++ -std=c++0x p1.cpp -O -o p1
+ 1240  ./p1
+ 1241  history >>his
+ 1242  g++ -std=c++11 p1.cpp -O -o p1
+ 1243  ./p1
+ 1244  g++ -std=c++14 p1.cpp -O -o p1
+ 1245  g++ -std=c++11 p1.cpp -O -o p1
+ 1246  ./p1
+ 1247  vi p1.cpp
+ 1248  g++ -std=c++11 p1.cpp -O -o p1
+ 1249  vi p1.cpp
+ 1250  g++ -std=c++11 p1.cpp -O -o p1
+ 1251  ./p1
+ 1252  vi p2.cpp
+ 1253  g++ -std=c++11 p2.cpp -O -o p2
+ 1254  ./p2
+ 1255  more p2.cpp 
+ 1256  more p2.cpp
+ 1257  vi p3.cpp
+ 1258  g++ -std=c++11 p3.cpp -O -o p3
+ 1259  ./p3
+ 1260  cd ..
+ 1261  ll
+ 1262  mkdir oprofile
+ 1263  cd oprofile/
+ 1264  cp ~/unstrip/unstrip-64/Oori .
+ 1265  more Oori 
+ 1266  vi objdump_parsing.cpp
+ 1267  history
+ 1268   g++ -std=c++11   objdump_parsing.cpp 
+ 1269   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1270  ./p
+ 1271  ./p OOOO
+ 1272  ./p Oori
+ 1273  vi objdump_parsing.cpp
+ 1274   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1275  vi objdump_parsing.cpp
+ 1276   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1277  vi objdump_parsing.cpp
+ 1278   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1279  vi objdump_parsing.cpp
+ 1280   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1281  ./p Oori
+ 1282  de
+ 1283  de 
+ 1284  cd
+ 1285  cd solveur/
+ 1286  ls
+ 1287  ll
+ 1288  more op4.170201091818.o190i211.3D_70_ko.4.MPI1NODE
+ 1289  cd
+ 1290  cd PHD/
+ 1291  ll
+ 1292  cd oprofile/
+ 1293  ll
+ 1294  history >>his
+ 1295  grep obj his
+ 1296  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1297  ./p Oori
+ 1298  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1299  time ./p Oori 
+ 1300  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1301  time ./p Oori 
+ 1302  wc Oori
+ 1303  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1304  time ./p Oori 
+ 1305  tail Oori
+ 1306  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1307  time ./p Oori 
+ 1308  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1309  time ./p Oori 
+ 1310  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1311  time ./p Oori 
+ 1312  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1313  time ./p Oori 
+ 1314  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1315  time ./p Oori 
+ 1316  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1317  time ./p Oori |more
+ 1318  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1319  time ./p Oori |more
+ 1320  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1321  time ./p Oori |more
+ 1322  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1323  time ./p Oori |more
+ 1324  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1325  time ./p Oori |more
+ 1326  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1327  rm .*
+ 1328  time ./p Oori |more
+ 1329  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1330  time ./p Oori |more
+ 1331  time ./p Oori 
+ 1332  demangle
+ 1333  time ./p Oori |c++filt |more
+ 1334  history >>his
+  351  more jrun1
+  352  more  /opt/hpe/tools/bin/start_monitormembw.local.sh
+  353  ll
+  354  ./jone
+  355  ll
+  356  history|grep jone
+  357  cd
+  358  cd solveur/
+  359  ./jone
+  360  squeue 
+  361  ssh o190i215
+  362  ./jone
+  363  squeue 
+  364  ssh o190i211
+  365  ll
+  366  cd dmlmem
+  367  ll
+  368  cd 
+  369  cd dmlmem
+  370  ll
+  371  cd lecture/
+  372  ll
+  373  more jrunmem.spe 
+  374  grep wait */j*
+  375  more 
+  376  more ring/jnexts
+  377  more jrun1
+  378  cd
+  379  cd solveur/
+  380  more jrun1
+  381  cd /opt/hpe/
+  382  ll
+  383  cd tools/
+  384  ll
+  385  cd src
+  386  ll
+  387  cd monitormembw/
+  388  ll
+  389  cd INTEL/
+  390  ll
+  391  more monitormembw.c
+  392  grep perf */j*
+  393  ll
+  394  cd
+  395  grep perf */j*
+  396  cd lecture/
+  397  ls
+  398  ks -l
+  399  ls -l
+  400  cd lecture/
+  401  ls
+  402  cd ..
+  403  cd solveur/
+  404  ll
+  405  more jone
+  406  cp jone ../lecture/
+  407  cd ../lecture/
+  408  vi jone
+  409  ./jone
+  410  cp ../solveur/jsleep .
+  411  ./jone
+  412  squeue 
+  413  ssh o190i211
+  414  ls
+  415  cd solveur/
+  416  ls
+  417  ls -lrt
+  418  ll j*
+  419  more jone
+  420  more jone2
+  421  .:jone2
+  422  ./jone2
+  423  squeue 
+  424  scancel 193503
+  425  ll
+  426  ll op1*
+  427  ll
+  428  vi jone2
+  429  ./jone
+  430  squeue 
+  431  vi jone2
+  432  ./jone2
+  433  squeue 
+  434  scancel 193504 193505
+  435  squeue 
+  436  ll
+  437  ls -lrt
+  438  ll
+  439  ls -l
+  440  ll
+  441  cd dmlmem
+  442  cd lecture/
+  443  ll
+  444  vi jexp1
+  445  ./jexp1
+  446  chmod 777 jexp1
+  447  ./jexp1 
+  448  vi dmlmem.cpp
+  449  more jexp1 
+  450  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  451  . /opt/intel/impi/current/bin64/mpivars.sh
+  452  export PATH=.:$PATH
+  453  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  454  vi dmlmemmpi.cpp
+  455  more dmlmem.cpp 
+  456  vi dmlmemmpi.cpp 
+  457  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  458  ./jexp1
+  459  vi jexp1 
+  460  ./jexp1 
+  461  vi jexp1 
+  462  ./jexp1 
+  463  vi jexp1 
+  464  ./jexp1 
+  465  vi jexp1
+  466  ./jexp1 
+  467  vi jexp1
+  468  ./jexp1 
+  469  vi jexp1
+  470  more /proc/cpuinfo 
+  471  vi jexp1
+  472  ./jexp1
+  473  grep CACHE *.cpp
+  474  vi jexp1
+  475  ./jexp1
+  476  vi jexp1
+  477  ./jexp1
+  478  vi jexp1
+  479  ./jexp1
+  480  vi jexp1
+  481  ./jexp1
+  482  vi jexp1
+  483  ./jexp1
+  484  vi jexp1
+  485  ./jexp1
+  486  vi jexp1
+  487  ./jexp1
+  488  cd dmlmem
+  489  ls
+  490  cd lecture
+  491  ls
+  492  more jcomp
+  493  ./jcomp
+  494  ll */DML*
+  495  ls -l */DML*
+  496  ls -l../ */DML*
+  497  ls -l ../ */DML*
+  498  ls -l ../*/DML*
+  499  cp ../counters/DML.c .
+  500  vi dmlmem.cpp 
+  501  ./jcomp
+  502  vi jcomp
+  503  ./jcomp
+  504  ./dmlmem 1
+  505  ll j*
+  506  vi jrun1
+  507  vi jcoomp
+  508  vi jcomp
+  509  ./jcomp 
+  510  vi jcomp
+  511   ll j
+  512  ll j*
+  513  pwd
+  514  ll
+  515  pwd
+  516  ll
+  517  pwd
+  518  cd ..
+  519  cd
+  520  cd solveur/
+  521  cp jone2 ../dmlmem/lecture/
+  522  cp jone ../dmlmem/lecture/
+  523  cd ../dmlmem/lecture/
+  524  vi jone2
+  525  ./jone2
+  526  squeue 
+  527  cp ../../solveur/jsleep .
+  528  ./jone2
+  529  ll
+  530  squeue 
+  531  mkdir KEEP/
+  532  mv op* KEEP/
+  533  ll
+  534  mv membwstats.1701251* KEEP/
+  535  mv OBJ* KEEP/
+  536  mv OUT* KEEP/
+  537  ll
+  538  rm -rf epoch.job-0.20170125-12h1*
+  539  ll
+  540  squeue 
+  541  ssh 193547
+  542  ssh o186i127
+  543  cd dmlmem
+  544  ls
+  545  cd lecture/
+  546  ll
+  547  rm -rf epoch*
+  548  ll
+  549  rm OUT*
+  550  ll
+  551  rm out*
+  552  ./jexp1 
+  553  more /proc/cpuinfo 
+  554  vi jexp1 
+  555  ./jexp1 
+  556  ll
+  557  ls -l
+  558  pwd
+  559  ll
+  560  cd dmlmem
+  561  cd lecture/
+  562  ./jone
+  563  squeue 
+  564  ssh o190i211
+  565  bc -l
+  566  top
+  567  cd solveur/
+  568  ./jrun16nodes 
+  569  ll
+  570  cd KEEP/
+  571  ll
+  572  cd ..
+  573  ll
+  574  more  OUT.170201004714.3D_large_ok
+  575  cd KEEP/
+  576  ll
+  577  more OUT.160814175935.o184i023.3D_large_ok.16
+  578  cd ..
+  579  ll
+  580  more OUT.170201004714.3D_large_ok
+  581  ll
+  582  ll *.txt
+  583  more input_Helmholtz3D_medium_ok.txt
+  584  cp input_Helmholtz3D_medium_ok.txt input_Helmholtz3D_150_ok.txt
+  585  vi input_Helmholtz3D_150_ok.txt
+  586  vi jrun16nodes 
+  587  ./jrun16nodes 
+  588  ll
+  589  more  OUT.170201005512.3D_150_ok
+  590  ll 
+  591  rm PARAM_TD_*
+  592  ll
+  593  vi op4.170201005512.3D_150_ok
+  594  ll
+  595  more jrun16nodes 
+  596  MKL=/opt/intel/compilers_and_libraries_2017.1.132/linux/mkl/lib/intel64_lin/libmkl_avx2.so
+  597  objdump -d $MKL >OBJ
+  598  ./dmlv3 OBJ op2.170201005512.3D_150_ok >op4.170201005512.3D_150_ok
+  599  vi op4.170201005512.3D_150_ok
+  600  ll
+  601  ll op2*
+  602  vi op2.170201005512.3D_150_ok
+  603  squeue 
+  604  scancel gre0_all
+  605  cd
+  606  squeue 
+  607  cd solveur/
+  608  vi jrun
+  609  vi jone
+  610  ./jone
+  611  squeue 
+  612  vi machines 
+  613  more machines 
+  614  ll jrun*
+  615  more jrun2x
+  616  squeue 
+  617  scancel 193781
+  618  exit
+  619  cd solveur/
+  620  more jrun1
+  621  more jrun16nodes 
+  622  top
+  623  vi machines 
+  624  vi jrun16nodes 
+  625  rm .*
+  626  vi jrun16nodes 
+  627  top
+  628  cd /home/dml/solveur/epoch.job-0.20170201-00h35m
+  629  ll
+  630  top
+  631  ll
+  632  cd ..
+  633  ll
+  634  more OUT.170201003508.3D_large_ok
+  635  squeue 
+  636  ssh o186i140
+  637  cd solveur
+  638  squeue 
+  639  ssh o186i127
+  640  vmstat 1 10000
+  641  top
+  642  vmstat 1 10000
+  643  squeue 
+  644  ssh o190ii212
+  645  ssh o190i212
+  646  top
+  647  squeue 
+  648  ll
+  649  pwd
+  650  ll
+  651  cd solveur/
+  652  more jrun4X
+  653  ll
+  654  ll *.txt
+  655  cp input_Helmholtz3D_70_ok.txt input_Helmholtz3D_100_ok.txt
+  656  vi input_Helmholtz3D_100_ok.txt
+  657  ll
+  658  more jrun2x
+  659  more jrun2X
+  660  cp jrun2X jrun100_32nodes
+  661  vi jrun100_32nodes
+  662  ll OB*
+  663  ./jrun100_32nodes
+  664  ll
+  665  squeue 
+  666  ll
+  667  squeue 
+  668  ll
+  669  vi machines 
+  670  ll
+  671  ll j*
+  672  vi jrun2X
+  673  ./jrun2X
+  674  top
+  675  ls -l
+  676  ll
+  677  more /proc/cpuinfo 
+  678  ll
+  679  cd solveur/
+  680  ll
+  681  ll op*
+  682  ls -lrt op*
+  683  vi op3.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  684  ll
+  685  more jrun2X
+  686  MKL=/opt/intel/compilers_and_libraries_2017.1.132/linux/mkl/lib/intel64_lin/libmkl_avx2.so
+  687  objdump -d $MKL >OBJ
+  688  ./dmlv3      OBJ op2.170201013618.o190i211.3D_70_ok.4.MPI1NODE >op4.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  689  vi op4.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  690  vi jrun2X
+  691  ./jrun2X
+  692  ll
+  693  ls -lrt
+  694  vi op4.170201014927.o190i211.3D_70_ok.4.MPI1NODE
+  695  pwd
+  696  more op1.170201014927.o190i211.3D_70_ok.4.MPI1NODE
+  697  ll
+  698  vi jrun2X
+  699  ./jrun2X
+  700  ls -lrt
+  701  more OUT.170201014927.o190i211.3D_70_ok.4.MPI1NODE
+  702  ll
+  703  ls -lrt
+  704  more OUT.170201020259.o190i211.3D_70_ok.4.MPI1NODE
+  705  ll
+  706  ls -lrt
+  707  more op4.170201020259.o190i211.3D_70_ok.4.MPI1NODE
+  708  q
+  709  ll
+  710  top
+  711  vmstat 1 10000
+  712  ll
+  713  squeue 
+  714  ssh o190i212
+  715  ll
+  716  squeue 
+  717  cd solveur/
+  718  vi jone
+  719  ./jone
+  720  squeue 
+  721  ssh o190i211
+  722  ll
+  723  cd
+  724  cd solveur/
+  725  ll
+  726  cd KEEP/
+  727  ll
+  728  more  OUT.170108100941.o186i014.3D_large_ok.16
+  729  ll
+  730  more  OUT.170108102853.o186i014.3D_large_ok.16
+  731  more OUT.160721203741.o184i085.3D_medium_ok.16
+  732  ll
+  733  ll *.160721203741*
+  734  vi op4.160721203741.o184i086.3D_medium_ok.16
+  735  ll
+  736  squeue 
+  737  ssh o190i211
+  738  squeue 
+  739  ssh o186i140
+  740  cd
+  741  cd solveur/
+  742  ll
+  743  more jrun2X
+  744  ll
+  745  more  OUT.170201012107.o190i211.3D_100_ok.4.MPI1NODE
+  746  ll
+  747  more  OUT.170201013618.o190i211.3D_70_ok.4.MPI1NODE
+  748     
+  749  bc -l
+  750  squeue 
+  751  ssh o190i215
+  752  squeue 
+  753  ssh o186i126
+  754  cd lecture/
+  755  ls
+  756  ls -l
+  757  more jrun
+  758  ./jone
+  759  squeue 
+  760  ssh o190i211
+  761  i#
+  762  vi jone
+  763  ./jone
+  764  squeue 
+  765  vi machines
+  766  ll
+  767  cd
+  768  cd solveur/
+  769  vi machines 
+  770  squeue 
+  771  vi machines 
+  772  wc machines 
+  773  vi jrun16nodes 
+  774  ./jrun16nodes 
+  775  vi jrun16nodes
+  776  ./jrun16nodes 
+  777  vi jrun16nodes 
+  778  vi machines
+  779  ./jrun16nodes 
+  780  ll
+  781  squeue 
+  782  ssh o186i126
+  783  squeue 
+  784  ssh o190i211
+  785  cd solveur/
+  786  ls -lrt
+  787  ll
+  788  ls -lrt
+  789  more perf.170201095706.o190i211.3D_70_ko.4.MPI1NODE
+  790  ll
+  791  exit
+  792  cd solveur/
+  793  ll
+  794  ./jone
+  795  squeue 
+  796  ssh o190i211
+  797  squeue 
+  798  scancel 193781 193790
+  799  squeue 
+  800  cd 
+  801  cd sponge
+  802  ll
+  803  more keccak.c
+  804     more sponge.c 
+  805  more /proc/cpuinfo 
+  806  ll
+  807  cd dmlmem/lecture/
+  808  ll
+  809  more jexp1
+  810  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  811  . /opt/intel/impi/current/bin64/mpivars.sh
+  812  export PATH=.:$PATH
+  813  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  814  export I_MPI_PIN_PROCESSOR_LIST=5
+  815  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=GB MAX_MEASURES=40 CACHE_LINE=64  Ghz=2.9
+  816  BIN=dmlmemmpi
+  817  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=GB MAX_MEASURES=40 CACHE_LINE=64  Ghz=2.9
+  818  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=CY MAX_MEASURES=40 CACHE_LINE=64  Ghz=2.9
+  819  mpirun -np 1 $BIN $I_MPI_PIN_PROCESSOR_LIST MIN_STRIDE=8   MAX_STRIDE=1024 MAT_SIZE=2000 MIN_LOG10=3.1 MAX_LOG10=8.4 STEP_LOG10=.1 MODE=READ DISP=CY MAX_MEASURES=40 CACHE_LINE=64  GHZ=2.9
+  820  vi jexp1
+  821  ./jexp1 
+  822  vi jexp1
+  823  more /proc/cpuinfo 
+  824  vi jexp1
+  825  ./jexp1 
+  826  vi jexp1
+  827  ./jexp1 
+  828  vi jexp1
+  829  ./jexp1 
+  830  vi jexp1
+  831  ./jexp1 
+  832  vi dmlmemmpi.c
+  833  vi dmlmemmpi.cpp 
+  834  vi jexp1 
+  835  ./jexp1 
+  836  vi jexp1 
+  837  ./jexp1 
+  838  vi jexp1 
+  839  ./jexp1 
+  840  cd dmlmem/lecture/
+  841  ll
+  842  more jrun
+  843  ./jrun
+  844  ./jexp1 
+  845  vi jexp1
+  846  ./jexp1 
+  847  pwd
+  848  ll
+  849  cd solveur/
+  850  ls -lrt
+  851  more perf.170201095706.o190i211.3D_70_ko.4.MPI1NODE
+  852  ll
+  853  more  op1.170201090107.o190i211.3D_70_ok.4.MPI1NODE
+  854  cd
+  855  ls -lrt
+  856  cd cd sponge2016/
+  857  ll
+  858  cd  sponge2016/
+  859  ll
+  860  cd sponge
+  861  ll
+  862  more sponge.c
+  863   
+  864  cd
+  865  cd sponge
+  866  ll
+  867  more sponge.c
+  868  qll
+  869  ls
+  870  more keccak.c 
+  871   
+  872  grep KECC *.c
+  873  grep KECC *.h
+  874  cd
+  875  cd solveur/
+  876  ll
+  877  more op1*OK*
+  878  more op1*ok*
+  879  more op1*ko*
+  880  more op2*ok*|grep -v '^ '|head -n20
+  881  more op2*ko*|grep -v '^ '|head -n20
+  882  vi aa
+  883  more op4*ok*
+  884  vi dmlv3.c
+  885  cd ..
+  886  ll */dmlv4*
+  887  ll */dmlv3*
+  888  ls -lrt */dmlv3*
+  889  ls -lrt */dmlv3.c
+  890  cd solveur/
+  891  ll
+  892  vi dmlv3.c
+  893  g++ -O3 dmlv3.c -o dmlv3
+  894  vi dmlv3.c
+  895  g++ -O3 dmlv3.c -o dmlv3
+  896  ls -lrt
+  897  ./dmlv3 OBJ op2.170201090107.o190i211.3D_70_ok.4.MPI1NODE >op4.170201090107.o190i211.3D_70_ok.4.MPI1NODE
+  898  ./dmlv3 OBJ op2.170201091818.o190i211.3D_70_ko.4.MPI1NODE >op4.170201091818.o190i211.3D_70_ko.4.MPI1NODE 
+  899  vi op4*ok*
+  900  vi op4*ko*
+  901  cd d
+  902  cd dmlmem
+  903  ls
+  904  ls -lrt
+  905  ll
+  906  more jrun
+  907  ll
+  908  cd
+  909  cd dmlmem
+  910  ll
+  911  cd lecture/
+  912  ll
+  913  ls -lrt j*
+  914  more jexp1
+  915  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  916  . /opt/intel/impi/current/bin64/mpivars.sh
+  917  export PATH=.:$PATH
+  918  mpiicc -O3 dmlmemmpi.cpp -o dmlmemmpi -march=core-avx2
+  919  export I_MPI_PIN_PROCESSOR_LIST=5
+  920  more jone
+  921  vi jone
+  922  ./jone
+  923  squeue 
+  924  ssh o186i001
+  925  ./jone
+  926  sq
+  927  squeue 
+  928  ssh o186i126
+  929  cd solveur/
+  930  ls
+  931  ls -l
+  932  more op1*ok*
+  933  ll 
+  934  more input_Helmholtz3D_70_ok.txt
+  935  ll
+  936  more OUT*ok*
+  937  bc -l
+  938  more op2*ok*|grep -v '^ '|more
+  939  more op4*ok*
+  940  more jrun
+  941    
+  942  more /proc/cpuinfo 
+  943  top
+  944  cd dmlmem
+  945  cd lecture/
+  946  ./jexp1 
+  947  ll
+  948  cd 
+  949  cd
+  950  cd solveur/
+  951  more jrun 
+  952  ll
+  953  more perf.170201084724.o190i211.3D_70_ok.4.MPI1NODE
+  954  ll
+  955  cd solveur/
+  956  ls
+  957  more op1*ok*
+  958  more jrun
+  959  more op1*ok*
+  960  more OUT*ok*
+  961  ls -lrt
+  962  more  input_Helmholtz3D_70_ok.txt
+  963  more OUT*ok*
+  964  bc -l
+  965  more jrun 
+  966  more op1*ok*
+  967  more op2*ok*
+  968  more op2*ok*|grep -v "^ "|more
+  969  more op4*ok*
+  970  more op1*ok*
+  971  more op1*ko*
+  972  more op4*ko*
+  973  ll
+  974  more input_Helmholtz3D_70_ko.txt
+  975  more /proc/cpuinfo 
+  976  cd 
+  977  cd dmlmem
+  978  squeue 
+  979  more jone
+  980  cd lecture/
+  981  ll
+  982  more jone
+  983  ./joen
+  984  ./jone
+  985  squeue 
+  986  vi jone
+  987  ./jone
+  988  squeue 
+  989  ssh o186i148
+  990  cd ..
+  991  ls
+  992  cd hmalha/
+  993  ll
+  994  find .|grep op2
+  995  cd /ibnfs/
+  996  ls
+  997  cd hmalha/
+  998  ll
+  999  find .|grep op2
+ 1000  cd awe
+ 1001  cd /ibnfs/hmalha/
+ 1002  cd awe/
+ 1003  find .|grep op2
+ 1004  ls -l $(find .|grep op2)
+ 1005  cd ..
+ 1006  find .|grep op2
+ 1007  ls -lrt 
+ 1008  cd PROJECTS/
+ 1009  ls -lrt 
+ 1010  find .|grep op2
+ 1011  cd PAPER/paper/
+ 1012  ll
+ 1013  date
+ 1014  cd work.64Px1T.jobid-196020.o186i070.20170202.175200.e5-2697Av4.32ppn.TOFF.pmpi.IB
+ 1015  ll
+ 1016  more op2* |grep -v '^ '|more
+ 1017  ll
+ 1018  cd ..
+ 1019  ll
+ 1020  cd work.128Px1T.jobid-196023.o186i126.20170202.182228.e5-2697Av4.32ppn.TOFF.pmpi.IB
+ 1021  more op2* |grep -v '^ '|more
+ 1022  ll
+ 1023  more op1..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+ 1024  ll
+ 1025  ls -lrt
+ 1026  cp  op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 ~/
+ 1027  cd 
+ 1028  more op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+ 1029  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 op2
+ 1030  more op2
+ 1031  objdump -d /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 >OBJ
+ 1032  cd dmlmem/lecture
+ 1033  cp dml3.* ../..
+ 1034  cd
+ 1035  cd -
+ 1036  cp dmlv3* ../..
+ 1037  cd ../..
+ 1038  ./dmlv3 OBJ op2 >op4
+ 1039  vi op4
+ 1040  cd -
+ 1041  ll OBJ
+ 1042  ll
+ 1043  cd
+ 1044  ll OBJ
+ 1045  vi dmlv3.c 
+ 1046  gcc -O dmlv3.c -o dmlv3
+ 1047  g++ -O dmlv3.c -o dmlv3
+ 1048  ./dmlv3 OBJ op2 >op4
+ 1049  more op2
+ 1050  more op2|grep '^ '|more
+ 1051  more op2|grep '^ '|awk '{if($2>1000)print $0}'|more
+ 1052  more op2|grep '^ '|awk '{if($2>10000)print $0}'|more
+ 1053  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+ 1054  more op2|grep -v '^ '|more
+ 1055  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+ 1056  more op2|grep '^ '|awk '{if($2>100000){sum+=$1;print $0 $1}}'|more
+ 1057  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 $1}}'|more
+ 1058  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 sum}}'|more
+ 1059  more op2|grep -v '^ '|more
+ 1060* more op2|grep '^ '|if(
+ 1061  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|more
+ 1062  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum $0}'|more
+ 1063  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum ' ' $0}'|more
+ 1064  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+ 1065  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+ 1066  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}
+ 1067  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'
+ 1068  more op2
+ 1069  vi OBJ
+ 1070  history
+ 1071  info /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0
+ 1072  man info
+ 1073  unstrip
+ 1074  cd
+ 1075  ll
+ 1076  cd
+ 1077  mkdir unstrip
+ 1078  cd unstrip/
+ 1079  mv ../unstrip* .
+ 1080  ll
+ 1081  cat unstrip-64.tgz |gzip -d|tar xvf -
+ 1082  cd unstrip-64/
+ 1083  ll
+ 1084  ./unstrip 
+ 1085  history
+ 1086  cp /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 fluori
+ 1087  ll
+ 1088  ./unstrip fluori flunew
+ 1089  ./unstrip -f fluori _o flunew
+ 1090  ./unstrip -f fluori -o flunew
+ 1091  past Oiru Onew|more
+ 1092  paste Oiru Onew|more
+ 1093  mm
+ 1094  ll
+ 1095  objdump -S fluori | awk '/^[[:xdigit:]]+ <FUNCTION>:$/{flag=1;next}/^[[:xdigit:]]+ <.*>:$/{flag=0}flag'
+ 1096  ll
+ 1097  more generate-learn-binary.bash 
+ 1098  vi j1
+ 1099  chmod 777 j1
+ 1100  .:j1
+ 1101  ./j1
+ 1102  ./j1 fluori 
+ 1103  ./j1 fluori more j1
+ 1104  ll
+ 1105  more j1
+ 1106  ./j1 main fluori
+ 1107  history >>his
+ 1108  strings fluori 
+ 1109  more op2*
+ 1110  ll
+ 1111  cd
+ 1112  cd solveur/
+ 1113  more op2*
+ 1114  addr2line 
+ 1115  cd
+ 1116  cd unstrip/unstrip-64/
+ 1117  ll
+ 1118  addr2line fluori |more
+ 1119  man addr2line
+ 1120  man addr2line main
+ 1121  addr2line fluori main
+ 1122  addr2line main fluori 
+ 1123  addr2line main -e fluori 
+ 1124  addr2line 50e932 -e fluori 
+ 1125  man addr2line 
+ 1126  addr2line -f -e fluori 
+ 1127  addr2line -f -e fluori 0509fd0 
+ 1128  addr2line -f -e fluori 0x509fd0 
+ 1129  addr2line  -e fluori 0x509fd0 
+ 1130  addr2line  -e fluori 107080
+ 1131  addr2line  -e fluori 0x107080
+ 1132  addr2line  -b fluori 0x107080
+ 1133  addr2line  -b -f fluori 0x107080
+ 1134  addr2line  -b -e fluori 0x107080
+ 1135  addr2line   -e fluori 0x107080
+ 1136  cp fluori a.out
+ 1137  addr2line   0x107080
+ 1138  addr2line  
+ 1139  man mtrace
+ 1140  cd
+ 1141  more op2
+ 1142  ll
+ 1143  cd unstrip/unstrip-64/
+ 1144  ll
+ 1145  objdump -D Oori |more
+ 1146  objdump -D  flu|more
+ 1147  objdump -D  fluori|more
+ 1148  objdump -D  fluori >Dori
+ 1149  tail Dori
+ 1150  vi Dori
+ 1151  vi Oori
+ 1152  grep xmm Oori|more
+ 1153  grep xmm Oori|wc
+ 1154  grep xmm Oori|grep -v pxor|wc
+ 1155  grep xmm Oori|grep -v -e pxor -e movsd|wc
+ 1156  grep xmm Oori|grep -v -e pxor -e movsd|more
+ 1157  grep xmm Oori|grep -v -e pxor -e mov|wc
+ 1158  grep xmm Oori|grep -v -e pxor -e mov|more
+ 1159  ll
+ 1160  man elfdump
+ 1161  elfdump
+ 1162  dwarfdump
+ 1163  elfdump
+ 1164  gdb 
+ 1165  ll
+ 1166  readelf -a flunew|more
+ 1167  readelf -a flunew >elf1
+ 1168  vi elf1
+ 1169  more elf2
+ 1170  wc elf2
+ 1171  vi  elf2
+ 1172  vi elf1
+ 1173  more elf<1
+ 1174  more elf1
+ 1175  vi  elf1
+ 1176* 
+ 1177  sort -k2 elf3|more
+ 1178  more elf3
+ 1179  more elf1
+ 1180               
+ 1181  ll
+ 1182  objdump --full-contents  fluori|more
+ 1183  ldd fluori
+ 1184  otool
+ 1185  nm flupri
+ 1186  nm fluori
+ 1187  nm flunew
+ 1188  nm flunew|more
+ 1189  nm flunew|sort -n|more
+ 1190  nm flunew|sort -x|more
+ 1191  man sort
+ 1192  man scanelf 
+ 1193  scanelf
+ 1194  eu-nm
+ 1195  eu-nm fluori 
+ 1196  eu-nm flunew
+ 1197  eu-objdump -d fluori
+ 1198  eu-objdump -D fluori
+ 1199  eu-objdump -d fluori
+ 1200  gdb ./fluori
+ 1201  objdump -D -M fluori 
+ 1202  objdump -D fluori|more
+ 1203  objdump -d fluori|more
+ 1204  readelf -S
+ 1205  readelf -S fluori
+ 1206  ll
+ 1207  gdb ./fluori
+ 1208  ll
+ 1209  more Oori
+ 1210  ll
+ 1211  more Onew
+ 1212  cd
+ 1213  cd solveur/
+ 1214  ll
+ 1215  ./jone
+ 1216  squeue 
+ 1217  ssh o190i211
+ 1218  vi jone
+ 1219  ./jone
+ 1220  squeue 
+ 1221  ssh o190i211
+ 1222  ll
+ 1223  cd
+ 1224  cd unstrip/unstrip-64/
+ 1225  ll
+ 1226  more Oori
+ 1227  more Onew
+ 1228  ll
+ 1229  more Oori
+ 1230  cd
+ 1231  mkdir PHD
+ 1232  cd PHD
+ 1233  mkdir C++
+ 1234  cd C++/
+ 1235  vi p1.cpp
+ 1236  g++ p1.cpp -O -o p1
+ 1237  g++44 p1.cpp -O -o p1
+ 1238  g++ p1.cpp -O -o p1
+ 1239  g++ -std=c++0x p1.cpp -O -o p1
+ 1240  ./p1
+ 1241  history >>his
+ 1242  g++ -std=c++11 p1.cpp -O -o p1
+ 1243  ./p1
+ 1244  g++ -std=c++14 p1.cpp -O -o p1
+ 1245  g++ -std=c++11 p1.cpp -O -o p1
+ 1246  ./p1
+ 1247  vi p1.cpp
+ 1248  g++ -std=c++11 p1.cpp -O -o p1
+ 1249  vi p1.cpp
+ 1250  g++ -std=c++11 p1.cpp -O -o p1
+ 1251  ./p1
+ 1252  vi p2.cpp
+ 1253  g++ -std=c++11 p2.cpp -O -o p2
+ 1254  ./p2
+ 1255  more p2.cpp 
+ 1256  more p2.cpp
+ 1257  vi p3.cpp
+ 1258  g++ -std=c++11 p3.cpp -O -o p3
+ 1259  ./p3
+ 1260  cd ..
+ 1261  ll
+ 1262  mkdir oprofile
+ 1263  cd oprofile/
+ 1264  cp ~/unstrip/unstrip-64/Oori .
+ 1265  more Oori 
+ 1266  vi objdump_parsing.cpp
+ 1267  history
+ 1268   g++ -std=c++11   objdump_parsing.cpp 
+ 1269   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1270  ./p
+ 1271  ./p OOOO
+ 1272  ./p Oori
+ 1273  vi objdump_parsing.cpp
+ 1274   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1275  vi objdump_parsing.cpp
+ 1276   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1277  vi objdump_parsing.cpp
+ 1278   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1279  vi objdump_parsing.cpp
+ 1280   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1281  ./p Oori
+ 1282  de
+ 1283  de 
+ 1284  cd
+ 1285  cd solveur/
+ 1286  ls
+ 1287  ll
+ 1288  more op4.170201091818.o190i211.3D_70_ko.4.MPI1NODE
+ 1289  cd
+ 1290  cd PHD/
+ 1291  ll
+ 1292  cd oprofile/
+ 1293  ll
+ 1294  history >>his
+ 1295  grep obj his
+ 1296  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1297  ./p Oori
+ 1298  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1299  time ./p Oori 
+ 1300  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1301  time ./p Oori 
+ 1302  wc Oori
+ 1303  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1304  time ./p Oori 
+ 1305  tail Oori
+ 1306  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1307  time ./p Oori 
+ 1308  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1309  time ./p Oori 
+ 1310  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1311  time ./p Oori 
+ 1312  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1313  time ./p Oori 
+ 1314  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1315  time ./p Oori 
+ 1316  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1317  time ./p Oori |more
+ 1318  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1319  time ./p Oori |more
+ 1320  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1321  time ./p Oori |more
+ 1322  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1323  time ./p Oori |more
+ 1324  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1325  time ./p Oori |more
+ 1326  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1327  rm .*
+ 1328  time ./p Oori |more
+ 1329  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1330  time ./p Oori |more
+ 1331  time ./p Oori 
+ 1332  demangle
+ 1333  time ./p Oori |c++filt |more
+ 1334  history >>his
+ 1335  time ./p Oori |more
+ 1336  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1337  time ./p Oori |more
+ 1338  time ./p Oori |awk '{if($2<30)print $0}'|more
+ 1339  time ./p Oori |awk '{if($2<40)print $0}'|more
+ 1340  time ./p Oori |awk '{if($2<40)if($1==0)print $0}'|more
+ 1341  time ./p Oori |awk '{if($2<40)if($1==0)if($2>0)print $0}'|more
+ 1342  time ./p Oori |awk '{if($2<40)if($1==0)if($2>0)print $0}'|grep -v -e retq -e nop|more
+ 1343  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop|more
+ 1344  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltd -e cqto |more
+ 1345  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltq -e cqto |more
+ 1346  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+ 1347  time ./p Oori |awk '{if($2<40)if($1==0)if($2>25)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+ 1348  time ./p Oori |awk '{if($2<40)if($1==0)if($2>31)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+ 1349  time ./p Oori |awk '{if($2<40)if($1==0)if($2>31)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd 
+ 1350  history >>his
+  161  ll
+  162  more jrun
+  163  more op4.170204231736.o190i211.2D_5K_ok.4.MPI1NODE
+  164  ll
+  165  ls -lrt
+  166  more op2.170204231736.o190i211.2D_5K_ok.4.MPI1NODE |grep -v '^ '|more
+  167  top
+  168  ls -lrt
+  169  ll
+  170  ls -lrt
+  171  more input_Helmholtz2D_2K_ok.txt
+  172  cp input_Helmholtz2D_2K_ok.txt input_Helmholtz2D_1K_ok.txt
+  173  vi input_Helmholtz2D_1K_ok.txt
+  174  vi jrun
+  175  top
+  176  cd solveur/
+  177  ls
+  178  cd lecture
+  179  ll
+  180  more op4.170201090107.o190i211.3D_70_ok.4.MPI1NODE
+  181  more op4*
+  182  cd
+  183  cd unstrip/
+  184  cd unstrip-64/
+  185  ll
+  186  more Oori
+  187  ll
+  188  more Oori
+  189  ll
+  190  more ../../op2
+  191  objdump -x a.out
+  192  objdump -x a.out|more
+  193  man objdump
+  194  ll
+  195  objdump  -d fluori|more
+  196  more Oori
+  197  more op2
+  198  cp ../../op2 .
+  199  more op2
+  200  grep 1000 his
+  201   more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+  202   more op2|grep -n '^ '|awk '{if($3>1000000)print $3 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+  203  ll
+  204  objdump -Dslx fluori
+  205  ll
+  206  cd
+  207  cd solveur/
+  208  ll
+  209  more jone
+  210  ./jone
+  211  squeue 
+  212  ssh o190i
+  213  ssh o190i211
+  214  cd
+  215  cd unstrip/unstrip-64/
+  216  ll
+  217  more Oori
+  218  pic
+  219  ll
+  220  man pic
+  221  readelf -h
+  222  kk
+  223  ll
+  224  readelf -a fluori
+  225  more Oori
+  226  ll
+  227  readelf --debug-dump=macro fluori
+  228  readelf --debug-dump=main fluori
+  229  readelf --debug-dump fluori
+  230  yasm
+  231  cd
+  232  squeue 
+  233  ssh o190i211
+  234  bc -l
+  235  squeue 
+  236  ssh o190i211
+  237  cd PHD/
+  238  ll
+  239  cd oprofile/
+  240  ll
+  241  more Oori 
+  242  ll
+  243  cd
+  244  cd unstrip/unstrip-64/
+  245  ll
+  246  more op2
+  247  cd /ibnfs/hmalha/
+  248  cd awe/
+  249  find .|grep op2
+  250  ls -l $(find .|grep op2)
+  251  cd ..
+  252  find .|grep op2
+  253  ls -lrt 
+  254  cd PROJECTS/
+  255  ls -lrt 
+  256  find .|grep op2
+  257  cd PAPER/paper/
+  258  ll
+  259  date
+  260  cd work.64Px1T.jobid-196020.o186i070.20170202.175200.e5-2697Av4.32ppn.TOFF.pmpi.IB
+  261  ll
+  262  more op2* |grep -v '^ '|more
+  263  ll
+  264  cd ..
+  265  ll
+  266  cd work.128Px1T.jobid-196023.o186i126.20170202.182228.e5-2697Av4.32ppn.TOFF.pmpi.IB
+  267  more op2* |grep -v '^ '|more
+  268  ll
+  269  more op1..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+  270  ll
+  271  ls -lrt
+  272  cp  op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 ~/
+  273  cd 
+  274  more op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+  275  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 op2
+  276  more op2
+  277  objdump -d /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 >OBJ
+  278  cd dmlmem/lecture
+  279  cp dml3.* ../..
+  280  cd
+  281  cd -
+  282  cp dmlv3* ../..
+  283  cd ../..
+  284  ./dmlv3 OBJ op2 >op4
+  285  vi op4
+  286  cd -
+  287  ll OBJ
+  288  ll
+  289  cd
+  290  ll OBJ
+  291  vi dmlv3.c 
+  292  gcc -O dmlv3.c -o dmlv3
+  293  g++ -O dmlv3.c -o dmlv3
+  294  ./dmlv3 OBJ op2 >op4
+  295  more op2
+  296  more op2|grep '^ '|more
+  297  more op2|grep '^ '|awk '{if($2>1000)print $0}'|more
+  298  more op2|grep '^ '|awk '{if($2>10000)print $0}'|more
+  299  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+  300  more op2|grep -v '^ '|more
+  301  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+  302  more op2|grep '^ '|awk '{if($2>100000){sum+=$1;print $0 $1}}'|more
+  303  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 $1}}'|more
+  304  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 sum}}'|more
+  305  more op2|grep -v '^ '|more
+  306  more op2|grep '^ '|if(
+  307  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|more
+  308  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum $0}'|more
+  309  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum ' ' $0}'|more
+  310  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+  311  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+  312  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}
+  313  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'
+  314  more op2
+  315  vi OBJ
+  316  history
+  317  info /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0
+  318  man info
+  319  unstrip
+  320  cd
+  321  ll
+  322  cd
+  323  mkdir unstrip
+  324  cd unstrip/
+  325  mv ../unstrip* .
+  326  ll
+  327  cat unstrip-64.tgz |gzip -d|tar xvf -
+  328  cd unstrip-64/
+  329  ll
+  330  ./unstrip 
+  331  history
+  332  cp /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 fluori
+  333  ll
+  334  ./unstrip fluori flunew
+  335  ./unstrip -f fluori _o flunew
+  336  ./unstrip -f fluori -o flunew
+  337  past Oiru Onew|more
+  338  paste Oiru Onew|more
+  339  mm
+  340  ll
+  341  objdump -S fluori | awk '/^[[:xdigit:]]+ <FUNCTION>:$/{flag=1;next}/^[[:xdigit:]]+ <.*>:$/{flag=0}flag'
+  342  ll
+  343  more generate-learn-binary.bash 
+  344  vi j1
+  345  chmod 777 j1
+  346  .:j1
+  347  ./j1
+  348  ./j1 fluori 
+  349  ./j1 fluori more j1
+  350  ll
+  351  more j1
+  352  ./j1 main fluori
+  353  history >>his
+  354  strings fluori 
+  355  more op2*
+  356  ll
+  357  cd
+  358  cd solveur/
+  359  more op2*
+  360  addr2line 
+  361  cd
+  362  cd unstrip/unstrip-64/
+  363  ll
+  364  addr2line fluori |more
+  365  man addr2line
+  366  man addr2line main
+  367  addr2line fluori main
+  368  addr2line main fluori 
+  369  addr2line main -e fluori 
+  370  addr2line 50e932 -e fluori 
+  371  man addr2line 
+  372  addr2line -f -e fluori 
+  373  addr2line -f -e fluori 0509fd0 
+  374  addr2line -f -e fluori 0x509fd0 
+  375  addr2line  -e fluori 0x509fd0 
+  376  addr2line  -e fluori 107080
+  377  addr2line  -e fluori 0x107080
+  378  addr2line  -b fluori 0x107080
+  379  addr2line  -b -f fluori 0x107080
+  380  addr2line  -b -e fluori 0x107080
+  381  addr2line   -e fluori 0x107080
+  382  cp fluori a.out
+  383  addr2line   0x107080
+  384  addr2line  
+  385  man mtrace
+  386  cd
+  387  more op2
+  388  ll
+  389  cd unstrip/unstrip-64/
+  390  ll
+  391  objdump -D Oori |more
+  392  objdump -D  flu|more
+  393  objdump -D  fluori|more
+  394  objdump -D  fluori >Dori
+  395  tail Dori
+  396  vi Dori
+  397  vi Oori
+  398  grep xmm Oori|more
+  399  grep xmm Oori|wc
+  400  grep xmm Oori|grep -v pxor|wc
+  401  grep xmm Oori|grep -v -e pxor -e movsd|wc
+  402  grep xmm Oori|grep -v -e pxor -e movsd|more
+  403  grep xmm Oori|grep -v -e pxor -e mov|wc
+  404  grep xmm Oori|grep -v -e pxor -e mov|more
+  405  ll
+  406  man elfdump
+  407  elfdump
+  408  dwarfdump
+  409  elfdump
+  410  gdb 
+  411  ll
+  412  readelf -a flunew|more
+  413  readelf -a flunew >elf1
+  414  vi elf1
+  415  more elf2
+  416  wc elf2
+  417  vi  elf2
+  418  vi elf1
+  419  more elf<1
+  420  more elf1
+  421  vi  elf1
+  422  sort -k2 elf3|more
+  423  more elf3
+  424  more elf1
+  425               
+  426  ll
+  427  objdump --full-contents  fluori|more
+  428  ldd fluori
+  429  otool
+  430  nm flupri
+  431  nm fluori
+  432  nm flunew
+  433  nm flunew|more
+  434  nm flunew|sort -n|more
+  435  nm flunew|sort -x|more
+  436  man sort
+  437  man scanelf 
+  438  scanelf
+  439  eu-nm
+  440  eu-nm fluori 
+  441  eu-nm flunew
+  442  eu-objdump -d fluori
+  443  eu-objdump -D fluori
+  444  eu-objdump -d fluori
+  445  gdb ./fluori
+  446  objdump -D -M fluori 
+  447  objdump -D fluori|more
+  448  objdump -d fluori|more
+  449  readelf -S
+  450  readelf -S fluori
+  451  ll
+  452  gdb ./fluori
+  453  ll
+  454  more Oori
+  455  ll
+  456  more Onew
+  457  cd
+  458  cd solveur/
+  459  ll
+  460  ./jone
+  461  squeue 
+  462  ssh o190i211
+  463  vi jone
+  464  ./jone
+  465  squeue 
+  466  ssh o190i211
+  467  ll
+  468  cd
+  469  cd unstrip/unstrip-64/
+  470  ll
+  471  more Oori
+  472  more Onew
+  473  ll
+  474  more Oori
+  475  cd
+  476  mkdir PHD
+  477  cd PHD
+  478  mkdir C++
+  479  cd C++/
+  480  vi p1.cpp
+  481  g++ p1.cpp -O -o p1
+  482  g++44 p1.cpp -O -o p1
+  483  g++ p1.cpp -O -o p1
+  484  g++ -std=c++0x p1.cpp -O -o p1
+  485  ./p1
+  486  history >>his
+  487  g++ -std=c++11 p1.cpp -O -o p1
+  488  ./p1
+  489  g++ -std=c++14 p1.cpp -O -o p1
+  490  g++ -std=c++11 p1.cpp -O -o p1
+  491  ./p1
+  492  vi p1.cpp
+  493  g++ -std=c++11 p1.cpp -O -o p1
+  494  vi p1.cpp
+  495  g++ -std=c++11 p1.cpp -O -o p1
+  496  ./p1
+  497  vi p2.cpp
+  498  g++ -std=c++11 p2.cpp -O -o p2
+  499  ./p2
+  500  more p2.cpp 
+  501  more p2.cpp
+  502  vi p3.cpp
+  503  g++ -std=c++11 p3.cpp -O -o p3
+  504  ./p3
+  505  cd ..
+  506  ll
+  507  mkdir oprofile
+  508  cd oprofile/
+  509  cp ~/unstrip/unstrip-64/Oori .
+  510  more Oori 
+  511  vi objdump_parsing.cpp
+  512  history
+  513   g++ -std=c++11   objdump_parsing.cpp 
+  514   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  515  ./p
+  516  ./p OOOO
+  517  ./p Oori
+  518  vi objdump_parsing.cpp
+  519   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  520  vi objdump_parsing.cpp
+  521   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  522  vi objdump_parsing.cpp
+  523   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  524  vi objdump_parsing.cpp
+  525   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  526  ./p Oori
+  527  de
+  528  de 
+  529  cd
+  530  cd solveur/
+  531  ls
+  532  ll
+  533  more op4.170201091818.o190i211.3D_70_ko.4.MPI1NODE
+  534  cd
+  535  cd PHD/
+  536  ll
+  537  cd oprofile/
+  538  ll
+  539  history >>his
+  540  grep obj his
+  541  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  542  ./p Oori
+  543  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  544  time ./p Oori 
+  545  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  546  time ./p Oori 
+  547  wc Oori
+  548  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  549  time ./p Oori 
+  550  tail Oori
+  551  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  552  time ./p Oori 
+  553  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  554  time ./p Oori 
+  555  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  556  time ./p Oori 
+  557  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  558  time ./p Oori 
+  559  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  560  time ./p Oori 
+  561  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  562  time ./p Oori |more
+  563  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  564  time ./p Oori |more
+  565  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  566  time ./p Oori |more
+  567  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  568  time ./p Oori |more
+  569  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  570  time ./p Oori |more
+  571  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  572  rm .*
+  573  time ./p Oori |more
+  574  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  575  time ./p Oori |more
+  576  time ./p Oori 
+  577  demangle
+  578  time ./p Oori |c++filt |more
+  579  history >>his
+  580  time ./p Oori |more
+  581  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  582  time ./p Oori |more
+  583  time ./p Oori |awk '{if($2<30)print $0}'|more
+  584  time ./p Oori |awk '{if($2<40)print $0}'|more
+  585  time ./p Oori |awk '{if($2<40)if($1==0)print $0}'|more
+  586  time ./p Oori |awk '{if($2<40)if($1==0)if($2>0)print $0}'|more
+  587  time ./p Oori |awk '{if($2<40)if($1==0)if($2>0)print $0}'|grep -v -e retq -e nop|more
+  588  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop|more
+  589  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltd -e cqto |more
+  590  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltq -e cqto |more
+  591  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+  592  time ./p Oori |awk '{if($2<40)if($1==0)if($2>25)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+  593  time ./p Oori |awk '{if($2<40)if($1==0)if($2>31)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+  594  time ./p Oori |awk '{if($2<40)if($1==0)if($2>31)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd 
+  595  history >>his
+  596  cd
+  597  cd solveur/
+  598  ll
+  599  cd
+  600  cd PHD
+  601  ll
+  602  cd oprofile/
+  603  ll
+  604  cd
+  605  ll */fluori
+  606  ls -l */fluori
+  607  ls -l */*/fluori
+  608  cd unstrip/unstrip-64/
+  609  ll
+  610  ldd fluori 
+  611  objdump -d fluori |more
+  612  nm fluori
+  613  objdump -d fluori |more
+  614  objdump -d fluori |grep '<'|more
+  615  objdump -d fluori |grep '^0'|more
+  616  file fluori 
+  617  objdump -d fluori |more
+  618  vi Oori 
+  619  grep -n main Oori |grep -v -e lmain  
+  620  grep -i main Oori|more
+  621  grep -i main Oori|grep -i -e domain|more
+  622  grep -i main Oori|grep -iv -e domain|more
+  623  grep -in main Oori|grep -iv -e domain -e lmain|more
+  624  vi Oori
+  625  nm -D fluori 
+  626  nm -D fluori |more
+  627  nm -D fluori |sort|more
+  628                          
+  629  squeue 
+  630  ssh o190i211
+  631  bc -l
+  632  cd unstrip/unstrip-64/
+  633  ls
+  634  more op2
+  635  more op2|grep '^ '|more
+  636  more op2|grep -v '^ '|more
+  637  cd
+  638  cd solveur/
+  639  ll
+  640  more op2*2737*|more
+  641  more op2*2737*|grep -v '^ '|more
+  642  ldd ztest_driver
+  643  nm -D ztest_driver
+  644  file  ztest_driver
+  645  cd ../unstrip/unstrip-64/
+  646  file fluori 
+  647  ldd fluori  |more
+  648  nm -D fluori  |more
+  649  nm  fluori  |more
+  650  cd -
+  651  nm  ztest_driver
+  652  nm -D ztest_driver
+  653  nm -D ztest_driver|more
+  654    
+  655  cd -
+  656  ls
+  657  more Ori
+  658  more Oori 
+  659  more op2
+  660  objdump -d fluori |more
+  661  cd -
+  662  more op2*2737*|grep -v '^ '|more
+  663  more op2*2737*|more
+  664  more op4*2737*|more
+  665  more OBJ
+  666  cd -
+  667  ls -l
+  668  more Oori
+  669  nm -D fluori |more
+  670  ldd -S fluori 
+  671  nm fluori 
+  672  nm -s fluori |more
+  673  ldd -a fluori |more
+  674  objdump -a fluori |more
+  675  more op2
+  676  more op2|awk '{if($2>10000)print $0}'|more
+  677  grep -n ' ' op2|awk '{if($3>10000)print $0}'|more
+  678  vi op2
+  679  grep -n ' ' op2|awk '{if($3>10000)print $0}'|wc
+  680  grep -n ' ' op2|awk '{if($3>100000)print $0}'|wc
+  681  grep -n ' ' op2|awk '{if($3>1000000)print $0}'|wc
+  682  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  683  more op2
+  684  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  685  wc op2
+  686  vi op2
+  687  chmod  777 ~/unstrip/
+  688  cd ..
+  689  ll
+  690  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126  op2
+  691  more op2
+  692   c -
+  693  cd unstrip-64/
+  694  ll
+  695  more op2
+  696  more op2|awk '{sum1+=$2;sum2+=$4;printf("%15.0f %15.0f %10.3f %s\n",sum1,sum2,sum2/sum1,$0)}'|more
+  697     
+  698  ls
+  699  ll
+  700  grep ymm Oori
+  701  grep '%ymm' Oori
+  702  grep '%xmm' Oori
+  703  grep '%ymm' Oori
+  704  grep '%xmm' Oori
+  705  grep '%xmm' Oori|grep mulpd
+  706  ll
+  707  ll /opt/platform_mpi/bin/
+  708   /opt/platform_mpi/bin/mpirun -h
+  709   /opt/platform_mpi/bin/mpirun -h|more
+  710  cd
+  711  grep mpirun */j*
+  712  grep mpirun */*/j*|grep ' -s '
+  713   /opt/platform_mpi/bin/mpirun -h|more
+  714  grep mpirun */*/j*|grep ' -s '
+  715  cd
+  716  grep mpirun */*/j*|grep ' -s '
+  717  cd unstrip/unstrip-64/
+  718  ls
+  719  more op2
+  720  more op2|grep '^ '|more
+  721  more op2|grep -v '^ '|more
+  722  cd
+  723  cd solveur/
+  724  ll
+  725  more op2*2737*|more
+  726  more op2*2737*|grep -v '^ '|more
+  727  ldd ztest_driver
+  728  nm -D ztest_driver
+  729  file  ztest_driver
+  730  cd ../unstrip/unstrip-64/
+  731  file fluori 
+  732  ldd fluori  |more
+  733  nm -D fluori  |more
+  734  nm  fluori  |more
+  735  cd -
+  736  nm  ztest_driver
+  737  nm -D ztest_driver
+  738  nm -D ztest_driver|more
+  739    
+  740  cd -
+  741  ls
+  742  more Ori
+  743  more Oori 
+  744  more op2
+  745  objdump -d fluori |more
+  746  cd -
+  747  more op2*2737*|grep -v '^ '|more
+  748  more op2*2737*|more
+  749  more op4*2737*|more
+  750  more OBJ
+  751  cd -
+  752  ls -l
+  753  more Oori
+  754  nm -D fluori |more
+  755  ldd -S fluori 
+  756  nm fluori 
+  757  nm -s fluori |more
+  758  ldd -a fluori |more
+  759  objdump -a fluori |more
+  760  more op2
+  761  more op2|awk '{if($2>10000)print $0}'|more
+  762  grep -n ' ' op2|awk '{if($3>10000)print $0}'|more
+  763  vi op2
+  764  grep -n ' ' op2|awk '{if($3>10000)print $0}'|wc
+  765  grep -n ' ' op2|awk '{if($3>100000)print $0}'|wc
+  766  grep -n ' ' op2|awk '{if($3>1000000)print $0}'|wc
+  767  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  768  more op2
+  769  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  770  wc op2
+  771  vi op2
+  772  chmod  777 ~/unstrip/
+  773  cd ..
+  774  ll
+  775  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126  op2
+  776  more op2
+  777   c -
+  778  cd unstrip-64/
+  779  ll
+  780  more op2
+  781  more op2|awk '{sum1+=$2;sum2+=$4;printf("%15.0f %15.0f %10.3f %s\n",sum1,sum2,sum2/sum1,$0)}'|more
+  782     
+  783  ls
+  784  ll
+  785  grep ymm Oori
+  786  grep '%ymm' Oori
+  787  grep '%xmm' Oori
+  788  grep '%ymm' Oori
+  789  grep '%xmm' Oori
+  790  grep '%xmm' Oori|grep mulpd
+  791  ll
+  792  ll /opt/platform_mpi/bin/
+  793   /opt/platform_mpi/bin/mpirun -h
+  794   /opt/platform_mpi/bin/mpirun -h|more
+  795  cd
+  796  grep mpirun */j*
+  797  grep mpirun */*/j*|grep ' -s '
+  798   /opt/platform_mpi/bin/mpirun -h|more
+  799  grep mpirun */*/j*|grep ' -s '
+  800  cd
+  801  grep mpirun */*/j*|grep ' -s '
+  802  grep mpirun */*/j*|grep ' -i '
+  803  cd
+  804  cd solveur/
+  805  more jrun
+  806  more perf.*
+  807  more jrun
+  808  find .|grep gprof
+  809  cd BCAC
+  810  ls
+  811  ll
+  812  find .|grep gprof
+  813  cd swat/sources/original/
+  814  more t1.gprof 
+  815  ll
+  816  cd ..
+  817  find .|grep gprof
+  818  cd ..
+  819  find .|grep gprof
+  820  cd ..
+  821  find .|grep gprof
+  822  cd old/BCAC/swat/sources/original/
+  823  ll
+  824  cd
+  825  find .|grep gprof
+  826  ls -l $(find .|grep gprof)
+  827  cd   
+  828  cd revF/oprofile-0.9.1/
+  829  ll
+  830  cd pg
+  831  ls -l $(find .|grep gprof)
+  832  cd
+  833  ls -l $(find .|grep gprof)
+  834  find .|grep gprof
+  835  cd mandel/qd-2.3.8/tests/
+  836  ll
+  837  find .|grep gprof
+  838  more gprof.out1 
+  839  ll
+  840  cd 
+  841  find .|grep gprof
+  842  mpre gprof.dml.4.1G.2 
+  843  more gprof.dml.4.1G.2 
+  844  cd solveur
+  845  grep perf his
+  846  ll
+  847  history >>his
+  848  grep perf his
+  849  cd 
+  850  grep perf */his
+  851  grep perf */his|grep awk
+  852  find .|grep awkperf
+  853  cd
+  854  find .|grep awkperf
+  855  more /proc/cpuinfo 
+  856  cd 
+  857  cd solveur/
+  858  ll
+  859  grep export j*
+  860  grep prot */j*
+  861  grep prot */*/j*
+  862  bc -
+  863  bc -l
+  864  grep prot */*/j*|grep ldom
+  865  grep prot */*/j*|grep rr
+  866  pwd
+  867  ./ssh
+  868  pwd
+  869  ll
+  870  /opt/platform_mpi/bin/mpirun -h
+  871  /opt/platform_mpi/bin/mpirun -h -cpu_bind
+  872  grep prot */j*
+  873  grep prot */*/j*
+  874  /opt/platform_mpi/bin/mpirun -h
+  875  cd flop
+  876  ll
+  877  more jone
+  878  wq
+  879  more /proc/cpuinfo 
+  880  vi jrun3
+  881  ./jrun3
+  882  top
+  883  ll
+  884  more perf.170207235803.o186i126
+  885   
+  886   cd
+  887  cd solveur/
+  888  grep cycles *.c
+  889  more dmlv3.c 
+  890  grep cycles *.c
+  891  more DML.c
+  892  cd 
+  893  grep dml_cycles */*.c
+  894  cd crible/
+  895  more p4.c
+  896  pwd
+  897  ll
+  898  cd flop
+  899  ll
+  900  ./jrun3
+  901  vi jrun3
+  902  ./jrun3
+  903  ll
+  904  vi flop4avx2.cpp
+  905  more jrun3
+  906  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  907  icc -O3 flop4avx2.cpp -S|more
+  908  ll
+  909  more flop4avx2.s
+  910  ll
+  911  vi flop4avx2.cpp
+  912  icc -O3 flop4avx2.cpp -o flop
+  913  vi flop4avx2.cpp
+  914  icc -O3 flop4avx2.cpp -o flop
+  915  vi flop4avx2.cpp
+  916  icc -O3 flop4avx2.cpp -o flop
+  917  ./flop
+  918  ./flop 5
+  919  ./flop 5|more
+  920  vi flop4avx2.cpp
+  921  icc -O3 flop4avx2.cpp -o flop
+  922  vi flop4avx2.cpp
+  923  icc -O3 flop4avx2.cpp -o flop
+  924  ./flop 5|more
+  925  vi flop4avx2.cpp
+  926  icc -O3 flop4avx2.cpp -o flop
+  927  ./flop 5|more
+  928  ./flop 5
+  929  pwd
+  930  ll
+  931  ls
+  932  find .|grep avx
+  933  cd flop
+  934  ll
+  935  more flop4avx2.cpp
+  936   
+  937  ls -lrt
+  938  g++ flop4avx2.cpp -O -o flop
+  939  icc
+  940  vi flop4avx2.cpp; g++ flop4avx2.cpp -O -o flop
+  941  cd
+  942  ls
+  943  cd /usr/include
+  944  ll
+  945  grep mm256 *.h
+  946  grep mm256 */*.h
+  947  grep mm256 */*/*.h
+  948  cd /opt/intel
+  949  ll
+  950  cd
+  951  cd solveur/
+  952  ll
+  953  more jrun 
+  954  cd /opt/intel/compilers_and_libraries/linux
+  955  ll
+  956  cd include/
+  957  ll
+  958  more  ieee_arithmetic.f90
+  959        
+  960  ll
+  961  grep mm256 *.h
+  962  gcc -E dvec.h|more
+  963     
+  964  grep mm256 *.h
+  965  vi dvec.h
+  966  ll fvec
+  967  ll fvec.h 
+  968  gcc -E dvec.h -I.|more
+  969  g++ -E dvec.h -I.|more
+  970  g++ -E dvec.h -I.|grep add
+  971  g++ -E dvec.h -I.|less
+  972  cd
+  973  history
+  974  cd flop
+  975  ll
+  976  more jrun
+  977  more flop3peak.cpp 
+  978  icc
+  979  mmore ~/solveur/jrun
+  980  more ~/solveur/jrun 
+  981  cp ~/solveur/jrun  jrun3
+  982  more jrun
+  983  vi jrun3
+  984  ll
+  985  more  flop4avx2.cpp
+  986  vi jrun3 
+  987  ./jrun3
+  988  vi flop4avx2.cpp
+  989  ./jrun3
+  990  vi flop4avx2.cpp
+  991  cp ~/solveur/jone .
+  992  vi jone
+  993  ./jone
+  994  cp ../solveur/jsleep .
+  995  ./jone
+  996  squeue 
+  997  ssh o186i126
+  998  squeue 
+  999  ssh o186i126
+ 1000  ls -l
+ 1001  cd flop
+ 1002  ./flop 3
+ 1003  vi jone
+ 1004  ./jone
+ 1005  squeue 
+ 1006  ssh o186i141
+ 1007  squeue 
+ 1008  ./jone
+ 1009  squeue 
+ 1010  ssh o186i056
+ 1011  ll
+ 1012  vi flop3avx2.cpp 
+ 1013  g++ flop3avx2.cpp -O -o flop
+ 1014  vi flop3avx2.cpp 
+ 1015  g++ flop3avx2.cpp -O -o flop
+ 1016  vi flop3avx2.cpp 
+ 1017  g++ flop3avx2.cpp -O -o flop
+ 1018  vi flop3avx2.cpp 
+ 1019  g++ flop3avx2.cpp -O -o flop
+ 1020  g++ -std=c++11  flop3avx2.cpp -O -o flop
+ 1021  which g++
+ 1022  strace g++ -std=c++11  flop3avx2.cpp -O -o flop
+ 1023  strace g++ -std=c++11  flop3avx2.cpp -O -o flop 2>&1|grep open
+ 1024  strace g++ -ffma -std=c++11  flop3avx2.cpp -O -o flop
+ 1025   g++ -ffma  -march=haswell -std=c++11  flop3avx2.cpp -O -o flop
+ 1026   g++ -fma  -march=haswell -std=c++11  flop3avx2.cpp -O -o flop
+ 1027   g++ -mfma  -march=haswell -std=c++11  flop3avx2.cpp -O -o flop
+ 1028   g++ -mfma  -march=avx2 -std=c++11  flop3avx2.cpp -O -o flop
+ 1029  g++ -help|less
+ 1030  g++ --help
+ 1031   g++ -mfma   -std=c++11  flop3avx2.cpp -O -o flop
+ 1032   g++ -mfma  -march=avx2 -std=c++11  flop3avx2.cpp -O -o flop
+ 1033  vi flop3avx2.cpp
+ 1034   g++ -mfma  -march=avx2 -std=c++11  flop3avx2.cpp -O -o flop
+ 1035   g++ -mfma  -std=c++11  flop3avx2.cpp -O -o flop
+ 1036  vi flop3avx2.cpp
+ 1037   g++ -mfma  -std=c++11  flop3avx2.cpp -O -o flop
+ 1038   g++ -mfma  -std=c++11  flop3avx2.cpp -O -S
+ 1039  ls -lrt *.s
+ 1040  more flop3avx2.s
+ 1041  vi flop3avx2.cpp
+ 1042   g++ -mfma  -std=c++11  flop3avx2.cpp -O -noinline -S
+ 1043   g++ -mfma  -std=c++11  flop3avx2.cpp -O -Onoinline -S
+ 1044  man g++
+ 1045  man g++|grep inline
+ 1046   g++ -mfma  -std=c++11  flop3avx2.cpp -O  -fno-inline -S
+ 1047  more flop3avx2.s
+ 1048  vi flop3avx2.cpp
+ 1049   g++ -mfma  -std=c++11  flop3avx2.cpp -O  -fno-inline -S
+ 1050  more flop3avx2.s
+ 1051   g++ -mfma  -std=c++11  flop3avx2.cpp -O3  -fno-inline -S
+ 1052  more flop3avx2.s
+ 1053   g++ -mfma  -std=c++11  flop3avx2.cpp -O3  -fno-inline -march=core-avx2 -S
+ 1054  more flop3avx2.s
+ 1055   g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2 -S
+ 1056  more flop3avx2.s
+ 1057  vi flop3avx2.cpp
+ 1058   g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2 -S
+ 1059  more flop3avx2.s
+ 1060   q
+ 1061   g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2  -o flop
+ 1062  ./flop 1
+ 1063  ./flop 1 2.6
+ 1064  vi flop3avx2.cpp
+ 1065   g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2  -o flop
+ 1066  ./flop 1 2.6
+ 1067  vi flop3avx2.cpp
+ 1068   g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2  -o flop
+ 1069  ./flop 1 2.6
+ 1070  squeue 
+ 1071  ./jone
+ 1072  squeue 
+ 1073  history >>his
+ 1074  ssh o186i056
+ 1075  vi flop6.cpp
+ 1076  ll
+ 1077  more op4.170208193324.o186i056.flop
+ 1078   g++ -S -fverbose-asm -g -O3 -mfma  -std=c++11  flop3avx2.cpp   -fno-inline -march=core-avx2  -S
+ 1079  ls -lrt
+ 1080  more flop3avx2.s
+ 1081   g++ -S -fverbose-asm -g -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=core-avx2  -S
+ 1082  ls -lrt
+ 1083  more flop6.s
+ 1084  as flop6.s
+ 1085  ls -lrt
+ 1086  ./aout 1 2.6
+ 1087  ./a.out 1 2.6
+ 1088  as flop6.s -o flop6
+ 1089* 
+ 1090  more a.out
+ 1091  chmod 777 a.out 
+ 1092  ./a.out 
+ 1093  gcc flop6.s -o flop6
+ 1094  ./flop6 
+ 1095  ./flop6 1 2.6
+ 1096  vi jrun3
+ 1097  ./jrun3
+ 1098  killall flop6
+ 1099  squeue 
+ 1100  ./jone
+ 1101  squeue 
+ 1102  ssh o186i126
+ 1103  history >>his
+ 1104  grep gcc his
+ 1105  grep g++ his
+ 1106  g++ -S -fverbose-asm -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=core-avx2 
+ 1107  more flop6.s
+ 1108  gcc -O3 flop6.s -o flop6
+ 1109  ssh o186i126
+ 1110  grep ui64 *.cpp
+ 1111  grep ui *.cpp
+ 1112  more flop6.cpp
+ 1113  cd -
+ 1114  cd PHD/oprofile/
+ 1115  ll
+ 1116  vi objdump_parsing.cpp 
+ 1117  cd -
+ 1118  cd flop
+ 1119  more flop6.cpp
+ 1120  ll
+ 1121  ls -l
+ 1122  cp flopsub6.c flopsub6.c
+ 1123  cp flopsub6.c flopsub7.c
+ 1124  cp flopsub6.cpp flopsub7.cpp
+ 1125  more flopsub7.cpp
+ 1126  g++ -S -fverbose-asm -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=skyl
+ 1127  man g++|grep march
+ 1128  g++ -S -fverbose-asm -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=skylake-avx512
+ 1129  g++ -S -fverbose-asm -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=avx512
+ 1130  g++ -S -fverbose-asm -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -mavx512
+ 1131  man g++|grep 512
+ 1132  gcc -v
+ 1133  icc 
+ 1134  more jrun
+ 1135  more ../solveur/jrun 
+ 1136  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+ 1137  icc -S flopsub7.cpp 
+ 1138  more flopsub7.s
+ 1139  icc -v
+ 1140  icc --help
+ 1141  icc --help|more
+ 1142  icc -S -O3 -axCORE-AVX512 flopsub7.cpp 
+ 1143  more flopsub7.s
+ 1144  ll
+ 1145  more flopsub6.s
+ 1146  squeue 
+ 1147  ll
+ 1148  more flopsub7.s
+ 1149  cp  flopsub7.s flopsub7.s.ori
+ 1150  ll
+ 1151  cp flopsub6.s flopsub7.s
+ 1152  vi flopsub7.s
+ 1153  gcc flopsub7.s
+ 1154  cd
+ 1155  cd PHD/oprofile/
+ 1156  ll
+ 1157  more Oori 
+ 1158  ll
+ 1159  history
+ 1160  history >>his
+  199  more op2
+  200  grep 1000 his
+  201   more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+  202   more op2|grep -n '^ '|awk '{if($3>1000000)print $3 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+  203  ll
+  204  objdump -Dslx fluori
+  205  ll
+  206  cd
+  207  cd solveur/
+  208  ll
+  209  more jone
+  210  ./jone
+  211  squeue 
+  212  ssh o190i
+  213  ssh o190i211
+  214  cd
+  215  cd unstrip/unstrip-64/
+  216  ll
+  217  more Oori
+  218  pic
+  219  ll
+  220  man pic
+  221  readelf -h
+  222  kk
+  223  ll
+  224  readelf -a fluori
+  225  more Oori
+  226  ll
+  227  readelf --debug-dump=macro fluori
+  228  readelf --debug-dump=main fluori
+  229  readelf --debug-dump fluori
+  230  yasm
+  231  cd
+  232  squeue 
+  233  ssh o190i211
+  234  bc -l
+  235  squeue 
+  236  ssh o190i211
+  237  cd PHD/
+  238  ll
+  239  cd oprofile/
+  240  ll
+  241  more Oori 
+  242  ll
+  243  cd
+  244  cd unstrip/unstrip-64/
+  245  ll
+  246  more op2
+  247  cd /ibnfs/hmalha/
+  248  cd awe/
+  249  find .|grep op2
+  250  ls -l $(find .|grep op2)
+  251  cd ..
+  252  find .|grep op2
+  253  ls -lrt 
+  254  cd PROJECTS/
+  255  ls -lrt 
+  256  find .|grep op2
+  257  cd PAPER/paper/
+  258  ll
+  259  date
+  260  cd work.64Px1T.jobid-196020.o186i070.20170202.175200.e5-2697Av4.32ppn.TOFF.pmpi.IB
+  261  ll
+  262  more op2* |grep -v '^ '|more
+  263  ll
+  264  cd ..
+  265  ll
+  266  cd work.128Px1T.jobid-196023.o186i126.20170202.182228.e5-2697Av4.32ppn.TOFF.pmpi.IB
+  267  more op2* |grep -v '^ '|more
+  268  ll
+  269  more op1..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+  270  ll
+  271  ls -lrt
+  272  cp  op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 ~/
+  273  cd 
+  274  more op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126
+  275  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126 op2
+  276  more op2
+  277  objdump -d /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 >OBJ
+  278  cd dmlmem/lecture
+  279  cp dml3.* ../..
+  280  cd
+  281  cd -
+  282  cp dmlv3* ../..
+  283  cd ../..
+  284  ./dmlv3 OBJ op2 >op4
+  285  vi op4
+  286  cd -
+  287  ll OBJ
+  288  ll
+  289  cd
+  290  ll OBJ
+  291  vi dmlv3.c 
+  292  gcc -O dmlv3.c -o dmlv3
+  293  g++ -O dmlv3.c -o dmlv3
+  294  ./dmlv3 OBJ op2 >op4
+  295  more op2
+  296  more op2|grep '^ '|more
+  297  more op2|grep '^ '|awk '{if($2>1000)print $0}'|more
+  298  more op2|grep '^ '|awk '{if($2>10000)print $0}'|more
+  299  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+  300  more op2|grep -v '^ '|more
+  301  more op2|grep '^ '|awk '{if($2>100000)print $0}'|more
+  302  more op2|grep '^ '|awk '{if($2>100000){sum+=$1;print $0 $1}}'|more
+  303  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 $1}}'|more
+  304  more op2|grep '^ '|awk '{if($2>100000){sum+=$2;print $0 sum}}'|more
+  305  more op2|grep -v '^ '|more
+  306  more op2|grep '^ '|if(
+  307  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|more
+  308  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum $0}'|more
+  309  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum ' ' $0}'|more
+  310  more op2|grep '^ '|awk '{if($2>100000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+  311  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'|awk '{sum+=$1;print sum " " $0}'|more
+  312  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}
+  313  more op2|grep '^ '|awk '{if($2>1000000)print $2 $0}'
+  314  more op2
+  315  vi OBJ
+  316  history
+  317  info /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0
+  318  man info
+  319  unstrip
+  320  cd
+  321  ll
+  322  cd
+  323  mkdir unstrip
+  324  cd unstrip/
+  325  mv ../unstrip* .
+  326  ll
+  327  cat unstrip-64.tgz |gzip -d|tar xvf -
+  328  cd unstrip-64/
+  329  ll
+  330  ./unstrip 
+  331  history
+  332  cp /apps/Ansys/ansys_inc/v170/fluent/fluent17.0.0/lnamd64/3d_node/fluent_mpi.17.0.0 fluori
+  333  ll
+  334  ./unstrip fluori flunew
+  335  ./unstrip -f fluori _o flunew
+  336  ./unstrip -f fluori -o flunew
+  337  past Oiru Onew|more
+  338  paste Oiru Onew|more
+  339  mm
+  340  ll
+  341  objdump -S fluori | awk '/^[[:xdigit:]]+ <FUNCTION>:$/{flag=1;next}/^[[:xdigit:]]+ <.*>:$/{flag=0}flag'
+  342  ll
+  343  more generate-learn-binary.bash 
+  344  vi j1
+  345  chmod 777 j1
+  346  .:j1
+  347  ./j1
+  348  ./j1 fluori 
+  349  ./j1 fluori more j1
+  350  ll
+  351  more j1
+  352  ./j1 main fluori
+  353  history >>his
+  354  strings fluori 
+  355  more op2*
+  356  ll
+  357  cd
+  358  cd solveur/
+  359  more op2*
+  360  addr2line 
+  361  cd
+  362  cd unstrip/unstrip-64/
+  363  ll
+  364  addr2line fluori |more
+  365  man addr2line
+  366  man addr2line main
+  367  addr2line fluori main
+  368  addr2line main fluori 
+  369  addr2line main -e fluori 
+  370  addr2line 50e932 -e fluori 
+  371  man addr2line 
+  372  addr2line -f -e fluori 
+  373  addr2line -f -e fluori 0509fd0 
+  374  addr2line -f -e fluori 0x509fd0 
+  375  addr2line  -e fluori 0x509fd0 
+  376  addr2line  -e fluori 107080
+  377  addr2line  -e fluori 0x107080
+  378  addr2line  -b fluori 0x107080
+  379  addr2line  -b -f fluori 0x107080
+  380  addr2line  -b -e fluori 0x107080
+  381  addr2line   -e fluori 0x107080
+  382  cp fluori a.out
+  383  addr2line   0x107080
+  384  addr2line  
+  385  man mtrace
+  386  cd
+  387  more op2
+  388  ll
+  389  cd unstrip/unstrip-64/
+  390  ll
+  391  objdump -D Oori |more
+  392  objdump -D  flu|more
+  393  objdump -D  fluori|more
+  394  objdump -D  fluori >Dori
+  395  tail Dori
+  396  vi Dori
+  397  vi Oori
+  398  grep xmm Oori|more
+  399  grep xmm Oori|wc
+  400  grep xmm Oori|grep -v pxor|wc
+  401  grep xmm Oori|grep -v -e pxor -e movsd|wc
+  402  grep xmm Oori|grep -v -e pxor -e movsd|more
+  403  grep xmm Oori|grep -v -e pxor -e mov|wc
+  404  grep xmm Oori|grep -v -e pxor -e mov|more
+  405  ll
+  406  man elfdump
+  407  elfdump
+  408  dwarfdump
+  409  elfdump
+  410  gdb 
+  411  ll
+  412  readelf -a flunew|more
+  413  readelf -a flunew >elf1
+  414  vi elf1
+  415  more elf2
+  416  wc elf2
+  417  vi  elf2
+  418  vi elf1
+  419  more elf<1
+  420  more elf1
+  421  vi  elf1
+  422  sort -k2 elf3|more
+  423  more elf3
+  424  more elf1
+  425               
+  426  ll
+  427  objdump --full-contents  fluori|more
+  428  ldd fluori
+  429  otool
+  430  nm flupri
+  431  nm fluori
+  432  nm flunew
+  433  nm flunew|more
+  434  nm flunew|sort -n|more
+  435  nm flunew|sort -x|more
+  436  man sort
+  437  man scanelf 
+  438  scanelf
+  439  eu-nm
+  440  eu-nm fluori 
+  441  eu-nm flunew
+  442  eu-objdump -d fluori
+  443  eu-objdump -D fluori
+  444  eu-objdump -d fluori
+  445  gdb ./fluori
+  446  objdump -D -M fluori 
+  447  objdump -D fluori|more
+  448  objdump -d fluori|more
+  449  readelf -S
+  450  readelf -S fluori
+  451  ll
+  452  gdb ./fluori
+  453  ll
+  454  more Oori
+  455  ll
+  456  more Onew
+  457  cd
+  458  cd solveur/
+  459  ll
+  460  ./jone
+  461  squeue 
+  462  ssh o190i211
+  463  vi jone
+  464  ./jone
+  465  squeue 
+  466  ssh o190i211
+  467  ll
+  468  cd
+  469  cd unstrip/unstrip-64/
+  470  ll
+  471  more Oori
+  472  more Onew
+  473  ll
+  474  more Oori
+  475  cd
+  476  mkdir PHD
+  477  cd PHD
+  478  mkdir C++
+  479  cd C++/
+  480  vi p1.cpp
+  481  g++ p1.cpp -O -o p1
+  482  g++44 p1.cpp -O -o p1
+  483  g++ p1.cpp -O -o p1
+  484  g++ -std=c++0x p1.cpp -O -o p1
+  485  ./p1
+  486  history >>his
+  487  g++ -std=c++11 p1.cpp -O -o p1
+  488  ./p1
+  489  g++ -std=c++14 p1.cpp -O -o p1
+  490  g++ -std=c++11 p1.cpp -O -o p1
+  491  ./p1
+  492  vi p1.cpp
+  493  g++ -std=c++11 p1.cpp -O -o p1
+  494  vi p1.cpp
+  495  g++ -std=c++11 p1.cpp -O -o p1
+  496  ./p1
+  497  vi p2.cpp
+  498  g++ -std=c++11 p2.cpp -O -o p2
+  499  ./p2
+  500  more p2.cpp 
+  501  more p2.cpp
+  502  vi p3.cpp
+  503  g++ -std=c++11 p3.cpp -O -o p3
+  504  ./p3
+  505  cd ..
+  506  ll
+  507  mkdir oprofile
+  508  cd oprofile/
+  509  cp ~/unstrip/unstrip-64/Oori .
+  510  more Oori 
+  511  vi objdump_parsing.cpp
+  512  history
+  513   g++ -std=c++11   objdump_parsing.cpp 
+  514   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  515  ./p
+  516  ./p OOOO
+  517  ./p Oori
+  518  vi objdump_parsing.cpp
+  519   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  520  vi objdump_parsing.cpp
+  521   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  522  vi objdump_parsing.cpp
+  523   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  524  vi objdump_parsing.cpp
+  525   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  526  ./p Oori
+  527  de
+  528  de 
+  529  cd
+  530  cd solveur/
+  531  ls
+  532  ll
+  533  more op4.170201091818.o190i211.3D_70_ko.4.MPI1NODE
+  534  cd
+  535  cd PHD/
+  536  ll
+  537  cd oprofile/
+  538  ll
+  539  history >>his
+  540  grep obj his
+  541  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  542  ./p Oori
+  543  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  544  time ./p Oori 
+  545  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  546  time ./p Oori 
+  547  wc Oori
+  548  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  549  time ./p Oori 
+  550  tail Oori
+  551  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  552  time ./p Oori 
+  553  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  554  time ./p Oori 
+  555  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  556  time ./p Oori 
+  557  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  558  time ./p Oori 
+  559  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  560  time ./p Oori 
+  561  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  562  time ./p Oori |more
+  563  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  564  time ./p Oori |more
+  565  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  566  time ./p Oori |more
+  567  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  568  time ./p Oori |more
+  569  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  570  time ./p Oori |more
+  571  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  572  rm .*
+  573  time ./p Oori |more
+  574  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  575  time ./p Oori |more
+  576  time ./p Oori 
+  577  demangle
+  578  time ./p Oori |c++filt |more
+  579  history >>his
+  580  time ./p Oori |more
+  581  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  582  time ./p Oori |more
+  583  time ./p Oori |awk '{if($2<30)print $0}'|more
+  584  time ./p Oori |awk '{if($2<40)print $0}'|more
+  585  time ./p Oori |awk '{if($2<40)if($1==0)print $0}'|more
+  586  time ./p Oori |awk '{if($2<40)if($1==0)if($2>0)print $0}'|more
+  587  time ./p Oori |awk '{if($2<40)if($1==0)if($2>0)print $0}'|grep -v -e retq -e nop|more
+  588  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop|more
+  589  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltd -e cqto |more
+  590  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltq -e cqto |more
+  591  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+  592  time ./p Oori |awk '{if($2<40)if($1==0)if($2>25)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+  593  time ./p Oori |awk '{if($2<40)if($1==0)if($2>31)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+  594  time ./p Oori |awk '{if($2<40)if($1==0)if($2>31)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd 
+  595  history >>his
+  596  cd
+  597  cd solveur/
+  598  ll
+  599  cd
+  600  cd PHD
+  601  ll
+  602  cd oprofile/
+  603  ll
+  604  cd
+  605  ll */fluori
+  606  ls -l */fluori
+  607  ls -l */*/fluori
+  608  cd unstrip/unstrip-64/
+  609  ll
+  610  ldd fluori 
+  611  objdump -d fluori |more
+  612  nm fluori
+  613  objdump -d fluori |more
+  614  objdump -d fluori |grep '<'|more
+  615  objdump -d fluori |grep '^0'|more
+  616  file fluori 
+  617  objdump -d fluori |more
+  618  vi Oori 
+  619  grep -n main Oori |grep -v -e lmain  
+  620  grep -i main Oori|more
+  621  grep -i main Oori|grep -i -e domain|more
+  622  grep -i main Oori|grep -iv -e domain|more
+  623  grep -in main Oori|grep -iv -e domain -e lmain|more
+  624  vi Oori
+  625  nm -D fluori 
+  626  nm -D fluori |more
+  627  nm -D fluori |sort|more
+  628                          
+  629  squeue 
+  630  ssh o190i211
+  631  bc -l
+  632  cd unstrip/unstrip-64/
+  633  ls
+  634  more op2
+  635  more op2|grep '^ '|more
+  636  more op2|grep -v '^ '|more
+  637  cd
+  638  cd solveur/
+  639  ll
+  640  more op2*2737*|more
+  641  more op2*2737*|grep -v '^ '|more
+  642  ldd ztest_driver
+  643  nm -D ztest_driver
+  644  file  ztest_driver
+  645  cd ../unstrip/unstrip-64/
+  646  file fluori 
+  647  ldd fluori  |more
+  648  nm -D fluori  |more
+  649  nm  fluori  |more
+  650  cd -
+  651  nm  ztest_driver
+  652  nm -D ztest_driver
+  653  nm -D ztest_driver|more
+  654    
+  655  cd -
+  656  ls
+  657  more Ori
+  658  more Oori 
+  659  more op2
+  660  objdump -d fluori |more
+  661  cd -
+  662  more op2*2737*|grep -v '^ '|more
+  663  more op2*2737*|more
+  664  more op4*2737*|more
+  665  more OBJ
+  666  cd -
+  667  ls -l
+  668  more Oori
+  669  nm -D fluori |more
+  670  ldd -S fluori 
+  671  nm fluori 
+  672  nm -s fluori |more
+  673  ldd -a fluori |more
+  674  objdump -a fluori |more
+  675  more op2
+  676  more op2|awk '{if($2>10000)print $0}'|more
+  677  grep -n ' ' op2|awk '{if($3>10000)print $0}'|more
+  678  vi op2
+  679  grep -n ' ' op2|awk '{if($3>10000)print $0}'|wc
+  680  grep -n ' ' op2|awk '{if($3>100000)print $0}'|wc
+  681  grep -n ' ' op2|awk '{if($3>1000000)print $0}'|wc
+  682  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  683  more op2
+  684  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  685  wc op2
+  686  vi op2
+  687  chmod  777 ~/unstrip/
+  688  cd ..
+  689  ll
+  690  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126  op2
+  691  more op2
+  692   c -
+  693  cd unstrip-64/
+  694  ll
+  695  more op2
+  696  more op2|awk '{sum1+=$2;sum2+=$4;printf("%15.0f %15.0f %10.3f %s\n",sum1,sum2,sum2/sum1,$0)}'|more
+  697     
+  698  ls
+  699  ll
+  700  grep ymm Oori
+  701  grep '%ymm' Oori
+  702  grep '%xmm' Oori
+  703  grep '%ymm' Oori
+  704  grep '%xmm' Oori
+  705  grep '%xmm' Oori|grep mulpd
+  706  ll
+  707  ll /opt/platform_mpi/bin/
+  708   /opt/platform_mpi/bin/mpirun -h
+  709   /opt/platform_mpi/bin/mpirun -h|more
+  710  cd
+  711  grep mpirun */j*
+  712  grep mpirun */*/j*|grep ' -s '
+  713   /opt/platform_mpi/bin/mpirun -h|more
+  714  grep mpirun */*/j*|grep ' -s '
+  715  cd
+  716  grep mpirun */*/j*|grep ' -s '
+  717  cd unstrip/unstrip-64/
+  718  ls
+  719  more op2
+  720  more op2|grep '^ '|more
+  721  more op2|grep -v '^ '|more
+  722  cd
+  723  cd solveur/
+  724  ll
+  725  more op2*2737*|more
+  726  more op2*2737*|grep -v '^ '|more
+  727  ldd ztest_driver
+  728  nm -D ztest_driver
+  729  file  ztest_driver
+  730  cd ../unstrip/unstrip-64/
+  731  file fluori 
+  732  ldd fluori  |more
+  733  nm -D fluori  |more
+  734  nm  fluori  |more
+  735  cd -
+  736  nm  ztest_driver
+  737  nm -D ztest_driver
+  738  nm -D ztest_driver|more
+  739    
+  740  cd -
+  741  ls
+  742  more Ori
+  743  more Oori 
+  744  more op2
+  745  objdump -d fluori |more
+  746  cd -
+  747  more op2*2737*|grep -v '^ '|more
+  748  more op2*2737*|more
+  749  more op4*2737*|more
+  750  more OBJ
+  751  cd -
+  752  ls -l
+  753  more Oori
+  754  nm -D fluori |more
+  755  ldd -S fluori 
+  756  nm fluori 
+  757  nm -s fluori |more
+  758  ldd -a fluori |more
+  759  objdump -a fluori |more
+  760  more op2
+  761  more op2|awk '{if($2>10000)print $0}'|more
+  762  grep -n ' ' op2|awk '{if($3>10000)print $0}'|more
+  763  vi op2
+  764  grep -n ' ' op2|awk '{if($3>10000)print $0}'|wc
+  765  grep -n ' ' op2|awk '{if($3>100000)print $0}'|wc
+  766  grep -n ' ' op2|awk '{if($3>1000000)print $0}'|wc
+  767  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  768  more op2
+  769  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  770  wc op2
+  771  vi op2
+  772  chmod  777 ~/unstrip/
+  773  cd ..
+  774  ll
+  775  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126  op2
+  776  more op2
+  777   c -
+  778  cd unstrip-64/
+  779  ll
+  780  more op2
+  781  more op2|awk '{sum1+=$2;sum2+=$4;printf("%15.0f %15.0f %10.3f %s\n",sum1,sum2,sum2/sum1,$0)}'|more
+  782     
+  783  ls
+  784  ll
+  785  grep ymm Oori
+  786  grep '%ymm' Oori
+  787  grep '%xmm' Oori
+  788  grep '%ymm' Oori
+  789  grep '%xmm' Oori
+  790  grep '%xmm' Oori|grep mulpd
+  791  ll
+  792  ll /opt/platform_mpi/bin/
+  793   /opt/platform_mpi/bin/mpirun -h
+  794   /opt/platform_mpi/bin/mpirun -h|more
+  795  cd
+  796  grep mpirun */j*
+  797  grep mpirun */*/j*|grep ' -s '
+  798   /opt/platform_mpi/bin/mpirun -h|more
+  799  grep mpirun */*/j*|grep ' -s '
+  800  cd
+  801  grep mpirun */*/j*|grep ' -s '
+  802  grep mpirun */*/j*|grep ' -i '
+  803  cd
+  804  cd solveur/
+  805  more jrun
+  806  more perf.*
+  807  more jrun
+  808  find .|grep gprof
+  809  cd BCAC
+  810  ls
+  811  ll
+  812  find .|grep gprof
+  813  cd swat/sources/original/
+  814  more t1.gprof 
+  815  ll
+  816  cd ..
+  817  find .|grep gprof
+  818  cd ..
+  819  find .|grep gprof
+  820  cd ..
+  821  find .|grep gprof
+  822  cd old/BCAC/swat/sources/original/
+  823  ll
+  824  cd
+  825  find .|grep gprof
+  826  ls -l $(find .|grep gprof)
+  827  cd   
+  828  cd revF/oprofile-0.9.1/
+  829  ll
+  830  cd pg
+  831  ls -l $(find .|grep gprof)
+  832  cd
+  833  ls -l $(find .|grep gprof)
+  834  find .|grep gprof
+  835  cd mandel/qd-2.3.8/tests/
+  836  ll
+  837  find .|grep gprof
+  838  more gprof.out1 
+  839  ll
+  840  cd 
+  841  find .|grep gprof
+  842  mpre gprof.dml.4.1G.2 
+  843  more gprof.dml.4.1G.2 
+  844  cd solveur
+  845  grep perf his
+  846  ll
+  847  history >>his
+  848  grep perf his
+  849  cd 
+  850  grep perf */his
+  851  grep perf */his|grep awk
+  852  find .|grep awkperf
+  853  cd
+  854  find .|grep awkperf
+  855  more /proc/cpuinfo 
+  856  cd 
+  857  cd solveur/
+  858  ll
+  859  grep export j*
+  860  grep prot */j*
+  861  grep prot */*/j*
+  862  bc -
+  863  bc -l
+  864  grep prot */*/j*|grep ldom
+  865  grep prot */*/j*|grep rr
+  866  pwd
+  867  ./ssh
+  868  pwd
+  869  ll
+  870  /opt/platform_mpi/bin/mpirun -h
+  871  /opt/platform_mpi/bin/mpirun -h -cpu_bind
+  872  grep prot */j*
+  873  grep prot */*/j*
+  874  /opt/platform_mpi/bin/mpirun -h
+  875  cd flop
+  876  ll
+  877  more jone
+  878  wq
+  879  more /proc/cpuinfo 
+  880  vi jrun3
+  881  ./jrun3
+  882  top
+  883  ll
+  884  more perf.170207235803.o186i126
+  885   
+  886   cd
+  887  cd solveur/
+  888  grep cycles *.c
+  889  more dmlv3.c 
+  890  grep cycles *.c
+  891  more DML.c
+  892  cd 
+  893  grep dml_cycles */*.c
+  894  cd crible/
+  895  more p4.c
+  896  pwd
+  897  ll
+  898  cd flop
+  899  ll
+  900  ./jrun3
+  901  vi jrun3
+  902  ./jrun3
+  903  ll
+  904  vi flop4avx2.cpp
+  905  more jrun3
+  906  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  907  icc -O3 flop4avx2.cpp -S|more
+  908  ll
+  909  more flop4avx2.s
+  910  ll
+  911  vi flop4avx2.cpp
+  912  icc -O3 flop4avx2.cpp -o flop
+  913  vi flop4avx2.cpp
+  914  icc -O3 flop4avx2.cpp -o flop
+  915  vi flop4avx2.cpp
+  916  icc -O3 flop4avx2.cpp -o flop
+  917  ./flop
+  918  ./flop 5
+  919  ./flop 5|more
+  920  vi flop4avx2.cpp
+  921  icc -O3 flop4avx2.cpp -o flop
+  922  vi flop4avx2.cpp
+  923  icc -O3 flop4avx2.cpp -o flop
+  924  ./flop 5|more
+  925  vi flop4avx2.cpp
+  926  icc -O3 flop4avx2.cpp -o flop
+  927  ./flop 5|more
+  928  ./flop 5
+  929  pwd
+  930  ll
+  931  ls
+  932  find .|grep avx
+  933  cd flop
+  934  ll
+  935  more flop4avx2.cpp
+  936   
+  937  ls -lrt
+  938  g++ flop4avx2.cpp -O -o flop
+  939  icc
+  940  vi flop4avx2.cpp; g++ flop4avx2.cpp -O -o flop
+  941  cd
+  942  ls
+  943  cd /usr/include
+  944  ll
+  945  grep mm256 *.h
+  946  grep mm256 */*.h
+  947  grep mm256 */*/*.h
+  948  cd /opt/intel
+  949  ll
+  950  cd
+  951  cd solveur/
+  952  ll
+  953  more jrun 
+  954  cd /opt/intel/compilers_and_libraries/linux
+  955  ll
+  956  cd include/
+  957  ll
+  958  more  ieee_arithmetic.f90
+  959        
+  960  ll
+  961  grep mm256 *.h
+  962  gcc -E dvec.h|more
+  963     
+  964  grep mm256 *.h
+  965  vi dvec.h
+  966  ll fvec
+  967  ll fvec.h 
+  968  gcc -E dvec.h -I.|more
+  969  g++ -E dvec.h -I.|more
+  970  g++ -E dvec.h -I.|grep add
+  971  g++ -E dvec.h -I.|less
+  972  cd
+  973  history
+  974  cd flop
+  975  ll
+  976  more jrun
+  977  more flop3peak.cpp 
+  978  icc
+  979  mmore ~/solveur/jrun
+  980  more ~/solveur/jrun 
+  981  cp ~/solveur/jrun  jrun3
+  982  more jrun
+  983  vi jrun3
+  984  ll
+  985  more  flop4avx2.cpp
+  986  vi jrun3 
+  987  ./jrun3
+  988  vi flop4avx2.cpp
+  989  ./jrun3
+  990  vi flop4avx2.cpp
+  991  cp ~/solveur/jone .
+  992  vi jone
+  993  ./jone
+  994  cp ../solveur/jsleep .
+  995  ./jone
+  996  squeue 
+  997  ssh o186i126
+  998  squeue 
+  999  ssh o186i126
+ 1000  squeue 
+ 1001  ssh o186i056
+ 1002  cd
+ 1003  ls -lrt
+ 1004  cd PHD
+ 1005  ll
+ 1006  cd oprofile/
+ 1007  ll
+ 1008  mor objdump_parsing.cpp 
+ 1009  more objdump_parsing.cpp 
+ 1010  grep g++ his
+ 1011  cd
+ 1012  cd flop
+ 1013  more flop5
+ 1014  more flop5.cpp 
+ 1015  killall flop6
+ 1016  top
+ 1017  killall flop
+ 1018  squeue 
+ 1019  cd
+ 1020  cd PHD
+ 1021  ls
+ 1022  cd oprofile/
+ 1023  ll
+ 1024  more objdump_parsing.cpp
+ 1025   
+ 1026  ll -lrt     ../../flop
+ 1027  cp    ../../flop/*.170208212905.o186i126.flop6 .
+ 1028  ll
+ 1029  more op2.170208212905.o186i126.flop6 
+ 1030  ll
+ 1031  more op2.170208212905.o186i126.flop6 
+ 1032  ll
+ 1033  more OBJ*
+ 1034  ll
+ 1035  vi objdump_parsing.cpp
+ 1036  grep g++ his
+ 1037  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1038  vi objdump_parsing.cpp
+ 1039  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1040  vi objdump_parsing.cpp
+ 1041  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1042  vi objdump_parsing.cpp
+ 1043  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1044  vi objdump_parsing.cpp
+ 1045  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1046  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1047  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1048  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1049  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1050  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1051  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1052  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1053  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1054  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1055  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1056  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1057  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1058  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1059  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1060  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1061  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1062  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1063  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1064  ./p OBJ.170208212905.o186i126.flop6 |more
+ 1065  ll
+ 1066  cd ..
+ 1067  cd C++/
+ 1068  ll
+ 1069  more p1.cpp
+ 1070  more p?.cpp
+ 1071  cd
+ 1072  cd flop
+ 1073  more flopsub6.s
+ 1074   
+ 1075  ls
+ 1076  grep g++ his
+ 1077  history|grep flop6
+ 1078  history|grep flop5
+ 1079   g++ -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=core-avx2
+ 1080   g++ -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=core-avx2 flopsub6.s -o flop
+ 1081   g++ -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=core-avx2 -S
+ 1082  more flop6.s
+ 1083   
+ 1084  ll
+ 1085  cd
+ 1086  cd PHD/
+ 1087  ll
+ 1088  cd oprofile/
+ 1089  ll
+ 1090  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1091  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1092  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1093  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1094  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1095  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1096  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1097  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1098  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1099  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1100  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1101  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1102     
+ 1103  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1104  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1105  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1106  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1107  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1108  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1109  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1110  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+ 1111  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1112  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+ 1113  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1114  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+ 1115  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1116       
+ 1117  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+ 1118  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1119  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+ 1120  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1121  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+ 1122  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1123  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+ 1124  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1125  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+ 1126  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1127  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1128  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1129  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1130  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1131  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1132  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1133  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1134  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1135  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1136  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1137  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1138  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1139  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1140  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1141  rm .vimfo
+ 1142  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1143  rm .*
+ 1144  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1145  quota
+ 1146  ll
+ 1147  ll >toto
+ 1148  rm toto
+ 1149  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1150  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:261
+ 1151  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1152  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:261
+ 1153  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1154  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:261
+ 1155  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1156  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1157  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |mo
+ 1158  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1159  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1160  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1161  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1162  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1163  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+ 1164  ll
+ 1165  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1166  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1167  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1168  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1169  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1170  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1171  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1172  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1173  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1174  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1175  bc -l
+ 1176  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1177  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1178  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1179  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1180  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1181  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1182  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1183  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1184  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1185  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1186  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1187  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1188  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1189  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1190  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1191  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1192  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1193  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1194  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1195  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1196  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1197  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+ 1198  history >>his
+   12  ll
+   13  more Oori
+   14  more Onew
+   15  ll
+   16  more Oori
+   17  cd
+   18  mkdir PHD
+   19  cd PHD
+   20  mkdir C++
+   21  cd C++/
+   22  vi p1.cpp
+   23  g++ p1.cpp -O -o p1
+   24  g++44 p1.cpp -O -o p1
+   25  g++ p1.cpp -O -o p1
+   26  g++ -std=c++0x p1.cpp -O -o p1
+   27  ./p1
+   28  history >>his
+   29  g++ -std=c++11 p1.cpp -O -o p1
+   30  ./p1
+   31  g++ -std=c++14 p1.cpp -O -o p1
+   32  g++ -std=c++11 p1.cpp -O -o p1
+   33  ./p1
+   34  vi p1.cpp
+   35  g++ -std=c++11 p1.cpp -O -o p1
+   36  vi p1.cpp
+   37  g++ -std=c++11 p1.cpp -O -o p1
+   38  ./p1
+   39  vi p2.cpp
+   40  g++ -std=c++11 p2.cpp -O -o p2
+   41  ./p2
+   42  more p2.cpp 
+   43  more p2.cpp
+   44  vi p3.cpp
+   45  g++ -std=c++11 p3.cpp -O -o p3
+   46  ./p3
+   47  cd ..
+   48  ll
+   49  mkdir oprofile
+   50  cd oprofile/
+   51  cp ~/unstrip/unstrip-64/Oori .
+   52  more Oori 
+   53  vi objdump_parsing.cpp
+   54  history
+   55   g++ -std=c++11   objdump_parsing.cpp 
+   56   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   57  ./p
+   58  ./p OOOO
+   59  ./p Oori
+   60  vi objdump_parsing.cpp
+   61   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   62  vi objdump_parsing.cpp
+   63   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   64  vi objdump_parsing.cpp
+   65   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   66  vi objdump_parsing.cpp
+   67   g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   68  ./p Oori
+   69  de
+   70  de 
+   71  cd
+   72  cd solveur/
+   73  ls
+   74  ll
+   75  more op4.170201091818.o190i211.3D_70_ko.4.MPI1NODE
+   76  cd
+   77  cd PHD/
+   78  ll
+   79  cd oprofile/
+   80  ll
+   81  history >>his
+   82  grep obj his
+   83  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   84  ./p Oori
+   85  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   86  time ./p Oori 
+   87  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   88  time ./p Oori 
+   89  wc Oori
+   90  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   91  time ./p Oori 
+   92  tail Oori
+   93  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   94  time ./p Oori 
+   95  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   96  time ./p Oori 
+   97  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+   98  time ./p Oori 
+   99  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  100  time ./p Oori 
+  101  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  102  time ./p Oori 
+  103  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  104  time ./p Oori |more
+  105  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  106  time ./p Oori |more
+  107  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  108  time ./p Oori |more
+  109  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  110  time ./p Oori |more
+  111  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  112  time ./p Oori |more
+  113  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  114  rm .*
+  115  time ./p Oori |more
+  116  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  117  time ./p Oori |more
+  118  time ./p Oori 
+  119  demangle
+  120  time ./p Oori |c++filt |more
+  121  history >>his
+  122  time ./p Oori |more
+  123  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  124  time ./p Oori |more
+  125  time ./p Oori |awk '{if($2<30)print $0}'|more
+  126  time ./p Oori |awk '{if($2<40)print $0}'|more
+  127  time ./p Oori |awk '{if($2<40)if($1==0)print $0}'|more
+  128  time ./p Oori |awk '{if($2<40)if($1==0)if($2>0)print $0}'|more
+  129  time ./p Oori |awk '{if($2<40)if($1==0)if($2>0)print $0}'|grep -v -e retq -e nop|more
+  130  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop|more
+  131  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltd -e cqto |more
+  132  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltq -e cqto |more
+  133  time ./p Oori |awk '{if($2<40)if($1==0)if($2>22)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+  134  time ./p Oori |awk '{if($2<40)if($1==0)if($2>25)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+  135  time ./p Oori |awk '{if($2<40)if($1==0)if($2>31)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd |more
+  136  time ./p Oori |awk '{if($2<40)if($1==0)if($2>31)print $0}'|grep -v -e retq -e nop -e cltq -e cqto -e cltd 
+  137  history >>his
+  138  cd
+  139  cd solveur/
+  140  ll
+  141  cd
+  142  cd PHD
+  143  ll
+  144  cd oprofile/
+  145  ll
+  146  cd
+  147  ll */fluori
+  148  ls -l */fluori
+  149  ls -l */*/fluori
+  150  cd unstrip/unstrip-64/
+  151  ll
+  152  ldd fluori 
+  153  objdump -d fluori |more
+  154  nm fluori
+  155  objdump -d fluori |more
+  156  objdump -d fluori |grep '<'|more
+  157  objdump -d fluori |grep '^0'|more
+  158  file fluori 
+  159  objdump -d fluori |more
+  160  vi Oori 
+  161  grep -n main Oori |grep -v -e lmain  
+  162  grep -i main Oori|more
+  163  grep -i main Oori|grep -i -e domain|more
+  164  grep -i main Oori|grep -iv -e domain|more
+  165  grep -in main Oori|grep -iv -e domain -e lmain|more
+  166  vi Oori
+  167  nm -D fluori 
+  168  nm -D fluori |more
+  169  nm -D fluori |sort|more
+  170                          
+  171  squeue 
+  172  ssh o190i211
+  173  bc -l
+  174  cd unstrip/unstrip-64/
+  175  ls
+  176  more op2
+  177  more op2|grep '^ '|more
+  178  more op2|grep -v '^ '|more
+  179  cd
+  180  cd solveur/
+  181  ll
+  182  more op2*2737*|more
+  183  more op2*2737*|grep -v '^ '|more
+  184  ldd ztest_driver
+  185  nm -D ztest_driver
+  186  file  ztest_driver
+  187  cd ../unstrip/unstrip-64/
+  188  file fluori 
+  189  ldd fluori  |more
+  190  nm -D fluori  |more
+  191  nm  fluori  |more
+  192  cd -
+  193  nm  ztest_driver
+  194  nm -D ztest_driver
+  195  nm -D ztest_driver|more
+  196    
+  197  cd -
+  198  ls
+  199  more Ori
+  200  more Oori 
+  201  more op2
+  202  objdump -d fluori |more
+  203  cd -
+  204  more op2*2737*|grep -v '^ '|more
+  205  more op2*2737*|more
+  206  more op4*2737*|more
+  207  more OBJ
+  208  cd -
+  209  ls -l
+  210  more Oori
+  211  nm -D fluori |more
+  212  ldd -S fluori 
+  213  nm fluori 
+  214  nm -s fluori |more
+  215  ldd -a fluori |more
+  216  objdump -a fluori |more
+  217  more op2
+  218  more op2|awk '{if($2>10000)print $0}'|more
+  219  grep -n ' ' op2|awk '{if($3>10000)print $0}'|more
+  220  vi op2
+  221  grep -n ' ' op2|awk '{if($3>10000)print $0}'|wc
+  222  grep -n ' ' op2|awk '{if($3>100000)print $0}'|wc
+  223  grep -n ' ' op2|awk '{if($3>1000000)print $0}'|wc
+  224  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  225  more op2
+  226  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  227  wc op2
+  228  vi op2
+  229  chmod  777 ~/unstrip/
+  230  cd ..
+  231  ll
+  232  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126  op2
+  233  more op2
+  234   c -
+  235  cd unstrip-64/
+  236  ll
+  237  more op2
+  238  more op2|awk '{sum1+=$2;sum2+=$4;printf("%15.0f %15.0f %10.3f %s\n",sum1,sum2,sum2/sum1,$0)}'|more
+  239     
+  240  ls
+  241  ll
+  242  grep ymm Oori
+  243  grep '%ymm' Oori
+  244  grep '%xmm' Oori
+  245  grep '%ymm' Oori
+  246  grep '%xmm' Oori
+  247  grep '%xmm' Oori|grep mulpd
+  248  ll
+  249  ll /opt/platform_mpi/bin/
+  250   /opt/platform_mpi/bin/mpirun -h
+  251   /opt/platform_mpi/bin/mpirun -h|more
+  252  cd
+  253  grep mpirun */j*
+  254  grep mpirun */*/j*|grep ' -s '
+  255   /opt/platform_mpi/bin/mpirun -h|more
+  256  grep mpirun */*/j*|grep ' -s '
+  257  cd
+  258  grep mpirun */*/j*|grep ' -s '
+  259  cd unstrip/unstrip-64/
+  260  ls
+  261  more op2
+  262  more op2|grep '^ '|more
+  263  more op2|grep -v '^ '|more
+  264  cd
+  265  cd solveur/
+  266  ll
+  267  more op2*2737*|more
+  268  more op2*2737*|grep -v '^ '|more
+  269  ldd ztest_driver
+  270  nm -D ztest_driver
+  271  file  ztest_driver
+  272  cd ../unstrip/unstrip-64/
+  273  file fluori 
+  274  ldd fluori  |more
+  275  nm -D fluori  |more
+  276  nm  fluori  |more
+  277  cd -
+  278  nm  ztest_driver
+  279  nm -D ztest_driver
+  280  nm -D ztest_driver|more
+  281    
+  282  cd -
+  283  ls
+  284  more Ori
+  285  more Oori 
+  286  more op2
+  287  objdump -d fluori |more
+  288  cd -
+  289  more op2*2737*|grep -v '^ '|more
+  290  more op2*2737*|more
+  291  more op4*2737*|more
+  292  more OBJ
+  293  cd -
+  294  ls -l
+  295  more Oori
+  296  nm -D fluori |more
+  297  ldd -S fluori 
+  298  nm fluori 
+  299  nm -s fluori |more
+  300  ldd -a fluori |more
+  301  objdump -a fluori |more
+  302  more op2
+  303  more op2|awk '{if($2>10000)print $0}'|more
+  304  grep -n ' ' op2|awk '{if($3>10000)print $0}'|more
+  305  vi op2
+  306  grep -n ' ' op2|awk '{if($3>10000)print $0}'|wc
+  307  grep -n ' ' op2|awk '{if($3>100000)print $0}'|wc
+  308  grep -n ' ' op2|awk '{if($3>1000000)print $0}'|wc
+  309  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  310  more op2
+  311  grep -n ' ' op2|awk '{if($3>1000000)print $0}'
+  312  wc op2
+  313  vi op2
+  314  chmod  777 ~/unstrip/
+  315  cd ..
+  316  ll
+  317  mv op2..e5-2697Av4.32ppn.TOFF.pmpi.IB.o186i126  op2
+  318  more op2
+  319   c -
+  320  cd unstrip-64/
+  321  ll
+  322  more op2
+  323  more op2|awk '{sum1+=$2;sum2+=$4;printf("%15.0f %15.0f %10.3f %s\n",sum1,sum2,sum2/sum1,$0)}'|more
+  324     
+  325  ls
+  326  ll
+  327  grep ymm Oori
+  328  grep '%ymm' Oori
+  329  grep '%xmm' Oori
+  330  grep '%ymm' Oori
+  331  grep '%xmm' Oori
+  332  grep '%xmm' Oori|grep mulpd
+  333  ll
+  334  ll /opt/platform_mpi/bin/
+  335   /opt/platform_mpi/bin/mpirun -h
+  336   /opt/platform_mpi/bin/mpirun -h|more
+  337  cd
+  338  grep mpirun */j*
+  339  grep mpirun */*/j*|grep ' -s '
+  340   /opt/platform_mpi/bin/mpirun -h|more
+  341  grep mpirun */*/j*|grep ' -s '
+  342  cd
+  343  grep mpirun */*/j*|grep ' -s '
+  344  grep mpirun */*/j*|grep ' -i '
+  345  cd
+  346  cd solveur/
+  347  more jrun
+  348  more perf.*
+  349  more jrun
+  350  find .|grep gprof
+  351  cd BCAC
+  352  ls
+  353  ll
+  354  find .|grep gprof
+  355  cd swat/sources/original/
+  356  more t1.gprof 
+  357  ll
+  358  cd ..
+  359  find .|grep gprof
+  360  cd ..
+  361  find .|grep gprof
+  362  cd ..
+  363  find .|grep gprof
+  364  cd old/BCAC/swat/sources/original/
+  365  ll
+  366  cd
+  367  find .|grep gprof
+  368  ls -l $(find .|grep gprof)
+  369  cd   
+  370  cd revF/oprofile-0.9.1/
+  371  ll
+  372  cd pg
+  373  ls -l $(find .|grep gprof)
+  374  cd
+  375  ls -l $(find .|grep gprof)
+  376  find .|grep gprof
+  377  cd mandel/qd-2.3.8/tests/
+  378  ll
+  379  find .|grep gprof
+  380  more gprof.out1 
+  381  ll
+  382  cd 
+  383  find .|grep gprof
+  384  mpre gprof.dml.4.1G.2 
+  385  more gprof.dml.4.1G.2 
+  386  cd solveur
+  387  grep perf his
+  388  ll
+  389  history >>his
+  390  grep perf his
+  391  cd 
+  392  grep perf */his
+  393  grep perf */his|grep awk
+  394  find .|grep awkperf
+  395  cd
+  396  find .|grep awkperf
+  397  more /proc/cpuinfo 
+  398  cd 
+  399  cd solveur/
+  400  ll
+  401  grep export j*
+  402  grep prot */j*
+  403  grep prot */*/j*
+  404  bc -
+  405  bc -l
+  406  grep prot */*/j*|grep ldom
+  407  grep prot */*/j*|grep rr
+  408  pwd
+  409  ./ssh
+  410  pwd
+  411  ll
+  412  /opt/platform_mpi/bin/mpirun -h
+  413  /opt/platform_mpi/bin/mpirun -h -cpu_bind
+  414  grep prot */j*
+  415  grep prot */*/j*
+  416  /opt/platform_mpi/bin/mpirun -h
+  417  cd flop
+  418  ll
+  419  more jone
+  420  wq
+  421  more /proc/cpuinfo 
+  422  vi jrun3
+  423  ./jrun3
+  424  top
+  425  ll
+  426  more perf.170207235803.o186i126
+  427   
+  428   cd
+  429  cd solveur/
+  430  grep cycles *.c
+  431  more dmlv3.c 
+  432  grep cycles *.c
+  433  more DML.c
+  434  cd 
+  435  grep dml_cycles */*.c
+  436  cd crible/
+  437  more p4.c
+  438  pwd
+  439  ll
+  440  cd flop
+  441  ll
+  442  ./jrun3
+  443  vi jrun3
+  444  ./jrun3
+  445  ll
+  446  vi flop4avx2.cpp
+  447  more jrun3
+  448  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  449  icc -O3 flop4avx2.cpp -S|more
+  450  ll
+  451  more flop4avx2.s
+  452  ll
+  453  vi flop4avx2.cpp
+  454  icc -O3 flop4avx2.cpp -o flop
+  455  vi flop4avx2.cpp
+  456  icc -O3 flop4avx2.cpp -o flop
+  457  vi flop4avx2.cpp
+  458  icc -O3 flop4avx2.cpp -o flop
+  459  ./flop
+  460  ./flop 5
+  461  ./flop 5|more
+  462  vi flop4avx2.cpp
+  463  icc -O3 flop4avx2.cpp -o flop
+  464  vi flop4avx2.cpp
+  465  icc -O3 flop4avx2.cpp -o flop
+  466  ./flop 5|more
+  467  vi flop4avx2.cpp
+  468  icc -O3 flop4avx2.cpp -o flop
+  469  ./flop 5|more
+  470  ./flop 5
+  471  pwd
+  472  ll
+  473  ls
+  474  find .|grep avx
+  475  cd flop
+  476  ll
+  477  more flop4avx2.cpp
+  478   
+  479  ls -lrt
+  480  g++ flop4avx2.cpp -O -o flop
+  481  icc
+  482  vi flop4avx2.cpp; g++ flop4avx2.cpp -O -o flop
+  483  cd
+  484  ls
+  485  cd /usr/include
+  486  ll
+  487  grep mm256 *.h
+  488  grep mm256 */*.h
+  489  grep mm256 */*/*.h
+  490  cd /opt/intel
+  491  ll
+  492  cd
+  493  cd solveur/
+  494  ll
+  495  more jrun 
+  496  cd /opt/intel/compilers_and_libraries/linux
+  497  ll
+  498  cd include/
+  499  ll
+  500  more  ieee_arithmetic.f90
+  501        
+  502  ll
+  503  grep mm256 *.h
+  504  gcc -E dvec.h|more
+  505     
+  506  grep mm256 *.h
+  507  vi dvec.h
+  508  ll fvec
+  509  ll fvec.h 
+  510  gcc -E dvec.h -I.|more
+  511  g++ -E dvec.h -I.|more
+  512  g++ -E dvec.h -I.|grep add
+  513  g++ -E dvec.h -I.|less
+  514  cd
+  515  history
+  516  cd flop
+  517  ll
+  518  more jrun
+  519  more flop3peak.cpp 
+  520  icc
+  521  mmore ~/solveur/jrun
+  522  more ~/solveur/jrun 
+  523  cp ~/solveur/jrun  jrun3
+  524  more jrun
+  525  vi jrun3
+  526  ll
+  527  more  flop4avx2.cpp
+  528  vi jrun3 
+  529  ./jrun3
+  530  vi flop4avx2.cpp
+  531  ./jrun3
+  532  vi flop4avx2.cpp
+  533  cp ~/solveur/jone .
+  534  vi jone
+  535  ./jone
+  536  cp ../solveur/jsleep .
+  537  ./jone
+  538  squeue 
+  539  ssh o186i126
+  540  squeue 
+  541  ssh o186i126
+  542  top
+  543  ./jmany
+  544  exit
+  545  cd flop
+  546  ./flop 1
+  547  more jrun
+  548  more jrun3
+  549  . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
+  550  icc -O3 flop4avx2.cpp -o flop
+  551  vi flop4avx2.cpp; icc -O3 flop4avx2.cpp -o flop
+  552  ./flop 10
+  553  ./flop 10|more
+  554  vi flop4avx2.cpp; icc -O3 flop4avx2.cpp -o flop
+  555  ./flop 10|more
+  556  pwd
+  557  ./flop 10
+  558  vi jone
+  559  ./jone
+  560  squeue 
+  561  ./flop 10
+  562  vi jmany
+  563  chmod 777 jmany
+  564  top
+  565  squeue 
+  566  ssh o186i126
+  567  ./jmany
+  568  vi jmany
+  569  ./jmany
+  570  vi jmany
+  571  vi flop4avx2.cpp
+  572  cd flop
+  573  ./flop 10
+  574  more /proc/cpuinfo 
+  575  ./flop 10
+  576  cd ..
+  577  ll
+  578  cd solveur/
+  579  more jrun 
+  580  cd ..
+  581  cd total/
+  582  ll
+  583  cd ddn
+  584  ll
+  585  more jrun
+  586  more jrun*
+  587  cd
+  588  cd flop
+  589  ./jmany 
+  590  more jmany
+  591  vi jmany
+  592  ./jmany
+  593  top
+  594  cd flop
+  595  more jone 
+  596  tail his
+  597   g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2  -o flop
+  598  ./flop 1
+  599  ./flop 1 2.6
+  600  vi jrun3
+  601  ./jrun3
+  602  ls -lrt
+  603  vi op4.170208180920.o186i056.flop
+  604  history
+  605  g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2  -o flop
+  606  cp flop3avx2.cpp flop5.cpp
+  607  vi flop5.cpp
+  608  vi jinline1
+  609  chmod 777 jinline1 
+  610  ./jinline1 
+  611  chmod 777 jinline1 
+  612  more jrun3
+  613  vi jinline1
+  614  ./jinline1 
+  615  ./jinline1  >jinline1.out
+  616  vi flop5.cpp 
+  617  g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2  -o flop
+  618  ./jrun3
+  619  ll
+  620  vi op4.170208181827.o186i056.flop
+  621  ll
+  622  g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2  -o flop
+  623  g++ -mfma  -std=c++11  flop3avx2.cpp -O4  -fno-inline -march=core-avx2  -S
+  624  ll
+  625  ls -lrt
+  626  more flop3avx2.s
+  627  g++ -mfma  -std=c++11  flop5.cpp -O4  -fno-inline -march=core-avx2  -S
+  628  more flop3avx2.s
+  629  g++ -mfma  -std=c++11  flop5.cpp -O4  -fno-inline -march=core-avx2  -S
+  630  more flop5.s
+  631  g++ -mfma  -std=c++11  flop5.cpp -O4  -fno-inline -march=core-avx2  -o flop
+  632  ./jrun3
+  633  ll
+  634  vi op4.170208182130.o186i056.flop
+  635  vi jrun3
+  636  ./jrun3
+  637  g++ -mfma  -std=c++11  flop6.cpp -O4  -fno-inline -march=core-avx2  -o flop
+  638  cp flop5.cpp flop6.cpp
+  639  vi flop6.cpp
+  640  cd flop
+  641  ./jrun3
+  642  killall flop
+  643  vi jrun3
+  644  ./jrun3
+  645  ls -lrt
+  646  vi op4.170208202616.o186i126
+  647  vi op4.170208202616.o186i126.flop6 
+  648  history
+  649  history >>his
+  650  exit
+  651  cd flop
+  652  vi jrun3
+  653  ./jrun3
+  654  ls -lrt
+  655  vi op4.170208203138.o186i126.flop6
+  656  grep g++ his
+  657  g++ -S -fverbose-asm -g -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=core-avx2
+  658  more flop6.s
+  659  g++  -g -O3 -mfma  -std=c++11  flop6.s   -fno-inline -march=core-avx2 -o flop6
+  660  ./jrun3
+  661  ls -lrt
+  662  more op4.170208203634.o186i126.flop6
+  663  ll
+  664  objdump -d flop6 
+  665  objdump -d flop6 |more
+  666  g++ -mfma  -std=c++11  flop6.s   -fno-inline -march=core-avx2 -o flop6
+  667  objdump -d flop6 
+  668  objdump -d flop6 |more
+  669  history >> his
+  670  cp flop6.s flop6.s.ori
+  671  vi flop6.ori
+  672  vi flop6.s
+  673  g++ -mfma  -std=c++11  flop6.s   -fno-inline -march=core-avx2 -o flop6
+  674  ./jrun3
+  675  ls -lrt
+  676  vi op4.170208204649.o186i126.flop6
+  677  objdump -d flop6|more
+  678  vi flop6.s
+  679  g++ -mfma  -std=c++11  flopsub6.s   -fno-inline -march=core-avx2 -o flop6
+  680  objdump -d flop6|more
+  681  vi jrun3
+  682  ./jrun3
+  683  l -lrt
+  684  ls -lrt
+  685  more op4.170208205140.o186i126.flop6
+  686  cp flop6.s flop.s.ok1
+  687  vi flop6.s
+  688  g++ -mfma  -std=c++11  flop6.s   -fno-inline -march=core-avx2 -o flop6
+  689  vi flop6.c
+  690  vi flop6.cpp 
+  691  vi flopsub6.cpp 
+  692  g++ -S -fverbose-asm -g -O3 -mfma  -std=c++11  flop6sub.cpp   -fno-inline -march=core-avx2
+  693  g++ -S -fverbose-asm -g -O3 -mfma  -std=c++11  flopsub6.cpp   -fno-inline -march=core-avx2
+  694  more flopsub6.s
+  695  vi flop6.cpp 
+  696  g++ flop6.cpp -O -o flop6
+  697  vi flop6.cpp 
+  698  more flopssub6.cpp
+  699  more flopsub6.cpp
+  700  vi flop6.cpp 
+  701  g++ -S -fverbose-asm -g -O3 -mfma  -std=c++11  flopsub6.cpp   -fno-inline -march=core-avx2
+  702  g++ flop6.cpp -O -o flop6
+  703  g++ flop6.cpp -O -o flop6 flopsub6.s
+  704  .:flop6 1 2.6
+  705  ./flop6 1 2.6
+  706  vi flopsub6.s
+  707  g++ flop6.cpp -O -o flop6 flopsub6.s
+  708  ./jrun3
+  709  ls -lrt
+  710  vi op4.170208211942.o186i126.flop6
+  711  vi flop6.cpp
+  712  g++ flop6.cpp -O -o flop6 flopsub6.s
+  713  ./jrun3
+  714  ls -lrt
+  715  vi op4.170208212116.o186i126.flop6
+  716  cp flopsub6.s flopsub6.s.ok1
+  717  vi flopsub6.s
+  718  g++ flop6.cpp -O -o flop6 flopsub6.s
+  719  ./jrun3
+  720  ls -lrt *
+  721  ls -lrt 
+  722  vi op4.170208212905.o186i126.flop6
+  723  more op2.170208212905.o186i126.flop6
+  724  bc -l
+  725  ls -lrt op4*
+  726  vi op4.170208212905.o186i126.flop6
+  727  mkdir FOR_HANA_JEAN
+  728  ls -lrt
+  729  cp op1.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 op4.170208212905.o186i126.flop6 FOR_HANA_JEAN/
+  730  mv FOR_HANA_JEAN/ ..
+  731  cd ../FOR_HANA_JEAN/
+  732  ll
+  733  squeue 
+  734  ssh o186i056
+  735  cd
+  736  ls -lrt
+  737  cd PHD
+  738  ll
+  739  cd oprofile/
+  740  ll
+  741  mor objdump_parsing.cpp 
+  742  more objdump_parsing.cpp 
+  743  grep g++ his
+  744  cd
+  745  cd flop
+  746  more flop5
+  747  more flop5.cpp 
+  748  killall flop6
+  749  top
+  750  killall flop
+  751  squeue 
+  752  cd
+  753  cd PHD
+  754  ls
+  755  cd oprofile/
+  756  ll
+  757  more objdump_parsing.cpp
+  758   
+  759  ll -lrt     ../../flop
+  760  cp    ../../flop/*.170208212905.o186i126.flop6 .
+  761  ll
+  762  more op2.170208212905.o186i126.flop6 
+  763  ll
+  764  more op2.170208212905.o186i126.flop6 
+  765  ll
+  766  more OBJ*
+  767  ll
+  768  vi objdump_parsing.cpp
+  769  grep g++ his
+  770  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  771  vi objdump_parsing.cpp
+  772  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  773  vi objdump_parsing.cpp
+  774  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  775  vi objdump_parsing.cpp
+  776  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  777  vi objdump_parsing.cpp
+  778  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  779  ./p OBJ.170208212905.o186i126.flop6 |more
+  780  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  781  ./p OBJ.170208212905.o186i126.flop6 |more
+  782  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  783  ./p OBJ.170208212905.o186i126.flop6 |more
+  784  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  785  ./p OBJ.170208212905.o186i126.flop6 |more
+  786  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  787  ./p OBJ.170208212905.o186i126.flop6 |more
+  788  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  789  ./p OBJ.170208212905.o186i126.flop6 |more
+  790  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  791  ./p OBJ.170208212905.o186i126.flop6 |more
+  792  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  793  ./p OBJ.170208212905.o186i126.flop6 |more
+  794  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  795  ./p OBJ.170208212905.o186i126.flop6 |more
+  796  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  797  ./p OBJ.170208212905.o186i126.flop6 |more
+  798  ll
+  799  cd ..
+  800  cd C++/
+  801  ll
+  802  more p1.cpp
+  803  more p?.cpp
+  804  cd
+  805  cd flop
+  806  more flopsub6.s
+  807   
+  808  ls
+  809  grep g++ his
+  810  history|grep flop6
+  811  history|grep flop5
+  812   g++ -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=core-avx2
+  813   g++ -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=core-avx2 flopsub6.s -o flop
+  814   g++ -O3 -mfma  -std=c++11  flop6.cpp   -fno-inline -march=core-avx2 -S
+  815  more flop6.s
+  816   
+  817  ll
+  818  cd
+  819  cd PHD/
+  820  ll
+  821  cd oprofile/
+  822  ll
+  823  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  824  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  825  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  826  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  827  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  828  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  829  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  830  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  831  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  832  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  833  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  834  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  835     
+  836  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  837  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  838  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  839  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  840  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  841  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  842  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  843  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+  844  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  845  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+  846  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  847  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+  848  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  849       
+  850  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+  851  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  852  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+  853  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  854  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+  855  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  856  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+  857  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  858  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:214
+  859  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  860  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  861  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  862  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  863  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  864  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  865  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  866  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  867  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  868  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  869  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  870  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  871  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  872  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  873  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  874  rm .vimfo
+  875  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  876  rm .*
+  877  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  878  quota
+  879  ll
+  880  ll >toto
+  881  rm toto
+  882  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  883  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:261
+  884  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  885  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:261
+  886  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  887  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p:261
+  888  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  889  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  890  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |mo
+  891  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  892  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  893  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  894  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  895  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  896  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  897  ll
+  898  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  899  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  900  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  901  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  902  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  903  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  904  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  905  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  906  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  907  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  908  bc -l
+  909  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  910  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  911  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  912  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  913  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  914  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  915  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  916  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  917  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  918  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  919  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  920  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  921  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  922  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  923  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  924  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  925  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  926  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  927  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  928  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  929  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  930  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  931  history >>his
+  932  grep mkl his
+  933   ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  934  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  935   ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  936  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  937  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  938  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  939  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  940  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  941  ./p OBJ.170208212905.o186i126.flop6 op2.170208212905.o186i126.flop6 |more
+  942   ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  943  ll
+  944  cd 
+  945  ls -lrt
+  946  cd jacobi
+  947  ll
+  948  more  op4.161129190622.o186i148.202.102.102
+  949  ll
+  950  more op4.161129184954.o186i148.2002.1002.1002
+  951  cp *.161129184954.* ~/PHD/oprofile/
+  952  cd ~/PHD/oprofile/
+  953  ./p OBJ.161129184954.* op2.161129184954.*|more
+  954  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  955  ./p OBJ.161129184954.* op2.161129184954.*|more
+  956  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  957  ./p OBJ.161129184954.* op2.161129184954.*|more
+  958  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  959  ./p OBJ.161129184954.* op2.161129184954.*|more
+  960  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  961  ./p OBJ.161129184954.* op2.161129184954.*|more
+  962  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  963  ./p OBJ.161129184954.* op2.161129184954.*|more
+  964  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  965  ./p OBJ.161129184954.* op2.161129184954.*|more
+  966  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  967  ./p OBJ.161129184954.* op2.161129184954.*|more
+  968  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  969  grep mkl his
+  970  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  971  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  972  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  973  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  974  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  975                    
+  976  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  977  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  978  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  979  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  980  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |cut -c 32-9999 |more
+  981  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |cut -c 36-9999 |more
+  982  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |cut -c 33-9999 |more
+  983  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |cut -c 33-9999 |awk '{print $1}'|more
+  984  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |cut -c 33-9999 |awk '{print $1}'|sort
+  985  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |cut -c 33-9999 |awk '{print $1}'|grep '^j'|sort -u
+  986  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  987  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |cut -c 33-9999 |awk '{print $1}'|sort
+  988  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  989  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |cut -c 33-9999 |awk '{print $1}'|sort
+  990  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  991  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  992  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  993  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  994  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  995  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  996  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  997  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+  998  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+  999  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+ 1000  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1001  cd PHD
+ 1002  cd oprofile/
+ 1003  ll
+ 1004  rm .*
+ 1005  ll
+ 1006  rm .*
+ 1007  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1008  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+ 1009  vi objdump_parsing.cpp;g++ -std=c++11   objdump_parsing.cpp  -O -o p
+ 1010  ./p OBJmkl op2.170204225143.o190i211.3D_70_ok |more
+ 1011  history >>his
