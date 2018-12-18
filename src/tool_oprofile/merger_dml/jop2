@@ -1,0 +1,4 @@
+sudo opcontrol --dump
+T=$(date +%y%m%d%H%M%S).$(uname -n)
+opreport     >op1.$T
+opreport -d  >op2.$T
