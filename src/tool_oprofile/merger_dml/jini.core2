@@ -1,0 +1,19 @@
+sudo opcontrol --shutdown
+sudo opcontrol --init
+sudo opcontrol --reset
+
+
+CPU=$(sudo opcontrol --list-events|grep cpu_clk_unhalted|awk '{print $1}')
+if [[ $CPU == "cpu_clk_unhalted:" ]]; then
+    echo "lower case detected"
+    sudo opcontrol --setup --no-vmlinux --event=cpu_clk_unhalted:10000000 --event=inst_retired:10000000
+fi
+CPU=$(sudo opcontrol --list-events|grep CPU_CLK_UNHALTED|awk '{print $1}')
+if [[ $CPU == "CPU_CLK_UNHALTED:" ]]; then
+    echo "UPPER CASE detected"
+    sudo opcontrol --setup --no-vmlinux --event=CPU_CLK_UNHALTED:1000000 --event=INST_RETIRED:1000000
+fi
+
+sudo opcontrol --save=junk
+sudo opcontrol --start
+
