@@ -25,7 +25,7 @@ import argparse
 import logging
 import matplotlib, os
 
-from colour import Color #https://github.com/vaab/colour used to generate the color gradient
+from colour import Color  # https://github.com/vaab/colour used to generate the color gradient
 
 from math import log, sqrt, pow, fabs
 
@@ -34,14 +34,15 @@ from math import log, sqrt, pow, fabs
 # --------------------------------------------------------------------------------------------
 
 _fileLog_mem = ""  # Argument parsing
-_screen = True # is screen re
+_screen = True  # is screen re
 _is_cache = False  # Argument
 _is_annotate = False  # Argument
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 # source https://en.wikichip.org/wiki/intel/xeon_gold/6148#Cache
-_cache_size = [32000, 1000000, 28000000]
+_cache_size = [32000, 256000, 32000000]  # ARM cn9980
+_cache_size = [32000, 1000000, 28000000]  # INTEL
 _cache_label = ["L1", "L2", "L3"]
 _cache_hauteur = [50, 70, 70]  # hauteur d'affichage du label en GB/s
 
@@ -73,7 +74,6 @@ def main():
     global _title
     is_screen_available()
 
-
     # -- PARSING COMMAND LINE --
     parse_parameter()
 
@@ -92,7 +92,7 @@ def main():
         if (i >= 7):
             cr = "\n"
             i = 0
-        res += word + " " +  cr
+        res += word + " " + cr
         i = i + 1
     _title = res
 
@@ -101,8 +101,6 @@ def main():
         log_file_array = np.loadtxt(file_txt[:-1], delimiter=',', dtype='float', comments='#')
     else:
         log_file_array = np.loadtxt(file_txt, delimiter=',', dtype='float', comments='#')
-
-
 
     # -- PARSING LOG FILE --
 
@@ -128,8 +126,7 @@ def main():
 
     # Color gradient to generate a different color for each stride
     gradient = list(Color("blue").range_to(Color("red"), len(_stride_array)))
-    COLOR = [ C.hex_l for C in gradient]
-
+    COLOR = [C.hex_l for C in gradient]
 
     # for each stride we draw a curve
     for i in range(0, nb_of_stride):
@@ -150,7 +147,6 @@ def main():
             #                      bbox=dict(boxstyle="round", fc="w"),
             #                      arrowprops=dict(arrowstyle="->"))
             # annot.set_visible(False)
-
 
     ## -- DRAWING VERTICAL LINES FOR CACHE L1 L2 L3 --
     if _is_cache:
@@ -189,11 +185,8 @@ def main():
 
     # No negatives values
     plt.ylim(ymin=0)
-    x1,x2,y1,y2 = plt.axis()
-    plt.axis((x1,x2,0,3000))
-
-
-
+    x1, x2, y1, y2 = plt.axis()
+    plt.axis((x1, x2, 0, 800))
 
     # Output: graphical or png file ?
     if _screen:
@@ -203,8 +196,6 @@ def main():
     else:
         logging.info(" Output = " + _path_image_file)
         plt.savefig(str(_path_image_file))
-
-
 
 
 # --------------------------------------------------------------------------------------------
@@ -272,6 +263,7 @@ def str2bool(v):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
 
+
 # https://stackoverflow.com/questions/7908636/possible-to-make-labels-appear-when-hovering-over-a-point-in-matplotlib
 def update_annot(ind, sc, stride):
     global names
@@ -280,6 +272,7 @@ def update_annot(ind, sc, stride):
     annot.xy = pos
     annot.set_text(stride)
     annot.get_bbox_patch().set_alpha(0.4)
+
 
 def hover(event):
     global _fig
@@ -297,12 +290,10 @@ def hover(event):
                 # update_annot(ind, sc, str(_stride_array[i]))
                 # annot.set_visible(True)
                 # _fig.canvas.draw_idle()
-            # else:
-            #     if vis:
-            #         annot.set_visible(False)
-            #         _fig.canvas.draw_idle()
-
-
+                # else:
+                #     if vis:
+                #         annot.set_visible(False)
+                #         _fig.canvas.draw_idle()
 
 
 if __name__ == "__main__":
