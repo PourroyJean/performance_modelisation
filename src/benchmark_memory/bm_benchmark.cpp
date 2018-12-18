@@ -44,7 +44,6 @@ BM_DATA_TYPE sum_read_unroll2(bm_parameters *p, THEINT max_index, int step, int 
             p1 += xstep;
             sum += *p2;
             p2 += xstep;
-//            sum += 1; //TODO remove
         }
     }
 //    exit (-1);
