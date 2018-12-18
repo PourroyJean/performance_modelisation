@@ -3,7 +3,7 @@
 file(GLOB SOURCES "*.cxx")
 file(GLOB COMMON_SOURCES "../common" "*.cxx")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=skylake-avx512 ")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=skylake-avx512")
 
 
 option(OPT_BUILD_MPI "Build the benchmark with MPI" OFF)
