@@ -34,13 +34,16 @@ void oprofile_print_resume() {
     cout << "======================== OPROFILE FILE WITH > 0.1 CYCLES ======================================" << endl
          << "===============================================================================================" << endl;
 
+    oprofile_line * current_line = NULL;
     for (int line = 0; line < oprofile_file.size(); line++) {
-        if (oprofile_file[line].type == oprofile_line::Type::NO) {
-            cout << "_0_ " << oprofile_file[line].line_original_string << endl;
+        current_line = & oprofile_file[line];
+
+        if (current_line->type == oprofile_line::Type::NO) {
+            cout << "_0_ " << current_line->line_original_string << endl;
         }
-        if (oprofile_file[line].type == oprofile_line::Type::FUNC) {
-            if (oprofile_file[line].event_cpu_clk > 0.01)
-                cout << "_1_ " << oprofile_file[line].line_original_string << endl;
+        if (current_line->type == oprofile_line::Type::FUNC) {
+            if (current_line->event_cpu_clk > 0.01)
+                cout << "_1_ " << current_line->line_original_string << endl;
         }
     }
     cout << "==============================================================================================="
@@ -62,27 +65,30 @@ int main(int argc, char *argv[]) {
 
     update_objdump_counters();
 
-
-
     // we have all data now ; we will reconstruct the profile in same order
     oprofile_print_resume();
 
-    // we have to present the hot spots in same order as op2
+    cout << endl << endl;
+
+//    cout << oprofile_file[22].line_original_string << endl;
+//    cout << oprofile_file[22].event_cpu_clk  << endl;
+//    cout << oprofile_file[22].event_inst_retired  << endl;
+//    cout << oprofile_file[22].memory_address  << endl;
 
 
-
-
+    //OPROFILE is already sorted by % of the execution time
     for (int line = 0; line < oprofile_file.size(); line++) {
+        oprofile_line * current_line = & oprofile_file[line];
 
-        vector<string> v{split(oprofile_file[line].line_original_string, ' ')};
-        ui64 memory_address = oprofile_file[line].memory_address;
+        vector<string> v{split(current_line->line_original_string, ' ')};
+        ui64 memory_address = current_line->memory_address;
         int in_objdump = objdump_address[memory_address];
 
 
 
         // we dump the disassembly of all functions consuming more than 0.1% of total
-        if (oprofile_file[line].type != oprofile_line::Type::FUNC
-            || oprofile_file[line].event_cpu_clk_percentage <= 0.1
+        if (current_line->type != oprofile_line::Type::FUNC
+            || current_line->event_cpu_clk_percentage <= 0.1
             || in_objdump <= 0) {
             continue;
         }
@@ -91,13 +97,13 @@ int main(int argc, char *argv[]) {
 
 
 
-//        cout << "_2_ " << memory_address << " " << in_objdump << " " << v[0] << " " << oprofile_file[line].line_original_string << endl;
+//        cout << "_2_ " << memory_address << " " << in_objdump << " " << v[0] << " " << current_line->line_original_string << endl;
         cout << endl
              << "====================================================================================================================================================\n"
-             << "_FUNCTION_ANALYSIS_ " << oprofile_file[line].line_original_string << endl
+             << "_FUNCTION_ANALYSIS_ from the binary (" << current_line->m_binary_name << ") hot spot from the function ( " << current_line->m_function_name << " )" << endl
              << "====================================================================================================================================================\n"
-             << "           SUM*4        SUM*3        SUM*2          CYCLES       INSTS      ADDRESS     code HEXA               disassembly\n"
-             << "---------------------------------------------------------------------------------------------------------------------------------------"
+             << "           SUM*4        SUM*3        SUM*2          CYCLES       INSTS      ADDRESS     code HEXA               disassembly                         \n"
+             << "----------------------------------------------------------------------------------------------------------------------------------------------------"
              << endl;
 
         for (int li = in_objdump - 1;; li++) {
@@ -142,40 +148,40 @@ int main(int argc, char *argv[]) {
 
 
                 //Detect if its a jump but not a JMPQ one.
-                if (instr[0] == 'j' &&v[0].compare("jmpq") != 0) {
+                if (instr[0] == 'j' && v[0].compare("jmpq") != 0) {
 
-                        ui64 add = stoullhexa(v[1]);
+                    ui64 add = stoullhexa(v[1]);
 
 
-                        ui64 diff = myadd - add;
-                        if (diff < 100000ull) { // backward loop
-                            // we will sum the cycles and instructions of the loop
-                            ui64 sumcy = 0;
-                            ui64 sumin = 0;
-                            int count = 0;
-                            for (int li2 = li;; li2--) {
-                                ui64 event_cpu_clk = objdump_file[li2].event_cpu_clk;
-                                ui64 event_inst_retired = objdump_file[li2].event_inst_retired;
-                                sumcy += event_cpu_clk;
-                                sumin += event_inst_retired;
-                                count++;
-                                ui64 addt = objdump_file[li2].address;
-                                if (addt == add)break;
-                            }
-                            double IPC = double(sumin) / double(sumcy);
-                            double cyL = double(count) / IPC;
-                            cout
-                                    << "----------------------------------------------------------------------------------------------------------------"
-                                    << endl;
-                            cout << "_7_ LOOP from " << std::hex << myadd << " to " << std::hex << add
-                                 << " size= " << std::dec << diff << " sum(cycles)= "
-                                 << sumcy << " sum(inst)= " << sumin << " #inst= " << count << " IPC= "
-                                 << IPC << " cycles/LOOP= " << cyL << endl;
-                            cout
-                                    << "----------------------------------------------------------------------------------------------------------------"
-                                    << endl;
+                    ui64 diff = myadd - add;
+                    if (diff < 100000ull) { // backward loop
+                        // we will sum the cycles and instructions of the loop
+                        ui64 sumcy = 0;
+                        ui64 sumin = 0;
+                        int count = 0;
+                        for (int li2 = li;; li2--) {
+                            ui64 event_cpu_clk = objdump_file[li2].event_cpu_clk;
+                            ui64 event_inst_retired = objdump_file[li2].event_inst_retired;
+                            sumcy += event_cpu_clk;
+                            sumin += event_inst_retired;
+                            count++;
+                            ui64 addt = objdump_file[li2].address;
+                            if (addt == add)break;
                         }
+                        double IPC = double(sumin) / double(sumcy);
+                        double cyL = double(count) / IPC;
+                        cout
+                                << "----------------------------------------------------------------------------------------------------------------"
+                                << endl;
+                        cout << "_7_ LOOP from " << std::hex << myadd << " to " << std::hex << add
+                             << " size= " << std::dec << diff << " sum(cycles)= "
+                             << sumcy << " sum(inst)= " << sumin << " #inst= " << count << " IPC= "
+                             << IPC << " cycles/LOOP= " << cyL << endl;
+                        cout
+                                << "----------------------------------------------------------------------------------------------------------------"
+                                << endl;
                     }
+                }
             }
         }
 

@@ -29,6 +29,12 @@ oprofile_line::oprofile_line(string line) {
     static_line_counter++;
     line_original_string = line;
 
+    //Example: 00402961 20        0.6553  23        0.3100  assembly                 aloop
+    vector<string> v{split(line, ' ')};
+    m_binary_name = v[v.size() - 2];
+
+
+
     if (len_str = line.length() <= 0)
         return;
 
@@ -36,9 +42,17 @@ oprofile_line::oprofile_line(string line) {
     if (line[0] == '0') {
         type = Type::FUNC;
         static_line_of_last_func = static_line_counter;
+        for (int i = 0; i < v.size(); ++i) {
+            cout << v[i] << endl;
+
+        }
+        m_function_name = v[v.size() - 1];
+
     }
 
-        //If line begins with ' ' then its an instruction line counter
+
+
+    //If line begins with ' ' then its an instruction line counter
     else if (line[0] == ' ') { // instruction
         type = Type::INST;
         line_fname = static_line_of_last_func;
@@ -91,9 +105,8 @@ void oprofile_line::get_address() {
 
 void oprofile_line::get_event_counters() {
     vector<string> v{split(line_original_string, ' ')};
-    event_cpu_clk               = stol(v[1]);
-    event_cpu_clk_percentage    = stof(v[2]);
-    event_inst_retired          = stol(v[3]);
-//    cout << "JANNOU " << event_cpu_clk << endl;
+    event_cpu_clk = stol(v[1]);
+    event_cpu_clk_percentage = stof(v[2]);
+    event_inst_retired = stol(v[3]);
 }
 
