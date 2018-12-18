@@ -8,6 +8,11 @@ CODE=/nfs/pourroy/code/THESE/performance_modelisation/build/assembly
 
 /nfs/pourroy/code/THESE/performance_modelisation/src/tool_oprofile/merger_dml/jini.core2
 
+PARSER=~dml/TOOLS/objdump_parsing
+PARSER=/nfs/pourroy/code/THESE/performance_modelisation/build/bin/tool_oprofile/merger
+
+
+
 #for i in {0..39}; do
 #   numactl --physcpubind=$i ./test2&
 #done
@@ -21,4 +26,4 @@ T=test
 opreport     >op1.$T
 opreport -d  >op2.$T
 objdump -d $CODE  > OBJ
-~dml/TOOLS/objdump_parsing OBJ op2.$T | tee op3.$T
+$PARSER OBJ op2.$T | tee op3.$T

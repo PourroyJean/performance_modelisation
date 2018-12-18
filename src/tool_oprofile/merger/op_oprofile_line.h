@@ -20,17 +20,23 @@ public:
     oprofile_line(string);
 
     string line_original_string;
+    string m_function_name; //Only if its a function
+    string m_binary_name;
+
 
     void get_event_counters();
+
     void get_address();
 
-    enum class Type {NO, FUNC, INST};
+    enum class Type {
+        NO, FUNC, INST
+    };
     Type type;                              //0=NO,  1=FUNC : 2=INST
     ui64 memory_address;                    //Memory address of the instruction
 
-    ui64   event_cpu_clk;                     //Clock cycles when not halted
+    ui64 event_cpu_clk;                     //Clock cycles when not halted
     double event_cpu_clk_percentage;          //Clock cycles when not halted
-    ui64   event_inst_retired;                //number of instructions retired
+    ui64 event_inst_retired;                //number of instructions retired
 
 private:
     int cur_line;
@@ -46,7 +52,7 @@ extern vector<oprofile_line> oprofile_file;
 
 // map address of instructions of OBJECT FILE to line inside oprofile_file
 // used for branch instruction to recover the line of the branch
-extern std::unordered_map<ui64,int> oprofile_address;
+extern std::unordered_map<ui64, int> oprofile_address;
 
 
 #endif //PERFORMANCE_MODELISATION_OPROFILE_LINE_H
