@@ -97,7 +97,7 @@ int main(int argc, char *argv[]) {
         fflush(stdout);
     }
 
-    return;
+    return 0;
 }
 
 /* +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ */
