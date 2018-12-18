@@ -137,22 +137,38 @@ test_mpi_L3_scaling_2 (){
 #Processors:      ( 0 80 ) ( 1 81 ) ( 2 82 ) ...
     export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19"
     export PIN_CORE_LIST="0 1 2 3 "
-    large_page=" "  #TO BET SET
-    large_page="--hugepages"  #TO BET SET
+    export PIN_CORE_LIST="0 1,2,3,4 5,6,7,8,9 10,11,12,13,14 15,16,17,18,19"
+
+
 
     core_list=   #set to empty
-    TOTAL_AVAILABLE=15 #best performance
-    TOTAL_AVAILABLE=0.8 #L3 size
+    mat_size=1 #L3 size
+
     for core_test in $PIN_CORE_LIST  ; do
         core_list="$core_list$core_test"
         export I_MPI_PIN_PROCESSOR_LIST="$core_list"
         nb_core=$((`echo $core_list | grep -o "," | wc -l` + 1))
 
-        cmd_chunk="bc -l <<< '$TOTAL_AVAILABLE/$nb_core'"
+        STRIDE=64
+        UNROLL=1
+        MATRIX_SIZE=3000
+        STEP_LOG=0
+        HUGEPAGES=
+        STRIDES=64 #8,16,32,64,128,256,1024
+        MODE=special
+        MEASURE=10
+        EXE="./bin/benchmark_memory/bm_mpi"
+
+        cmd_chunk="bc -l <<< '$mat_size/$nb_core'"
         CHUNK_PER_PROCESS=`eval $cmd_chunk`
 
-        band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --type read --cacheline 64 --prefix l3_scaling_2  --output out  --steplog 0 --matrixsize $CHUNK_PER_PROCESS --measure 100 --mode special --unroll 1 --stride 8 $large_page | grep Bandwidth `
-#       mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --type read --cacheline 64 --prefix out_stride_LONG  --output out  --steplog 0.01 --minlog 5 --matrixsize 15 --measure 20 --mode special --unroll 16 --stride  8
+        band=`mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $CHUNK_PER_PROCESS --measure $MEASURE --steplog $LOG $HUGEPAGES |  grep "out K" | awk '{printf $5 ; printf "MB ";  printf $7}'`
+#        mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $CHUNK_PER_PROCESS --measure $MEASURE --steplog $LOG $HUGEPAGES
+#        mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $mat_size --measure $MEASURE --steplog $LOG $HUGEPAGES
+#        echo $res
+#        band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --type read --cacheline 64 --prefix l3_scaling_2  --output out  --steplog 0 --matrixsize $CHUNK_PER_PROCESS --measure 100 --mode special --unroll 1 --stride 8 $large_page | grep Bandwidth `
+#        mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES
+
         band_tot=`echo $band | awk -v nbc=$nb_core '{ print $2*nbc }'`
 #        printf "($nb_core) = "
         printf "$nb_core "
@@ -162,6 +178,50 @@ test_mpi_L3_scaling_2 (){
     done
 }
 
+
+test_mpi_sharing_cache (){
+    export PIN_CORE_LIST="0 1,2,3,4 5,6,7,8,9 10,11,12,13,14 15,16,17,18,19"
+    export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19"
+
+
+    LOG=0  #5 = 780 KiB   3.5 = 24 KiB
+    EXE="./bin/benchmark_memory/bm_mpi"
+    check_bin $EXE
+
+    STRIDE=64
+    UNROLL=8
+    MATRIX_SIZE=28
+    HUGEPAGES=#"--hugepages"
+    STRIDES=64 #8,16,32,64,128,256,1024
+    MODE=special
+    MEASURE=5000
+
+perf_file="test_L3_perf_log"
+
+    printf  '%-8s %-12s %-13s %-15s %-15s\n' "Nb_core" "Data_set" "LLC_miss" "bandwidth_core"  "bandwidth_total"
+    for core_test in $PIN_CORE_LIST  ; do
+            core_list="$core_list$core_test"
+            export I_MPI_PIN_PROCESSOR_LIST="$core_list"
+            nb_core=$((`echo $core_list | grep -o "," | wc -l` + 1))
+
+            cmd_chunk="bc -l <<< '$MATRIX_SIZE/$nb_core'"
+            CHUNK_PER_PROCESS=`eval $cmd_chunk`
+#            echo $CHUNK_PER_PROCESS
+#            mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $CHUNK_PER_PROCESS --measure $MEASURE --steplog $LOG $HUGEPAGES
+#            res=`perf stat -B -e cache-misses,cycles:u,instructions:u,task-clock:u,dTLB-load-misses,iTLB-load-misses  -o $perf_file mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $CHUNK_PER_PROCESS --measure $MEASURE --steplog $LOG $HUGEPAGES |  grep "out K" | awk '{printf $5 ; printf "MB ";  printf $7}'`
+            res=`perf stat -B -e cache-misses,cycles:u,instructions:u,task-clock:u,dTLB-load-misses,iTLB-load-misses  -o $perf_file mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $CHUNK_PER_PROCESS --measure $MEASURE --steplog $LOG $HUGEPAGES |  grep "out K" | awk '{printf $5 ; printf "MB ";  printf $7}'`
+#            instructions=`cat  $perf_file | grep instructions:u |  awk '{print $1}' | tr -d ,`
+#            ipc=`cat  $perf_file | grep instructions:u |  awk '{print $4}'`
+            misses=`cat  $perf_file | grep cache-misses |  awk '{print $1}' | tr -d ,`
+#            dtlb_misses=`cat  $perf_file | grep dTLB-load-misses |  awk '{print $1}' | tr -d ,`
+            size=`echo $res | awk '{print $1}' | tr -d MB `
+            band=`echo $res | awk '{print $2}' `
+            band_tot=`echo $band | awk -v nbc=$nb_core '{ print $1*nbc }'`
+            printf  '%-8s %-12s %-13s %-15s %-15s\n' $nb_core $size $instructions $ipc $misses $dtlb_misses $band $band_tot
+              core_list="$core_list,"
+    done
+
+}
 
 
 # ---- USAGE ---
@@ -178,8 +238,8 @@ test_mpi_L3_scaling_2 (){
 test_mpi_hierarchy_specific_bench (){
 #Processors:      ( 0 80 ) ( 1 81 ) ( 2 82 ) ...
     export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19"
-    large_page=" "  #TO BET SET
     large_page="--hugepages"  #TO BET SET
+    large_page=" "  #TO BET SET
     core_list=   #set to empty
     TOTAL_AVAILABLE=15 #best performance
     TOTAL_AVAILABLE=0.8 #L3 size
@@ -194,8 +254,8 @@ test_mpi_hierarchy_specific_bench (){
         cmd_chunk="bc -l <<< '$TOTAL_AVAILABLE/$nb_core'"
 
 #        -- L1 --
-        CHUNK_PER_PROCESS=30
-        LOG=3.6 #31 KiB
+        CHUNK_PER_PROCESS=0.9
+        LOG=0 #31 KiB
         UNROLL=1
 
 #        -- L2 --
@@ -214,7 +274,7 @@ test_mpi_hierarchy_specific_bench (){
         UNROLL=1
         STRIDE=64
 
-        mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --type read --cacheline 64 --prefix test_mpi_cache_scaling  --output out  --log $LOG --matrixsize $CHUNK_PER_PROCESS --measure 10 --mode special --unroll $UNROLL --stride $STRIDE $large_page > res_tmp
+        mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --type read --cacheline 64 --prefix test_mpi_cache_scaling  --output out  --steplog $LOG --matrixsize $CHUNK_PER_PROCESS --measure 100 --mode special --unroll $UNROLL --stride $STRIDE $large_page > res_tmp
         band=`cat res_tmp | grep Bandwidth | awk '{print $2}'`
         data_size=`cat res_tmp | grep "_ test_mpi_cache_scaling K =" | awk '{print $5 $6}'`
 
@@ -259,9 +319,9 @@ test_mpi_hierarchy_conflict (){
         export I_MPI_PIN_PROCESSOR_LIST="$core_list"
         nb_core=$((`echo $core_list | grep -o "," | wc -l` + 1))
         printf "($nb_core) = "
-           mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES
-        continue
-# band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES | grep Bandwidth`
+#           mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES
+#        continue
+        band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES | grep Bandwidth`
         band_tot=`echo $band | awk -v nbc=$nb_core '{ print $2*nbc }'`
         echo "$band  -- Total = $band_tot -- Cores used : $I_MPI_PIN_PROCESSOR_LIST"
         core_list="$core_list,"
@@ -277,7 +337,6 @@ test_mpi_hierarchy_conflict (){
 #4        2.0          1652209634    0.32         167157535       713829       11.49            45.96
 #5        2.0          2709002229    0.29         217764439       894819       11.18            55.9
 #6        2.0          4936839736    0.31         266595033       1070054      9.85             59.1
-7
 test_mpi_scaling_core_or_dataset (){
 #    export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19"
 
@@ -285,23 +344,6 @@ test_mpi_scaling_core_or_dataset (){
     export PIN_CORE_LIST="0"
     export PIN_CORE_LIST="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19"
     export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19"
-
-
-
-
-#
-#    for core_test in $PIN_CORE_LIST  ; do
-#        core_list="$core_list$core_test"
-#        export I_MPI_PIN_PROCESSOR_LIST="$core_list"
-#        nb_core=$((`echo $core_list | grep -o "," | wc -l` + 1))
-#        printf "($nb_core) = "
-#           mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES
-#        continue
-## band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES | grep Bandwidth`
-#        band_tot=`echo $band | awk -v nbc=$nb_core '{ print $2*nbc }'`
-#        echo "$band  -- Total = $band_tot -- Cores used : $I_MPI_PIN_PROCESSOR_LIST"
-#        core_list="$core_list,"
-#    done
 
     LOG=0  #5 = 780 KiB   3.5 = 24 KiB
     EXE="./bin/benchmark_memory/bm_mpi"
@@ -422,19 +464,18 @@ test_prefetch_particular_stride (){
 test_particular_stride () {
 
 UNROLL=1    #1 is the best in memory
-    LOG_STEP=0.10
     HUGEPAGES=
     UNROLL_LIST="1 2 4 8 16 32 64"
-    STRIDES="73704 73728 77816 77824 81928 81920 86008 86016 90136 90112 94224 94208 98312 98304"
     STRIDES_GOOD="73704 77816 81928 86008 90136 94224 98312"
     STRIDES_BAD="73728 77824 81920 86016 90112 94208 98304"
     STRIDES="$STRIDES_GOOD $STRIDES_BAD"
+    STRIDES="73704 73728 77816 77824 81928 81920 86008 86016 90136 90112 94224 94208 98312 98304"
     UNROLL=8
     LOG=0  #5 = 780 KiB   3.5 = 24 KiB
     HUGEPAGES=
     MODE=special
     MEASURE=10
-    MAT_SIZE=500
+    MAT_SIZE=10000
     EXE="./bin/benchmark_memory/bm"
     check_bin $EXE
 
@@ -497,13 +538,15 @@ test_unrolling (){
 
 }
 
+
 #test_bw_staturation
 #test_mpi_bandwidth_saturation
 #test_mpi_L3_scaling
 #test_mpi_hierarchy_conflict
-test_mpi_scaling_core_or_dataset
+#test_mpi_scaling_core_or_dataset
 #test_mpi_hierarchy_specific_bench
 #test_mpi_L3_scaling_2
+test_mpi_sharing_cache
 #test_mpi_cache_scaling
 #test_bw_staturation
 #test_jean
@@ -512,12 +555,6 @@ test_mpi_scaling_core_or_dataset
 #test_prefetch_particular_stride
 #test_particular_stride
 #test_unrolling_special
-
-
-
-
-
-
 
 
 
