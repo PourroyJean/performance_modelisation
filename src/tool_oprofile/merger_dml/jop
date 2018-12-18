@@ -1,0 +1,4 @@
+sudo opcontrol --dump
+T=$1
+opreport     >op1.$T
+opreport -d  >op2.$T
