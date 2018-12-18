@@ -31,7 +31,6 @@
 // --------------------------------
 
 
-//TODO
 extern BM_DATA_TYPE *mat;  //THE matrix :)
 
 extern int mpi_rank;
