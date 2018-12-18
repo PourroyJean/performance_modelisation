@@ -52,3 +52,4 @@ public:
 };
 
 #endif //__kg_misc_H__
+
