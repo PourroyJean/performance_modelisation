@@ -87,10 +87,10 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
         do{
             uint64_t max_index  = (THEINT) (double) (exp(max_log * LOG10) + 0.5);
             if (max_index > m_MAT_NB_ELEM) {
-                max_log -= 0.01;
+                max_log -= 0.001;
                 break;
             }
-            max_log += 0.01;
+            max_log += 0.001;
 
         }while (true);
 
@@ -750,3 +750,5 @@ bm_parameters::~bm_parameters() {
         m_log_file.close();
     }
 }
+
+
