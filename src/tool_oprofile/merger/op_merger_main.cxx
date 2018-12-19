@@ -8,6 +8,9 @@
 #include "op_objdump_line.h"
 #include "op_oprofile_line.h"
 #include "op_misc.h"
+#include "InputFile.h"
+#include "Line_Objdump.h"
+#include "Line_Oprofile.h"
 
 
 using namespace std;
@@ -25,7 +28,6 @@ void update_objdump_counters() {
                 //cout << "_3_ ";for(auto n:v) cout << n << " "; cout << event_cpu_clk << " " << event_inst_retired << " " << in_objdump << " " << objdump_file[in_objdump].str << endl;
             }
         }
-
     }
 }
 
@@ -34,9 +36,9 @@ void oprofile_print_resume() {
     cout << "======================== OPROFILE FILE WITH > 0.1 CYCLES ======================================" << endl
          << "===============================================================================================" << endl;
 
-    oprofile_line * current_line = NULL;
+    oprofile_line *current_line = NULL;
     for (int line = 0; line < oprofile_file.size(); line++) {
-        current_line = & oprofile_file[line];
+        current_line = &oprofile_file[line];
 
         if (current_line->type == oprofile_line::Type::NO) {
             cout << "_0_ " << current_line->line_original_string << endl;
@@ -59,11 +61,44 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
+
     //Read both files
     read_object_file(argv[1]);
     read_oprofile_file(argv[2]);
 
+    InputFile<Line_Objdump> FILE_OBJ(argv[1]);
+    InputFile<Line_Oprofile> FILE_OPR(argv[2]);
+
+
+    cout << FILE_OBJ << endl;
+//    cout << FILE_OPR << endl;
+
+    exit(-1);
+
+    cout << " BEFORE " << endl;
+    for (std::vector<oprofile_line>::iterator it = oprofile_file.begin(); it != oprofile_file.end(); ++it) {
+        if (it->type == oprofile_line::Type::INST) {
+            cout << "OP2 INSTRUCTION " << it->line_original_string << endl;
+        }
+    }
+
+    for (std::vector<oprofile_line>::iterator it = oprofile_file.begin(); it != oprofile_file.end(); ++it) {
+        if (it->type == oprofile_line::Type::FUNC) {
+            cout << " OP2 FUNCTION     " << it->line_original_string << endl;
+        }
+    }
+
+    for (std::vector<objdump_line>::iterator it = objdump_file.begin(); it != objdump_file.end(); ++it) {
+        cout << " OBJ " << it->line_original_string << endl;
+    }
+
+
     update_objdump_counters();
+
+
+
+
+
 
     // we have all data now ; we will reconstruct the profile in same order
     oprofile_print_resume();
@@ -78,7 +113,7 @@ int main(int argc, char *argv[]) {
 
     //OPROFILE is already sorted by % of the execution time
     for (int line = 0; line < oprofile_file.size(); line++) {
-        oprofile_line * current_line = & oprofile_file[line];
+        oprofile_line *current_line = &oprofile_file[line];
 
         vector<string> v{split(current_line->line_original_string, ' ')};
         ui64 memory_address = current_line->memory_address;
@@ -100,7 +135,8 @@ int main(int argc, char *argv[]) {
 //        cout << "_2_ " << memory_address << " " << in_objdump << " " << v[0] << " " << current_line->line_original_string << endl;
         cout << endl
              << "====================================================================================================================================================\n"
-             << "_FUNCTION_ANALYSIS_ from the binary (" << current_line->m_binary_name << ") hot spot from the function ( " << current_line->m_function_name << " )" << endl
+             << "_FUNCTION_ANALYSIS_ from the app name (" << current_line->m_binary_name
+             << ") hot spot from the symbole name ( " << current_line->m_function_name << " )" << endl
              << "====================================================================================================================================================\n"
              << "           SUM*4        SUM*3        SUM*2          CYCLES       INSTS      ADDRESS     code HEXA               disassembly                         \n"
              << "----------------------------------------------------------------------------------------------------------------------------------------------------"

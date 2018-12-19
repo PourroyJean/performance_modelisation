@@ -43,7 +43,7 @@ oprofile_line::oprofile_line(string line) {
         type = Type::FUNC;
         static_line_of_last_func = static_line_counter;
         for (int i = 0; i < v.size(); ++i) {
-            cout << v[i] << endl;
+//            cout << v[i] << endl;
 
         }
         m_function_name = v[v.size() - 1];
