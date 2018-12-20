@@ -13,6 +13,9 @@
 int Line_Objdump::LINE_COUNTER = 0;
 int Line_Objdump::LAST_FCT_CTR = 0;
 string Line_Objdump::LAST_SYMB = "";
+InputFile<Line_Objdump> *Line_Objdump::FILE_OBJ = NULL;
+
+
 std::unordered_map<uint64_t, int> Line_Objdump::objdump_address;
 
 
@@ -52,20 +55,6 @@ uint64_t Line_Objdump::get_address() {
 }
 
 
-const vector<string> my_split(const string &s, const char &c) {
-    string buff{""};
-    vector<string> v;
-
-    for (auto n:s) {
-        if (n != c) buff += n;
-        else if (n == c && buff != "") {
-            v.push_back(buff);
-            buff = "";
-        }
-    }
-    if (buff != "") v.push_back(buff);
-    return v;
-}
 
 
 void Line_Objdump::analyse_current_line() {

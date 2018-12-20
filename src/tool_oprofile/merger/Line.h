@@ -9,6 +9,8 @@
 #include <inttypes.h>
 #include <iostream>
 #include <iomanip>
+//#include "Line_Objdump.h"
+//#include "Line_Oprofile.h"
 
 using namespace std;
 
@@ -18,9 +20,9 @@ protected:
 
 //    const string &m_original_line; TODO
     string m_original_line;
-    uint64_t m_event_cpu_clk;
+    uint64_t m_event_cpu_clk; //ctr1
     uint64_t m_event_cpu_clk_percentage;
-    uint64_t m_event_inst_retired;
+    uint64_t m_event_inst_retired; //ctr2
     uint64_t m_memory_address;
     string m_symbole_name;
     int m_line_type;
