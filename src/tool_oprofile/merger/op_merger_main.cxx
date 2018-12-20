@@ -66,12 +66,18 @@ int main(int argc, char *argv[]) {
     read_object_file(argv[1]);
     read_oprofile_file(argv[2]);
 
-    InputFile<Line_Objdump> FILE_OBJ(argv[1]);
-    InputFile<Line_Oprofile> FILE_OPR(argv[2]);
+//    InputFile<Line_Objdump> Line_Objdump::FILE_OBJ ("coucou");
+
+    InputFile<Line_Objdump> *FILE_OBJ = new InputFile<Line_Objdump>(argv[1]);
+    Line_Objdump::FILE_OBJ = FILE_OBJ;
 
 
-    cout << FILE_OBJ << endl;
-//    cout << FILE_OPR << endl;
+//    InputFile<Line_Objdump> Line_Objdump::FILE_OBJ ("coucou");
+    InputFile<Line_Oprofile> *FILE_OPR = new InputFile<Line_Oprofile>(argv[2]);
+    Line_Oprofile::FILE_OPR = FILE_OPR;
+
+//    cout << FILE_OBJ << endl;
+    cout << *FILE_OPR << endl;
 
     exit(-1);
 

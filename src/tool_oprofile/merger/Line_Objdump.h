@@ -35,6 +35,8 @@ public:
     static std::unordered_map<uint64_t, int> objdump_address;
 
     void print(std::ostream &sortie) const override;
+
+    static InputFile<Line_Objdump> *FILE_OBJ;
 };
 
 
