@@ -17,6 +17,8 @@ using namespace std;
 
 const vector<string> split(const std::string & s, const char& c);
 
+const vector<string> my_split(const std::string &s, const char &c);
+
 
 ui64 stoullhexa(string str);
 
