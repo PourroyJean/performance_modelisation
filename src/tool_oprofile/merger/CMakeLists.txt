@@ -6,7 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
 
 #Main executable
-add_executable(merger op_merger_main.cxx op_misc.cpp op_objdump_line.cxx op_oprofile_line.cxx op_misc.cpp Line.cpp Line_Objdump.cpp Line_Oprofile.cpp InputFile.cpp)
+add_executable(merger op_merger_main.cxx op_misc.cpp op_misc.cpp Line.cpp Line_Objdump.cpp Line_Oprofile.cpp InputFile.cpp)
 
 
 #We use the common/misc codde

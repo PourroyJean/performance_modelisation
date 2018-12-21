@@ -23,24 +23,4 @@ const vector<string> my_split(const std::string &s, const char &c);
 ui64 stoullhexa(string str);
 
 
-void read_oprofile_file(const char* fname);
-
-void read_object_file(const char* fname);
-
-void read_file(const char *fname);
-//{
-//    ifstream fobj(fname);
-//    assert(fobj.is_open());
-//    while (1) {
-//        string line;
-//        getline(fobj, line);
-//        if (fobj.eof())
-//            break;
-//        assert(!fobj.fail() && !fobj.bad());
-//        objdump_file.push_back(line);
-//    }
-//    fobj.close();
-//}
-
-
 #endif //PERFORMANCE_MODELISATION_OP_MISC_H
