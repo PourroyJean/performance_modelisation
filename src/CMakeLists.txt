@@ -15,11 +15,11 @@ file(GLOB SOURCES "*.c")
 
 
 # CHANGE THIS
-add_subdirectory (tool_hw_description)
+#add_subdirectory (tool_hw_description)
 add_subdirectory (tool_kernel_generator)
 add_subdirectory (tool_oprofile)
-add_subdirectory (tool_monitor_memory_bandwidth)
+#add_subdirectory (tool_monitor_memory_bandwidth)
 add_subdirectory (common)
 add_subdirectory (benchmark_multiply)
-add_subdirectory (tool_monitoring_bandwidth)
-add_subdirectory (benchmark_memory)
+#add_subdirectory (tool_monitoring_bandwidth)
+#add_subdirectory (benchmark_memory)

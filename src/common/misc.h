@@ -22,9 +22,10 @@ std::string convert_size(size_t  size);
 void print_times(char *s);
 
 
-#define OP_DEBUG 1
+#define OP_DEBUG
+#undef OP_DEBUG
 #ifdef  OP_DEBUG
-    #define DEBUG cout << "_DEBUG_  "
+#define DEBUG cout << "_DEBUG_ "
 #else
     #define DEBUG 0 && cout
 #endif
