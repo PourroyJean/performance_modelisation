@@ -37,7 +37,7 @@ export OP_FILE_SUMMARY="$OP_CURRENT_PATH/report_summary.txt"
 export OP_FILE_INST="$OP_CURRENT_PATH/report_instructions.txt"
 
 #Analysis
-export OP_MERGING_PROGRAM="$OP_DIR_PATH/MERGER"
+export OP_MERGING_PROGRAM="$OP_DIR_PATH/merger"
 export OP_OBJ_FILE="$OP_CURRENT_PATH/op_objdump.txt"
 export OP_MERGED_FILE="$OP_CURRENT_PATH/op_merged.txt"
 
