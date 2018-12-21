@@ -7,29 +7,21 @@
 #include "op_misc.h"
 #include <iomanip>
 
-//InputFile <Line_Objdump> Line_Objdump::m_file;
-
-
-int Line_Objdump::LINE_COUNTER = 0;
-int Line_Objdump::LAST_FCT_CTR = 0;
+int Line_Objdump::LINE_COUNTER = 0;                     //Start to read at line 0
 string Line_Objdump::LAST_SYMB = "";
-InputFile<Line_Objdump> *Line_Objdump::FILE_OBJ = NULL;
-
-
+InputFile<Line_Objdump> *Line_Objdump::FILE_OBJ = NULL; // Done in the main function
 std::unordered_map<uint64_t, int> Line_Objdump::objdump_address;
 
 
 Line_Objdump::Line_Objdump(string line) : Line(line) {
-
+    m_line_number = Line_Objdump::LINE_COUNTER;
     Line_Objdump::LINE_COUNTER++;
 
     //Search for the type of the line
-    m_line_type = LINE_TYPE::NORMAL; //for the moment
+    m_line_type = LINE_TYPE::EMPTY; //for the moment
     if (m_original_line.size() > 0) {
         analyse_current_line();
     }
-
-
 }
 
 uint64_t Line_Objdump::get_address() {
@@ -55,10 +47,11 @@ uint64_t Line_Objdump::get_address() {
 }
 
 
-
-
 void Line_Objdump::analyse_current_line() {
 
+    // -------- -------- ---------
+    // -------- FUNCTION ---------
+    // -------- -------- ---------
     //0000000000401690 <_init>:
     if (m_original_line[0] == '0') {
         // this line is a function name
@@ -75,12 +68,14 @@ void Line_Objdump::analyse_current_line() {
         if (inf == 17) { // txt name
             m_symbole_name = m_original_line.substr(inf + 1, sup - inf - 1);
             LAST_SYMB = m_symbole_name;
-            LAST_FCT_CTR = LINE_COUNTER;
         }
     }
 
-    //  401694:	48 8b 05 5d 29 20 00 	mov    0x20295d(%rip),%rax
-    if (m_original_line[0] == ' ') {
+        // ------ ----------- ---------
+        // ------ INSTRUCTION ---------
+        // ------ ----------- ---------
+        //  401694:	48 8b 05 5d 29 20 00 	mov    0x20295d(%rip),%rax
+    else if (m_original_line[0] == ' ') {
         // this m_original_line is an instruction assembly
         m_line_type = LINE_TYPE::INSTRUCTION;
         m_memory_address = get_address();
@@ -96,18 +91,47 @@ void Line_Objdump::analyse_current_line() {
                 if (v[0].compare("jmpq") != 0) {
                     uint64_t add = stoullhexa(v[1]);
                     int in_objdump = objdump_address[add];
-//                    objdump_file[in_objdump].target = 1; #TODO ?
-                    //cout << v[0] << " " << v[1] << endl;
                 }
         }
-        return;
+    } else {
+        m_line_type = LINE_TYPE::NORMAL;
+        m_symbole_name = "";
     }
-
-}
-
-void Line_Objdump::print(std::ostream &cout) const {
-    Line::print(cout); //print the base class
-    cout << left << setw(60) << this->m_assembly_instruction;
 }
 
 
+ostream &operator<<(ostream &cout, Line_Objdump L) {
+    if (!(Line::LINE_TYPE::EMPTY == L.m_line_type)) {
+        cout << *static_cast<Line * >(&L); //Base class cout
+        cout << left << setw(101) << L.m_assembly_instruction.substr(0, 100);
+    } else {
+        cout << endl;
+    }
+    return cout;
+}
+
+// ------ GETTERS  AND  SETTERS ----
+
+const string &Line_Objdump::get_assembly_instruction() const {
+    return m_assembly_instruction;
+}
+
+void Line_Objdump::set_assembly_instruction(const string &m_assembly_instruction) {
+    Line_Objdump::m_assembly_instruction = m_assembly_instruction;
+}
+
+const unordered_map<uint64_t, int> &Line_Objdump::getObjdump_address() {
+    return objdump_address;
+}
+
+void Line_Objdump::setObjdump_address(const unordered_map<uint64_t, int> &objdump_address) {
+    Line_Objdump::objdump_address = objdump_address;
+}
+
+InputFile<Line_Objdump> *Line_Objdump::getFILE_OBJ() {
+    return FILE_OBJ;
+}
+
+void Line_Objdump::setFILE_OBJ(InputFile<Line_Objdump> *FILE_OBJ) {
+    Line_Objdump::FILE_OBJ = FILE_OBJ;
+}
