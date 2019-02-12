@@ -1,0 +1,314 @@
+@../horner > ../../build/bin/tool_oprofile/merger OBJ op2.test 
+================================================ OPROFILE SYMBOLE NAME  WITH MORE THAN 1 CYCLES ====================================================
+====================================================================================================================================================
+_0_ CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+_0_ Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 10000000
+_0_ Counted inst_retired events () with a unit mask of 0x00 (Number of instructions retired. General Counter   - architectural event) count 10000000
+_0_ vma      samples  %        samples  %        app name                 symbol name
+_1_ 00401ab0 7348     50.1878  21851    60.7462  horner1_long             f1(double)
+_1_ 00401d30 4449     30.3873  8885     24.7005  horner1_long             main
+_1_ 00401b40 2307     15.7571  4901     13.6249  horner1_long             range_f1(double, double, int)
+_1_ 00000000 445       3.0394  137       0.3809  no-vmlinux               /no-vmlinux
+_1_ 00000000 63        0.4303  161       0.4476  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+_1_ 000820e0 3         0.0205  4         0.0111  libc-2.17.so             _int_malloc
+_1_ 00000000 2         0.0137  2         0.0056  gawk                     /usr/bin/gawk
+_1_ 000095e0 2         0.0137  0              0  ld-2.17.so               do_lookup_x
+_1_ 0003ae30 2         0.0137  0              0  libc-2.17.so             __GI_____strtoll_l_internal
+_1_ 00080f70 2         0.0137  3         0.0083  libc-2.17.so             _int_free
+_1_ 00016a30 1         0.0068  0              0  ld-2.17.so               _dl_cache_libcmp
+_1_ 0000b680 1         0.0068  0              0  ld-2.17.so               _dl_relocate_object
+_1_ 0007cd10 1         0.0068  0              0  libc-2.17.so             _IO_default_xsputn
+_1_ 000590f0 1         0.0068  3         0.0083  libc-2.17.so             _IO_vfscanf
+_1_ 0008c3a0 1         0.0068  0              0  libc-2.17.so             __GI_strlen
+_1_ 00169220 1         0.0068  0              0  libc-2.17.so             __memcmp_sse4_1
+_1_ 00036010 1         0.0068  0              0  libc-2.17.so             __sigjmp_save
+_1_ 0013c520 1         0.0068  0              0  libc-2.17.so             _dl_addr
+_1_ 000ced30 1         0.0068  0              0  libc-2.17.so             check_node_accept
+_1_ 00085580 1         0.0068  1         0.0028  libc-2.17.so             free
+_1_ 00085160 1         0.0068  4         0.0111  libc-2.17.so             malloc
+_1_ 000a8650 1         0.0068  1         0.0028  libc-2.17.so             mbrtoc32
+_1_ 000cf450 1         0.0068  0              0  libc-2.17.so             re_node_set_add_intersect
+_1_ 00085660 1         0.0068  0              0  libc-2.17.so             realloc
+_1_ 0003ae10 1         0.0068  0              0  libc-2.17.so             strtoul
+_1_ 00001180 1         0.0068  0              0  libdl-2.17.so            check_free
+_1_ 00000000 1         0.0068  1         0.0028  oprofiled                /usr/bin/oprofiled
+_1_ 00000000 1         0.0068  0              0  pam_systemd.so           /usr/lib64/security/pam_systemd.so
+====================================================================================================================================================
+====================================================================================================================================================
+
+
+====================================================================================================================================================
+_FUNCTION_ANALYSIS_ from the app name (horner1_long) hot spot from the symbole name (f1(double)) which takes 50.1878% of the profiling
+====================================================================================================================================================
+           SUM*4        SUM*3        SUM*2          CYCLES       INSTS     ADDRESS    ASSEMBLY                         
+----------------------------------------------------------------------------------------------------------------------------------------------------
+_5_         1002         1002         1002 |         1002         3539      401ab0    vmovsd 0xd0f0(%rip),%xmm2        # 40eba8 <_IO_stdin_used+0x28>
+_5_         1049            0            0 |            0            0      401ab8    vmulsd %xmm0,%xmm0,%xmm6
+_5_         1049         1049            0 |            0            0      401abc    vfmadd213sd 0xd0eb(%rip),%xmm0,%xmm2        # 40ebb0 <_IO_stdin_used+0x30>
+_5_         1049         1049         1049 |         1049         3775      401ac5    vmovsd 0xd0eb(%rip),%xmm1        # 40ebb8 <_IO_stdin_used+0x38>
+_5_            0            0            0 |            0            0      401acd    vfmsub231sd 0xd0ca(%rip),%xmm6,%xmm2        # 40eba0 <_IO_stdin_used+0x20>
+_5_            0            0            0 |            0            0      401ad6    vfmsub213sd 0xd0e1(%rip),%xmm0,%xmm1        # 40ebc0 <_IO_stdin_used+0x40>
+_5_         1065         1065            0 |            0            0      401adf    vmovsd 0xd0e1(%rip),%xmm4        # 40ebc8 <_IO_stdin_used+0x48>
+_5_         1065         1065         1065 |         1065         3479      401ae7    vmovsd 0xd0e9(%rip),%xmm3        # 40ebd8 <_IO_stdin_used+0x58>
+_5_            0            0            0 |            0            0      401aef    vmovsd 0xd0f1(%rip),%xmm7        # 40ebe8 <_IO_stdin_used+0x68>
+_5_         1027            0            0 |            0            0      401af7    vmovsd 0xd0f9(%rip),%xmm5        # 40ebf8 <_IO_stdin_used+0x78>
+_5_         1027         1027         1027 |            0            0      401aff    vfmsub213sd %xmm1,%xmm6,%xmm2
+_5_         1027         1027         1027 |         1027         3591      401b04    vfmadd213sd 0xd0c3(%rip),%xmm0,%xmm4        # 40ebd0 <_IO_stdin_used+0x50>
+_5_            0            0            0 |            0            0      401b0d    vfmadd213sd 0xd0ca(%rip),%xmm0,%xmm3        # 40ebe0 <_IO_stdin_used+0x60>
+_5_            0            0            0 |            0            0      401b16    vfmsub213sd 0xd0d1(%rip),%xmm0,%xmm7        # 40ebf0 <_IO_stdin_used+0x70>
+_5_         1053         1053            0 |            0            0      401b1f    vfmadd213sd 0xd0d8(%rip),%xmm5,%xmm0        # 40ec00 <_IO_stdin_used+0x80>
+_5_         1065         1053         1053 |         1053         3531      401b28    vfmadd231sd %xmm6,%xmm2,%xmm4
+_5_         2152           12            0 |            0            0      401b2d    vfmadd213sd %xmm3,%xmm6,%xmm4
+_5_         2152         2152           12 |            0            0      401b32    vfmsub231sd %xmm6,%xmm4,%xmm7
+_5_         2152         2152         2152 |           12           70      401b37    vfnmadd231sd %xmm7,%xmm6,%xmm0
+_5_         2140         2140         2140 |         2140         3866      401b3c            retq
+_5_            0            0            0 |            0            0      401b3d      nopl   (%rax)
+
+====================================================================================================================================================
+_FUNCTION_ANALYSIS_ from the app name (horner1_long) hot spot from the symbole name (main) which takes 30.3873% of the profiling
+====================================================================================================================================================
+           SUM*4        SUM*3        SUM*2          CYCLES       INSTS     ADDRESS    ASSEMBLY
+----------------------------------------------------------------------------------------------------------------------------------------------------
+_5_            0            0            0 |            0            0      401d30        push   %rbp
+_5_            0            0            0 |            0            0      401d31    mov    %rsp,%rbp
+_5_            0            0            0 |            0            0      401d34    and    $0xffffffffffffff80,%rsp
+_5_            0            0            0 |            0            0      401d38        push   %r13
+_5_            0            0            0 |            0            0      401d3a        push   %r14
+_5_            0            0            0 |            0            0      401d3c        push   %r15
+_5_            0            0            0 |            0            0      401d3e        push   %rbx
+_5_            0            0            0 |            0            0      401d3f    sub    $0x60,%rsp
+_5_            0            0            0 |            0            0      401d43    mov    $0x9d9ffe,%esi
+_5_            0            0            0 |            0            0      401d48    mov    $0x3,%edi
+_5_            0            0            0 |            0            0      401d4d    callq  402bb0 <__intel_new_feature_proc_init>
+_5_            0            0            0 |            0            0      401d52    vstmxcsr (%rsp)
+_5_            0            0            0 |            0            0      401d57    mov    $0x40ee20,%edi
+_5_            0            0            0 |            0            0      401d5c    mov    $0x40ee24,%esi
+_5_            0            0            0 |            0            0      401d61    orl    $0x8040,(%rsp)
+_5_            0            0            0 |            0            0      401d68    vldmxcsr (%rsp)
+_5_            0            0            0 |            0            0      401d6d    callq  401fb0 <yamb_annotate_set_event>
+_5_            0            0            0 |            0            0      401d72     xor    %al,%al
+_5_            0            0            0 |            0            0      401d74    mov    %al,%r13b
+_5_            0            0            0 |            0            0      401d77    vmovsd 0xd069(%rip),%xmm0        # 40ede8 <_IO_stdin_used+0x268>
+_5_            0            0            0 |            0            0      401d7f    vxorpd %xmm1,%xmm1,%xmm1
+_5_            0            0            0 |            0            0      401d83    vmovsd %xmm0,(%rsp)
+_5_            0            0            0 |            0            0      401d88    vmovsd %xmm1,0x10(%rsp)
+_5_            0            0            0 |            0            0      401d8e    callq  401aa0 <_ZN17_INTERNAL249f75c110dml_cyclesEv>
+_5_            0            0            0 |            0            0      401d93    mov    %rax,%r15
+_5_            0            0            0 |            0            0      401d96    vmovsd (%rsp),%xmm1
+_5_            0            0            0 |            0            0      401d9b    xor    %ebx,%ebx
+_5_            0            0            0 |            0            0      401d9d    xor    %r14d,%r14d
+_5_            0            0            0 |            0            0      401da0    vmovapd %xmm1,%xmm0
+_5_            0            0            0 |            0            0      401da4    vmovsd %xmm1,(%rsp)
+_5_         1046            0            0 |            0            0      401da9    callq  401ab0 <_Z2f1d>
+_5_         3441         1046            0 |            0            0      401dae    vmovsd (%rsp),%xmm1
+_5_         3441         3441         1046 |            0            0      401db3       inc    %r14d
+_5_         3441         3441         3441 |         1046         1184      401db6    vaddsd 0x10(%rsp),%xmm0,%xmm2
+_5_         3397         2395         2395 |         2395         4224      401dbc    vaddsd 0xd02c(%rip),%xmm1,%xmm1        # 40edf0 <_IO_stdin_used+0x270>
+_5_         1002         1002         1002 |            0            0      401dc4    vmovsd %xmm2,0x10(%rsp)
+_5_         1002         1002         1002 |         1002         3468      401dca    cmp    $0xf4240,%r14d
+_5_            0            0            0 |            0            0      401dd1    jl     401da0 <main+0x70>
+----------------------------------------------------------------------------------------------------------------
+_7_ LOOP from 401dd1 to 401da0 size= 49 sum(cycles)= 4443 sum(inst)= 8876 #inst= 11 IPC= 1.99775 cycles/LOOP= 5.5062
+----------------------------------------------------------------------------------------------------------------
+_5_            0            0            0 |            0            0      401dd3        inc    %ebx
+_5_            0            0            0 |            0            0      401dd5    cmp    $0x400,%ebx
+_5_            0            0            0 |            0            0      401ddb    jl     401d9d <main+0x6d>
+_7_ LOOP from 401ddb to 401d9d size= 62 sum(cycles)= 4443 sum(inst)= 8876 #inst= 15 IPC= 1.99775 cycles/LOOP= 7.50845
+----------------------------------------------------------------------------------------------------------------
+_5_            0            0            0 |            0            0      401ddd    callq  401aa0 <_ZN17_INTERNAL249f75c110dml_cyclesEv>
+_5_            0            0            0 |            0            0      401de2    mov    %rax,%rbx
+_5_            0            0            0 |            0            0      401de5       inc    %r13b
+_5_            0            0            0 |            0            0      401de8    cmp    $0xa,%r13b
+_5_            0            0            0 |            0            0      401dec    jl     401d77 <main+0x47>
+_7_ LOOP from 401dec to 401d77 size= 117 sum(cycles)= 4443 sum(inst)= 8876 #inst= 29 IPC= 1.99775 cycles/LOOP= 14.5163
+----------------------------------------------------------------------------------------------------------------
+_5_            0            0            0 |            0            0      401dee    mov    $0x612ba0,%edi
+_5_            0            0            0 |            0            0      401df3    mov    $0x40ee2c,%esi
+_5_            0            0            0 |            0            0      401df8    callq  4017c0 <_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@plt>
+_5_            0            0            0 |            0            0      401dfd    mov    $0x40ee34,%edi
+_5_            0            0            0 |            0            0      401e02    mov    $0x40ee40,%esi
+_5_            0            0            0 |            0            0      401e07    callq  401fb0 <yamb_annotate_set_event>
+_5_            0            0            0 |            0            0      401e0c     xor    %al,%al
+_5_            0            0            0 |            0            0      401e0e    mov    %al,%r13b
+_5_            0            0            0 |            0            0      401e11    vmovsd 0xcfcf(%rip),%xmm2        # 40ede8 <_IO_stdin_used+0x268>
+_5_            0            0            0 |            0            0      401e19    xor    %r14d,%r14d
+_5_            0            0            0 |            0            0      401e1c    vxorpd %xmm1,%xmm1,%xmm1
+_5_            0            0            0 |            0            0      401e20    vmovsd %xmm1,(%rsp)
+_5_            0            0            0 |            0            0      401e25    vmovsd 0xcfc3(%rip),%xmm1        # 40edf0 <_IO_stdin_used+0x270>
+_5_            1            1            0 |            0            0      401e2d    vmovapd %xmm2,%xmm0
+_5_            1            1            1 |            0            0      401e31    mov    $0x400,%edi
+_5_            2            1            1 |            1            1      401e36    vmovsd %xmm2,0x8(%rsp)
+_5_            1            1            0 |            0            0      401e3c    callq  401b40 <_Z8range_f1ddi>
+_5_            3            1            1 |            0            0      401e41    vmovsd 0x8(%rsp),%xmm2
+_5_            3            3            1 |            1            2      401e47       inc    %r14d
+_5_            2            2            2 |            0            0      401e4a    vaddsd (%rsp),%xmm0,%xmm1
+_5_            4            2            2 |            2            3      401e4f    vaddsd 0xcfa1(%rip),%xmm2,%xmm2        # 40edf8 <_IO_stdin_used+0x278>
+_5_            2            2            2 |            0            0      401e57    vmovsd %xmm1,(%rsp)
+_5_            2            2            2 |            2            3      401e5c    cmp    $0xf4240,%r14d
+_5_            0            0            0 |            0            0      401e63    jl     401e25 <main+0xf5>
+_7_ LOOP from 401e63 to 401e25 size= 62 sum(cycles)= 6 sum(inst)= 9 #inst= 14 IPC= 1.5 cycles/LOOP= 9.33333
+----------------------------------------------------------------------------------------------------------------
+_5_            0            0            0 |            0            0      401e65    vmovsd %xmm2,0x8(%rsp)
+_5_            0            0            0 |            0            0      401e6b    callq  401aa0 <_ZN17_INTERNAL249f75c110dml_cyclesEv>
+_5_            0            0            0 |            0            0      401e70       inc    %r13b
+_5_            0            0            0 |            0            0      401e73    vmovsd 0x8(%rsp),%xmm2
+_5_            0            0            0 |            0            0      401e79    cmp    $0xa,%r13b
+_5_            0            0            0 |            0            0      401e7d    jl     401e11 <main+0xe1>
+_7_ LOOP from 401e7d to 401e11 size= 108 sum(cycles)= 6 sum(inst)= 9 #inst= 25 IPC= 1.5 cycles/LOOP= 16.6667
+----------------------------------------------------------------------------------------------------------------
+_5_            0            0            0 |            0            0      401e7f    mov    $0x40ee44,%edi
+_5_            0            0            0 |            0            0      401e84    mov    $0x40ee48,%esi
+_5_            0            0            0 |            0            0      401e89    vmovsd %xmm2,0x8(%rsp)
+_5_            0            0            0 |            0            0      401e8f    callq  401fb0 <yamb_annotate_set_event>
+_5_            0            0            0 |            0            0      401e94    mov    %rbx,%rax
+_5_            0            0            0 |            0            0      401e97    vxorpd %xmm0,%xmm0,%xmm0
+_5_            0            0            0 |            0            0      401e9b    vmovsd 0xcf65(%rip),%xmm2        # 40ee08 <_IO_stdin_used+0x288>
+_5_            0            0            0 |            0            0      401ea3    sub    %r15,%rax
+_5_            0            0            0 |            0            0      401ea6    vcvtsi2sd %rax,%xmm0,%xmm0
+_5_            0            0            0 |            0            0      401eab    jns    401ec7 <main+0x197>
+_5_            0            0            0 |            0            0      401ead    mov    %rax,%rdx
+_5_            0            0            0 |            0            0      401eb0    vxorpd %xmm0,%xmm0,%xmm0
+_5_            0            0            0 |            0            0      401eb4        shr    %rax
+_5_            0            0            0 |            0            0      401eb7    and    $0x1,%rdx
+_5_            0            0            0 |            0            0      401ebb    or     %rax,%rdx
+_5_            0            0            0 |            0            0      401ebe    vcvtsi2sd %rdx,%xmm0,%xmm0
+_5_            0            0            0 |            0            0      401ec3    vaddsd %xmm0,%xmm0,%xmm0
+_5_            0            0            0 |            0            0      401ec7    vmulsd 0xcf41(%rip),%xmm0,%xmm0        # 40ee10 <_IO_stdin_used+0x290>
+_5_            0            0            0 |            0            0      401ecf    vxorpd %xmm1,%xmm1,%xmm1
+_5_            0            0            0 |            0            0      401ed3    vdivsd %xmm2,%xmm0,%xmm0
+_5_            0            0            0 |            0            0      401ed7    sub    %rbx,%rax
+_5_            0            0            0 |            0            0      401eda    vcvtsi2sd %rax,%xmm1,%xmm1
+_5_            0            0            0 |            0            0      401edf    jns    401efb <main+0x1cb>
+_5_            0            0            0 |            0            0      401ee1    mov    %rax,%rdx
+_5_            0            0            0 |            0            0      401ee4    vxorpd %xmm1,%xmm1,%xmm1
+_5_            0            0            0 |            0            0      401ee8        shr    %rax
+_5_            0            0            0 |            0            0      401eeb    and    $0x1,%rdx
+_5_            0            0            0 |            0            0      401eef    or     %rax,%rdx
+_5_            0            0            0 |            0            0      401ef2    vcvtsi2sd %rdx,%xmm1,%xmm1
+_5_            0            0            0 |            0            0      401ef7    vaddsd %xmm1,%xmm1,%xmm1
+_5_            0            0            0 |            0            0      401efb    vmulsd 0xcf0d(%rip),%xmm1,%xmm5        # 40ee10 <_IO_stdin_used+0x290>
+_5_            0            0            0 |            0            0      401f03    mov    $0x40ee50,%edi
+_5_            0            0            0 |            0            0      401f08    vdivsd %xmm2,%xmm5,%xmm1
+_5_            0            0            0 |            0            0      401f0c    vmovsd 0x10(%rsp),%xmm3
+_5_            0            0            0 |            0            0      401f12    mov    $0x6,%eax
+_5_            0            0            0 |            0            0      401f17    vmovsd (%rsp),%xmm4
+_5_            0            0            0 |            0            0      401f1c    vmovsd 0x8(%rsp),%xmm2
+_5_            0            0            0 |            0            0      401f22    vsubsd %xmm3,%xmm4,%xmm5
+_5_            0            0            0 |            0            0      401f26    callq  4016e0 <printf@plt>
+_5_            0            0            0 |            0            0      401f2b    xor    %eax,%eax
+_5_            0            0            0 |            0            0      401f2d    add    $0x60,%rsp
+_5_            0            0            0 |            0            0      401f31        pop    %rbx
+_5_            0            0            0 |            0            0      401f32        pop    %r15
+_5_            0            0            0 |            0            0      401f34        pop    %r14
+_5_            0            0            0 |            0            0      401f36        pop    %r13
+_5_            0            0            0 |            0            0      401f38    mov    %rbp,%rsp
+_5_            0            0            0 |            0            0      401f3b        pop    %rbp
+_5_            0            0            0 |            0            0      401f3c            retq
+_5_            0            0            0 |            0            0      401f3d      nopl   (%rax)
+----------------------------------------------------------------------------------------------------------------
+
+
+====================================================================================================================================================
+_FUNCTION_ANALYSIS_ from the app name (horner1_long) hot spot from the symbole name (range_f1(double,) which takes 15.7571% of the profiling
+====================================================================================================================================================
+           SUM*4        SUM*3        SUM*2          CYCLES       INSTS     ADDRESS    ASSEMBLY
+----------------------------------------------------------------------------------------------------------------------------------------------------
+_5_            1            1            1 |            0            0      401b40    vxorpd %xmm11,%xmm11,%xmm11
+_5_            1            1            1 |            1            0      401b45    test   %edi,%edi
+_5_            0            0            0 |            0            0      401b47    jle    401d1f <_Z8range_f1ddi+0x1df>
+_5_            0            0            0 |            0            0      401b4d    cmp    $0x4,%edi
+_5_            0            0            0 |            0            0      401b50    jl     401d28 <_Z8range_f1ddi+0x1e8>
+_5_            0            0            0 |            0            0      401b56    vmulsd 0xd282(%rip),%xmm1,%xmm13        # 40ede0 <_IO_stdin_used+0x260>
+_5_            0            0            0 |            0            0      401b5e    mov    %edi,%eax
+_5_            0            0            0 |            0            0      401b60    vmovupd 0xd118(%rip),%ymm8        # 40ec80 <_IO_stdin_used+0x100>
+_5_            0            0            0 |            0            0      401b68    vmovupd 0xd130(%rip),%ymm7        # 40eca0 <_IO_stdin_used+0x120>
+_5_            2            0            0 |            0            0      401b70    vmovupd 0xd148(%rip),%ymm6        # 40ecc0 <_IO_stdin_used+0x140>
+_5_            2            2            2 |            0            0      401b78    vmovsd %xmm1,-0x8(%rsp)
+_5_            4            2            2 |            2            1      401b7e    vbroadcastsd %xmm0,%ymm2
+_5_            2            2            0 |            0            0      401b83    vbroadcastsd %xmm1,%ymm11
+_5_            2            2            2 |            0            0      401b88    vbroadcastsd %xmm13,%ymm12
+_5_            2            2            2 |            2            0      401b8d    vmovupd 0xd14b(%rip),%ymm5        # 40ece0 <_IO_stdin_used+0x160>
+_5_            0            0            0 |            0            0      401b95    vmovupd 0xd163(%rip),%ymm4        # 40ed00 <_IO_stdin_used+0x180>
+_5_            0            0            0 |            0            0      401b9d    vfmadd132pd 0xd07a(%rip),%ymm2,%ymm11        # 40ec20 <_IO_stdin_used+0xa0>
+_5_            1            1            0 |            0            0      401ba6    vmovupd 0xd172(%rip),%ymm3        # 40ed20 <_IO_stdin_used+0x1a0>
+_5_            1            1            1 |            1            3      401bae    vmovupd 0xd18a(%rip),%ymm10        # 40ed40 <_IO_stdin_used+0x1c0>
+_5_            0            0            0 |            0            0      401bb6    vmovupd 0xd1a2(%rip),%ymm9        # 40ed60 <_IO_stdin_used+0x1e0>
+_5_            0            0            0 |            0            0      401bbe    vmovupd 0xd1ba(%rip),%ymm2        # 40ed80 <_IO_stdin_used+0x200>
+_5_            0            0            0 |            0            0      401bc6    vmovupd 0xd072(%rip),%ymm15        # 40ec40 <_IO_stdin_used+0xc0>
+_5_            0            0            0 |            0            0      401bce    vxorpd %ymm14,%ymm14,%ymm14
+_5_            0            0            0 |            0            0      401bd3    and    $0xfffffffc,%eax
+_5_            5            0            0 |            0            0      401bd6    xor    %edx,%edx
+_5_            5            5            0 |            0            0      401bd8    nopl   0x0(%rax,%rax,1)
+_5_          204            5            5 |            5           11      401be0    vmovupd 0xd1b8(%rip),%ymm1        # 40eda0 <_IO_stdin_used+0x220>
+_5_          238          238          199 |            0            0      401be8    add    $0x4,%edx
+_5_          241          238          238 |          199          533      401beb    vaddsd %xmm13,%xmm0,%xmm0
+_5_           43           42           39 |           39           79      401bf0    vfnmadd231pd 0xd1c7(%rip),%ymm11,%ymm1        # 40edc0 <_IO_stdin_used+0x240>
+_5_          258          221            4 |            3           14      401bf9    vfmadd213pd %ymm2,%ymm11,%ymm1
+_5_          255          255          218 |            1            0      401bfe    vfmadd213pd %ymm9,%ymm11,%ymm1
+_5_          254          254          254 |          217          401      401c03    vfnmadd213pd %ymm10,%ymm11,%ymm1
+_5_          255           37           37 |           37           68      401c08    vfmadd213pd %ymm3,%ymm11,%ymm1
+_5_          252          218            0 |            0            6      401c0d    vfmadd213pd %ymm4,%ymm11,%ymm1
+_5_          257          252          218 |            0            0      401c12    vfmadd213pd %ymm5,%ymm11,%ymm1
+_5_          260          257          252 |          218          434      401c17    vfmadd213pd %ymm6,%ymm11,%ymm1
+_5_           42           42           39 |           34           56      401c1c    vfnmadd213pd %ymm7,%ymm11,%ymm1
+_5_          392            8            8 |            5            4      401c21    vfnmadd213pd %ymm8,%ymm11,%ymm1
+_5_          720          387            3 |            3           11      401c26    vfnmadd213pd 0xd031(%rip),%ymm11,%ymm1        # 40ec60 <_IO_stdin_used+0xe0>
+_5_         1478          718          717 |          384          744      401c2f    vfmadd213pd %ymm15,%ymm11,%ymm1
+_5_         1142         1094          334 |          333          745      401c34    vaddpd %ymm12,%ymm11,%ymm11
+_5_          809          809          761 |            1            2      401c39    vaddpd %ymm14,%ymm1,%ymm14
+_5_          812          808          808 |          760         1652      401c3e    cmp    %eax,%edx
+_5_           52           52           48 |           48           99      401c40    jb     401be0 <_Z8range_f1ddi+0xa0>
+----------------------------------------------------------------------------------------------------------------
+_7_ LOOP from 401c40 to 401be0 size= 96 sum(cycles)= 2287 sum(inst)= 4859 #inst= 22 IPC= 2.12462 cycles/LOOP= 10.3548
+----------------------------------------------------------------------------------------------------------------
+_5_            8            4            4 |            0            0      401c42    vextractf128 $0x1,%ymm14,%xmm2
+_5_            8            8            4 |            4            7      401c48    vmovsd -0x8(%rsp),%xmm1
+_5_            8            4            4 |            0            0      401c4e    vaddpd %xmm2,%xmm14,%xmm3
+_5_            8            8            4 |            4           15      401c52    vunpckhpd %xmm3,%xmm3,%xmm4
+_5_            4            4            4 |            0            3      401c56    vaddsd %xmm4,%xmm3,%xmm11
+_5_            4            4            4 |            4           11      401c5a    cmp    %edi,%eax
+_5_            0            0            0 |            0            0      401c5c    jae    401d1f <_Z8range_f1ddi+0x1df>
+_5_            0            0            0 |            0            0      401c62    vmovsd 0xcf96(%rip),%xmm10        # 40ec00 <_IO_stdin_used+0x80>
+_5_            0            0            0 |            0            0      401c6a    vmovsd 0xcf86(%rip),%xmm9        # 40ebf8 <_IO_stdin_used+0x78>
+_5_            0            0            0 |            0            0      401c72    vmovsd 0xcf76(%rip),%xmm8        # 40ebf0 <_IO_stdin_used+0x70>
+_5_            0            0            0 |            0            0      401c7a    vmovsd 0xcf66(%rip),%xmm7        # 40ebe8 <_IO_stdin_used+0x68>
+_5_            0            0            0 |            0            0      401c82    vmovsd 0xcf4e(%rip),%xmm6        # 40ebd8 <_IO_stdin_used+0x58>
+_5_            0            0            0 |            0            0      401c8a    vmovsd 0xcf36(%rip),%xmm5        # 40ebc8 <_IO_stdin_used+0x48>
+_5_            0            0            0 |            0            0      401c92    vmovsd 0xcf1e(%rip),%xmm4        # 40ebb8 <_IO_stdin_used+0x38>
+_5_            0            0            0 |            0            0      401c9a    vmovsd 0xcf06(%rip),%xmm12        # 40eba8 <_IO_stdin_used+0x28>
+_5_            0            0            0 |            0            0      401ca2    vmovsd 0xcef6(%rip),%xmm3        # 40eba0 <_IO_stdin_used+0x20>
+_5_            0            0            0 |            0            0      401caa    nopw   0x0(%rax,%rax,1)
+_5_            0            0            0 |            0            0      401cb0    vmovsd 0xcef8(%rip),%xmm14        # 40ebb0 <_IO_stdin_used+0x30>
+_5_            0            0            0 |            0            0      401cb8        inc    %eax
+_5_            0            0            0 |            0            0      401cba    vmulsd %xmm0,%xmm0,%xmm2
+_5_            0            0            0 |            0            0      401cbe    vaddsd %xmm10,%xmm11,%xmm11
+_5_            0            0            0 |            0            0      401cc3    vfmadd231sd %xmm0,%xmm12,%xmm14
+_5_            0            0            0 |            0            0      401cc8    vmovsd 0xcef0(%rip),%xmm13        # 40ebc0 <_IO_stdin_used+0x40>
+_5_            0            0            0 |            0            0      401cd0    vfmsub231sd %xmm2,%xmm3,%xmm14
+_5_            0            0            0 |            0            0      401cd5    vfmsub231sd %xmm0,%xmm4,%xmm13
+_5_            0            0            0 |            0            0      401cda    vmovsd 0xcefe(%rip),%xmm15        # 40ebe0 <_IO_stdin_used+0x60>
+_5_            0            0            0 |            0            0      401ce2    vfmadd231sd %xmm0,%xmm6,%xmm15
+_5_            0            0            0 |            0            0      401ce7    vfmsub213sd %xmm13,%xmm2,%xmm14
+_5_            0            0            0 |            0            0      401cec    vmovsd 0xcedc(%rip),%xmm13        # 40ebd0 <_IO_stdin_used+0x50>
+_5_            0            0            0 |            0            0      401cf4    vfmadd231sd %xmm0,%xmm5,%xmm13
+_5_            0            0            0 |            0            0      401cf9    vfmadd231sd %xmm2,%xmm14,%xmm13
+_5_            0            0            0 |            0            0      401cfe    vfmadd213sd %xmm15,%xmm2,%xmm13
+_5_            0            0            0 |            0            0      401d03    vfmsub213sd %xmm7,%xmm0,%xmm13
+_5_            0            0            0 |            0            0      401d08    vfmadd213sd %xmm8,%xmm0,%xmm13
+_5_            0            0            0 |            0            0      401d0d    vfmsub213sd %xmm9,%xmm0,%xmm13
+_5_            0            0            0 |            0            0      401d12    vfnmadd231sd %xmm13,%xmm0,%xmm11
+_5_            0            0            0 |            0            0      401d17    vaddsd %xmm1,%xmm0,%xmm0
+_5_            2            0            0 |            0            0      401d1b    cmp    %edi,%eax
+_5_            2            2            0 |            0            0      401d1d    jb     401cb0 <_Z8range_f1ddi+0x170>
+_7_ LOOP from 401d1d to 401cb0 size= 109 sum(cycles)= 0 sum(inst)= 0 #inst= 26 IPC= -nan cycles/LOOP= -nan
+----------------------------------------------------------------------------------------------------------------
+_5_            2            2            2 |            0            0      401d1f        vzeroupper
+_5_            2            2            2 |            2            2      401d22    vmovapd %xmm11,%xmm0
+_5_            0            0            0 |            0            0      401d27            retq
+_5_            0            0            0 |            0            0      401d28    xor    %eax,%eax
+_5_            0            0            0 |            0            0      401d2a    jmpq   401c5a <_Z8range_f1ddi+0x11a>
+_5_            0            0            0 |            0            0      401d2f                nop
+----------------------------------------------------------------------------------------------------------------
+
+End ...
+@../horner > ../../build/bin/tool_oprofile/merger OBJ op2.test

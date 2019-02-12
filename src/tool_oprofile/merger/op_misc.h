@@ -17,12 +17,10 @@ using namespace std;
 
 const vector<string> split(const std::string & s, const char& c);
 
+const vector<string> my_split(const std::string &s, const char &c);
+
 
 ui64 stoullhexa(string str);
 
-
-void read_oprofile_file(const char* fname);
-
-void read_object_file(const char* fname);
 
 #endif //PERFORMANCE_MODELISATION_OP_MISC_H
