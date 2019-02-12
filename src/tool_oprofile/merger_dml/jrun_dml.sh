@@ -9,8 +9,8 @@ CODE=/nfs/pourroy/code/THESE/performance_modelisation/test/horner/horner1_long
 
 /nfs/pourroy/code/THESE/performance_modelisation/src/tool_oprofile/merger_dml/jini.core2
 
-PARSER=~dml/TOOLS/objdump_parsing
 PARSER=/nfs/pourroy/code/THESE/performance_modelisation/build/bin/tool_oprofile/merger
+PARSER=~dml/TOOLS/objdump_parsing
 
 
 
@@ -18,8 +18,7 @@ PARSER=/nfs/pourroy/code/THESE/performance_modelisation/build/bin/tool_oprofile/
 #   numactl --physcpubind=$i ./test2&
 #done
 #wait
-$CODE
-
+time $CODE
 
 sudo opcontrol --dump
 T=$(date +%H%M%S)
