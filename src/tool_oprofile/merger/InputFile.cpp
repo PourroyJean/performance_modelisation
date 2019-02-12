@@ -9,6 +9,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>      // std::ifstream
+#include <assert.h>
 
 using namespace std;
 
