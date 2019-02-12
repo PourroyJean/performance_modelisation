@@ -8,6 +8,8 @@
 #include "InputFile.h"
 #include "Line_Objdump.h"
 #include "Line_Oprofile.h"
+#include <iterator>
+
 
 
 using namespace std;
@@ -85,14 +87,14 @@ int main(int argc, char *argv[]) {
             ui64 sum4 = sum3 + objdump_file->at(li + 3)->get_event_cpu_clk();
 
             //So we have all the necessary information for the display
-            if (event_cpu_clk > 0 && event_inst_retired > 0) {
+            if (event_cpu_clk >= 0 && event_inst_retired >= 0 && instr.compare("") != 0) {
                 cout << "_5_ "
                      << std::setw(12) << sum4 << " "
                      << std::setw(12) << sum3 << " "
                      << std::setw(12) << sum2 << " | "
                      << std::setw(12) << event_cpu_clk << " "
                      << std::setw(12) << event_inst_retired << "    "
-                     << std::setw(8) << myadd << "    "
+                     << std::setw(8) << std::hex << myadd << std::dec << "    "
                      << std::setw(15) << instr
                      << endl;
             }
@@ -140,6 +142,9 @@ int main(int argc, char *argv[]) {
                          << " size= " << std::dec << diff << " sum(cycles)= "
                          << sumcy << " sum(inst)= " << sumin << " #inst= " << count << " IPC= "
                          << IPC << " cycles/LOOP= " << cyL << endl;
+                    cout
+                            << "----------------------------------------------------------------------------------------------------------------\n";
+
                 }
 
 
