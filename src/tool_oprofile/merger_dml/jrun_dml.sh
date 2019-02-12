@@ -21,7 +21,6 @@ PARSER=~dml/TOOLS/objdump_parsing
 #wait
 time $CODE
 
-
 sudo opcontrol --dump
 T=$(date +%H%M%S)
 T=test
