@@ -1,0 +1,104 @@
+================================================ OPROFILE SYMBOLE NAME  WITH MORE THAN 1 CYCLES ====================================================
+====================================================================================================================================================
+_0_ CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+_0_ Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 10000000
+_0_ Counted inst_retired events () with a unit mask of 0x00 (Number of instructions retired. General Counter   - architectural event) count 10000000
+_0_ vma      samples  %        samples  %        app name                 symbol name
+_1_ 00401ab0 7348     50.1878  21851    60.7462  horner1_long             f1(double)
+_1_ 00401d30 4449     30.3873  8885     24.7005  horner1_long             main
+_1_ 00401b40 2307     15.7571  4901     13.6249  horner1_long             range_f1(double, double, int)
+_1_ 00000000 445       3.0394  137       0.3809  no-vmlinux               /no-vmlinux
+_1_ 00000000 63        0.4303  161       0.4476  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+_1_ 000820e0 3         0.0205  4         0.0111  libc-2.17.so             _int_malloc
+_1_ 00000000 2         0.0137  2         0.0056  gawk                     /usr/bin/gawk
+_1_ 000095e0 2         0.0137  0              0  ld-2.17.so               do_lookup_x
+_1_ 0003ae30 2         0.0137  0              0  libc-2.17.so             __GI_____strtoll_l_internal
+_1_ 00080f70 2         0.0137  3         0.0083  libc-2.17.so             _int_free
+_1_ 00016a30 1         0.0068  0              0  ld-2.17.so               _dl_cache_libcmp
+_1_ 0000b680 1         0.0068  0              0  ld-2.17.so               _dl_relocate_object
+_1_ 0007cd10 1         0.0068  0              0  libc-2.17.so             _IO_default_xsputn
+_1_ 000590f0 1         0.0068  3         0.0083  libc-2.17.so             _IO_vfscanf
+_1_ 0008c3a0 1         0.0068  0              0  libc-2.17.so             __GI_strlen
+_1_ 00169220 1         0.0068  0              0  libc-2.17.so             __memcmp_sse4_1
+_1_ 00036010 1         0.0068  0              0  libc-2.17.so             __sigjmp_save
+_1_ 0013c520 1         0.0068  0              0  libc-2.17.so             _dl_addr
+_1_ 000ced30 1         0.0068  0              0  libc-2.17.so             check_node_accept
+_1_ 00085580 1         0.0068  1         0.0028  libc-2.17.so             free
+_1_ 00085160 1         0.0068  4         0.0111  libc-2.17.so             malloc
+_1_ 000a8650 1         0.0068  1         0.0028  libc-2.17.so             mbrtoc32
+_1_ 000cf450 1         0.0068  0              0  libc-2.17.so             re_node_set_add_intersect
+_1_ 00085660 1         0.0068  0              0  libc-2.17.so             realloc
+_1_ 0003ae10 1         0.0068  0              0  libc-2.17.so             strtoul
+_1_ 00001180 1         0.0068  0              0  libdl-2.17.so            check_free
+_1_ 00000000 1         0.0068  1         0.0028  oprofiled                /usr/bin/oprofiled
+_1_ 00000000 1         0.0068  0              0  pam_systemd.so           /usr/lib64/security/pam_systemd.so
+====================================================================================================================================================
+====================================================================================================================================================
+
+
+====================================================================================================================================================
+_FUNCTION_ANALYSIS_ from the app name (horner1_long) hot spot from the symbole name (f1(double)) which takes 50.1878% of the profiling
+====================================================================================================================================================
+           SUM*4        SUM*3        SUM*2          CYCLES       INSTS     ADDRESS    ASSEMBLY                         
+----------------------------------------------------------------------------------------------------------------------------------------------------
+_5_         1002         1002         1002 |         1002         3539     4201136    vmovsd 0xd0f0(%rip),%xmm2        # 40eba8 <_IO_stdin_used+0x28>
+_5_         1049         1049         1049 |         1049         3775     4201157    vmovsd 0xd0eb(%rip),%xmm1        # 40ebb8 <_IO_stdin_used+0x38>
+_5_         1065         1065         1065 |         1065         3479     4201191    vmovsd 0xd0e9(%rip),%xmm3        # 40ebd8 <_IO_stdin_used+0x58>
+_5_         1027         1027         1027 |         1027         3591     4201220    vfmadd213sd 0xd0c3(%rip),%xmm0,%xmm4        # 40ebd0 <_IO_stdin_used+0x50>
+_5_         1065         1053         1053 |         1053         3531     4201256    vfmadd231sd %xmm6,%xmm2,%xmm4
+_5_         2152         2152         2152 |           12           70     4201271    vfnmadd231sd %xmm7,%xmm6,%xmm0
+_5_         2140         2140         2140 |         2140         3866     4201276            retq   
+
+====================================================================================================================================================
+_FUNCTION_ANALYSIS_ from the app name (horner1_long) hot spot from the symbole name (main) which takes 30.3873% of the profiling
+====================================================================================================================================================
+           SUM*4        SUM*3        SUM*2          CYCLES       INSTS     ADDRESS    ASSEMBLY                         
+----------------------------------------------------------------------------------------------------------------------------------------------------
+_5_         3441         3441         3441 |         1046         1184     4201910    vaddsd 0x10(%rsp),%xmm0,%xmm2
+_5_         3397         2395         2395 |         2395         4224     4201916    vaddsd 0xd02c(%rip),%xmm1,%xmm1        # 40edf0 <_IO_stdin_used+0x270>
+_5_         1002         1002         1002 |         1002         3468     4201930    cmp    $0xf4240,%r14d
+----------------------------------------------------------------------------------------------------------------
+_7_ LOOP from 401dd1 to 401da0 size= 49 sum(cycles)= 4443 sum(inst)= 8876 #inst= 11 IPC= 1.99775 cycles/LOOP= 5.5062
+_7_ LOOP from 401ddb to 401d9d size= 62 sum(cycles)= 4443 sum(inst)= 8876 #inst= 15 IPC= 1.99775 cycles/LOOP= 7.50845
+_7_ LOOP from 401dec to 401d77 size= 117 sum(cycles)= 4443 sum(inst)= 8876 #inst= 29 IPC= 1.99775 cycles/LOOP= 14.5163
+_5_            2            1            1 |            1            1     4202038    vmovsd %xmm2,0x8(%rsp)
+_5_            3            3            1 |            1            2     4202055       inc    %r14d
+_5_            4            2            2 |            2            3     4202063    vaddsd 0xcfa1(%rip),%xmm2,%xmm2        # 40edf8 <_IO_stdin_used+0x278>
+_5_            2            2            2 |            2            3     4202076    cmp    $0xf4240,%r14d
+_7_ LOOP from 401e63 to 401e25 size= 62 sum(cycles)= 6 sum(inst)= 9 #inst= 14 IPC= 1.5 cycles/LOOP= 9.33333
+_7_ LOOP from 401e7d to 401e11 size= 108 sum(cycles)= 6 sum(inst)= 9 #inst= 25 IPC= 1.5 cycles/LOOP= 16.6667
+----------------------------------------------------------------------------------------------------------------
+
+
+====================================================================================================================================================
+_FUNCTION_ANALYSIS_ from the app name (horner1_long) hot spot from the symbole name (range_f1(double,) which takes 15.7571% of the profiling
+====================================================================================================================================================
+           SUM*4        SUM*3        SUM*2          CYCLES       INSTS     ADDRESS    ASSEMBLY                         
+----------------------------------------------------------------------------------------------------------------------------------------------------
+_5_            4            2            2 |            2            1     4201342    vbroadcastsd %xmm0,%ymm2
+_5_            1            1            1 |            1            3     4201390    vmovupd 0xd18a(%rip),%ymm10        # 40ed40 <_IO_stdin_used+0x1c0>
+_5_          204            5            5 |            5           11     4201440    vmovupd 0xd1b8(%rip),%ymm1        # 40eda0 <_IO_stdin_used+0x220>
+_5_          241          238          238 |          199          533     4201451    vaddsd %xmm13,%xmm0,%xmm0
+_5_           43           42           39 |           39           79     4201456    vfnmadd231pd 0xd1c7(%rip),%ymm11,%ymm1        # 40edc0 <_IO_stdin_used+0x240>
+_5_          258          221            4 |            3           14     4201465    vfmadd213pd %ymm2,%ymm11,%ymm1
+_5_          254          254          254 |          217          401     4201475    vfnmadd213pd %ymm10,%ymm11,%ymm1
+_5_          255           37           37 |           37           68     4201480    vfmadd213pd %ymm3,%ymm11,%ymm1
+_5_          260          257          252 |          218          434     4201495    vfmadd213pd %ymm6,%ymm11,%ymm1
+_5_           42           42           39 |           34           56     4201500    vfnmadd213pd %ymm7,%ymm11,%ymm1
+_5_          392            8            8 |            5            4     4201505    vfnmadd213pd %ymm8,%ymm11,%ymm1
+_5_          720          387            3 |            3           11     4201510    vfnmadd213pd 0xd031(%rip),%ymm11,%ymm1        # 40ec60 <_IO_stdin_used+0xe0>
+_5_         1478          718          717 |          384          744     4201519    vfmadd213pd %ymm15,%ymm11,%ymm1
+_5_         1142         1094          334 |          333          745     4201524    vaddpd %ymm12,%ymm11,%ymm11
+_5_          809          809          761 |            1            2     4201529    vaddpd %ymm14,%ymm1,%ymm14
+_5_          812          808          808 |          760         1652     4201534    cmp    %eax,%edx
+_5_           52           52           48 |           48           99     4201536    jb     401be0 <_Z8range_f1ddi+0xa0>
+----------------------------------------------------------------------------------------------------------------
+_7_ LOOP from 401c40 to 401be0 size= 96 sum(cycles)= 2287 sum(inst)= 4859 #inst= 22 IPC= 2.12462 cycles/LOOP= 10.3548
+_5_            8            8            4 |            4            7     4201544    vmovsd -0x8(%rsp),%xmm1
+_5_            8            8            4 |            4           15     4201554    vunpckhpd %xmm3,%xmm3,%xmm4
+_5_            4            4            4 |            4           11     4201562    cmp    %edi,%eax
+_7_ LOOP from 401d1d to 401cb0 size= 109 sum(cycles)= 0 sum(inst)= 0 #inst= 26 IPC= -nan cycles/LOOP= -nan
+_5_            2            2            2 |            2            2     4201762    vmovapd %xmm11,%xmm0
+----------------------------------------------------------------------------------------------------------------
+
+End ...
