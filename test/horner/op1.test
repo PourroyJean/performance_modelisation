@@ -1,0 +1,15 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 10000000
+Counted inst_retired events () with a unit mask of 0x00 (Number of instructions retired. General Counter   - architectural event) count 10000000
+cpu_clk_unhalt...|inst_retired:1...|
+  samples|      %|  samples|      %|
+------------------------------------
+    14104 96.3322     35637 99.0715 horner1_long
+      445  3.0394       137  0.3809 no-vmlinux
+       63  0.4303       161  0.4476 libperl.so
+       20  0.1366        31  0.0862 libc-2.17.so
+        4  0.0273         2  0.0056 ld-2.17.so
+        2  0.0137         2  0.0056 gawk
+        1  0.0068         1  0.0028 oprofiled
+        1  0.0068         0       0 libdl-2.17.so
+        1  0.0068         0       0 pam_systemd.so
