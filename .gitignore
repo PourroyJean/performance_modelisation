@@ -17,7 +17,7 @@ build
 build2
 cmake-build-debug
 
-test
+#test
 
 src/PMU_research/uncore_pci/skylake_nda_information
 
