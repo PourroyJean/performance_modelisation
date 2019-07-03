@@ -23,8 +23,3 @@ python $DIR/kg_distribution.py $FILE_DATA_CYCLE $SIZE_RECTANGLE
 
 
 
-
-
-
-
-
