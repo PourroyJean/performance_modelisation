@@ -5,7 +5,7 @@ BENCH="assembly"
 
 # -- WILL LAUNCH THE BENCH ON CPUs : --
 #CPU 0, 1, 2 .... NB_CORES_TO_BENCH
-NB_CORES_TO_BENCH=36 #TOTAL
+NB_CORES_TO_BENCH=`numactl --hardware | grep "node 1" | head -n 1 | awk '{print $4}'`
 
 
 #  -- FIND THE FIRST CORE OF THE SECOND SOCKET --
@@ -16,7 +16,7 @@ NEXT_SOCKET=`numactl --hardware | grep "node 1" | head -n 1 | awk '{print $4}'`
 
 
 printf "Launching $BENCH on {"
-for ((i=0; i<($NB_CORES_TO_BENCH / 2); i++)); do
+for ((i=0; i<($NB_CORES_TO_BENCH - 1); i++)); do
     printf "$i,  "
     ./$BENCH $i  | grep "Running" &
 done
@@ -24,17 +24,9 @@ done
 echo
 printf "            "
 
-# We don't execute the bench on the last core, see below
-for ((i=$NEXT_SOCKET; i<($NB_CORES_TO_BENCH/2 + $NEXT_SOCKET - 1); i++)); do
-    printf " $i, "
-    ./$BENCH $i  | grep "Running" &
-done
-
-
 
 # We manually execute the last one to have at least one output to display
-echo $(($NB_CORES_TO_BENCH/2 + $NEXT_SOCKET - 1))"}"
-perf stat ./$BENCH $(($NB_CORES_TO_BENCH/2 + $NEXT_SOCKET - 1))
 
+perf stat ./$BENCH $(($NB_CORES_TO_BENCH -1))
 
 
