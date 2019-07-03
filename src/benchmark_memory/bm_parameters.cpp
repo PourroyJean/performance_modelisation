@@ -31,6 +31,8 @@ using namespace std;
 #include <string>
 #include <code_annotation.h>
 
+#define DEBUG_MPI cout
+
 extern string YAMB_ANNOTATE_LOG_FILE;
 
 void bm_parameters::print_configuration() {
