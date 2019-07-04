@@ -72,17 +72,15 @@ void KG_executor::Monitor_Execution() {
     double frequency = (total_cycle / total_time )/1000000000;
 
 
-    DEBUG << "## Number of instruction TOTAL   :  " <<  NbInstruction << "\n";
-    DEBUG << "Number of instruction per loop:  " <<  mParameters->P_OPERATIONS.size() << "\n";
-    DEBUG << "Size boucle                      " << mParameters->P_LOOP_SIZE<< endl;
-
-    DEBUG << "## Total cycle      " << total_cycle << endl;
-    DEBUG << "Mean cycle         " << mean_cycle << endl;
-    DEBUG << "Ecart cycle        " << ecart_cycle << endl;
-
-    DEBUG << "## Total time      " << total_time << endl;
-    DEBUG << "Mean time          " <<fixed << mean_time << endl;
-    DEBUG << "Ecart time         " << ecart_time << endl;
+    DEBUG  << "## Number of instruction TOTAL   :  " <<  NbInstruction << "\n";
+    DEBUG  << "Number of instruction per loop:  " <<  mParameters->P_OPERATIONS.size() << "\n";
+    DEBUG  << "Size boucle                      " << mParameters->P_LOOP_SIZE<< endl;
+    DEBUG  << "## Total cycle      " << total_cycle << endl;
+    DEBUG  << "Mean cycle         " << mean_cycle << endl;
+    DEBUG  << "Ecart cycle        " << ecart_cycle << endl;
+    DEBUG  << "## Total time      " << total_time << endl;
+    DEBUG  << "Mean time          " <<fixed << mean_time << endl;
+    DEBUG  << "Ecart time         " << ecart_time << endl;
 
     cout  << "----------------------------------------" << endl;
     cout  << "Frequency          " << frequency << endl;
