@@ -17,18 +17,23 @@ cycles = []
 iteration = []
 
 with open(FILE_NAME) as f:
+    i =1
     for line in f:
-        i =1
-        for word in line.split():
-            cycles.append(int(word))
-            iteration.append(i)
-            i = i + 1
+        ligne = line.split()
+        # print ligne
+        # print " ---- "
+        # print i
+        cycles.append(int(ligne[0]))
+        iteration.append(i)
+        i = i + 1
 
 
 x = iteration
 y = cycles
 
+print x
 plt.plot (x,y)
+# plt.hist(y, normed=True, bins=1000)
 
 
 plt.xlabel('Iteration')
