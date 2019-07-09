@@ -125,10 +125,11 @@ void KG_generators::generate_instructions() {
     for (auto operation : *mOperations_set) {
         string saveSource = to_string(Get_register_source());
         string saveCible = to_string(Get_register_cible());
+
         //v add p d
         string instruction = mPrefix + operation + mSuffix + mPrecision + " ";
         instruction += "%%" + mRegister_name + "0, ";
-        if (mParameters->P_COUNT) {
+        if (mParameters->P_COUNT) {//Count by adding 1 for each addition
             instruction += "%%" + mRegister_name + saveCible + ", ";
             if (atoi(saveCible.c_str()) > mRegister_max) {
                 mRegister_max = atoi(saveCible.c_str());
@@ -220,7 +221,7 @@ void KG_generators::parse_and_label_instructions() {
 
 
 void KG_generators::parse_and_label_instructions_custom() {
-    DEBUG << "-- Init Generator register, prefix, suffix, and precision \n";
+    DEBUG << "-- Init Generator register, prefix, suffix, and precision for custom width \n";
 
     //only [v]addpd instructions supported
     mPrefix = "v";
@@ -259,13 +260,13 @@ void KG_generators::parse_and_label_instructions_custom() {
         }
 
 
-        if (width == 64 || width == 128) {
+        if (width == 64 || width == 128 || width == 1 || width == 2) {
             mRegister_list.push_back("xmm");
         }
-        if (width == 256) {
+        if (width == 256 || width == 3) {
             mRegister_list.push_back("ymm");
         }
-        if (width == 512) {
+        if (width == 512 || width == 4) {
             mRegister_list.push_back("zmm");
         }
     }
