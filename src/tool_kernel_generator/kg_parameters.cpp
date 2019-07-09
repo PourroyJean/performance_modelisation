@@ -45,10 +45,10 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
     string cwd(buff);
     HOME_DIR = cwd;
 
-    const char *const short_opts = "W:w:O:B:D:P:L:U:F:S:A:C:vhG";
+    const char *const short_opts = "W:O:B:D:P:L:U:F:S:A:C:vhG";
     const option long_opts[] = {
             {"width",      required_argument, nullptr, 'W'},
-            {"width_cust", required_argument, nullptr, 'w'},
+//            {"width_cust", required_argument, nullptr, 'w'},
             {"operations", required_argument, nullptr, 'O'},
             {"bind",       required_argument, nullptr, 'B'},
             {"dependency", required_argument, nullptr, 'D'},
@@ -155,6 +155,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                     printf("/!\\ WRONG FREQUENCY CHECK OPTION: %s\n", optarg);
                     exit(EXIT_FAILURE);
                 }
+                break;
 
             case 'G':
                 this->P_GRAPH = true;
