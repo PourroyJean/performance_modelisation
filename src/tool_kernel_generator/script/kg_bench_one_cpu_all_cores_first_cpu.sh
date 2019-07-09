@@ -5,7 +5,7 @@ BENCH="assembly"
 
 # -- WILL LAUNCH THE BENCH ON CPUs : --
 #CPU 0, 1, 2 .... NB_CORES_TO_BENCH
-NB_CORES_TO_BENCH=20 #TOTAL
+NB_CORES_TO_BENCH=`lscpu | grep "Core(s)" | awk '{print $4}'` #TOTAL
 
 
 #  -- FIND THE FIRST CORE OF THE SECOND SOCKET --
