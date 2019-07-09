@@ -10,24 +10,22 @@ if len(sys.argv) < 3:
 
 
 FILE_NAME=sys.argv[1]           #First argument is the input file
-SIZE_RECT=int(sys.argv[2])           #Second the rectangle size
+SIZE_RECT=int(sys.argv[2])       #Second the rectangle size
 
 cycles = []
 
 with open(FILE_NAME) as f:
     for line in f:
-        for word in line.split():
-            cycles.append(int(word))
-
+        ligne = line.split()
+        cycles.append(int(ligne[0]))
 
 x = sorted(cycles)
 
-n, bins, patches = plt.hist(x, SIZE_RECT, normed=1, facecolor='b', alpha=0.5)
+n, bins, patches = plt.hist(x, SIZE_RECT, normed=False, facecolor='b', alpha=0.5)
 
 
-plt.xlabel('Mise')
-plt.ylabel('Probabilite')
-# plt.axis([x[0], x[-1], 0, 0.000002])
+plt.xlabel('Number of cycle')
+plt.ylabel('Distribution')
 plt.autoscale(enable=True, axis='both', tight=None)
 plt.grid(True)
 plt.show()

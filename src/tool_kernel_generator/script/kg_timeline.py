@@ -11,7 +11,6 @@ if len(sys.argv) < 2:
 
 
 FILE_NAME=sys.argv[1]                #First argument is the input file
-# SIZE_RECT=int(sys.argv[2])           #Second the rectangle size
 
 cycles = []
 iteration = []
@@ -20,9 +19,6 @@ with open(FILE_NAME) as f:
     i =1
     for line in f:
         ligne = line.split()
-        # print ligne
-        # print " ---- "
-        # print i
         cycles.append(int(ligne[0]))
         iteration.append(i)
         i = i + 1
@@ -33,12 +29,12 @@ y = cycles
 
 print x
 plt.plot (x,y)
-# plt.hist(y, normed=True, bins=1000)
+plt.grid(True)
 
 
-plt.xlabel('Iteration')
-plt.ylabel('Number of cycles')
-# plt.axis([x[0], x[-1], 0, 0.000002])
+
+plt.xlabel('Mesures')
+plt.ylabel('Nombre de cycles')
 plt.autoscale(enable=True, axis='both', tight=None)
 plt.grid(True)
 plt.show()
