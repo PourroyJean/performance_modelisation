@@ -51,6 +51,8 @@ public:
     std::string mPrecision;
     int mFLOP_SP;
     int mFLOP_DP;
+    const int static mMAX_REGISTER = 32;
+    int mLast_register=-1;
 
     void Generate_code();
 
