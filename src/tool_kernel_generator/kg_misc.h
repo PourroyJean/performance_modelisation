@@ -59,10 +59,10 @@ double mygettime();
 uint64_t rdtsc();
 
 
-void leftRotatebyOne(int arr[], int n);
 
 /*Function to left rotate arr[] of size n by d*/
 void leftRotate(std::vector<int> * arr, int d, int n);
+void leftRotatebyOne(std::vector<int> * arr , int n);
 
 
 
