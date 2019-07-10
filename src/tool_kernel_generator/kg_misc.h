@@ -32,6 +32,7 @@
 #define PARAM_OPERATIONS    "aaaaa"
 #define PARAM_BIND          0
 #define PARAM_DEPENDENCY    false
+#define PARAM_NB_DEPENDENCY 0
 #define PARAM_PRECISION     "double"
 #define PARAM_VERBOSE       false
 #define PARAM_LOOP_SIZE     200000
@@ -56,6 +57,12 @@ std::vector<std::string> split(const std::string &s, char delim);
 double mygettime();
 
 uint64_t rdtsc();
+
+
+void leftRotatebyOne(int arr[], int n);
+
+/*Function to left rotate arr[] of size n by d*/
+void leftRotate(std::vector<int> * arr, int d, int n);
 
 
 

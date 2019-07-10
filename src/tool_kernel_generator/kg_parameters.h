@@ -26,6 +26,7 @@ public:
     std::string P_OPERATIONS;
     int         P_BIND;
     bool        P_DEPENDENCY;
+    int         P_NB_DEPENDENCY;
     std::string P_PRECISION;
     bool        P_VERBOSE;
     bool        P_HELP;
