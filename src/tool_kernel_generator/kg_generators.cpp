@@ -122,7 +122,7 @@ void KG_generators::generate_instructions() {
     mInstructions_set->clear();
     mPrevious_target_register = 1;
 
-    for (auto & operation : *mOperations_set) {
+    for (auto &operation : *mOperations_set) {
         string saveSource = to_string(Get_register_source());
         string saveCible = to_string(Get_register_cible());
 
@@ -137,10 +137,10 @@ void KG_generators::generate_instructions() {
                 mRegister_max = atoi(saveCible.c_str());
             }
         } else {
-            if (&operation == &mOperations_set->front() && mParameters->P_DEPENDENCY){
+            if (&operation == &mOperations_set->front() && mParameters->P_DEPENDENCY) {
                 instruction += "%%" + mRegister_name + to_string(mLast_register) + ", ";
 //                saveCible = to_string(Get_register_cible());
-            } else{
+            } else {
                 instruction += "%%" + mRegister_name + saveSource + ", ";
             }
         }
@@ -214,6 +214,17 @@ void KG_generators::parse_and_label_instructions() {
         }
     }
 
+    //If dependy is set, calculate the last register used to loop with the first instruction
+    if (mParameters->P_DEPENDENCY) {
+        if (mParameters->P_OPERATIONS.length() < mMAX_REGISTER - 1) {
+            mLast_register = (mParameters->P_OPERATIONS.length() + 1) % mMAX_REGISTER;
+        } else if ((mParameters->P_OPERATIONS.length()) % (mMAX_REGISTER - 2) == 0) {
+            mLast_register = mMAX_REGISTER - 1;
+        } else {
+            mLast_register = ((mParameters->P_OPERATIONS.length()) % (mMAX_REGISTER - 2)) + 1;
+        }
+    }
+
     flop *= mParameters->P_UNROLLING;
 
     if (!mParameters->P_PRECISION.compare("single")) {
@@ -231,16 +242,10 @@ void KG_generators::parse_and_label_instructions_custom() {
     //only [v]addpd instructions supported
     mPrefix = "v";
 
-//    int flop_per_inst = 0;
-
-    //vaddp[s,d]
-//    int size_register = 0;
     if (!mParameters->P_PRECISION.compare("single")) {
         mPrecision = "s";
-//        size_register = 32;
     } else {
         mPrecision = "d";
-//        size_register = 64;
     }
 
     for (int i = 0; i < mParameters->P_OPERATIONS.size(); ++i) {
@@ -252,13 +257,10 @@ void KG_generators::parse_and_label_instructions_custom() {
 
         if (op == 'a') {
             mOperations_set->push_back("add");
-//            flop += flop_per_inst;
         } else if (op == 'm') {
             mOperations_set->push_back("mul");
-//            flop += flop_per_inst;
         } else if (op == 'f') {
             mOperations_set->push_back("fmadd231");
-//            flop += flop_per_inst * 2;
         } else {
             cout << "ERROR PARSING INSTRUCTION";
             exit(1);
@@ -280,10 +282,8 @@ void KG_generators::parse_and_label_instructions_custom() {
     if (mParameters->P_WIDTH == 64) {
         //Scalar
         mSuffix = "s";
-//        flop_per_inst =1;
     } else {
         mSuffix = "p";
-//        flop_per_inst = mParameters->P_WIDTH / size_register;
     }
 
 
@@ -357,8 +357,6 @@ KG_generators::KG_generators(KG_parameters *param) :
 
 
 KG_generators::~KG_generators() {
-//    fclose(P_FPC);
-//    fclose(P_FPH);
 }
 
 
