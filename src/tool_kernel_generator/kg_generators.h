@@ -25,6 +25,8 @@ private:
 
     void parse_and_label_instructions_custom();
 
+    void KG_generate_table_registers();
+
     void calcul_flop();
 
     int Get_register_source();
@@ -52,6 +54,11 @@ public:
     int mFLOP_SP;
     int mFLOP_DP;
     const int static mMAX_REGISTER = 32;
+
+    std::vector<int> * mTableRegisterSource1;
+    std::vector<int> * mTableRegisterSource2;
+    std::vector<int> * mTableRegisterCible  ;
+
     int mLast_register=-1;
 
     void Generate_code();

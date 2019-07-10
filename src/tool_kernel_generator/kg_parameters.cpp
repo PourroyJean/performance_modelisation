@@ -20,6 +20,7 @@ KG_parameters::KG_parameters() {
     P_OPERATIONS = PARAM_OPERATIONS;
     P_BIND = PARAM_BIND;
     P_DEPENDENCY = PARAM_DEPENDENCY;
+    P_NB_DEPENDENCY = PARAM_NB_DEPENDENCY;
     P_PRECISION = PARAM_PRECISION;
     P_LOOP_SIZE = PARAM_LOOP_SIZE;
     P_UNROLLING = PARAM_UNROLLING;
@@ -107,15 +108,15 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                 }
                 break;
             case 'D':
-                tmp_str = optarg;
-                if (!tmp_str.compare("true") || !tmp_str.compare("false")) {
-                    bool b;
-                    istringstream(optarg) >> std::boolalpha >> b;
-                    P_DEPENDENCY = b;
+                ioptarg = atoi(optarg);
+                if ((ioptarg >= 0) && (ioptarg < 32)) {
+                    this->P_DEPENDENCY = true;
+                    this->P_NB_DEPENDENCY = atoi(optarg);
                 } else {
-                    printf("/!\\ WRONG DEPENDENCY OPTION: %s\n", optarg);
+                    printf("/!\\ WRONG DEPENDENCY DEPTH OPTION: %s\n", optarg);
                     exit(EXIT_FAILURE);
                 }
+
 
                 break;
             case 'P':
