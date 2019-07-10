@@ -27,7 +27,7 @@ void print_times(char *s);
 #ifdef  OP_DEBUG
 #define DEBUG cout << "_DEBUG_ "
 #else
-    #define DEBUG 0 && cout
+    #define DEBUG 1 && cout
 #endif
 
 typedef uint64_t ui64;
