@@ -97,9 +97,7 @@ void KG_generators::generate_source() {
 
 
 int KG_generators::Get_register_source() {
-    //TODO: on genere ca 				"vaddsd %%xmm0, %%xmm1, %%xmm2; " on veut ca 				"vaddsd %%xmm0, %%xmm2, %%xmm2; "
     if (mParameters->P_DEPENDENCY) {
-        return mPrevious_target_register +1;
         return mPrevious_target_register;
     } else {
         return 1;
@@ -107,10 +105,12 @@ int KG_generators::Get_register_source() {
 }
 
 int KG_generators::Get_register_cible() {
-    if (mPrevious_target_register == 15) {
-        mPrevious_target_register = 1;
+    if (mPrevious_target_register == mMAX_REGISTER - 1) { //max is 32 registers
+        mPrevious_target_register = 2;
+    } else {
+        mPrevious_target_register++;
     }
-    mPrevious_target_register++;
+
     return mPrevious_target_register;
 }
 
@@ -122,12 +122,14 @@ void KG_generators::generate_instructions() {
     mInstructions_set->clear();
     mPrevious_target_register = 1;
 
-    for (auto operation : *mOperations_set) {
+    for (auto & operation : *mOperations_set) {
         string saveSource = to_string(Get_register_source());
         string saveCible = to_string(Get_register_cible());
 
         //v add p d
         string instruction = mPrefix + operation + mSuffix + mPrecision + " ";
+
+
         instruction += "%%" + mRegister_name + "0, ";
         if (mParameters->P_COUNT) {//Count by adding 1 for each addition
             instruction += "%%" + mRegister_name + saveCible + ", ";
@@ -135,7 +137,12 @@ void KG_generators::generate_instructions() {
                 mRegister_max = atoi(saveCible.c_str());
             }
         } else {
-            instruction += "%%" + mRegister_name + saveSource + ", ";
+            if (&operation == &mOperations_set->front() && mParameters->P_DEPENDENCY){
+                instruction += "%%" + mRegister_name + to_string(mLast_register) + ", ";
+//                saveCible = to_string(Get_register_cible());
+            } else{
+                instruction += "%%" + mRegister_name + saveSource + ", ";
+            }
         }
         instruction += "%%" + mRegister_name + saveCible + "; ";
         //tmp pour verifier dependency
@@ -145,9 +152,7 @@ void KG_generators::generate_instructions() {
 
         mInstructions_set->push_back(instruction);
         DEBUG << instruction << endl;
-
     }
-
 
 }
 
@@ -318,7 +323,6 @@ void KG_generators::Generate_code() {
     generate_instructions();
 
     generate_source();
-
 
     return;
 }

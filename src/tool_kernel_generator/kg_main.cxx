@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
     executor->Execute_assembly();
 
     //----------- ANALYZING -------------------
-    //executor->Monitor_Execution();
+    executor->Monitor_Execution();
 
     return 0;
 }
