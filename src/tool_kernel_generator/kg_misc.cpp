@@ -76,3 +76,21 @@ void native_frequency() {
     printf("NATIVE_FREQUENCY %u MHz\n", freq);
 
 }
+
+
+void leftRotatebyOne(std::vector<int> * arr , int n)
+{
+    int i_1 = arr->at(n-1);
+    for (int i = 0; i < n ; i++){
+        int tmp = arr->at(i);
+        arr->at(i) = i_1;
+        i_1 = tmp;
+    }
+}
+
+/*Function to left rotate arr[] of size n by d*/
+void leftRotate(std::vector<int> * arr, int d, int n)
+{
+    for (int i = 0; i < d; i++)
+        leftRotatebyOne(arr, n);
+}

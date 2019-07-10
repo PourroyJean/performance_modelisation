@@ -115,6 +115,45 @@ int KG_generators::Get_register_cible() {
 }
 
 
+void KG_generators::KG_generate_table_registers() {
+
+    //generates three register buffers for constructing instructions.
+    //The first table contains only register 0,
+    //The second source depends on whether or not the dependency option is used.
+    int size_register_vector = mOperations_set->size() < mMAX_REGISTER ? mOperations_set->size() : mMAX_REGISTER;
+
+    mTableRegisterSource1 = new std::vector<int>(size_register_vector);
+    mTableRegisterSource2 = new std::vector<int>(size_register_vector);
+    mTableRegisterCible = new std::vector<int>(size_register_vector);
+
+
+    //generates the three lists of source and destination registers for instructions
+    for (int i = 0; i < size_register_vector; ++i) {
+        mTableRegisterSource1->at(i) = 0;
+
+        if (mParameters->P_DEPENDENCY) {
+            mTableRegisterSource2->at(i) = i + 2;
+        } else {
+            mTableRegisterSource2->at(i) = 1;
+        }
+
+        mTableRegisterCible->at(i) = i + 2;
+    }
+
+    //the rotation of the source register table allows to generate N chain of dependencies
+    leftRotate(mTableRegisterSource2, mParameters->P_NB_DEPENDENCY, size_register_vector);
+
+
+    DEBUG << " Source 1 - [";
+    for (auto a : *mTableRegisterSource1) { DEBUG << a << ", "; }
+    DEBUG << "]\n  Source 2 - [";
+    for (auto a : *mTableRegisterSource2) { DEBUG << a << ", "; }
+    DEBUG << "]\n Cible   -  [";
+    for (auto a : *mTableRegisterCible) { DEBUG << a << ", "; }
+    DEBUG << "]\n";
+}
+
+
 void KG_generators::generate_instructions() {
     DEBUG << "-- Generating instructions vector\n";
 
@@ -122,35 +161,30 @@ void KG_generators::generate_instructions() {
     mInstructions_set->clear();
     mPrevious_target_register = 1;
 
+    int instruction_index_register = 0;
+
+    KG_generate_table_registers();
+
+    cout << "mOperations_set " << mOperations_set->size() << endl;
+
     for (auto &operation : *mOperations_set) {
         string saveSource = to_string(Get_register_source());
         string saveCible = to_string(Get_register_cible());
+        instruction_index_register = (instruction_index_register) % (mMAX_REGISTER - 2);
 
         //v add p d
         string instruction = mPrefix + operation + mSuffix + mPrecision + " ";
+        //instruction = "vdivpd ";    #generate division todo
 
+        // 3 registers
+        instruction += "%%" + mRegister_name + to_string(mTableRegisterSource1->at(instruction_index_register)) + ", ";
+        instruction += "%%" + mRegister_name + to_string(mTableRegisterSource2->at(instruction_index_register)) + ", ";
+        instruction += "%%" + mRegister_name + to_string(mTableRegisterCible->at(instruction_index_register)) + "; ";
 
-        instruction += "%%" + mRegister_name + "0, ";
-        if (mParameters->P_COUNT) {//Count by adding 1 for each addition
-            instruction += "%%" + mRegister_name + saveCible + ", ";
-            if (atoi(saveCible.c_str()) > mRegister_max) {
-                mRegister_max = atoi(saveCible.c_str());
-            }
-        } else {
-            if (&operation == &mOperations_set->front() && mParameters->P_DEPENDENCY) {
-                instruction += "%%" + mRegister_name + to_string(mLast_register) + ", ";
-//                saveCible = to_string(Get_register_cible());
-            } else {
-                instruction += "%%" + mRegister_name + saveSource + ", ";
-            }
-        }
-        instruction += "%%" + mRegister_name + saveCible + "; ";
-        //tmp pour verifier dependency
-//        instruction += "%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
-//        instruction += "%%" + mRegister_name + to_string(Get_register_cible()) + ", ";
-//        instruction += "%%" + mRegister_name + to_string(Get_register_cible()) + "; ";
 
         mInstructions_set->push_back(instruction);
+        instruction_index_register++;
+
         DEBUG << instruction << endl;
     }
 
@@ -324,6 +358,7 @@ void KG_generators::Generate_code() {
 
     generate_source();
 
+
     return;
 }
 
@@ -353,6 +388,8 @@ KG_generators::KG_generators(KG_parameters *param) :
         cerr << FILE_ASM_SOURCE_GENERATED << endl;
         exit(0);
     }
+
+
 }
 
 
