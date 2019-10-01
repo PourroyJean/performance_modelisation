@@ -12,7 +12,7 @@ res_file=RES_FILE
 #echo $dir[1]
 
 for d in $dir;do
-    tail -n +2 $d/out_TEST  | awk -F "," '{print $1}' > $res_file
+    tail -n +2 $d/out_DATA  | awk -F "," '{print $1}' > $res_file
     break
 done
 
@@ -21,7 +21,7 @@ cat $res_file
 
 
 for d in $dir;do
-   output_file="$d/out_TEST"
+   output_file="$d/out_DATA"
   echo  "---- $d ---- "
   if [ `grep -c '#This was launch with' $output_file` -eq 0 ]; then
     echo "Running..."
