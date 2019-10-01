@@ -84,7 +84,7 @@ set_target_properties( ${BM_EXECUTABLE}
 #        )
 #
 #
-#file(COPY ${KG_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_kernel_generator)
+#file(COPY ${KG_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/benchmark_kernel_generator)
 
 
 
