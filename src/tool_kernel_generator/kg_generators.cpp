@@ -120,7 +120,7 @@ void KG_generators::KG_generate_table_registers() {
     //generates three register buffers for constructing instructions.
     //The first table contains only register 0,
     //The second source depends on whether or not the dependency option is used.
-    int size_register_vector = mOperations_set->size() < mMAX_REGISTER ? mOperations_set->size() : mMAX_REGISTER;
+    int size_register_vector = mOperations_set->size() < mMAX_REGISTER - 1 ? mOperations_set->size() : mMAX_REGISTER -2;
 
     mTableRegisterSource1 = new std::vector<int>(size_register_vector);
     mTableRegisterSource2 = new std::vector<int>(size_register_vector);
@@ -144,6 +144,7 @@ void KG_generators::KG_generate_table_registers() {
     leftRotate(mTableRegisterSource2, mParameters->P_NB_DEPENDENCY, size_register_vector);
 
 
+    DEBUG << mTableRegisterSource1->size() << " ok ok \n";
     DEBUG << " Source 1 - [";
     for (auto a : *mTableRegisterSource1) { DEBUG << a << ", "; }
     DEBUG << "]\n  Source 2 - [";
