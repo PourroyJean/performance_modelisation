@@ -6,6 +6,7 @@ ls /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh
 . /opt/intel/compilers_and_libraries/linux/bin/compilervars.sh intel64
 export PATH=.:$PATH
 
+
 # Path of the
 check_bin  (){
 BIN=$1
@@ -104,6 +105,81 @@ test_mpi_bandwidth_saturation (){
         core_list="$core_list,"
     done
 }
+
+
+
+# -------------------------------------------------------
+# --     How much bandwidth with max nb of core        --
+# -------------------------------------------------------
+test_mpi_bandwidth_saturation_max_nb_core (){
+    #export PIN_CORE_LIST="0 1,2,3,4,5 6,7,8,9"
+    #export PIN_CORE_LIST="0,1,2,3,4,5,6,7"
+    echo "Running test_mpi_bandwidth_saturation_max_nb_core ..."
+    export PIN_CORE_LIST="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19"
+
+    EXE="./bin/benchmark_memory/bm_mpi"
+    check_bin $EXE
+
+    echo -e "Nb_Core\tBand_unit\tBand_Total"
+    for core_test in $PIN_CORE_LIST  ; do
+        core_list="$core_list$core_test"
+        export I_MPI_PIN_PROCESSOR_LIST="$core_list"
+        nb_core=$((`echo $core_list | grep -o "," | wc -l` + 1))
+
+        STRIDE=64
+        UNROLL=8    #1 is the best in memory
+        MINLOG=8.3  #1.5 GiB
+        MAXLOG=8.8  #3.0 GiB
+        HUGEPAGES="--hugepages"
+        HUGEPAGES=""
+        mpirun -np $nb_core numactl  $EXE --steplog 0.31 --unroll $UNROLL --type read --mode special --cacheline 64 --prefix out --stride $STRIDE --matrixsize 3400 --log 0 --output out > res_tmp
+        band=`cat res_tmp | grep Bandwidth | awk '{print $2}'`
+
+        band_tot=`echo $band | awk -v nbc=$nb_core '{ print $1*nbc }'`
+        echo -e "${nb_core}\t${band}\t${band_tot}\t\t-- Cores used : $core_list "
+        core_list="$core_list,"
+    done
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # ---------------------------------
@@ -508,7 +584,8 @@ test_unrolling (){
     MODE=special
     MEASURE=1000
     MAT_SIZE=2
-    EXE="./bin/benchmark_memory/bm_icc_no_unroll"
+#    EXE="./bin/benchmark_memory/bm_icc_no_unroll"
+    EXE=$BIN
     check_bin $EXE
 
     printf  '%-12s %-13s %-12s %-15s %-12s \n' "Data_set" "unrolling" "bandwidth" "nb_inst" "IPC"
@@ -541,12 +618,13 @@ test_unrolling (){
 
 #test_bw_staturation
 #test_mpi_bandwidth_saturation
+test_mpi_bandwidth_saturation_max_nb_core
 #test_mpi_L3_scaling
 #test_mpi_hierarchy_conflict
 #test_mpi_scaling_core_or_dataset
 #test_mpi_hierarchy_specific_bench
 #test_mpi_L3_scaling_2
-test_mpi_sharing_cache
+#test_mpi_sharing_cache
 #test_mpi_cache_scaling
 #test_bw_staturation
 #test_jean
