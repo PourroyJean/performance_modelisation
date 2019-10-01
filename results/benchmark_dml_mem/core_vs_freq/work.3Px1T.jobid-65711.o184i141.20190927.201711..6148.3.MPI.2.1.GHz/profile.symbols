@@ -1,0 +1,43 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        app name                 symbol name
+847      51.4581  vmlinux-unknown          /vmlinux-unknown
+369      22.4180  bm_mpi                   main
+300      18.2260  bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+50        3.0377  xfs                      /xfs
+14        0.8505  libmpi.so.12.0.0         MPIDU_shm_barrier
+10        0.6075  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+5         0.3038  ld-2.17.so               do_lookup_x
+4         0.2430  libpsm2.so.2.1           ips_ptl_poll
+3         0.1823  libc-2.17.so             _int_malloc
+3         0.1823  libmpi.so.12.0.0         ADIOI_Set_lock64
+3         0.1823  libmpi.so.12.0.0         MPIDI_Bcast_intra_composition_epsilon
+3         0.1823  libpsm2.so.2.1           psmi_poll_internal
+2         0.1215  bash                     /usr/bin/bash
+2         0.1215  libc-2.17.so             __gconv_transform_utf8_internal
+2         0.1215  libc-2.17.so             _dl_addr
+2         0.1215  libmpi.so.12.0.0         inflate_fast
+2         0.1215  libpsm2.so.2.1           __intel_avx_rep_memset
+2         0.1215  libpsm2.so.2.1           amsh_ep_connreq_poll
+2         0.1215  libpsm2.so.2.1           psmi_cycles_left
+1         0.0608  ib_ipoib                 /ib_ipoib
+1         0.0608  ld-2.17.so               _dl_fixup
+1         0.0608  ld-2.17.so               _dl_name_match_p
+1         0.0608  ld-2.17.so               _dl_relocate_object
+1         0.0608  ld-2.17.so               dl_main
+1         0.0608  ld-2.17.so               strcmp
+1         0.0608  libc-2.17.so             _IO_default_xsputn
+1         0.0608  libc-2.17.so             __GI_strcmp
+1         0.0608  libc-2.17.so             __close_nocancel
+1         0.0608  libc-2.17.so             __ctype_b_loc
+1         0.0608  libc-2.17.so             __memcpy_sse2
+1         0.0608  libc-2.17.so             fgetc
+1         0.0608  libc-2.17.so             fileno
+1         0.0608  libc-2.17.so             getenv
+1         0.0608  libmpi.so.12.0.0         MPIDI_Progress_test
+1         0.0608  libmpi.so.12.0.0         MPID_Init
+1         0.0608  libpsm2.so.2.1           psm2_mq_ipeek
+1         0.0608  libpsmx2-fi.so           psmx2_am_progress
+1         0.0608  libpsmx2-fi.so           psmx2_cq_poll_mq
+1         0.0608  oprofiled                /usr/bin/oprofiled
+1         0.0608  systemd-journald         /usr/lib/systemd/systemd-journald

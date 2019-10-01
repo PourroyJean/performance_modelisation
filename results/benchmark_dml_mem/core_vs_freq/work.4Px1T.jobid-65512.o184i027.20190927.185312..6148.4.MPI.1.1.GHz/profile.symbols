@@ -1,0 +1,55 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        app name                 symbol name
+845      60.0996  vmlinux-unknown          /vmlinux-unknown
+235      16.7141  bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+220      15.6472  bm_mpi                   main
+20        1.4225  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+9         0.6401  xfs                      /xfs
+7         0.4979  libmpi.so.12.0.0         MPIDU_shm_barrier
+4         0.2845  ld-2.17.so               do_lookup_x
+4         0.2845  ld-2.17.so               strcmp
+4         0.2845  libc-2.17.so             _int_malloc
+3         0.2134  bash                     /usr/bin/bash
+3         0.2134  ld-2.17.so               _dl_relocate_object
+3         0.2134  libc-2.17.so             __GI_____strtoull_l_internal
+2         0.1422  ld-2.17.so               _dl_lookup_symbol_x
+2         0.1422  libc-2.17.so             fgetc
+2         0.1422  libc-2.17.so             get_nprocs_conf
+2         0.1422  libc-2.17.so             mbrtoc32
+2         0.1422  libmpi.so.12.0.0         MPIDI_Bcast_intra_composition_epsilon
+2         0.1422  libmpi.so.12.0.0         inflate_fast
+2         0.1422  libpsm2.so.2.1           ips_ptl_poll
+2         0.1422  libpsm2.so.2.1           psm2_mq_ipeek
+2         0.1422  libpsmx2-fi.so           psmx2_cq_readfrom
+1         0.0711  bm_mpi                   bm_parameters::init_arguments(int, char const**)
+1         0.0711  hfi1                     /hfi1
+1         0.0711  hydra_pmi_proxy          hwloc_bitmap_and
+1         0.0711  ld-2.17.so               _dl_fixup
+1         0.0711  ld-2.17.so               _dl_important_hwcaps
+1         0.0711  ld-2.17.so               _dl_runtime_resolve_xsavec
+1         0.0711  ld-2.17.so               init_cpu_features.constprop.0
+1         0.0711  libc-2.17.so             __GI_strncmp
+1         0.0711  libc-2.17.so             __errno_location
+1         0.0711  libc-2.17.so             __gconv_read_conf
+1         0.0711  libc-2.17.so             __gconv_transform_utf8_internal
+1         0.0711  libc-2.17.so             __memcmp_sse4_1
+1         0.0711  libc-2.17.so             _int_free
+1         0.0711  libc-2.17.so             _wordcopy_fwd_dest_aligned
+1         0.0711  libc-2.17.so             fgets
+1         0.0711  libc-2.17.so             malloc
+1         0.0711  libc-2.17.so             readdir
+1         0.0711  libc-2.17.so             strtoul
+1         0.0711  libmpi.so.12.0.0         MPIDI_OFI_retry_progress
+1         0.0711  libmpi.so.12.0.0         MPIR_Comm_register_hint
+1         0.0711  libmpi.so.12.0.0         _fini
+1         0.0711  libmpi.so.12.0.0         adler32
+1         0.0711  libpsm2.so.2.1           __intel_avx_rep_memset
+1         0.0711  libpsm2.so.2.1           amsh_poll
+1         0.0711  libpsm2.so.2.1           psmi_mpool_create
+1         0.0711  libpsmx2-fi.so           psmx2_cq_poll_mq
+1         0.0711  libpsmx2-fi.so           psmx2_unlock
+1         0.0711  nfs                      /nfs
+1         0.0711  ophelp                   /usr/bin/ophelp
+1         0.0711  oprofile                 /oprofile
+1         0.0711  tg3                      /tg3

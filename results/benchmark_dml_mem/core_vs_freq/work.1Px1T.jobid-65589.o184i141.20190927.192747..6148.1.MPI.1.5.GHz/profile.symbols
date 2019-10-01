@@ -1,0 +1,38 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        app name                 symbol name
+346      56.5359  vmlinux-unknown          /vmlinux-unknown
+96       15.6863  bm_mpi                   main
+74       12.0915  bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+35        5.7190  xfs                      /xfs
+18        2.9412  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+6         0.9804  bash                     /usr/bin/bash
+5         0.8170  ld-2.17.so               do_lookup_x
+2         0.3268  cp                       /usr/bin/cp
+2         0.3268  libc-2.17.so             _dl_addr
+2         0.3268  libc-2.17.so             _int_free
+2         0.3268  sunrpc                   /sunrpc
+1         0.1634  crc32c_intel             /crc32c_intel
+1         0.1634  dbus-daemon              /usr/bin/dbus-daemon
+1         0.1634  hydra_pmi_proxy          hwloc_linux_parse_cpuinfo_x86
+1         0.1634  irqbalance               /usr/sbin/irqbalance
+1         0.1634  ld-2.17.so               _dl_add_to_namespace_list
+1         0.1634  ld-2.17.so               _dl_lookup_symbol_x
+1         0.1634  ld-2.17.so               _dl_relocate_object
+1         0.1634  ld-2.17.so               _dl_start
+1         0.1634  ld-2.17.so               match_symbol
+1         0.1634  libc-2.17.so             __close_nocancel
+1         0.1634  libc-2.17.so             __memmove_ssse3_back
+1         0.1634  libc-2.17.so             __strcpy_sse2_unaligned
+1         0.1634  libc-2.17.so             _dl_mcount_wrapper_check
+1         0.1634  libc-2.17.so             _int_malloc
+1         0.1634  libc-2.17.so             _nl_normalize_codeset
+1         0.1634  libc-2.17.so             clock_gettime
+1         0.1634  libc-2.17.so             malloc_consolidate
+1         0.1634  libc-2.17.so             vfprintf
+1         0.1634  libdbus-1.so.3.14.14     /usr/lib64/libdbus-1.so.3.14.14
+1         0.1634  libmpi.so.12.0.0         _fini
+1         0.1634  libmpi.so.12.0.0         inflate_fast
+1         0.1634  libpsm2.so.2.1           __intel_avx_rep_memset
+1         0.1634  mpiexec.hydra            look_sysfscpu
+1         0.1634  sudo                     /usr/bin/sudo
