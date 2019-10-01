@@ -30,6 +30,8 @@ void print_times(char *s);
     #define DEBUG 1 && cout
 #endif
 
+
+
 typedef uint64_t ui64;
 typedef uint32_t ui32;
 /**
