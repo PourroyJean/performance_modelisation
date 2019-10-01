@@ -2,7 +2,7 @@ T=$(date +%y%m%d%H%M%S).$(uname -n)
 
 MD="m"
 
-BENCH="./bin/tool_kernel_generator/kg"
+BENCH="./bin/benchmark_kernel_generator/kg"
 
 for i in {1..200};do
     echo "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" >>$T
