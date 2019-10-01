@@ -1,0 +1,39 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        app name                 symbol name
+413      56.0380  vmlinux-unknown          /vmlinux-unknown
+122      16.5536  bm_mpi                   main
+101      13.7042  bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+45        6.1058  xfs                      /xfs
+12        1.6282  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+3         0.4071  ld-2.17.so               _dl_map_object_from_fd
+3         0.4071  ld-2.17.so               do_lookup_x
+3         0.4071  libc-2.17.so             _int_malloc
+3         0.4071  libdbus-1.so.3.14.14     /usr/lib64/libdbus-1.so.3.14.14
+2         0.2714  bash                     /usr/bin/bash
+2         0.2714  ld-2.17.so               _dl_lookup_symbol_x
+2         0.2714  ld-2.17.so               _dl_relocate_object
+2         0.2714  libc-2.17.so             __gconv_transform_utf8_internal
+2         0.2714  libc-2.17.so             __strlen_sse2_pminub
+1         0.1357  gawk                     /usr/bin/gawk
+1         0.1357  hydra_pmi_proxy          hwloc_bitmap_set_ith_ulong
+1         0.1357  hydra_pmi_proxy          look_proc
+1         0.1357  ixgbe                    /ixgbe
+1         0.1357  ld-2.17.so               _dl_map_object_deps
+1         0.1357  ld-2.17.so               _dl_name_match_p
+1         0.1357  ld-2.17.so               _dl_runtime_resolve_xsavec
+1         0.1357  ld-2.17.so               check_match.9522
+1         0.1357  ld-2.17.so               dl_main
+1         0.1357  ld-2.17.so               index
+1         0.1357  ld-2.17.so               memset
+1         0.1357  ld-2.17.so               strcmp
+1         0.1357  libc-2.17.so             __GI_strlen
+1         0.1357  libc-2.17.so             __close_nocancel
+1         0.1357  libc-2.17.so             _dl_addr
+1         0.1357  libc-2.17.so             fgetc
+1         0.1357  libc-2.17.so             realloc
+1         0.1357  libc-2.17.so             vsscanf
+1         0.1357  libc-2.17.so             waitpid
+1         0.1357  oprofile                 /oprofile
+1         0.1357  rdmavt                   /rdmavt
+1         0.1357  systemd-journald         /usr/lib/systemd/systemd-journald

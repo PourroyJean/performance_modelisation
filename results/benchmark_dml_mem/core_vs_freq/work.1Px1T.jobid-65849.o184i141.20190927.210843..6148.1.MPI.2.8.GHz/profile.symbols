@@ -1,0 +1,28 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        app name                 symbol name
+355      55.7300  vmlinux-unknown          /vmlinux-unknown
+119      18.6813  bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+91       14.2857  bm_mpi                   main
+29        4.5526  xfs                      /xfs
+9         1.4129  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+4         0.6279  bash                     /usr/bin/bash
+3         0.4710  ld-2.17.so               _dl_relocate_object
+3         0.4710  libc-2.17.so             malloc
+2         0.3140  ld-2.17.so               _dl_check_map_versions
+2         0.3140  ld-2.17.so               do_lookup_x
+2         0.3140  libc-2.17.so             __gconv_transform_utf8_internal
+2         0.3140  libc-2.17.so             __memcpy_ssse3_back
+2         0.3140  libc-2.17.so             _int_malloc
+2         0.3140  libc-2.17.so             openat64
+2         0.3140  libpsm2.so.2.1           __intel_avx_rep_memset
+1         0.1570  ixgbe                    /ixgbe
+1         0.1570  ld-2.17.so               _dl_fixup
+1         0.1570  ld-2.17.so               check_match.9522
+1         0.1570  libc-2.17.so             _IO_vfscanf
+1         0.1570  libc-2.17.so             __mempcpy_ssse3_back
+1         0.1570  libc-2.17.so             __strcpy_sse2_unaligned
+1         0.1570  libc-2.17.so             __strlen_sse2_pminub
+1         0.1570  libc-2.17.so             __strncat_sse2_unaligned
+1         0.1570  libpsm2.so.2.1           hfi_touch_mmap
+1         0.1570  libpthread-2.17.so       pthread_cond_signal@@GLIBC_2.3.2

@@ -1,0 +1,51 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        app name                 symbol name
+1023     50.2703  vmlinux-unknown          /vmlinux-unknown
+451      22.1622  bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+428      21.0319  bm_mpi                   main
+43        2.1130  xfs                      /xfs
+13        0.6388  libmpi.so.12.0.0         MPIDU_shm_barrier
+7         0.3440  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+5         0.2457  bash                     /usr/bin/bash
+5         0.2457  ld-2.17.so               do_lookup_x
+4         0.1966  libc-2.17.so             __memcpy_ssse3_back
+3         0.1474  libc-2.17.so             mbrtoc32
+3         0.1474  libmpi.so.12.0.0         MPIDI_Bcast_intra_composition_epsilon
+3         0.1474  libmpi.so.12.0.0         MPIDI_NM_progress
+2         0.0983  ld-2.17.so               _dl_lookup_symbol_x
+2         0.0983  libc-2.17.so             get_nprocs_conf
+2         0.0983  libmpi.so.12.0.0         MPIDI_Progress_test
+2         0.0983  libmpi.so.12.0.0         _fini
+2         0.0983  libmpi.so.12.0.0         inflate_fast
+2         0.0983  libpsm2.so.2.1           ips_ptl_poll
+2         0.0983  libpsm2.so.2.1           psm2_mq_ipeek
+2         0.0983  libpsm2.so.2.1           psmi_poll_internal
+2         0.0983  libpsmx2-fi.so           psmx2_am_progress
+2         0.0983  libpsmx2-fi.so           psmx2_cq_poll_mq
+2         0.0983  libpsmx2-fi.so           psmx2_unlock
+1         0.0491  bm_mpi                   ez::ezOptionParser::parse(int, char const**)
+1         0.0491  dbus-daemon              /usr/bin/dbus-daemon
+1         0.0491  hfi1                     /hfi1
+1         0.0491  ib_uverbs                /ib_uverbs
+1         0.0491  ixgbe                    /ixgbe
+1         0.0491  ld-2.17.so               _dl_fixup
+1         0.0491  ld-2.17.so               _dl_relocate_object
+1         0.0491  ld-2.17.so               bcmp
+1         0.0491  ld-2.17.so               open64
+1         0.0491  ld-2.17.so               open_verify
+1         0.0491  libc-2.17.so             __GI_strlen
+1         0.0491  libc-2.17.so             __memmove_ssse3_back
+1         0.0491  libc-2.17.so             __open_nocancel
+1         0.0491  libc-2.17.so             _dl_addr
+1         0.0491  libc-2.17.so             _int_malloc
+1         0.0491  libc-2.17.so             malloc_consolidate
+1         0.0491  libc-2.17.so             open_socket
+1         0.0491  libc-2.17.so             vsscanf
+1         0.0491  libdbus-1.so.3.14.14     /usr/lib64/libdbus-1.so.3.14.14
+1         0.0491  libmpi.so.12.0.0         MPIDI_OFI_retry_progress
+1         0.0491  libmpi.so.12.0.0         impi_shm_heap_progress
+1         0.0491  libpsm2.so.2.1           __intel_avx_rep_memset
+1         0.0491  libpsmx2-fi.so           psmx2_lock
+1         0.0491  megaraid_sas             /megaraid_sas
+1         0.0491  ophelp                   /usr/bin/ophelp
