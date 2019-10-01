@@ -1,0 +1,28 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+cpu_clk_unhalt...|
+  samples|      %|
+------------------
+     3534 66.4661 vmlinux-unknown
+     1580 29.7160 bm_mpi
+       53  0.9968 libc-2.17.so
+       48  0.9028 libmpi.so.12.0.0
+       33  0.6207 ld-2.17.so
+       20  0.3762 libperl.so
+       13  0.2445 libpsm2.so.2.1
+       13  0.2445 xfs
+        5  0.0940 libpsmx2-fi.so
+        3  0.0564 bash
+        2  0.0376 oprofile
+        2  0.0376 cp
+        1  0.0188 hfi1
+        1  0.0188 hydra_pmi_proxy
+        1  0.0188 libmpicxx.so.12.0.0
+        1  0.0188 libfabric.so.1
+        1  0.0188 sunrpc
+        1  0.0188 tg3
+        1  0.0188 ophelp
+        1  0.0188 oprofiled
+        1  0.0188 systemd
+        1  0.0188 libibverbs.so.1.1.17.2
+        1  0.0188 libstdc++.so.6.0.19

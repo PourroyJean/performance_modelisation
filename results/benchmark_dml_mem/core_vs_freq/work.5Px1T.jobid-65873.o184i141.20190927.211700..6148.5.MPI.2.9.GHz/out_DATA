@@ -1,0 +1,3 @@
+#This was launch with : --steplog 0 --unroll 8 --type read --cacheline 64 --mode special --prefix freq_ --matrixsize 2000 --stride 64 --output out_DATA 
+-1,64
+2094545920,11.34

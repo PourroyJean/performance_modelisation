@@ -1,0 +1,129 @@
+[MYMPIRUN] Version 5.6 - June 2019
+[MYMPIRUN] Going to guess which MPI library should be used
+[MYMPIRUN] Built-in attachment enabled, using: /opt/hpe/tools/bin/attach -c p
+ATTENTION: Use of opcontrol is discouraged.  Please see the man page for operf.
+Daemon started.
+Profiler running.
+Signalling daemon... done
+[MYMPIRUN] Intel MPI executable will be launched
+[MYMPIRUN] Going to use /opt/intel/impi/current/bin64/mpiexec.hydra as launcher
++ /usr/bin/time -p /opt/intel/impi/current/intel64/bin/mpiexec.hydra -bootstrap ssh -pmi-aggregate -pmi-connect lazy-cache -branch-count 32 -f ./hosts.33951.compact -perhost 1 -envall -wdir /nfs/pourroy/code/THESE/performance_modelisation/build/WORK_DIR/work.1Px1T.jobid-65669.o184i141.20190927.200044..6148.1.MPI.1.9.GHz -np 1 /opt/hpe/tools/bin/attach -c p /nfs/pourroy/code/THESE/performance_modelisation/build/WORK_DIR/work.1Px1T.jobid-65669.o184i141.20190927.200044..6148.1.MPI.1.9.GHz/bm_mpi --steplog 0 --unroll 8 --type read --cacheline 64 --mode special --prefix freq_ --matrixsize 2000 --stride 64 --output out_DATA
+Hello world from processor 0out of 1processors
+
+ ------------- CONFIGURATION --------------
+ - PARSING -
+
+                  -h    1          (default value)
+          --annotate               (default value)
+         --cacheline    64        
+            --cpuaff    0          (default value)
+           --display    AVERAGE    (default value)
+               --ghz    0          (default value)
+         --hugepages    false      (default value)
+             --index    1          (default value)
+               --log    0          (default value)
+      --matrixoffset    0          (default value)
+        --matrixsize    2000      
+            --maxlog    15         (default value)
+            --maxops    1          (default value)
+         --maxstride    8192       (default value)
+           --measure    2          (default value)
+            --memaff    0          (default value)
+            --minlog    3          (default value)
+         --minstride    8          (default value)
+              --mode    special   
+            --output    out_DATA  
+            --prefix    freq_     
+           --steplog    0         
+            --stride    64        
+        --stridemode    ODD        (default value)
+              --type    read      
+              --unit    GB         (default value)
+            --unroll    8         
+           --verbose    1          (default value)
+
+-- The following configuration will be used for the benchmark:
+  Benchmark type               READ       
+  Benchmark mode               SPECIAL    
+  Matrix size                  2.0 GiB    
+  Number of thread             1          
+  Memory page size             Default (4 KiB) 
+  Number of element            262144000 
+  Number of manual unroll      8          
+  Measure are displayed in     GB         
+  Measure represents the       AVERAGE    
+  Cache line size              64         
+  Stride range in byte         64 - 64 mode ODD 
+  Log range                    8.418000 - 8.418000 
+  Step Log                     99999.000000 
+  Memory range                 2.0 MiB - 2.0 MiB 
+  Save output                  yes in : out_DATA 
+  Annotation file for YAMB     no         
+
+
+ ---------------- BENCHMARK ----------------
+_ freq_ Stride  S   ->         64
+_ freq_ Value       ->    AVERAGE
+_ freq_ K =    2.0 GiB      11.10
+
+ ---------------- RESULTS ----------------
+                Name    freq_      
+        Total micros    378140.000000 
+         Total Loops    65454560.010000 
+         Performance    5.777138   ns/loop
+           Bandwidth    11.078151  GB/s
+real 2.87
+user 0.92
+sys 0.84
++ set +xv
+Stopping profiling.
+Killing daemon.
+Unloading oprofile module
+
+########## Processing profile.* files ##########
+
+Time% Image
+----- -----
+ 56.2 vmlinux-unknown
+ 30.2 bm_mpi
+  6.7 xfs
+  2.2 libperl.so
+  1.0 ld-2.17.so
+  ...
+
+%Time  Image                 Symbol
+-----  --------------------  ---------------------
+ 56.2  vmlinux-unknown       /vmlinux-unknown
+ 17.1  bm_mpi                main
+ 13.0  bm_mpi                sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+  6.7  xfs                   /xfs
+  2.2  libperl.so            /usr/lib64/perl5/CORE/libperl.so
+  0.4  ld-2.17.so            _dl_relocate_object
+  0.3  ixgbe                 /ixgbe
+  0.3  libc-2.17.so          __gconv_transform_utf8_internal
+  0.3  systemd-journald      /usr/lib/systemd/systemd-journald
+  0.1  bash                  /usr/bin/bash
+  0.1  dbus-daemon           /usr/bin/dbus-daemon
+  0.1  grep                  /usr/bin/grep
+  0.1  hydra_pmi_proxy       hwloc_linux_parse_cpuinfo
+  0.1  hydra_pmi_proxy       propagate_nodeset
+  0.1  ld-2.17.so            _dl_cache_libcmp
+  0.1  ld-2.17.so            _dl_runtime_resolve_xsavec
+  0.1  ld-2.17.so            do_lookup_x
+  0.1  ld-2.17.so            strcmp
+  0.1  libc-2.17.so          __strchr_sse42
+  0.1  libc-2.17.so          _dl_addr
+  0.1  libc-2.17.so          fgetc
+  0.1  libc-2.17.so          getenv
+  0.1  libdbus-1.so.3.14.14  /usr/lib64/libdbus-1.so.3.14.14
+  0.1  libmpi.so.12.0.0      _fini
+  0.1  libmpi.so.12.0.0      inflate_fast
+  0.1  libpsm2.so.2.1        __intel_avx_rep_memset
+  0.1  libsudo_util.so.0.0.  /usr/libexec/sudo/libsudo_util.so.0.0.0
+  0.1  mpiexec.hydra         __popcountdi2
+  0.1  nfs                   /nfs
+  0.1  oprofiled             /usr/bin/oprofiled
+  0.1  sysimgblt             /sysimgblt
+  0.1  systemd-logind        /usr/lib/systemd/systemd-logind
+  ...
+

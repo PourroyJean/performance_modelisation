@@ -1,0 +1,46 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        app name                 symbol name
+511      55.3629  vmlinux-unknown          /vmlinux-unknown
+201      21.7768  bm_mpi                   main
+144      15.6013  bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+9         0.9751  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+7         0.7584  xfs                      /xfs
+3         0.3250  ld-2.17.so               _dl_relocate_object
+3         0.3250  ld-2.17.so               do_lookup_x
+3         0.3250  libc-2.17.so             _dl_addr
+3         0.3250  oprofile                 /oprofile
+2         0.2167  bash                     /usr/bin/bash
+2         0.2167  cp                       /usr/bin/cp
+2         0.2167  ld-2.17.so               strcmp
+2         0.2167  libc-2.17.so             malloc
+2         0.2167  libpsm2.so.2.1           ips_ptl_poll
+1         0.1083  hydra_pmi_proxy          hwloc_look_x86
+1         0.1083  hydra_pmi_proxy          look_proc
+1         0.1083  ld-2.17.so               _dl_map_object_deps
+1         0.1083  ld-2.17.so               _dl_map_object_from_fd
+1         0.1083  ld-2.17.so               _dl_name_match_p
+1         0.1083  ld-2.17.so               dl_main
+1         0.1083  ld-2.17.so               open_path
+1         0.1083  libc-2.17.so             _IO_link_in
+1         0.1083  libc-2.17.so             __GI_____strtoull_l_internal
+1         0.1083  libc-2.17.so             __GI_strncmp
+1         0.1083  libc-2.17.so             ____strtod_l_internal
+1         0.1083  libc-2.17.so             __gconv_load_cache
+1         0.1083  libc-2.17.so             __gconv_transform_utf8_internal
+1         0.1083  libc-2.17.so             __getdents
+1         0.1083  libc-2.17.so             __strchr_sse42
+1         0.1083  libc-2.17.so             _int_free
+1         0.1083  libc-2.17.so             _int_malloc
+1         0.1083  libc-2.17.so             get_nprocs_conf
+1         0.1083  libc-2.17.so             malloc_consolidate
+1         0.1083  libc-2.17.so             readdir
+1         0.1083  libc-2.17.so             vfprintf
+1         0.1083  libmpi.so.12.0.0         MPID_Progress_idle_timer_tick
+1         0.1083  libmpi.so.12.0.0         inflate_fast
+1         0.1083  libpsm2.so.2.1           __intel_ssse3_strncpy
+1         0.1083  libpsmx2-fi.so           psmx2_cq_poll_mq
+1         0.1083  libpthread-2.17.so       close
+1         0.1083  libpthread-2.17.so       pthread_cond_wait@@GLIBC_2.3.2
+1         0.1083  nfs                      /nfs
+1         0.1083  tg3                      /tg3
