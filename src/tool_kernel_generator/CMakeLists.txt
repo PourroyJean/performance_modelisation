@@ -26,8 +26,8 @@ set_target_properties( kg
 
 
 file(GLOB KG_COPY_FILES
-        "script/*.py"
-        "script/*.sh"
+        "../../script/benchmark_kernel_generator/script/*.py"
+        "../../script/benchmark_kernel_generator/script/*.sh"
         "kg_template_start.cpp"
         "kg_template_end.cpp"
         "kg_template_frequency.cpp"
