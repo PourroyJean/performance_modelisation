@@ -31,7 +31,9 @@ using namespace std;
 #include <string>
 #include <code_annotation.h>
 
+#ifndef DEBUG_MPI
 #define DEBUG_MPI cout
+#endif
 
 extern string YAMB_ANNOTATE_LOG_FILE;
 
