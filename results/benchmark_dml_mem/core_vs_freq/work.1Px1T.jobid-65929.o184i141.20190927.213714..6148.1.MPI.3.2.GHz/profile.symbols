@@ -1,0 +1,36 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        app name                 symbol name
+392      55.9201  vmlinux-unknown          /vmlinux-unknown
+132      18.8302  bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+100      14.2653  bm_mpi                   main
+31        4.4223  xfs                      /xfs
+7         0.9986  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+3         0.4280  bash                     /usr/bin/bash
+3         0.4280  ld-2.17.so               do_lookup_x
+2         0.2853  ld-2.17.so               _dl_lookup_symbol_x
+2         0.2853  ld-2.17.so               strcmp
+2         0.2853  libc-2.17.so             _dl_addr
+2         0.2853  libc-2.17.so             _int_free
+2         0.2853  libc-2.17.so             malloc
+2         0.2853  libc-2.17.so             vfprintf
+2         0.2853  libdbus-1.so.3.14.14     /usr/lib64/libdbus-1.so.3.14.14
+1         0.1427  hfi1                     /hfi1
+1         0.1427  hydra_pmi_proxy          __intel_avx_rep_memcpy
+1         0.1427  ip_tables                /ip_tables
+1         0.1427  ld-2.17.so               _dl_relocate_object
+1         0.1427  libc-2.17.so             _IO_file_doallocate
+1         0.1427  libc-2.17.so             __GI_____strtoull_l_internal
+1         0.1427  libc-2.17.so             __gconv_transform_utf8_internal
+1         0.1427  libc-2.17.so             __strlen_sse2_pminub
+1         0.1427  libc-2.17.so             _int_malloc
+1         0.1427  libc-2.17.so             fgetc
+1         0.1427  libcrc32c                /libcrc32c
+1         0.1427  libmpi.so.12.0.0         adler32
+1         0.1427  libmpi.so.12.0.0         impi_calloc
+1         0.1427  libpsm2.so.2.1           __intel_avx_rep_memset
+1         0.1427  libpsm2.so.2.1           hfi_touch_mmap
+1         0.1427  libpthread-2.17.so       read
+1         0.1427  mpiexec.hydra            hwloc_linux_parse_cpuinfo
+1         0.1427  sudoers.so               /usr/libexec/sudo/sudoers.so
+1         0.1427  sunrpc                   /sunrpc

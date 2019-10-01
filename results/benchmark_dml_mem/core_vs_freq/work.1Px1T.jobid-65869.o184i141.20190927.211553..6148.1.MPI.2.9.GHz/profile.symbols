@@ -1,0 +1,34 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        app name                 symbol name
+332      53.6349  vmlinux-unknown          /vmlinux-unknown
+122      19.7092  bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+89       14.3780  bm_mpi                   main
+31        5.0081  xfs                      /xfs
+7         1.1309  bash                     /usr/bin/bash
+5         0.8078  libperl.so               /usr/lib64/perl5/CORE/libperl.so
+4         0.6462  ld-2.17.so               do_lookup_x
+3         0.4847  libc-2.17.so             _int_malloc
+2         0.3231  cp                       /usr/bin/cp
+2         0.3231  ld-2.17.so               _dl_relocate_object
+2         0.3231  libc-2.17.so             __close_nocancel
+1         0.1616  ld-2.17.so               _dl_fixup
+1         0.1616  ld-2.17.so               _dl_lookup_symbol_x
+1         0.1616  ld-2.17.so               dl_main
+1         0.1616  ld-2.17.so               strcmp
+1         0.1616  libc-2.17.so             __GI_strncmp
+1         0.1616  libc-2.17.so             __fxstat64
+1         0.1616  libc-2.17.so             __memcpy_ssse3_back
+1         0.1616  libc-2.17.so             __memset_sse2
+1         0.1616  libc-2.17.so             _dl_addr
+1         0.1616  libc-2.17.so             free
+1         0.1616  libc-2.17.so             malloc
+1         0.1616  libc-2.17.so             vfprintf
+1         0.1616  libdbus-1.so.3.14.14     /usr/lib64/libdbus-1.so.3.14.14
+1         0.1616  libmpi.so.12.0.0         inflate_fast
+1         0.1616  libsudo_util.so.0.0.0    /usr/libexec/sudo/libsudo_util.so.0.0.0
+1         0.1616  mpiexec.hydra            cpuid_or_from_dump
+1         0.1616  mpiexec.hydra            look_sysfscpu
+1         0.1616  nfs                      /nfs
+1         0.1616  oprofile                 /oprofile
+1         0.1616  rm                       /usr/bin/rm

@@ -1,0 +1,52 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 8000000
+samples  %        image name               app name                 symbol name
+1156     47.1260  vmlinux-unknown          vmlinux-unknown          /vmlinux-unknown
+658      26.8243  bm_mpi                   bm_mpi                   sum_readspe_unroll8(bm_parameters*, unsigned long long, int, int, unsigned long long)
+477      19.4456  bm_mpi                   bm_mpi                   main
+40        1.6307  libmpi.so.12.0.0         libmpi.so.12.0.0         MPIDU_shm_barrier
+36        1.4676  xfs                      xfs                      /xfs
+8         0.3261  libperl.so               libperl.so               /usr/lib64/perl5/CORE/libperl.so
+6         0.2446  libmpi.so.12.0.0         libmpi.so.12.0.0         MPIDI_Bcast_intra_composition_epsilon
+5         0.2038  ld-2.17.so               ld-2.17.so               _dl_relocate_object
+5         0.2038  ld-2.17.so               ld-2.17.so               do_lookup_x
+5         0.2038  libpsm2.so.2.1           libpsm2.so.2.1           psm2_mq_ipeek
+4         0.1631  bash                     bash                     /usr/bin/bash
+4         0.1631  libpsm2.so.2.1           libpsm2.so.2.1           ips_ptl_poll
+3         0.1223  libmpi.so.12.0.0         libmpi.so.12.0.0         inflate_fast
+3         0.1223  libpsmx2-fi.so           libpsmx2-fi.so           psmx2_cq_poll_mq
+2         0.0815  libc-2.17.so             libc-2.17.so             __memcpy_ssse3_back
+2         0.0815  libc-2.17.so             libc-2.17.so             _int_malloc
+2         0.0815  libc-2.17.so             libc-2.17.so             malloc
+2         0.0815  libdbus-1.so.3.14.14     libdbus-1.so.3.14.14     /usr/lib64/libdbus-1.so.3.14.14
+2         0.0815  libmpi.so.12.0.0         libmpi.so.12.0.0         ADIOI_Set_lock64
+2         0.0815  libpsm2.so.2.1           libpsm2.so.2.1           __intel_avx_rep_memset
+2         0.0815  oprofile                 oprofile                 /oprofile
+2         0.0815  procsetd                 procsetd                 /usr/sbin/procsetd
+1         0.0408  [vdso] (tgid:18932 range:0x7fff4f190000-0x7fff4f192000) systemd-logind           [vdso] (tgid:18932 range:0x7fff4f190000-0x7fff4f192000)
+1         0.0408  bm_mpi                   bm_mpi                   _intel_fast_memcmp
+1         0.0408  hydra_pmi_proxy          hydra_pmi_proxy          hwloc_pci_discovery_init
+1         0.0408  ib_ipoib                 ib_ipoib                 /ib_ipoib
+1         0.0408  ixgbe                    ixgbe                    /ixgbe
+1         0.0408  ld-2.17.so               ld-2.17.so               _dl_check_map_versions
+1         0.0408  ld-2.17.so               ld-2.17.so               _dl_lookup_symbol_x
+1         0.0408  ld-2.17.so               ld-2.17.so               open64
+1         0.0408  ld-2.17.so               ld-2.17.so               strcmp
+1         0.0408  libc-2.17.so             libc-2.17.so             __gconv_transform_utf8_internal
+1         0.0408  libc-2.17.so             libc-2.17.so             _dl_addr
+1         0.0408  libc-2.17.so             libc-2.17.so             _nl_intern_locale_data
+1         0.0408  libc-2.17.so             libc-2.17.so             handle_intel.isra.0
+1         0.0408  libc-2.17.so             libc-2.17.so             malloc_consolidate
+1         0.0408  libc-2.17.so             libc-2.17.so             mmap64
+1         0.0408  libc-2.17.so             libc-2.17.so             sched_yield
+1         0.0408  libmpi.so.12.0.0         libmpi.so.12.0.0         MPIR_Wait_impl
+1         0.0408  libmpi.so.12.0.0         libmpi.so.12.0.0         _fini
+1         0.0408  libmpi.so.12.0.0         libmpi.so.12.0.0         impi_shm_heap_progress
+1         0.0408  libpsm2.so.2.1           libpsm2.so.2.1           amsh_ep_connreq_poll
+1         0.0408  libpsm2.so.2.1           libpsm2.so.2.1           psmi_cycles_left
+1         0.0408  libpsmx2-fi.so           libpsmx2-fi.so           psmx2_cq_readfrom
+1         0.0408  libpsmx2-fi.so           libpsmx2-fi.so           psmx2_getinfo
+1         0.0408  libstdc++.so.6.0.19      libstdc++.so.6.0.19      /usr/lib64/libstdc++.so.6.0.19
+1         0.0408  mpiexec.hydra            mpiexec.hydra            hwloc_find_linux_cpuset_mntpnt
+1         0.0408  nfs                      nfs                      /nfs
+1         0.0408  sunrpc                   sunrpc                   /sunrpc
