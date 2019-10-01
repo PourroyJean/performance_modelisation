@@ -19,7 +19,7 @@ cmake-build-debug
 
 #test
 
-src/PMU_research/uncore_pci/skylake_nda_informatio
+src/PMU_research/uncore_pci/skylake_nda_information
 
 #NFS
 .fuse_*
