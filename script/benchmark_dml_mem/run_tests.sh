@@ -34,10 +34,10 @@ export I_MPI_PIN_PROCESSOR_LIST=0,79
 export I_MPI_PIN_PROCESSOR_LIST="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19"
 export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159"
 
-#mpirun -np 20 numactl  ./bin/benchmark_memory/bm_mpi --steplog 0.01 --unroll 2 --type read --cacheline 64 --prefix out --output out --matrixsize 200 --minlog 5 --maxlog 6.7
+#mpirun -np 20 numactl  ./bin/benchmark_dml_mem/bm_mpi --steplog 0.01 --unroll 2 --type read --cacheline 64 --prefix out --output out --matrixsize 200 --minlog 5 --maxlog 6.7
 
 #export I_MPI_PIN_PROCESSOR_LIST=0,20,40,60
-#mpirun -np 4 numactl  ./bin/benchmark_memory/bm_mpi --steplog 0.31 --unroll 2 --type read --cacheline 64 --prefix out --output out --matrixsize 200 --minlog 5 --maxlog 6.7
+#mpirun -np 4 numactl  ./bin/benchmark_dml_mem/bm_mpi --steplog 0.31 --unroll 2 --type read --cacheline 64 --prefix out --output out --matrixsize 200 --minlog 5 --maxlog 6.7
 
 
 
@@ -82,7 +82,7 @@ test_mpi_bandwidth_saturation (){
     #export PIN_CORE_LIST="0 1,2,3,4,5 6,7,8,9"
     #export PIN_CORE_LIST="0,1,2,3,4,5,6,7"
     core_list=
-    EXE="./bin/benchmark_memory/bm_mpi"
+    EXE="./bin/benchmark_dml_mem/bm_mpi"
     check_bin $EXE
 
     echo -e "Nb_Core\tBand_unit\tBand_Total"
@@ -117,7 +117,7 @@ test_mpi_bandwidth_saturation_max_nb_core (){
     echo "Running test_mpi_bandwidth_saturation_max_nb_core ..."
     export PIN_CORE_LIST="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19"
 
-    EXE="./bin/benchmark_memory/bm_mpi"
+    EXE="./bin/benchmark_dml_mem/bm_mpi"
     check_bin $EXE
 
     echo -e "Nb_Core\tBand_unit\tBand_Total"
@@ -233,7 +233,7 @@ test_mpi_L3_scaling_2 (){
         STRIDES=64 #8,16,32,64,128,256,1024
         MODE=special
         MEASURE=10
-        EXE="./bin/benchmark_memory/bm_mpi"
+        EXE="./bin/benchmark_dml_mem/bm_mpi"
 
         cmd_chunk="bc -l <<< '$mat_size/$nb_core'"
         CHUNK_PER_PROCESS=`eval $cmd_chunk`
@@ -242,7 +242,7 @@ test_mpi_L3_scaling_2 (){
 #        mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $CHUNK_PER_PROCESS --measure $MEASURE --steplog $LOG $HUGEPAGES
 #        mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $mat_size --measure $MEASURE --steplog $LOG $HUGEPAGES
 #        echo $res
-#        band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --type read --cacheline 64 --prefix l3_scaling_2  --output out  --steplog 0 --matrixsize $CHUNK_PER_PROCESS --measure 100 --mode special --unroll 1 --stride 8 $large_page | grep Bandwidth `
+#        band=`mpirun -np $nb_core numactl  ./bin/benchmark_dml_mem/bm_mpi --type read --cacheline 64 --prefix l3_scaling_2  --output out  --steplog 0 --matrixsize $CHUNK_PER_PROCESS --measure 100 --mode special --unroll 1 --stride 8 $large_page | grep Bandwidth `
 #        mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES
 
         band_tot=`echo $band | awk -v nbc=$nb_core '{ print $2*nbc }'`
@@ -261,7 +261,7 @@ test_mpi_sharing_cache (){
 
 
     LOG=0  #5 = 780 KiB   3.5 = 24 KiB
-    EXE="./bin/benchmark_memory/bm_mpi"
+    EXE="./bin/benchmark_dml_mem/bm_mpi"
     check_bin $EXE
 
     STRIDE=64
@@ -362,7 +362,7 @@ test_mpi_hierarchy_specific_bench (){
 #        exit
 
 
-#       mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --type read --cacheline 64 --prefix out_stride_LONG  --output out  --steplog 0.01 --minlog 5 --matrixsize 15 --measure 20 --mode special --unroll 16 --stride  8
+#       mpirun -np $nb_core numactl  ./bin/benchmark_dml_mem/bm_mpi --type read --cacheline 64 --prefix out_stride_LONG  --output out  --steplog 0.01 --minlog 5 --matrixsize 15 --measure 20 --mode special --unroll 16 --stride  8
 #        printf "($nb_core) = "
 #        echo "$band  -- Total = $band_tot -- Cores used : $core_list  (mat size $CHUNK_PER_PROCESS)"
         core_list="$core_list,"
@@ -395,7 +395,7 @@ test_mpi_hierarchy_conflict (){
         export I_MPI_PIN_PROCESSOR_LIST="$core_list"
         nb_core=$((`echo $core_list | grep -o "," | wc -l` + 1))
         printf "($nb_core) = "
-#           mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES
+#           mpirun -np $nb_core numactl  ./bin/benchmark_dml_mem/bm_mpi --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES
 #        continue
         band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll $UNROLL --mode $MODE --type read --cacheline 64 --prefix test_mpi_hierarchy_conflict --stride $STRIDES --minlog $MINLOG --maxlog $MAXLOG --output out --matrixsize $MATRIX_SIZE --steplog $STEP_LOG --measure $MEASURE $HUGEPAGES | grep Bandwidth`
         band_tot=`echo $band | awk -v nbc=$nb_core '{ print $2*nbc }'`
@@ -422,7 +422,7 @@ test_mpi_scaling_core_or_dataset (){
     export PIN_CORE_LIST="0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19"
 
     LOG=0  #5 = 780 KiB   3.5 = 24 KiB
-    EXE="./bin/benchmark_memory/bm_mpi"
+    EXE="./bin/benchmark_dml_mem/bm_mpi"
     check_bin $EXE
 
     STRIDE=64
@@ -445,7 +445,7 @@ test_mpi_scaling_core_or_dataset (){
 
             perf_file="test_L3_perf_log"
             res=`perf stat -B -e cache-misses,cycles:u,instructions:u,task-clock:u,dTLB-load-misses,iTLB-load-misses  -o $perf_file mpirun -np $nb_core numactl  $EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $mat_size --measure $MEASURE --steplog $LOG $HUGEPAGES |  grep "out K" | awk '{printf $5 ; printf "MB ";  printf $7}'`
-#            res=`(set -x; perf stat -B -e cache-misses,cycles:u,instructions:u,task-clock:u  -o $perf_file mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $mat_size --measure $MEASURE --steplog $LOG)`
+#            res=`(set -x; perf stat -B -e cache-misses,cycles:u,instructions:u,task-clock:u  -o $perf_file mpirun -np $nb_core numactl  ./bin/benchmark_dml_mem/bm_mpi --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $mat_size --measure $MEASURE --steplog $LOG)`
             instructions=`cat  $perf_file | grep instructions:u |  awk '{print $1}' | tr -d ,`
             ipc=`cat  $perf_file | grep instructions:u |  awk '{print $4}'`
             misses=`cat  $perf_file | grep cache-misses |  awk '{print $1}' | tr -d ,`
@@ -510,7 +510,7 @@ test_jean (){
         nb_core=$((`echo $core_list | grep -o "," | wc -l` + 1))
         printf "($nb_core) = "
 
-#        band=`(set -x; mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll 2 --type read --cacheline 64 --prefix out_stride_LONG --stride 64 --output out --matrixsize 1000 --measure 4 --log 8.11 | grep Bandwidth)`
+#        band=`(set -x; mpirun -np $nb_core numactl  ./bin/benchmark_dml_mem/bm_mpi --unroll 2 --type read --cacheline 64 --prefix out_stride_LONG --stride 64 --output out --matrixsize 1000 --measure 4 --log 8.11 | grep Bandwidth)`
         band=`mpirun -np $nb_core numactl  ./bin/benchmark_memory/bm_mpi --unroll 2 --type read --cacheline 64 --prefix out_stride_LONG --stride 64 --output out --matrixsize 1000 --measure 4 --log 8.11 | grep Bandwidth`
         band_tot=`echo $band | awk -v nbc=$nb_core '{ print $2*nbc }'`
         echo "$band  -- Total = $band_tot -- Cores used : $I_MPI_PIN_PROCESSOR_LIST"
@@ -552,7 +552,7 @@ UNROLL=1    #1 is the best in memory
     MODE=special
     MEASURE=10
     MAT_SIZE=10000
-    EXE="./bin/benchmark_memory/bm"
+    EXE="./bin/benchmark_dml_mem/bm"
     check_bin $EXE
 
     printf  '%-12s %-13s %-12s %-15s %-11s %-12s\n' "Data_set" "stride" "bandwidth" "nb_inst" "IPC" "misses"
@@ -584,7 +584,7 @@ test_unrolling (){
     MODE=special
     MEASURE=1000
     MAT_SIZE=2
-#    EXE="./bin/benchmark_memory/bm_icc_no_unroll"
+#    EXE="./bin/benchmark_dml_mem/bm_icc_no_unroll"
     EXE=$BIN
     check_bin $EXE
 
@@ -595,8 +595,8 @@ test_unrolling (){
         perf_file="test_L3_perf_log"
 
 
-#        res=`perf stat -B -e cache-misses -o $perf_file ./bin/benchmark_memory/bm_icc_no_unroll --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDES --matrixsize 2 --measure 100 --log $log $large_page |  grep "out K" | awk '{printf $5 ; printf "MB ";  printf $7}'`
-#        res=`./bin/benchmark_memory/bm_icc_no_unroll --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDES --matrixsize 2 --measure 10 --log $log $large_page |  grep "Bandwidth"`
+#        res=`perf stat -B -e cache-misses -o $perf_file ./bin/benchmark_dml_mem/bm_icc_no_unroll --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDES --matrixsize 2 --measure 100 --log $log $large_page |  grep "out K" | awk '{printf $5 ; printf "MB ";  printf $7}'`
+#        res=`./bin/benchmark_dml_mem/bm_icc_no_unroll --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDES --matrixsize 2 --measure 10 --log $log $large_page |  grep "Bandwidth"`
         res=`perf stat -B -e cycles:u,instructions:u,task-clock:u  -o $perf_file ./$EXE --unroll $UNROLL --type read --cacheline 64 --prefix out --stride $STRIDE --mode special --matrixsize $MAT_SIZE --measure $MEASURE --log $LOG |  grep "out K" | awk '{printf $5 ; printf "MB ";  printf $7}'`
 #        echo $res
 #        cat $perf_file
