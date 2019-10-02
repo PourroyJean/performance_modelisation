@@ -3,12 +3,26 @@
 file(GLOB SOURCES "*.cxx")
 file(GLOB COMMON_SOURCES "../common" "*.cxx")
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=skylake-avx512 -qopt-streaming-stores=always")
 
+if (UNIX)
+    #do something
+endif (UNIX)
+
+if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    # using Clang
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=skylake-avx512")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=skylake-avx512 -qopt-streaming-stores=always")
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    # using Visual Studio C++
+else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
+endif()
 
 option(OPT_BUILD_MPI "Build the benchmark with MPI" OFF)
 
-set (BM_EXECUTABLE "xxx")
+set (DML_EXECUTABLE "xxx")
 
 
 #REQUIRED OR NOT
@@ -19,16 +33,16 @@ if(OPT_BUILD_MPI)
         include_directories(${MPI_INCLUDE_PATH})
         message("-- The benchmark will be compiled with MPI library" )
         add_definitions(-DCOMPILED_WITH_MPI)
-        set (BM_EXECUTABLE "bm_mpi")
+        set (DML_EXECUTABLE "dml_mpi")
     else ()
         #should never happen as MPI is required
         message(WARNING "MPI requested but not found by Cmake")
-        set (BM_EXECUTABLE "bm")
+        set (DML_EXECUTABLE "dml")
 
     endif()
 else()
     message("MPI NOT REQUIRED")
-    set (BM_EXECUTABLE "bm")
+    set (DML_EXECUTABLE "dml")
 endif()
 
 
@@ -45,31 +59,31 @@ include_directories(../common)
 include_directories(../tool_monitoring_bandwidth/)
 
 
-add_executable(${BM_EXECUTABLE} bm_main.cpp bm_parameters.cpp bm_benchmark.cpp ${COMMON_SOURCES} bm_misc.cpp)
+add_executable(${DML_EXECUTABLE} dml_main.cpp dml_parameters.cpp dml_benchmark.cpp ${COMMON_SOURCES} dml_misc.cpp)
 
 
 #INCLUDE DIRECTORY
-target_include_directories(${BM_EXECUTABLE} PRIVATE ${MPI_CXX_INCLUDE_PATH})
+target_include_directories(${DML_EXECUTABLE} PRIVATE ${MPI_CXX_INCLUDE_PATH})
 
 #LINK LIBRARIES
-target_link_libraries (${BM_EXECUTABLE} "misc" )
-target_link_libraries (${BM_EXECUTABLE} "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so"  )
-target_link_libraries (${BM_EXECUTABLE} "${MPI_CXX_LIBRARIES}")
+target_link_libraries (${DML_EXECUTABLE} "misc" )
+target_link_libraries (${DML_EXECUTABLE} "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so"  )
+target_link_libraries (${DML_EXECUTABLE} "${MPI_CXX_LIBRARIES}")
 
 
 
 if(MPI_COMPILE_FLAGS)
-    set_target_properties(${BM_EXECUTABLE} PROPERTIES COMPILE_FLAGS "${MPI_COMPILE_FLAGS}")
+    set_target_properties(${DML_EXECUTABLE} PROPERTIES COMPILE_FLAGS "${MPI_COMPILE_FLAGS}")
 endif()
 
 if(MPI_LINK_FLAGS)
-    set_target_properties(${BM_EXECUTABLE} PROPERTIES LINK_FLAGS "${MPI_LINK_FLAGS}")
+    set_target_properties(${DML_EXECUTABLE} PROPERTIES LINK_FLAGS "${MPI_LINK_FLAGS}")
 endif()
 
 
-set_target_properties( ${BM_EXECUTABLE}
+set_target_properties( ${DML_EXECUTABLE}
     PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/benchmark_memory"
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/benchmark_dml_mem"
 )
 
 
