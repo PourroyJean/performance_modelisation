@@ -144,44 +144,6 @@ test_mpi_bandwidth_saturation_max_nb_core (){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # ---------------------------------
 # -- TEST OF L3 SCALING          --
 # ---------------------------------
@@ -539,19 +501,24 @@ test_prefetch_particular_stride (){
 #492.6        81928         100.41       69007697       0.52         3062615
 test_particular_stride () {
 
-UNROLL=1    #1 is the best in memory
+    UNROLL=1    #1 is the best in memory
     HUGEPAGES=
-    UNROLL_LIST="1 2 4 8 16 32 64"
+
+
+    #Good vs Bad strides
     STRIDES_GOOD="73704 77816 81928 86008 90136 94224 98312"
     STRIDES_BAD="73728 77824 81920 86016 90112 94208 98304"
     STRIDES="$STRIDES_GOOD $STRIDES_BAD"
+
+
     STRIDES="73704 73728 77816 77824 81928 81920 86008 86016 90136 90112 94224 94208 98312 98304"
+    STRIDES="64 128 192 256 320 384 448 512 576 640 704 768 832 896 960 1024 1088 1152 1216 1280 1344 1408 1472 1536 1600 1664 1728 1792 1856 1920 1984 2048 2112 2176 2240 2304 2368 2432 2496 2560 2624 2688 2752 2816 2880 2944 3008 3072 3136 3200 3264 3328 3392 3456 3520 3584 3648 3712 "
     UNROLL=8
-    LOG=0  #5 = 780 KiB   3.5 = 24 KiB
+      LOG=0  #5 = 780 KiB   3.5 = 24 KiB
     HUGEPAGES=
     MODE=special
-    MEASURE=10
-    MAT_SIZE=10000
+    MEASURE=1
+    MAT_SIZE=1000
     EXE="./bin/benchmark_dml_mem/dml"
     check_bin $EXE
 
@@ -618,7 +585,7 @@ test_unrolling (){
 
 #test_bw_staturation
 #test_mpi_bandwidth_saturation
-test_mpi_bandwidth_saturation_max_nb_core
+#test_mpi_bandwidth_saturation_max_nb_core
 #test_mpi_L3_scaling
 #test_mpi_hierarchy_conflict
 #test_mpi_scaling_core_or_dataset
@@ -631,7 +598,7 @@ test_mpi_bandwidth_saturation_max_nb_core
 #test_miss
 #test_unrolling
 #test_prefetch_particular_stride
-#test_particular_stride
+test_particular_stride
 #test_unrolling_special
 
 
