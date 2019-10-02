@@ -3,16 +3,16 @@
 //
 
 #include "ezOptionParser.hpp"
-#include "bm_parameters.h"
+#include "dml_parameters.h"
 #include <iostream>
 #include <unistd.h>
 #include <assert.h>
 #include "misc.h"
-#include "bm_misc.h"
+#include "dml_misc.h"
 #include <algorithm>
 #include <cmath>
-#include "bm_benchmark.h"
-#include "bm_misc.h"
+#include "dml_benchmark.h"
+#include "dml_misc.h"
 
 
 using namespace ez;
@@ -37,10 +37,10 @@ using namespace std;
 
 extern string YAMB_ANNOTATE_LOG_FILE;
 
-void bm_parameters::print_configuration() {
+void Dml_parameters::print_configuration() {
 
-    size_t min = ((size_t) (double) (exp(m_MIN_LOG10 * LOG10) + 0.5)) * sizeof(BM_DATA_TYPE) / 1024;
-    size_t max = ((size_t) (double) (exp(m_MAX_LOG10 * LOG10) + 0.5)) * sizeof(BM_DATA_TYPE) / 1024;
+    size_t min = ((size_t) (double) (exp(m_MIN_LOG10 * LOG10) + 0.5)) * sizeof(DML_DATA_TYPE) / 1024;
+    size_t max = ((size_t) (double) (exp(m_MAX_LOG10 * LOG10) + 0.5)) * sizeof(DML_DATA_TYPE) / 1024;
 
     printf("  %-25s    %-10s \n", "Benchmark type", getValue(m_type).c_str());
     printf("  %-25s    %-10s \n", "Benchmark mode", getValue(m_mode).c_str());
@@ -77,7 +77,7 @@ void bm_parameters::print_configuration() {
     }
 }
 
-int bm_parameters::init_arguments(int argc, const char *argv[]) {
+int Dml_parameters::init_arguments(int argc, const char *argv[]) {
     //Setup the command to parse
     setup_parser(argc, argv);
 
@@ -221,12 +221,12 @@ int bm_parameters::init_arguments(int argc, const char *argv[]) {
     return 0;
 }
 
-int bm_parameters::setup_parser(int argc, const char *argv[]) {
+int Dml_parameters::setup_parser(int argc, const char *argv[]) {
 
     opt.overview = "The unrolled version expect multiply of the unroll factor since this is a performance code we do not care loosing the last elements of the normal loop.";
     opt.syntax = "full [OPTIONS]";
     opt.example = "full -h\n\n";
-    opt.footer = "dmlmem v0.1.4 Copyright (C) 2018 Jean Pourroy \nThis program is free and without warranty.\n";
+    opt.footer = "dmlmem_orig v0.1.4 Copyright (C) 2018 Jean Pourroy \nThis program is free and without warranty.\n";
     string default_name = "_bench_";
     opt.add(
             default_name.c_str(), // Default.
@@ -306,7 +306,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
     opt.add(
-            to_string(sizeof(BM_DATA_TYPE)).c_str(), // Default.
+            to_string(sizeof(DML_DATA_TYPE)).c_str(), // Default.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -505,7 +505,7 @@ int bm_parameters::setup_parser(int argc, const char *argv[]) {
     return 0;
 }
 
-int bm_parameters::parse_arguments(int argc, const char *argv[]) {
+int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
 
     DEBUG_MPI << " - PARSING -\n";
     opt.parse(argc, argv);
@@ -603,7 +603,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
         cout << "Error: please check the size of your matrix (" << m_MAT_SIZE << ")\n";
         exit(EXIT_FAILURE);
     };
-    m_MAT_NB_ELEM = size_t(size_t(m_MAT_SIZE) / (sizeof(BM_DATA_TYPE)));
+    m_MAT_NB_ELEM = size_t(size_t(m_MAT_SIZE) / (sizeof(DML_DATA_TYPE)));
 
 
     opt.get("--maxops")->getInt(m_MAX_OPS);
@@ -611,14 +611,14 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 
 
     opt.get("--minstride")->getInt(m_MIN_STRIDE);
-    m_MIN_STRIDE /= sizeof(BM_DATA_TYPE);
+    m_MIN_STRIDE /= sizeof(DML_DATA_TYPE);
     if (m_MIN_STRIDE < 1) {
         cout << "Error: please check the size of the minimum stride (" << m_MIN_STRIDE << " byte)\n";
         exit(EXIT_FAILURE);
     }
 
     opt.get("--maxstride")->getInt(m_MAX_STRIDE);
-    m_MAX_STRIDE /= sizeof(BM_DATA_TYPE);
+    m_MAX_STRIDE /= sizeof(DML_DATA_TYPE);
 
 
     if (opt.isSet("--stride")) {
@@ -657,7 +657,7 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
             //Stride de step element
             //converti en byte
             //décallage si impaire
-            m_STRIDE_LIST.push_back((step * sizeof(BM_DATA_TYPE)) + ((m_STRIDE_MODE == BENCH_STRIDE::ODD) ? 0 : +7));
+            m_STRIDE_LIST.push_back((step * sizeof(DML_DATA_TYPE)) + ((m_STRIDE_MODE == BENCH_STRIDE::ODD) ? 0 : +7));
         }
         m_MIN_STRIDE = m_STRIDE_LIST[0];
         m_MAX_STRIDE = m_STRIDE_LIST[m_STRIDE_LIST.size() - 1];
@@ -730,14 +730,14 @@ int bm_parameters::parse_arguments(int argc, const char *argv[]) {
 }
 
 
-int bm_parameters::getKey(string val) {
+int Dml_parameters::getKey(string val) {
     for (map<int, string>::iterator it = mapParameter.begin(); it != mapParameter.end(); ++it) {
         if (it->second == val) return it->first;
     }
     return -1;
 }
 
-string bm_parameters::getValue(int key) {
+string Dml_parameters::getValue(int key) {
     for (map<int, string>::iterator it = mapParameter.begin(); it != mapParameter.end(); ++it) {
         if (it->first == key) return it->second;
     }
@@ -745,11 +745,11 @@ string bm_parameters::getValue(int key) {
     exit(EXIT_FAILURE);
 }
 
-bm_parameters::bm_parameters() : m_STRIDE_LIST() {
+Dml_parameters::Dml_parameters() : m_STRIDE_LIST() {
 
 }
 
-bm_parameters::~bm_parameters() {
+Dml_parameters::~Dml_parameters() {
     if (m_log_file.is_open()) {
         m_log_file.close();
     }

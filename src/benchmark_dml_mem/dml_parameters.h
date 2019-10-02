@@ -2,14 +2,14 @@
 // Created by Jean Pourroy on 09/04/2018.
 //
 
-#ifndef PERFORMANCE_MODELISATION_BM_PARAMETERS_H
-#define PERFORMANCE_MODELISATION_BM_PARAMETERS_H
+#ifndef PERFORMANCE_MODELISATION_DML_PARAMETERS_H
+#define PERFORMANCE_MODELISATION_DML_PARAMETERS_H
 
 #include <string>
 #include <iostream>
 #include <unistd.h>
 #include "ezOptionParser.hpp"
-#include "bm_misc.h"
+#include "dml_misc.h"
 
 using namespace ez;
 using namespace std;
@@ -68,7 +68,8 @@ static std::map<int, std::string> mapParameter = {{READ,    "READ"},
 #define UNROLL32   32
 #define UNROLL64   64
 
-class bm_parameters {
+
+class Dml_parameters {
 private:
     ezOptionParser opt;
 
@@ -81,7 +82,7 @@ public:
     int m_mode;
     int m_type;
 
-    BM_DATA_TYPE (*m_BENCHMARK)(bm_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+    DML_DATA_TYPE (*m_BENCHMARK)(Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
     int m_GHZ = 0;
     int m_UNROLL;//= UNROLL4;
     int m_VERBOSE = 1;
@@ -93,7 +94,7 @@ public:
     size_t m_MAT_SIZE = 100;        // size of the matrix in byte
     size_t m_MAT_NB_ELEM = -1;
     int m_MAX_OPS = 1;
-    int m_MIN_STRIDE = sizeof(BM_DATA_TYPE);// = sizeof(THETYPE);
+    int m_MIN_STRIDE = sizeof(DML_DATA_TYPE);// = sizeof(THETYPE);
     int m_MAX_STRIDE = 1024 * 8;
     int m_STRIDE_MODE = BENCH_STRIDE ::EVEN;
     vector <int> m_STRIDE_LIST;
@@ -119,12 +120,12 @@ public:
 
     int setup_parser(int argc, const char *argv[]);
 
-    virtual ~bm_parameters();
+    virtual ~Dml_parameters();
 
-    bm_parameters ();
+    Dml_parameters ();
 
 
 };
 
 
-#endif //PERFORMANCE_MODELISATION_BM_PARAMETERS_H
+#endif //PERFORMANCE_MODELISATION_DML_PARAMETERS_H
