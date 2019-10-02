@@ -105,7 +105,7 @@ sysctl -a >& sysctl.out
 
 
 # READY BENCHMARK
-EXE_NAME=bm_mpi
+EXE_NAME=dml_mpi
 cp $o/bin/benchmark_memory/$EXE_NAME $d
 export myEXE=$d/$EXE_NAME
 ldd $myEXE >& ldd.out
