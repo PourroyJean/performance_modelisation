@@ -405,7 +405,7 @@ int Dml_parameters::setup_parser(int argc, const char *argv[]) {
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
-            "only one stride measured", // Help description.
+            "measure only one data set size (set minlog and maxlog at the same value)", // Help description.
             "--log" // Flag token.
     );
 
