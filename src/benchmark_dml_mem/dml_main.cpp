@@ -150,7 +150,7 @@ int work(Dml_parameters *p) {
     int measure;
     string log_temporal = "";
     string big_log = "";
-    char res_str[100];
+    char res_str[1000];
 
 
     //Print header
@@ -159,13 +159,15 @@ int work(Dml_parameters *p) {
         LOG_MPI(log_temporal, "-1,");
 
         for (int stride : p->m_STRIDE_LIST) {
-            char res_str[10];
+            char res_str[100];
 
-            if (p->m_DISP == DISP_MODE::AVERAGE) sprintf(res_str, "%11d", stride);
+	    //Print the size of the stride for the current column
+	    if (p->m_DISP == DISP_MODE::AVERAGE) sprintf(res_str, "%11d", stride);
             if (p->m_DISP == DISP_MODE::BEST) sprintf(res_str, "%11d", stride);
             if (p->m_DISP == DISP_MODE::TWO) sprintf(res_str, "%11d%11d", stride, stride);
             if (p->m_DISP == DISP_MODE::ALL) sprintf(res_str, "%11d%11d%11d", stride, stride, stride);
-            COUT << res_str;
+
+	    COUT << res_str;
             if (p->m_is_log) {
                 string s(res_str);
                 s.erase(remove(s.begin(), s.end(), ' '), s.end());
