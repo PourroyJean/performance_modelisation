@@ -149,7 +149,7 @@ SCRIPT_NAME="$(basename ${0})" # scriptname without path
 SCRIPT_UNIQ="${SCRIPT_NAME%.*}${SCRIPT_ID}.${HOSTNAME%%.*}"
 SCRIPT_UNIQ_DATED="${SCRIPT_UNIQ}.$(date "+%y%m%d%H%M%S").${$}"
 SCRIPT_DIR="$( cd $(dirname "$0") && pwd )" # script directory
-SCRIPT_PYTHON="$SCRIPT_DIR""/format_log.py"
+SCRIPT_PYTHON="$SCRIPT_DIR""/yamb_graph.py"
 DIR_TMP="/nfs/pourroy/tmp"                                  # Make sure temporary folder is RW
 YAMB_ANNOTATE_LOG_FILE="${DIR_TMP}/yamb_annotate_log_file"  # Make sure this file is the same as the one used in YAMB (code_annotation.h file)
 
