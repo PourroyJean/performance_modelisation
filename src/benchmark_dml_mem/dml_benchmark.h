@@ -9,7 +9,7 @@
 #include "dml_parameters.h"
 
 
-static double towrite = 0.0;
+static double towrite = 03.0592;
 
 
 DML_DATA_TYPE sum_read_unroll1  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
