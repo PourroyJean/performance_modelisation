@@ -55,7 +55,7 @@ install(FILES ${HEADERS} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_monitoring_ban
 
 
 #
-#set(INSTALL_PATH "${CMAKE_BINARY_DIR}/bin/tool_monitoring_bandwidth/")
+#set(INSTALL_PATH "${CMAKE_BINARY_DIR}/bin/tool_yamb/")
 #
 #message(WARNING  ${INSTALL_PATH})
 #
@@ -73,7 +73,7 @@ install(FILES ${HEADERS} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_monitoring_ban
 #
 ## Install library headers
 #file(GLOB HEADERS code_annotation.h)
-#install(FILES ${HEADERS} DESTINATION /nfs/pourroy/code/THESE/performance_modelisation/build/bin/tool_monitoring_bandwidth/include)
+#install(FILES ${HEADERS} DESTINATION /nfs/pourroy/code/THESE/performance_modelisation/build/bin/tool_yamb/include)
 #
 #
 #
@@ -90,8 +90,8 @@ install(FILES ${HEADERS} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_monitoring_ban
 #set_target_properties(yambLibCodeAnnotation PROPERTIES PUBLIC_HEADER code_annotation.h)
 #
 #install(TARGETS yambLibCodeAnnotation
-#        LIBRARY DESTINATION LIB ${CMAKE_BINARY_DIR}/bin/tool_monitoring_bandwidth/lib #${CMAKE_INSTALL_LIBDIR}
-#        PUBLIC_HEADER DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_monitoring_bandwidth/include)
+#        LIBRARY DESTINATION LIB ${CMAKE_BINARY_DIR}/bin/tool_yamb/lib #${CMAKE_INSTALL_LIBDIR}
+#        PUBLIC_HEADER DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_yamb/include)
 #
 #
 #
@@ -102,21 +102,21 @@ install(FILES ${HEADERS} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_monitoring_ban
 
 #file(GLOB BW_COPY_FILES
 #        "monitoring_bw_main.sh"
-#        "format_log.py"
+#        "yamb_graph.py"
 #        )
 
 
 
 #
 #
-#file(COPY ${BW_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_monitoring_bandwidth)
+#file(COPY ${BW_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_yamb)
 #
 #
 #
 #file(GLOB HEADER_COPY_FILES
 #        "code_annotation.h"
 #        )
-#file(COPY ${HEADER_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_monitoring_bandwidth/include)
+#file(COPY ${HEADER_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/tool_yamb/include)
 #
 
 

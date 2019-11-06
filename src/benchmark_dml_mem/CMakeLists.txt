@@ -56,7 +56,7 @@ set_property(TARGET libAnno PROPERTY IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/lib/
 
 
 include_directories(../common)
-include_directories(../tool_monitoring_bandwidth/)
+include_directories(../tool_yamb/)
 
 
 add_executable(${DML_EXECUTABLE} dml_main.cpp dml_parameters.cpp dml_benchmark.cpp ${COMMON_SOURCES} dml_misc.cpp)
