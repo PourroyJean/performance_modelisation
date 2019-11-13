@@ -1,0 +1,27 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 2000004
+Counted inst_retired events () with a unit mask of 0x00 (Number of instructions retired. General Counter   - architectural event) count 2000004
+cpu_clk_unhalt...|inst_retired:2...|
+  samples|      %|  samples|      %|
+------------------------------------
+    18215 88.9665     37038 95.9832 assembly
+     2017  9.8515      1073  2.7807 no-vmlinux
+      124  0.6056       311  0.8060 libperl.so
+       71  0.3468        97  0.2514 libc-2.17.so
+       18  0.0879        14  0.0363 ld-2.17.so
+       10  0.0488        22  0.0570 bash
+        4  0.0195         1  0.0026 libpthread-2.17.so
+        2  0.0098         3  0.0078 gawk
+        2  0.0098         7  0.0181 ophelp
+        2  0.0098         6  0.0155 oprofiled
+        2  0.0098         1  0.0026 systemd
+        2  0.0098         5  0.0130 libdbus-1.so.3.14.14
+        1  0.0049         2  0.0052 cp
+        1  0.0049         0       0 grep
+        1  0.0049         0       0 locale-archive
+        1  0.0049         0       0 HiRes.so
+        1  0.0049         3  0.0078 sudoers.so
+        0       0         2  0.0052 dbus-daemon
+        0       0         1  0.0026 systemd-journald
+        0       0         1  0.0026 libsystemd.so.0.6.0
+        0       0         1  0.0026 libsudo_util.so.0.0.0
