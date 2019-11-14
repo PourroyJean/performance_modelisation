@@ -53,14 +53,14 @@ int main(int argc, char *argv[]) {
         }
 
         cout << endl
-             << "====================================================================================================================================================\n"
-             << "_FUNCTION_ANALYSIS_ from the app name (" << current_line->get_application_name()
-             << ") hot spot from the symbole name (" << current_line->get_symbole_name() << ")" << " which takes "
-             << current_line->get_event_cpu_clk_percentage() << "% of the profiling" << endl
-             << "====================================================================================================================================================\n"
-             << "           SUM*4        SUM*3        SUM*2          CYCLES       INSTS     ADDRESS    ASSEMBLY                         \n"
-             << "----------------------------------------------------------------------------------------------------------------------------------------------------"
-             << endl;
+                << "====================================================================================================================================================\n"
+                << "_FUNCTION_ANALYSIS_ from the app name (" << current_line->get_application_name()
+                << ") hot spot from the symbole name (" << current_line->get_symbole_name() << ")" << " which takes "
+                << current_line->get_event_cpu_clk_percentage() << "% of the profiling" << endl
+                << "====================================================================================================================================================\n"
+                << "           SUM*4        SUM*3        SUM*2         IPC       CYCLES       INSTS     ADDRESS    ASSEMBLY                         \n"
+                << "----------------------------------------------------------------------------------------------------------------------------------------------------"
+                << endl;
 
         //Easier to manipulate
         const vector<Line_Objdump *> *objdump_file = &Line_Objdump::getFILE_OBJ()->get_lines_vector();
@@ -78,13 +78,14 @@ int main(int argc, char *argv[]) {
             string str = objdump_file->at(li)->get_original_line();
             ui64 myadd = objdump_file->at(li)->get_address();
             string instr = objdump_file->at(li)->get_assembly_instruction();
+            double ipc = (event_cpu_clk == 0 ? 0 : double(double(event_inst_retired) / double(event_cpu_clk)));
+            if (ipc < 0 || ipc > 10) ipc = -1; //Verify that the IPC is a consistent value
 
-
-            //Sum 2 3 4
             //We try to sum instructions by pack of 2, 3, 4 to detect super-scalar execution pattern
             ui64 sum2 = event_cpu_clk + objdump_file->at(li + 1)->get_event_cpu_clk();
             ui64 sum3 = sum2 + objdump_file->at(li + 2)->get_event_cpu_clk();
             ui64 sum4 = sum3 + objdump_file->at(li + 3)->get_event_cpu_clk();
+
 
             //So we have all the necessary information for the display
             if (event_cpu_clk >= 0 && event_inst_retired >= 0 && instr.compare("") != 0) {
@@ -92,6 +93,7 @@ int main(int argc, char *argv[]) {
                      << std::setw(12) << sum4 << " "
                      << std::setw(12) << sum3 << " "
                      << std::setw(12) << sum2 << " | "
+                     << std::setw(9) << std::setprecision(3) << ipc << " "
                      << std::setw(12) << event_cpu_clk << " "
                      << std::setw(12) << event_inst_retired << "    "
                      << std::setw(8) << std::hex << myadd << std::dec << "    "
