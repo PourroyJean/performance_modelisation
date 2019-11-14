@@ -11,23 +11,24 @@
 #include <iterator>
 
 
-
 using namespace std;
 
 
 int main(int argc, char *argv[]) {
 
-    string line;
-    if (argc != 3) {
-        cerr << "command Object_file oprofile_file" << endl;
-        return 1;
-    }
+    //\\ ** ARGUMENT PARSING ** \\//
+    AnyOption *opt = new AnyOption();
+    parse_argument(argc, argv, opt);
+    bool isDisplaySum = (opt->getValue("s") != NULL || opt->getValue("sum") != NULL);
 
-    InputFile<Line_Objdump> *FILE_OBJ = new InputFile<Line_Objdump>(argv[1]);
+
+
+    //\\ **  FILES ANALYSIS  ** \\//
+    InputFile<Line_Objdump> *FILE_OBJ = new InputFile<Line_Objdump>(opt->getValue("object"));
     Line_Objdump::setFILE_OBJ(FILE_OBJ);
     FILE_OBJ->analysis();
 
-    InputFile<Line_Oprofile> *FILE_OPR = new InputFile<Line_Oprofile>(argv[2]);
+    InputFile<Line_Oprofile> *FILE_OPR = new InputFile<Line_Oprofile>(opt->getValue("profile"));
     Line_Oprofile::setFILE_OPR(FILE_OPR);
     FILE_OPR->analysis();
 
@@ -53,14 +54,15 @@ int main(int argc, char *argv[]) {
         }
 
         cout << endl
-                << "====================================================================================================================================================\n"
-                << "_FUNCTION_ANALYSIS_ from the app name (" << current_line->get_application_name()
-                << ") hot spot from the symbole name (" << current_line->get_symbole_name() << ")" << " which takes "
-                << current_line->get_event_cpu_clk_percentage() << "% of the profiling" << endl
-                << "====================================================================================================================================================\n"
-                << "           SUM*4        SUM*3        SUM*2         IPC       CYCLES       INSTS     ADDRESS    ASSEMBLY                         \n"
-                << "----------------------------------------------------------------------------------------------------------------------------------------------------"
-                << endl;
+             << "====================================================================================================================================================\n"
+             << "_FUNCTION_ANALYSIS_ from the app name (" << current_line->get_application_name()
+             << ") hot spot from the symbole name (" << current_line->get_symbole_name() << ")" << " which takes "
+             << current_line->get_event_cpu_clk_percentage() << "% of the profiling" << endl
+             << "====================================================================================================================================================\n"
+             << (isDisplaySum ? "      SUM*4        SUM*3        SUM*2" : " ")
+             << "       IPC       CYCLES        INSTS     ADDRESS    ASSEMBLY                         \n"
+             << "----------------------------------------------------------------------------------------------------------------------------------------------------"
+             << endl;
 
         //Easier to manipulate
         const vector<Line_Objdump *> *objdump_file = &Line_Objdump::getFILE_OBJ()->get_lines_vector();
@@ -89,12 +91,20 @@ int main(int argc, char *argv[]) {
 
             //So we have all the necessary information for the display
             if (event_cpu_clk >= 0 && event_inst_retired >= 0 && instr.compare("") != 0) {
-                cout << "_5_ "
-                     << std::setw(12) << sum4 << " "
-                     << std::setw(12) << sum3 << " "
-                     << std::setw(12) << sum2 << " | "
-                     << std::setw(9) << std::setprecision(3) << ipc << " "
-                     << std::setw(12) << event_cpu_clk << " "
+                cout << "_5_ ";
+                if (isDisplaySum) {
+                    cout << std::setw(7) << sum4 << " "
+                         << std::setw(12) << sum3 << " "
+                         << std::setw(12) << sum2 << " | ";
+                }
+                cout << std::setprecision(3);
+
+                if (ipc < 1) { cout << "\033[0;93m" << std::setw(7) << ipc << "\033[0m "; }
+                else if (ipc < 2) { cout << "\033[0;92m" << std::setw(7) << ipc << "\033[0m "; }
+                else if (ipc < 3) { cout << "\033[0;94m" << std::setw(7) << ipc << "\033[0m "; }
+                else if (ipc < 6) { cout << "\033[0;95m" << std::setw(7) << ipc << "\033[0m "; }
+                else { cout << std::setw(7) << ipc << " "; }
+                cout << std::setw(12) << event_cpu_clk << " "
                      << std::setw(12) << event_inst_retired << "    "
                      << std::setw(8) << std::hex << myadd << std::dec << "    "
                      << std::setw(15) << instr
@@ -107,8 +117,8 @@ int main(int argc, char *argv[]) {
             //  (2) Detect if its a jump (begin by 'j'
             //  (3) But not a JMPQ one (return jump for function)
             std::istringstream iss(instr);
-            std::vector<std::string> v_split(std::istream_iterator<std::string> { iss },
-            std::istream_iterator<std::string>());
+            std::vector<std::string> v_split(std::istream_iterator<std::string>{iss},
+                                             std::istream_iterator<std::string>());
             if (instr.size() >= 0 && instr[0] == 'j' && v_split[0] != "jmpq") {
 
                 ui64 jump_add = stoullhexa(v_split[1]);
@@ -139,19 +149,14 @@ int main(int argc, char *argv[]) {
                     double IPC = double(sumin) / double(sumcy);
                     double cyL = double(count) / IPC;
 
-                    //TODO use setw for this part
                     cout << "_7_ LOOP from " << std::hex << myadd << " to " << std::hex << jump_add
                          << " size= " << std::dec << diff << " sum(cycles)= "
                          << sumcy << " sum(inst)= " << sumin << " #inst= " << count << " IPC= "
                          << IPC << " cycles/LOOP= " << cyL << endl;
                     cout
                             << "----------------------------------------------------------------------------------------------------------------\n";
-
                 }
-
-
             }
-
         }
         if (loop_detected) {
             cout
@@ -159,10 +164,6 @@ int main(int argc, char *argv[]) {
             loop_detected = false;
             cout << endl;
         }
-
-
     }
-
-    cout << "End ..." << endl;
 }
 
