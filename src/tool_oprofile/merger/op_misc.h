@@ -9,6 +9,7 @@
 #include <vector>
 #include <misc.h>
 
+#include "../../common/AnyOption/anyoption.h"
 
 
 
@@ -21,6 +22,8 @@ const vector<string> my_split(const std::string &s, const char &c);
 
 
 ui64 stoullhexa(string str);
+
+void parse_argument(int argc, char *argv[], AnyOption *opt);
 
 
 #endif //PERFORMANCE_MODELISATION_OP_MISC_H
