@@ -9,7 +9,7 @@
 
 
 if [ ${#@} == 0 ]; then
-    echo "Usage: ./op_main.sh PROG"
+    echo "Usage: ./oprofile++.sh PROG"
     echo "* PROG: name of the program you want to profile"
     exit
 fi
