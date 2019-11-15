@@ -123,10 +123,12 @@ void Line_Oprofile::print_resume() {
 
     for (Line_Oprofile *current_line : FILE_OPR->get_lines()) {
         if (current_line->m_line_type == Line::LINE_TYPE::NORMAL) {
-            cout << "_0_ " << current_line->m_original_line << endl;
+            DEBUG << "_0_";
+            cout << current_line->m_original_line << endl;
         } else if (current_line->m_line_type == Line::LINE_TYPE::FUNCTION) {
             if (current_line->m_event_cpu_clk > 0.1) {
-                cout << "_1_ " << current_line->m_original_line << endl;
+                DEBUG << "_1_";
+                cout << current_line->m_original_line << endl;
             }
         }
     }

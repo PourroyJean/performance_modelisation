@@ -34,8 +34,8 @@ int main(int argc, char *argv[]) {
     FILE_OPR->analysis();
 
     //Debugging: print both files content
-//    cout << *FILE_OBJ << endl;
-//    cout << *FILE_OPR << endl;
+    DEBUG << *FILE_OBJ << endl;
+    DEBUG << *FILE_OPR << endl;
 
 
     // we have all data now ; we will reconstruct the profile in same order
@@ -161,7 +161,8 @@ int main(int argc, char *argv[]) {
                     double IPC = double(sumin) / double(sumcy);
                     double cyL = double(count) / IPC;
 
-                    cout << "_7_ LOOP from " << std::hex << myadd << " to " << std::hex << jump_add
+                    DEBUG << "_7_";
+                    cout << "LOOP from " << std::hex << myadd << " to " << std::hex << jump_add
                          << " size= " << std::dec << diff << " sum(cycles)= "
                          << sumcy << " sum(inst)= " << sumin << " #inst= " << count << " IPC= "
                          << IPC << " cycles/LOOP= " << cyL << endl;
