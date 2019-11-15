@@ -22,15 +22,16 @@ std::string convert_size(size_t  size);
 void print_times(char *s);
 
 
-#define OP_DEBUG
+//#define OP_DEBUG
 #undef OP_DEBUG
+
+
 #ifdef  OP_DEBUG
-#define DEBUG cout << "_DEBUG_ "
+    #define DEBUG cout << "_DEBUG_ "
 #else
-    #define DEBUG 1 && cout
+    extern std::stringstream black_hole;
+    #define DEBUG  black_hole
 #endif
-
-
 
 typedef uint64_t ui64;
 typedef uint32_t ui32;

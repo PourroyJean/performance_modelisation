@@ -11,7 +11,7 @@ add_executable(merger op_merger_main.cxx op_misc.cpp op_misc.cpp Line.cpp Line_O
 
 #We use the common/misc codde
 include_directories(../common)
-target_link_libraries(merger misc)
+target_link_libraries(merger misc anyOptionlib)
 
 
 #Move needed files
