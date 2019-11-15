@@ -19,9 +19,9 @@ InputFile<T>::InputFile(const string &m_file_path) :  m_file_path(m_file_path) {
 
 template <class T>
 ostream& operator<<(ostream& sortie, const InputFile<T> & n) {
-    cout << "Print the file  " << n.get_file_path() << " with " << n.get_lines_vector().size() << " lines\n";
+    sortie << "Print the file  " << n.get_file_path() << " with " << n.get_lines_vector().size() << " lines\n";
   for(auto one_line : n.get_lines_vector()){
-    cout << "#" <<  *one_line << "#" << endl;
+    sortie << "#" <<  *one_line << "#" << endl;
   }
   return sortie;
 }
