@@ -11,6 +11,7 @@
 #include <iterator>
 
 
+
 using namespace std;
 
 
@@ -19,8 +20,8 @@ int main(int argc, char *argv[]) {
     //\\ ** ARGUMENT PARSING ** \\//
     AnyOption *opt = new AnyOption();
     parse_argument(argc, argv, opt);
-    bool isDisplaySum = (opt->getValue("s") != NULL || opt->getValue("sum") != NULL);
-
+    bool isDisplaySum = to_bool(opt->getValue("sum"));
+    bool isDisplayIPC = to_bool(opt->getValue("ipc")) ;
 
 
     //\\ **  FILES ANALYSIS  ** \\//
@@ -54,15 +55,16 @@ int main(int argc, char *argv[]) {
         }
 
         cout << endl
-             << "====================================================================================================================================================\n"
+             << "===============================================================================\n"
              << "_FUNCTION_ANALYSIS_ from the app name (" << current_line->get_application_name()
              << ") hot spot from the symbole name (" << current_line->get_symbole_name() << ")" << " which takes "
              << current_line->get_event_cpu_clk_percentage() << "% of the profiling" << endl
-             << "====================================================================================================================================================\n"
-             << (isDisplaySum ? "      SUM*4        SUM*3        SUM*2" : " ")
-             << "       IPC       CYCLES        INSTS     ADDRESS    ASSEMBLY                         \n"
-             << "----------------------------------------------------------------------------------------------------------------------------------------------------"
-             << endl;
+             << "===============================================================================\n";
+        DEBUG << "_6_";
+        cout << (isDisplaySum ? "  SUM*4      SUM*3      SUM*2    " : " ")
+             << (isDisplayIPC ? "   IPC  " : "")
+             << "   CYCLES     INSTS     ADDRESS    ASSEMBLY                         \n"
+             << "-------------------------------------------------------------------------------\n";
 
         //Easier to manipulate
         const vector<Line_Objdump *> *objdump_file = &Line_Objdump::getFILE_OBJ()->get_lines_vector();
@@ -83,29 +85,39 @@ int main(int argc, char *argv[]) {
             double ipc = (event_cpu_clk == 0 ? 0 : double(double(event_inst_retired) / double(event_cpu_clk)));
             if (ipc < 0 || ipc > 10) ipc = -1; //Verify that the IPC is a consistent value
 
-            //We try to sum instructions by pack of 2, 3, 4 to detect super-scalar execution pattern
-            ui64 sum2 = event_cpu_clk + objdump_file->at(li + 1)->get_event_cpu_clk();
-            ui64 sum3 = sum2 + objdump_file->at(li + 2)->get_event_cpu_clk();
-            ui64 sum4 = sum3 + objdump_file->at(li + 3)->get_event_cpu_clk();
-
 
             //So we have all the necessary information for the display
             if (event_cpu_clk >= 0 && event_inst_retired >= 0 && instr.compare("") != 0) {
-                cout << "_5_ ";
-                if (isDisplaySum) {
-                    cout << std::setw(7) << sum4 << " "
-                         << std::setw(12) << sum3 << " "
-                         << std::setw(12) << sum2 << " | ";
-                }
-                cout << std::setprecision(3);
+                DEBUG << "_5_ ";
 
-                if (ipc < 1) { cout << "\033[0;93m" << std::setw(7) << ipc << "\033[0m "; }
-                else if (ipc < 2) { cout << "\033[0;92m" << std::setw(7) << ipc << "\033[0m "; }
-                else if (ipc < 3) { cout << "\033[0;94m" << std::setw(7) << ipc << "\033[0m "; }
-                else if (ipc < 6) { cout << "\033[0;95m" << std::setw(7) << ipc << "\033[0m "; }
-                else { cout << std::setw(7) << ipc << " "; }
-                cout << std::setw(12) << event_cpu_clk << " "
-                     << std::setw(12) << event_inst_retired << "    "
+                //We try to sum instructions by pack of 2, 3, 4 to detect super-scalar execution pattern
+                if (isDisplaySum) {
+                    ui64 sum2 = event_cpu_clk + objdump_file->at(li + 1)->get_event_cpu_clk();
+                    ui64 sum3 = sum2 + objdump_file->at(li + 2)->get_event_cpu_clk();
+                    ui64 sum4 = sum3 + objdump_file->at(li + 3)->get_event_cpu_clk();
+                    cout << std::setw(7) << sum4 << " "
+                         << std::setw(10) << sum3 << " "
+                         << std::setw(10) << sum2 << " | ";
+                }
+
+
+                //\\ COLOR AND PRINT CYCLE, INST, ADD, ASM \\//
+                if(isDisplayIPC) {
+                    if (ipc < .5)
+                        cout << std::setprecision(3) << "\033[0;96m" << std::setw(7) << ipc << "\033[0m ";
+                    else if (ipc < 2.5)
+                        cout << std::setprecision(3) << "\033[0;92m" << std::setw(7) << ipc << "\033[0m ";
+                    else if (ipc < 3.5)
+                        cout << std::setprecision(3) << "\033[0;94m" << std::setw(7) << ipc << "\033[0m ";
+                    else if (ipc < 6)
+                        cout << std::setprecision(3) << "\033[0;95m" << std::setw(7) << ipc << "\033[0m ";
+                    else {
+                        cout << std::setprecision(3) << std::setw(7) << ipc << " ";
+                    }
+                }
+
+                cout << std::setw(10) << event_cpu_clk << " "
+                     << std::setw(9) << event_inst_retired << "    "
                      << std::setw(8) << std::hex << myadd << std::dec << "    "
                      << std::setw(15) << instr
                      << endl;
@@ -127,7 +139,7 @@ int main(int argc, char *argv[]) {
                 if (diff < 100000ull) { // backward loop
                     if (!loop_detected) {
                         cout
-                                << "----------------------------------------------------------------------------------------------------------------\n";
+                                << "-------------------------------------------------------------------------------\n";
                     }
                     loop_detected = true;
 
@@ -154,13 +166,13 @@ int main(int argc, char *argv[]) {
                          << sumcy << " sum(inst)= " << sumin << " #inst= " << count << " IPC= "
                          << IPC << " cycles/LOOP= " << cyL << endl;
                     cout
-                            << "----------------------------------------------------------------------------------------------------------------\n";
+                            << "-------------------------------------------------------------------------------\n";
                 }
             }
         }
         if (loop_detected) {
             cout
-                    << "----------------------------------------------------------------------------------------------------------------\n";
+                    << "-------------------------------------------------------------------------------\n";
             loop_detected = false;
             cout << endl;
         }

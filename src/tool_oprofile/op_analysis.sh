@@ -25,6 +25,6 @@ echo   "---------- MERGE: OPROFILE + OBJDUMP ----------"
 echo   "-----------------------------------------------"
 
 objdump -d  $OP_PROGRAM  > $OP_OBJ_FILE
-$OP_MERGING_PROGRAM $OP_OBJ_FILE $OP_FILE_INST > $OP_MERGED_FILE
+$OP_MERGING_PROGRAM --object $OP_OBJ_FILE  --profile $OP_FILE_INST > $OP_MERGED_FILE
 cat op_merged.txt | grep IPC
 
