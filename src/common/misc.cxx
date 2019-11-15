@@ -1,6 +1,7 @@
 #include "misc.h"
 #include <inttypes.h>
 #include <stdio.h>
+#include <sstream>
 
 
 #include <string>
@@ -9,6 +10,8 @@ using namespace std;
 float TIME_ELAPSED;
 struct timeval start_time, end_time;
 
+
+std::stringstream black_hole;
 
 
 void print_times(char *s) {
