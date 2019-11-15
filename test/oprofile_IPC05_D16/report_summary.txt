@@ -1,0 +1,49 @@
+CPU: Intel Skylake microarchitecture, speed 3.7e+06 MHz (estimated)
+Counted cpu_clk_unhalted events () with a unit mask of 0x00 (Core cycles when at least one thread on the physical core is not in halt state) count 2000004
+Counted inst_retired events () with a unit mask of 0x00 (Number of instructions retired. General Counter   - architectural event) count 2000004
+cpu_clk_unhalt...|inst_retired:2...|
+  samples|      %|  samples|      %|
+------------------------------------
+   140364 92.7542     71288 90.1045 assembly
+     9608  6.3491      4617  5.8357 no-vmlinux
+      899  0.5941      2438  3.0815 libperl.so
+      188  0.1242       366  0.4626 libc-2.17.so
+      101  0.0667       172  0.2174 libpython2.7.so.1.0
+       54  0.0357        40  0.0506 ld-2.17.so
+       29  0.0192        36  0.0455 bash
+       26  0.0172        82  0.1036 libfreeblpriv3.so
+       12  0.0079        30  0.0379 oprofiled
+        5  0.0033         2  0.0025 systemd
+        5  0.0033         4  0.0051 libpthread-2.17.so
+        4  0.0026         7  0.0088 gawk
+        4  0.0026         8  0.0101 libdbus-1.so.3.14.14
+        4  0.0026         2  0.0025 libprocps.so.4.0.0
+        3  0.0020         1  0.0013 SmallMonitoringDaemon
+	cpu_clk_unhalt...|inst_retired:2...|
+	  samples|      %|  samples|      %|
+	------------------------------------
+	        3 100.000         0       0 SmallMonitoringDaemon
+	        0       0         1 100.000 [vdso] (tgid:103673 range:0x7ffff7ffa000-0x7ffff7ffc000)
+        3  0.0020         5  0.0063 ophelp
+        2  0.0013         2  0.0025 cp
+        2  0.0013         0       0 systemd-logind
+        2  0.0013         1  0.0013 libcrypto.so.1.0.2k
+        2  0.0013         2  0.0025 irqbalance
+        1 6.6e-04         1  0.0013 libslurmfull.so
+        1 6.6e-04         0       0 libcmudebug.so
+        1 6.6e-04         1  0.0013 dbus-daemon
+        1 6.6e-04         0       0 df
+        1 6.6e-04         0       0 grep
+        1 6.6e-04         0       0 systemd-machined
+        1 6.6e-04         0       0 libgcc_s-4.8.5-20150702.so.1
+        1 6.6e-04         1  0.0013 librpmio.so.3.2.2
+        1 6.6e-04         0       0 libsoftokn3.so
+        1 6.6e-04         0       0 libtinfo.so.5.9
+        1 6.6e-04         2  0.0025 ldconfig
+        1 6.6e-04         1  0.0013 procsetd
+        0       0         1  0.0013 ps
+        0       0         1  0.0013 systemd-journald
+        0       0         1  0.0013 libfastjson.so.4.0.0
+        0       0         2  0.0025 libglib-2.0.so.0.5600.1
+        0       0         1  0.0013 libpam.so.0.83.1
+        0       0         2  0.0025 sudoers.so
