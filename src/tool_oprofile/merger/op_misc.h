@@ -25,5 +25,7 @@ ui64 stoullhexa(string str);
 
 void parse_argument(int argc, char *argv[], AnyOption *opt);
 
+bool to_bool(std::string str);
+
 
 #endif //PERFORMANCE_MODELISATION_OP_MISC_H
