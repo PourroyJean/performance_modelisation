@@ -1,5 +1,5 @@
 # Intro to Performance optimisation
-This package should be used by every ninja programmer interested by tunning or monitoring the performance of his applications.
+This package should be used by any programmer interested by tunning or monitoring the performance of his applications.
 
 ## Tools
 This package contains the following tools
