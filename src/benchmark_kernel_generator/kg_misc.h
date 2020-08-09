@@ -7,6 +7,9 @@
 
 #include <vector>
 
+#include <sstream>
+extern std::stringstream black_hole;
+
 //****************************
 //**        FILES PATH      **
 //****************************
