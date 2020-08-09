@@ -17,7 +17,7 @@ file(GLOB SOURCES "*.c")
 add_subdirectory(common)
 add_subdirectory(common/AnyOption)
 
-# CHANGE THIS
+# << Choose the required tool by commenting or not >>
 add_subdirectory (benchmark_kernel_generator)
 #add_subdirectory(tool_oprofile)
 #add_subdirectory (tool_yamb)
