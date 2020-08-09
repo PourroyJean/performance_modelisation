@@ -19,7 +19,7 @@ add_subdirectory(common/AnyOption)
 
 # CHANGE THIS
 add_subdirectory (benchmark_kernel_generator)
-add_subdirectory(tool_oprofile)
-add_subdirectory (tool_yamb)
-add_subdirectory (benchmark_dml_mem)
+#add_subdirectory(tool_oprofile)
+#add_subdirectory (tool_yamb)
+#add_subdirectory (benchmark_dml_mem)
 
