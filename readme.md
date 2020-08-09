@@ -10,7 +10,7 @@ This package contains the following tools
 
 # Install
 
-Each tool/benchmark can be compiled separately. You can choose which one to compile by modifying the [Cmake configuration file](src/CMakeLists.txt) in **src/CMakeLists.txt**:
+Each tool/benchmark can be compiled separately. You can choose which one to compile by modifying the [Cmake configuration file](src/CMakeLists.txt) in **src/CMakeLists.txt**. For example, to only compile the Kernel Generator, you can use the following configuration:
 ```
 add_subdirectory (benchmark_kernel_generator)
 #add_subdirectory(tool_oprofile)
