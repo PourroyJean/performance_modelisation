@@ -166,7 +166,7 @@ void KG_generators::generate_instructions() {
 
     KG_generate_table_registers();
 
-    cout << "mOperations_set " << mOperations_set->size() << endl;
+    DEBUG << "mOperations_set " << mOperations_set->size() << endl;
 
     for (auto &operation : *mOperations_set) {
         string saveSource = to_string(Get_register_source());
