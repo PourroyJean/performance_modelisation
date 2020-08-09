@@ -25,7 +25,7 @@ git clone git@github.com:PourroyJean/performance_modelisation.git performance_mo
 cd performance_modelisation
 mkdir build
 cd build
-emacs ../src/CMakeLists.txt  #to choose which tool to compile 
+vi ../src/CMakeLists.txt  #to choose which tool to compile 
 cmake ..
 make
 ```
