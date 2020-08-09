@@ -21,6 +21,8 @@
 
 
 
+std::stringstream black_hole;
+
 
 int main(int argc, char **argv) {
 
