@@ -17,6 +17,7 @@ add_subdirectory (benchmark_kernel_generator)
 #add_subdirectory (tool_yamb)
 #add_subdirectory (benchmark_dml_mem)
 ```
+*Note:* YAMB requires to be compiled with YAMB as it uses its *annotation code* library.
 
 Here is the simplest way to download and install our tools:
 ```bash
@@ -24,6 +25,7 @@ git clone git@github.com:PourroyJean/performance_modelisation.git performance_mo
 cd performance_modelisation
 mkdir build
 cd build
+emacs ../src/CMakeLists.txt  #to choose which tool to compile 
 cmake ..
 make
 ```
