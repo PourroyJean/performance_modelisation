@@ -3,13 +3,15 @@ This package should be used by every ninja programmer interested by tunning or m
 
 ## Tools
 This package contains the following tools
-*   kg: used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
-
-## Benchmark
-We also provide some benchmark:
-* KeKKak: simple kernels is developped to have a fair comparison of microarchitectures on the Keccak algorithm 
+*   Kernel Generator: used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
+*   DML_MEM: a benchmark used to measure the performance of the memory subsystem by accessing memory with stride access
+*   YAMB: a tool used to monitor the memory bus traffic.
+*   Oprofile++: a tool to find and extract hot spots from an application
 
 # Install
+
+Each tool/benchmark can be compiled separately. You can choose which one to compile by modifying the [Cmake configuration file](src/CMakeLists.txt) in **src/CMakeLists.txt**
+
 Here is the simplest way to download and install our tools:
 ```bash
 git clone git@github.com:PourroyJean/performance_modelisation.git performance_modelisation
@@ -20,33 +22,24 @@ cmake ..
 make
 ```
 
-# Quick example
-
-Here is an example explaining how to use `kg`:
-```
-cd performance_modelisation/buid/bin/tool_kernel_generator/kg
-./kg
-```
-
-
 
 ## Requirement
 
 * [CMAKE](https://cmake.org/) - An open-source, cross-platform family of tools designed to build, test and package software
 
 
+## Other
+
+We also provide :
+* KeKKak: simple kernels is developped to have a fair comparison of microarchitectures on the Keccak algorithm 
+
+
+
 ## Authors
 
 * **[Jean Pourroy](https://www.linkedin.com/in/pourroyjean/)** - PHD student at ENS Paris Saclay - HPE
-* **[Fred]()** - Ninja
-* **[Dml]()** - Ninja
+* **[Patrick Demichel]()** - HPE
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
