@@ -10,7 +10,13 @@ This package contains the following tools
 
 # Install
 
-Each tool/benchmark can be compiled separately. You can choose which one to compile by modifying the [Cmake configuration file](src/CMakeLists.txt) in **src/CMakeLists.txt**
+Each tool/benchmark can be compiled separately. You can choose which one to compile by modifying the [Cmake configuration file](src/CMakeLists.txt) in **src/CMakeLists.txt**:
+```
+add_subdirectory (benchmark_kernel_generator)
+#add_subdirectory(tool_oprofile)
+#add_subdirectory (tool_yamb)
+#add_subdirectory (benchmark_dml_mem)
+```
 
 Here is the simplest way to download and install our tools:
 ```bash
