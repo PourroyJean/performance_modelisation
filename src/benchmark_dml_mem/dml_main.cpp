@@ -46,7 +46,7 @@ int mpi_rank = 0;
 int mpi_size = 1;
 bool is_I_LOG = false;
 
-std::stringstream black_hole;
+extern std::stringstream black_hole;
 
 
 #ifdef  COMPILED_WITH_MPI
