@@ -22,8 +22,8 @@ std::string convert_size(size_t  size);
 void print_times(char *s);
 
 
-//#define OP_DEBUG
-#undef OP_DEBUG
+#define OP_DEBUG
+//#undef OP_DEBUG
 
 
 #ifdef  OP_DEBUG
