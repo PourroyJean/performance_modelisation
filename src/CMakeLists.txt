@@ -18,8 +18,8 @@ add_subdirectory(common/AnyOption)
 
 # CHANGE THIS
 #add_subdirectory (tool_hw_description)
-#add_subdirectory (benchmark_kernel_generator)
-add_subdirectory(tool_oprofile)
+add_subdirectory (benchmark_kernel_generator)
+#add_subdirectory(tool_oprofile)
 #add_subdirectory (benchmark_multiply)
 #add_subdirectory (tool_yamb)
 #add_subdirectory (benchmark_dml_mem)
