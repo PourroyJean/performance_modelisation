@@ -15,7 +15,6 @@ add_subdirectory (benchmark_kernel_generator)
 #add_subdirectory (tool_yamb)
 #add_subdirectory (benchmark_dml_mem)
 ```
-*Note:* YAMB requires to be compiled with YAMB as it uses its *annotation code* library.
 
 Here is the simplest way to download and install our tools:
 ```bash
