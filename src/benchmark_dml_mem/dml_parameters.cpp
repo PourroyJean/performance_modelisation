@@ -35,7 +35,9 @@ using namespace std;
 #define DEBUG_MPI cout
 #endif
 
+#ifdef YAMB_ENABLED
 extern string YAMB_ANNOTATE_LOG_FILE;
+#endif
 
 void Dml_parameters::print_configuration() {
 
@@ -597,7 +599,6 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
     double size;
     opt.get("--matrixsize")->getDouble(size);
 
-//    m_MAT_SIZE += 1; //TODO WHY ?
     m_MAT_SIZE = size*(1024 * 1024); // 1 mb  == 1 * 1024 * 1024 byte
     if (!(m_MAT_SIZE >=  1024)) {
         cout << "Error: please check the size of your matrix (" << m_MAT_SIZE << ")\n";
@@ -703,15 +704,17 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
 
 
     if (opt.isSet("--annotate")) {
-        m_is_annotate = true;
-        opt.get("--annotate")->getString(m_annotate_file_name);
-        //Check if the file name was given in argument, and is is not the next option (begin with --)
-        if (m_annotate_file_name.empty() ||
-            !strncmp(m_annotate_file_name.c_str(), string("--").c_str(), string("--").size())) {
-            cout << "Error: please write the name of the annotate file\n";
-            exit(EXIT_FAILURE);
-        }
-        YAMB_ANNOTATE_LOG_FILE = m_annotate_file_name;
+        #ifdef YAMB_ENABLED
+            m_is_annotate = true;
+            opt.get("--annotate")->getString(m_annotate_file_name);
+            //Check if the file name was given in argument, and is is not the next option (begin with --)
+            if (m_annotate_file_name.empty() ||
+                !strncmp(m_annotate_file_name.c_str(), string("--").c_str(), string("--").size())) {
+                cout << "Error: please write the name of the annotate file\n";
+                exit(EXIT_FAILURE);
+            }
+            YAMB_ANNOTATE_LOG_FILE = m_annotate_file_name;
+        #endif
     } else {
         m_is_annotate = false;
     }
