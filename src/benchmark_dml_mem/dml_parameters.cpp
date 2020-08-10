@@ -608,7 +608,7 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
 
 
     opt.get("--maxops")->getInt(m_MAX_OPS);
-    m_MAX_OPS *= (1024 * 1024); //TODO why ?
+    m_MAX_OPS *= (1024 * 1024);
 
 
     opt.get("--minstride")->getInt(m_MIN_STRIDE);
