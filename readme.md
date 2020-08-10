@@ -1,33 +1,34 @@
 # Intro to Performance optimisation
-This package should be used by every ninja programmer interested by tunning or monitoring the performance of his applications.
+This package should be used by any programmer interested by tunning or monitoring the performance of his applications.
 
 ## Tools
 This package contains the following tools
-*   kg: used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
-
-## Benchmark
-We also provide some benchmark:
-* KeKKak: simple kernels is developped to have a fair comparison of microarchitectures on the Keccak algorithm 
+*   Kernel Generator: used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
+*   DML_MEM: a benchmark used to measure the performance of the memory subsystem by accessing memory with stride access
+*   YAMB: a tool used to monitor the memory bus traffic.
+*   Oprofile++: a tool to find and extract hot spots from an application
 
 # Install
+
+Each tool/benchmark can be compiled separately. You can choose which one to compile by modifying the [Cmake configuration file](src/CMakeLists.txt) in **src/CMakeLists.txt**. For example, to only compile the Kernel Generator, you can use the following configuration:
+```
+add_subdirectory (benchmark_kernel_generator)
+#add_subdirectory(tool_oprofile)
+#add_subdirectory (tool_yamb)
+#add_subdirectory (benchmark_dml_mem)
+```
+*Note:* YAMB requires to be compiled with YAMB as it uses its *annotation code* library.
+
 Here is the simplest way to download and install our tools:
 ```bash
 git clone git@github.com:PourroyJean/performance_modelisation.git performance_modelisation
 cd performance_modelisation
 mkdir build
 cd build
+vi ../src/CMakeLists.txt  #to choose which tool to compile 
 cmake ..
 make
 ```
-
-# Quick example
-
-Here is an example explaining how to use `kg`:
-```
-cd performance_modelisation/buid/bin/tool_kernel_generator/kg
-./kg
-```
-
 
 
 ## Requirement
@@ -35,18 +36,18 @@ cd performance_modelisation/buid/bin/tool_kernel_generator/kg
 * [CMAKE](https://cmake.org/) - An open-source, cross-platform family of tools designed to build, test and package software
 
 
+## Other
+
+We also provide :
+* KeKKak: simple kernels is developped to have a fair comparison of microarchitectures on the Keccak algorithm 
+
+
+
 ## Authors
 
 * **[Jean Pourroy](https://www.linkedin.com/in/pourroyjean/)** - PHD student at ENS Paris Saclay - HPE
-* **[Fred]()** - Ninja
-* **[Dml]()** - Ninja
+* **[Patrick Demichel]()** - HPE
 
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone who's code was used
-* Inspiration
-* etc
