@@ -303,7 +303,7 @@ int Dml_parameters::setup_parser(int argc, const char *argv[]) {
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
-            "TODO", // Help description.
+            "CPU frequency", // Help description.
             "--ghz" // Flag token.
     );
 
