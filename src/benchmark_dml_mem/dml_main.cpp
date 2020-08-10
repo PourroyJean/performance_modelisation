@@ -340,9 +340,11 @@ int work(Dml_parameters *p) {
 #ifdef __ia64__
 #define ADDR (void *)(0x8000000000000000UL)
 #define SHMAT_FLAGS (SHM_RND)
+#define FLAGS  SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_R | SHM_W
 #else
 #define ADDR (void *)(0x0UL)
 #define SHMAT_FLAGS (0)
+#define  FLAGS IPC_CREAT | IPC_EXCL | SHM_R | SHM_W
 #endif
 
 
@@ -351,14 +353,12 @@ void data_alloc_spe(size_t size) {
     MPI_BARRIER
 
     cout << flush;
-    shmid = shmget(IPC_PRIVATE, size, SHM_HUGETLB | IPC_CREAT | IPC_EXCL | SHM_R | SHM_W);
+    shmid = shmget(IPC_PRIVATE, size, FLAGS);
 
     if (shmid == -1) {
         DEBUG << "ERROR on shmget " << std::strerror(errno) << '\n';
         exit(1);
     }
-
-//    DEBUG << "SHMID  " << shmid << endl;
 
 
 #ifdef  COMPILED_WITH_MPI
