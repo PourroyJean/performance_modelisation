@@ -1,8 +1,6 @@
 # Intro to Performance optimisation
 This package should be used by any programmer interested by tunning or monitoring the performance of his applications.
-
-## Tools
-This package contains the following tools
+This package contains the following tools:
 *   Kernel Generator: used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
 *   DML_MEM: a benchmark used to measure the performance of the memory subsystem by accessing memory with stride access
 *   YAMB: a tool used to monitor the memory bus traffic.
@@ -30,6 +28,19 @@ cmake ..
 make
 ```
 
+## Configure each tool
+
+Each tool can be compiled separately and have its own settings.
+
+### DML_MEM benchmark
+The DML benchmark can be compiled with MPI or not. To do this, the following flag must be set in the cmake tool configuration:
+```
+cmake -DDML_BUILD_MPI=ON ..
+```
+To analyze the different steps of the benchmark (change of stride size, data set size) it can be interesting to monitor the memory bus traffic with YAMB and to annotate the graph with the library provided for. To do this, the following flag must be set in the cmake tool configuration:
+```
+cmake -DDML_USE_YAMB=ON ..
+```
 
 ## Requirement
 
