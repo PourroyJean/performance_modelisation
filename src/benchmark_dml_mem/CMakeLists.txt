@@ -1,32 +1,51 @@
+# CONFIGURATION
+option(DML_BUILD_MPI "Build the benchmark with MPI" OFF)
+option(DML_USE_YAMB "Use YAMB lib annotation (YAMB must be compiled)" OFF)
+
+
+
 
 #However, the file(GLOB...) allows for wildcard additions:
 file(GLOB SOURCES "*.cxx")
 file(GLOB COMMON_SOURCES "../common" "*.cxx")
 
 
-if (UNIX)
-    #do something
-endif (UNIX)
-
+# COMPILER FLAG
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    # using Clang
+    # MacOS
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    # GCC
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=skylake-avx512")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
+    # ICC
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=skylake-avx512 -qopt-streaming-stores=always")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    # using Visual Studio C++
+    # Visual Studio C++
 else()
+    # Default
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
 endif()
 
-option(OPT_BUILD_MPI "Build the benchmark with MPI" OFF)
+# enable or not the yamb annotation lib
+if(DML_USE_YAMB)
+    message("-- YAMB : enabled")
+    #Enable C++ code
+    add_definitions(-DYAMB_ENABLED)
 
+    #Generate the code annotation library
+    add_library(libAnno SHARED IMPORTED)
+    set_property(TARGET libAnno PROPERTY IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so")
+else()
+    message("-- YAMB : disabled")
+endif()
+
+
+
+
+# MPI
 set (DML_EXECUTABLE "xxx")
-
-
-#REQUIRED OR NOT
-if(OPT_BUILD_MPI)
+if(DML_BUILD_MPI)
     find_package(MPI REQUIRED)
 
     if (MPI_FOUND)
@@ -36,12 +55,12 @@ if(OPT_BUILD_MPI)
         set (DML_EXECUTABLE "dml_mpi")
     else ()
         #should never happen as MPI is required
-        message(WARNING "MPI requested but not found by Cmake")
+        message(WARNING "/!\ MPI requested but not found by Cmake")
         set (DML_EXECUTABLE "dml")
 
     endif()
 else()
-    message("MPI NOT REQUIRED")
+    message("  MPI NOT REQUIRED")
     set (DML_EXECUTABLE "dml")
 endif()
 
@@ -49,9 +68,6 @@ endif()
 
 
 
-#Generate the code annotation library
-add_library(libAnno SHARED IMPORTED)
-set_property(TARGET libAnno PROPERTY IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so")
 
 
 
@@ -67,7 +83,9 @@ target_include_directories(${DML_EXECUTABLE} PRIVATE ${MPI_CXX_INCLUDE_PATH})
 
 #LINK LIBRARIES
 target_link_libraries (${DML_EXECUTABLE} "misc" )
-target_link_libraries (${DML_EXECUTABLE} "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so"  )
+if(DML_USE_YAMB)
+    target_link_libraries (${DML_EXECUTABLE} "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so"  )
+endif()
 target_link_libraries (${DML_EXECUTABLE} "${MPI_CXX_LIBRARIES}")
 
 
