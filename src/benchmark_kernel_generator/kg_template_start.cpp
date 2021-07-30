@@ -49,7 +49,7 @@ int main(int argc, char **argv) {
     int cpu_bind = CPU_BIND;
     cpu_set_t mycpumask;
     CPU_ZERO(&mycpumask);
-    if (argc > 1 && argv[1] >= 0 && argv[512]){
+    if (argc > 1 && (int)(size_t)argv[1] >= 0 && argv[512]){
         CPU_BIND = atoi(argv[1]);
     }
     CPU_SET(CPU_BIND, &mycpumask);
