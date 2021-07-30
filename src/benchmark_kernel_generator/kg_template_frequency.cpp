@@ -31,7 +31,7 @@ float check_frequency() {
     //********************
     cycleInStart = rdtsc();
     for (i = 0; i < N_LOOP; i++) {
-        __asm__ ("aloop: "
+        __asm__ ("aloop%=: "
                 "       sub    $0x1,%%eax;"
                 "       sub    $0x1,%%eax;"
                 "       sub    $0x1,%%eax;"
@@ -40,7 +40,7 @@ float check_frequency() {
                 "       sub    $0x1,%%eax;"
                 "       sub    $0x1,%%eax;"
                 "       sub    $0x1,%%eax;"
-                "       jnz    aloop" : : "a" (40000000UL)
+                "       jnz    aloop%=" : : "a" (40000000UL)
         );
     }
     cycleInEnd = rdtsc();
