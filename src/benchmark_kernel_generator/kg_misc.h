@@ -33,6 +33,7 @@ extern std::stringstream black_hole;
 //Do not use them direclty on the code because they could be overwritten by the user  at the execution (parameters flag)
 #define PARAM_WIDTH         64
 #define PARAM_OPERATIONS    "aaaaa"
+#define PARAM_COMPILER      "g++ --std=c++11"
 #define PARAM_BIND          0
 #define PARAM_DEPENDENCY    false
 #define PARAM_NB_DEPENDENCY 0

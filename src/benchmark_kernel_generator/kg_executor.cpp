@@ -5,6 +5,9 @@
 #include "kg_executor.h"
 #include <cmath>
 #include <misc.h>
+#include <sys/wait.h>
+
+
 
 
 using namespace std;
@@ -22,7 +25,15 @@ void KG_executor::Execute_assembly() {
     Cpu_binding();
 
     string stmp(FILE_ASM_EXE);
-    system(stmp.c_str());
+    int status = system(stmp.c_str());
+
+
+    if (status != 0){
+        cout << "Error status " << status << endl;
+        cout << " - 4 = Illegal instruction --> check if AVX, FMA512, etc... are available" << endl;
+        exit (status);
+    }
+
     return;
 
 }
