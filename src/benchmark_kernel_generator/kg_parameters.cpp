@@ -234,7 +234,7 @@ void KG_parameters::parameter_summary() {
     cout << "\t -O <operationsl list> " << this->P_OPERATIONS << endl;
     cout << "\t -C <compiler command> " << this->P_COMPILER   << endl;
     cout << "\t -B (core binding)     " << this->P_BIND   << endl;
-    cout << "\t -D (op dependency)    " << std::boolalpha << this->P_DEPENDENCY << endl;
+    cout << "\t -D (op dependency)    " << std::boolalpha << this->P_DEPENDENCY << " (" << P_NB_DEPENDENCY << ")" << endl;
     cout << "\t -P (op precision)     " << this->P_PRECISION << endl;
     cout << "\t -L (loop size)        " << this->P_LOOP_SIZE << endl;
     cout << "\t -U (unrolling)        " << this->P_UNROLLING << endl;

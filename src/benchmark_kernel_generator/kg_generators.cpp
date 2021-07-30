@@ -17,6 +17,7 @@ using namespace std;
 
 void KG_generators::generate_assembly() {
 
+
     mFile_assembly_src << "\t\t__asm__ (\"\" " << endl;
 
     string smallestRegisterName = "xmm";
@@ -42,9 +43,11 @@ void KG_generators::generate_assembly() {
     mFile_assembly_src << "\t\t \"myBench: \" " << endl;
     for (int i = 0; i < mParameters->P_UNROLLING; ++i) {
         for (auto instruction: *mInstructions_set) {
-            mFile_assembly_src << "\t\t\t\t\"" << instruction << "\"\n";
+            mkernel_assembly_src << "\t\t\t\t\"" << instruction << "\"\n";
         }
     }
+    mFile_assembly_src << mkernel_assembly_src.str();
+
     mFile_assembly_src << "\t\t\"sub  $0x1, %%eax;\"\n";
     mFile_assembly_src << "\t\t\"jnz  myBench;\"";
 
@@ -63,7 +66,8 @@ void KG_generators::generate_assembly() {
 
     mFile_assembly_src
             << "\t\t: \"=r\" (instructions_executed) "
-            << ": \"a\" (NB_lOOP_IN));";
+            << ": \"a\" (NB_lOOP_IN));" << endl;
+
 
 
 }
@@ -360,6 +364,11 @@ void KG_generators::Generate_code() {
     generate_source();
 
 
+    return;
+}
+
+void KG_generators::print_assembly_kernel () const{
+    cout << mkernel_assembly_src.str();
     return;
 }
 
