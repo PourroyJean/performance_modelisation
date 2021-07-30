@@ -14,10 +14,11 @@ std::string HOME_DIR;
 using namespace std;
 
 KG_parameters::KG_parameters() {
-    //By default use the parameters located in the tool_feq_misch.h file
+    //By default use the parameters located in the kg_misch.h file
     P_WIDTH = PARAM_WIDTH;
     P_WIDTH_CUSTOM = NULL;
     P_OPERATIONS = PARAM_OPERATIONS;
+    P_COMPILER   = PARAM_COMPILER;
     P_BIND = PARAM_BIND;
     P_DEPENDENCY = PARAM_DEPENDENCY;
     P_NB_DEPENDENCY = PARAM_NB_DEPENDENCY;
@@ -46,11 +47,12 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
     string cwd(buff);
     HOME_DIR = cwd;
 
-    const char *const short_opts = "W:O:B:D:P:L:U:F:S:A:C:vhG";
+    const char *const short_opts = "W:O:K:B:D:P:L:U:F:S:A:C:vhG";
     const option long_opts[] = {
             {"width",      required_argument, nullptr, 'W'},
 //            {"width_cust", required_argument, nullptr, 'w'},
             {"operations", required_argument, nullptr, 'O'},
+            {"compiler",   required_argument, nullptr, 'K'},
             {"bind",       required_argument, nullptr, 'B'},
             {"dependency", required_argument, nullptr, 'D'},
             {"precision",  required_argument, nullptr, 'P'},
@@ -83,6 +85,9 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                 break;
             case 'O':
                 P_OPERATIONS = optarg;
+                break;
+            case 'K':
+                P_COMPILER   = optarg;
                 break;
             case 'w':
                 tmp_str = optarg;
@@ -227,13 +232,14 @@ void KG_parameters::parameter_summary() {
     cout << "\t -W (gobal width)      " << this->P_WIDTH << endl;
     cout << "\t -w (custom width)     " ; if(P_WIDTH_CUSTOM) for (int i : *this->P_WIDTH_CUSTOM) cout << i; cout << endl;
     cout << "\t -O <operationsl list> " << this->P_OPERATIONS << endl;
-    cout << "\t -B (core binding)     " << this->P_BIND << endl;
+    cout << "\t -C <compiler command> " << this->P_COMPILER   << endl;
+    cout << "\t -B (core binding)     " << this->P_BIND   << endl;
     cout << "\t -D (op dependency)    " << std::boolalpha << this->P_DEPENDENCY << endl;
     cout << "\t -P (op precision)     " << this->P_PRECISION << endl;
     cout << "\t -L (loop size)        " << this->P_LOOP_SIZE << endl;
     cout << "\t -U (unrolling)        " << this->P_UNROLLING << endl;
-    cout << "\t -F (frequency)        " << std::boolalpha << this->P_FREQUENCY << endl;
-    cout << "\t -G (graphic)          " << this->P_GRAPH << endl;
+    cout << "\t -F (frequency)        " << std::boolalpha  << this->P_FREQUENCY << endl;
+    cout << "\t -G (graphic)          " << this->P_GRAPH   << endl;
     cout << "\t -S (samples)          " << this->P_SAMPLES << endl;
     cout << "\t -A (analysis)         " << this->P_DEBUG << endl;
     cout << "\t -C (count)            " << this->P_COUNT << endl;
@@ -246,7 +252,8 @@ void KG_parameters::help() {
     cout << "This tool should be launched with the following parameters ([] = default):\n";
     cout << "\t -W, --width            [" << PARAM_WIDTH << "] / 64 128 256 512" << endl;
     cout << "\t -w, --width_cust       [11111] / 1(scalar), 2 (SSE/128), 3 (AVX/256), 4(AVX/512)" << endl;
-    cout << "\t -O, --operations-list  [" << PARAM_OPERATIONS"] / ADD=a MUL=m FMA=f" << endl;
+    cout << "\t -O, --operations       [" << PARAM_OPERATIONS <<"] / ADD=a MUL=m FMA=f" << endl;
+    cout << "\t -C, --compiler         [" << PARAM_COMPILER   <<"] / gcc, clang..." << endl;
     cout << "\t -B,--binding           [no binding] / 0 1 2 ... NbCore\n";
     cout << "\t -D,--dependency        [" << boolalpha << PARAM_DEPENDENCY << "] / true false\n";
     cout << "\t -P,--precision         [" << PARAM_PRECISION << "] / single double\n";

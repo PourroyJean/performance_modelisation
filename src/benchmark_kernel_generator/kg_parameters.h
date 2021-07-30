@@ -24,6 +24,7 @@ public:
     int         P_WIDTH;
     vector<int>*P_WIDTH_CUSTOM;
     std::string P_OPERATIONS;
+    std::string P_COMPILER;
     int         P_BIND;
     bool        P_DEPENDENCY;
     int         P_NB_DEPENDENCY;
