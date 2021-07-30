@@ -30,7 +30,7 @@ void KG_executor::Execute_assembly() {
 
     if (status != 0){
         cout << "Error status " << status << endl;
-        cout << " - 4 = Illegal instruction --> check if AVX is available" << endl;
+        cout << " - 4 = Illegal instruction --> check if AVX, FMA512, etc... are available" << endl;
         exit (status);
     }
 
