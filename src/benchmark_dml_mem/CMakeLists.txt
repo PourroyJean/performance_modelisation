@@ -1,8 +1,13 @@
 # CONFIGURATION
-option(DML_BUILD_MPI "Build the benchmark with MPI" OFF)
+option(DML_BUILD_MPI                "Build the benchmark with MPI" OFF)
+option(DML_INST_TYPE=skylake-avx512 "Build the benchmark with INTEL_SKL_AVX512" OFF)
+option(DML_BUILD_AVX512 "Build the benchmark with AVX512" OFF)
 option(DML_USE_YAMB "Use YAMB lib annotation (YAMB must be compiled)" OFF)
 
-
+TODO
+    - faire le readme.md
+    - rendre possible l'affichage dans cmake -LA pour que ca affiche  un truc
+    - coucou
 
 
 #However, the file(GLOB...) allows for wildcard additions:
@@ -11,15 +16,24 @@ file(GLOB COMMON_SOURCES "../common" "*.cxx")
 
 
 # COMPILER FLAG
+if(DML_INST_TYPE)
+    if ("${DML_INST_TYPE}" STREQUAL "INTEL_SKL_AVX512")
+        set (DML_FLAG_INST_TYPE "-march=skylake-avx512")
+        message("+++ DML_INST_TYPE (" "${DML_INST_TYPE}" ") flag = " ${DML_FLAG_INST_TYPE})
+    endif()
+endif()
+
+
+
 if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
     # MacOS
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
     # GCC
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=skylake-avx512")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 ${DML_FLAG_INST_TYPE}")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
     # ICC
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 -march=skylake-avx512 -qopt-streaming-stores=always")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 ${DML_FLAG_INST_TYPE} -qopt-streaming-stores=always")
 elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
     # Visual Studio C++
 else()
@@ -29,7 +43,7 @@ endif()
 
 # enable or not the yamb annotation lib
 if(DML_USE_YAMB)
-    message("-- YAMB : enabled")
+    message("+++ YAMB : enabled")
     #Enable C++ code
     add_definitions(-DYAMB_ENABLED)
 
@@ -37,7 +51,7 @@ if(DML_USE_YAMB)
     add_library(libAnno SHARED IMPORTED)
     set_property(TARGET libAnno PROPERTY IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so")
 else()
-    message("-- YAMB : disabled")
+    message("+++ YAMB : disabled")
 endif()
 
 
@@ -50,7 +64,7 @@ if(DML_BUILD_MPI)
 
     if (MPI_FOUND)
         include_directories(${MPI_INCLUDE_PATH})
-        message("-- The benchmark will be compiled with MPI library" )
+        message("+++ The benchmark will be compiled with MPI library" )
         add_definitions(-DCOMPILED_WITH_MPI)
         set (DML_EXECUTABLE "dml_mpi")
     else ()
@@ -60,7 +74,7 @@ if(DML_BUILD_MPI)
 
     endif()
 else()
-    message("  MPI NOT REQUIRED")
+    message("+++ MPI NOT REQUIRED")
     set (DML_EXECUTABLE "dml")
 endif()
 
