@@ -34,6 +34,7 @@ private:
     int Get_register_cible();
 
 
+
     std::ofstream     mFile_assembly_src;
     std::stringstream mkernel_assembly_src;
     std::ifstream mFile_template_start ;
@@ -66,8 +67,8 @@ public:
 
     void Generate_code();
 
-    void print_assembly_kernel () const;
 
+    void print_assembly_kernel () const;
     KG_generators(KG_parameters *param);
 
     virtual ~KG_generators();
