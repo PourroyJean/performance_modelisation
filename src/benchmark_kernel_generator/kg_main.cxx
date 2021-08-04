@@ -33,6 +33,7 @@ int main(int argc, char **argv) {
     //------------ CODE GENERATION  -------------
     KG_generators * generator = new KG_generators (kg_parameters);
     generator->Generate_code();
+
     if (kg_parameters->P_VERBOSE)
         generator->print_assembly_kernel();
 
