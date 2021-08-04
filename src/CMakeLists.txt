@@ -25,5 +25,3 @@ add_subdirectory(common/AnyOption)
 #add_subdirectory(tool_oprofile)
 #add_subdirectory (tool_yamb)
 add_subdirectory (benchmark_dml_mem)
-
->>>>>>> master
