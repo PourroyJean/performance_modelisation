@@ -4,10 +4,10 @@ option(DML_INST_TYPE=skylake-avx512 "Build the benchmark with INTEL_SKL_AVX512" 
 option(DML_BUILD_AVX512 "Build the benchmark with AVX512" OFF)
 option(DML_USE_YAMB "Use YAMB lib annotation (YAMB must be compiled)" OFF)
 
-TODO
-    - faire le readme.md
-    - rendre possible l'affichage dans cmake -LA pour que ca affiche  un truc
-    - coucou
+#TODO
+#    - faire le readme.md
+#    - rendre possible l'affichage dans cmake -LA pour que ca affiche  un truc
+#    - coucou
 
 
 #However, the file(GLOB...) allows for wildcard additions:
