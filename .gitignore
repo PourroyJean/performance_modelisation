@@ -71,3 +71,4 @@ src/PMU_research/uncore_pci/skylake_nda_information
 .\#*
 
 his_oprofile*
+/cmake-build-default-system/
