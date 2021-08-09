@@ -1,3 +1,4 @@
+// Credits: Frederic C. (HPE)
 
 #define _GNU_SOURCE
 #include <stdio.h>
