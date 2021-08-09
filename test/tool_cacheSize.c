@@ -2,15 +2,20 @@
 // Created by Jean Pourroy on 06/12/2016.
 //
 
-//
-// Created by Jean Pourroy on 06/12/2016.
-//
-
 #include <stdio.h>
 #include <inttypes.h>
 #include <stdlib.h>
 #include <strings.h>
-#include "misc.h"
+#include <inttypes.h>
+
+typedef uint64_t ui64;
+typedef uint32_t ui32;
+
+ui64 dml_cycles() {
+    ui64 eax, edx;
+    __asm__ volatile ("rdtsc":"=a" (eax), "=d" (edx));
+    return ((edx << 32) | eax);
+}
 
 #define KILO 1024UL
 #define MEGA 1048576UL
@@ -35,9 +40,9 @@ int main(int argc, char *argv[]) {
 
     printf("Array size  Cycle per element\n");
 
-    int steps = 64 * 1024 * 1024; // Arbitrary number of steps
+    int steps =  1024 * 1024; // Arbitrary number of steps
 
-    for (int array_size = 16; array_size < 1 * GIGA / sizeof (int64_t); array_size = array_size * 2) {
+    for (int array_size = 16; array_size < 1 * GIGA / sizeof (int64_t); array_size = array_size * 1.2) {
         int res = 0;
         ui64 deb = dml_cycles();
         for (int i = 0; i < STEP; i++) {
@@ -50,4 +55,3 @@ int main(int argc, char *argv[]) {
     free (array);
 
 }
-
