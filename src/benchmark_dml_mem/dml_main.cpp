@@ -64,10 +64,6 @@ int main(int argc, const char *argv[]) {
     char **m_argv = (char **) argv;
 
 #ifdef  COMPILED_WITH_MPI
-    if ( ! is_Launched_with_mpirun()){
-        cout << "This program was compiled with MPI, you should use mpirun to launch it\n";
-        return 1;
-    }
     MPI_Init(&argc, &m_argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
@@ -377,7 +373,6 @@ void data_alloc_spe(size_t size) {
         shmctl(shmid, IPC_RMID, NULL);
     }
 #endif
-
 
     //shmat return 0xfffff if failed, equal to (char *) -1
     mat = (DML_DATA_TYPE *) shmat(shmid, ADDR, SHMAT_FLAGS);
