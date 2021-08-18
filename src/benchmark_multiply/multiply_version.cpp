@@ -19,8 +19,8 @@ void init_mat(double *a, int MATRIX_LINES, int MATRIX_COLUMNS) {
 long sum_res(double *c, int MATRIX_LINES, int MATRIX_COLUMNS) {
     int i;
     float res = 0;
-    for (i = 0; i < MATRIX_LINES; i++) {
-        res += C(i, 0);
+    for (i = 0; i < MATRIX_LINES * MATRIX_LINES; i++) {
+        res += c[i];
     }
     return res;
 }
@@ -34,11 +34,9 @@ void mult_simple(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_C
             }
         }
     }
-    return;
 }
 
 void mult_KIJ(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLUMNS) {
-    memset(c, 0, sizeof(c[0]) * MATRIX_LINES * MATRIX_LINES);
     int i, j, k;
     for (k = 0; k < MATRIX_COLUMNS; ++k)
         for (i = 0; i < MATRIX_LINES; ++i) {
@@ -46,7 +44,18 @@ void mult_KIJ(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLU
                 C(i, j) += A(i, k) * B(k, j);
             }
         }
-    return;
+}
+
+void mult_block(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLUMNS, int BLOCK_SIZE) {
+    for (int ii = 0; ii < MATRIX_LINES; ii += BLOCK_SIZE)
+        for (int jj = 0; jj < MATRIX_LINES; jj += BLOCK_SIZE)
+            for (int kk = 0; kk < MATRIX_LINES; kk += BLOCK_SIZE)
+                for (int i = ii; i < ii + BLOCK_SIZE; ++i)
+                    for (int k = kk; k < kk + BLOCK_SIZE; ++k)
+                        for (int j = jj; j < jj + BLOCK_SIZE; ++j)
+                            C(i, j) += A(i, k) * B(k, j);
+
+
 }
 
 
@@ -61,8 +70,5 @@ void mult_simple_omp(double *a, double *b, double *c, int MATRIX_LINES, int MATR
             }
         }
     }
-
-    return;
-
 }
 

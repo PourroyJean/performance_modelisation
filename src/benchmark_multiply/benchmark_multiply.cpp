@@ -18,17 +18,19 @@ using namespace std;
 int BENCH_VERSION = 1;
 int MATRIX_LINES = 100;
 int MATRIX_COLUMNS = 100;
-
+int BLOCK_SIZE = 1;
 
 void print_usage(int argc, char **argv) {
     cout << "Usage: " << argv[0] << " <option>" << endl;
     cout << "   -V <version>" << endl <<
-         "       1 : standard multiplication (IJK)" << endl <<
-         "       2 : rotated  multiplication (KIJ)" << endl <<
-         "       3 : standard multiplication with OpenMP" << endl <<
-         "       4 : All versions" << endl <<
+         "       1 : standard   multiplication (IJK)" << endl <<
+         "       2 : permuted   multiplication (KIJ)" << endl <<
+         "       3 : blocking   multiplication (IKJ)" << endl <<
+         "       4 : OpenMP     multiplication (IJK)" << endl <<
+         "       5 : All versions" << endl <<
          "   -L <lines>    number of lines" << endl <<
-         "   -C <columns>  number of columns";
+         "   -C <columns>  number of columns" << endl <<
+         "   -B <block>    number of block only for -V 3";
     cout << endl;
 }
 
@@ -42,11 +44,12 @@ void parse_arguments(int argc, char **argv) {
     }
 
 
-    const char *const short_opts = "V:L:C:h";
+    const char *const short_opts = "V:L:C:B:h";
     const option long_opts[] = {
             {"version", required_argument, nullptr, 'V'},
             {"lines",   required_argument, nullptr, 'L'},
             {"columns", required_argument, nullptr, 'C'},
+            {"block",   optional_argument, nullptr, 'B'},
 
             {"help",    no_argument,       nullptr, 'h'},
             {nullptr, 0,                   nullptr, 0}
@@ -75,6 +78,17 @@ void parse_arguments(int argc, char **argv) {
                     MATRIX_COLUMNS = ioptarg;
                 } else {
                     printf("/!\\ WRONG COLUMNS OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+                break;
+
+            case 'B':
+                ioptarg = atoi(optarg);
+
+                if (ioptarg > 0 && ioptarg < 999999999) {
+                    BLOCK_SIZE = ioptarg;
+                } else {
+                    printf("/!\\ WRONG BLOCK SIZE OPTION: %s\n", optarg);
                     exit(EXIT_FAILURE);
                 }
                 break;
@@ -132,6 +146,11 @@ int main(int argc, char *argv[]) {
             break;
         }
         case 3: {
+            mult_block(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
+            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) <<  "  (block=" << BLOCK_SIZE << ")" << endl;
+            break;
+        }
+        case 4: {
             int nb_threads = 0;
             #pragma omp parallel default(shared)
             {
@@ -146,9 +165,10 @@ int main(int argc, char *argv[]) {
 
             break;
         }
-        case 4: {
+        case 5: {
             mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
             mult_KIJ(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+            mult_block(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
             cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
         }
         default: {

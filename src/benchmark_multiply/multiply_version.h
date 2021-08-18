@@ -18,8 +18,9 @@ void mult_simple(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_C
 
 void mult_KIJ(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLUMNS);
 
-void mult_simple_omp(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLUMNS);
+void mult_block(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLUMNS, int BLOCK_SIZE);
 
+void mult_simple_omp(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLUMNS);
 
 
 #endif //PERFORMANCE_MODELISATION_MULTIPLY_VERSION_H
