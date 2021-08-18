@@ -21,7 +21,7 @@ std::string convert_size(size_t  size);
 
 void print_times(char *s);
 
-#ifdef  OP_DEBUG
+#ifdef OP_DEBUG
     #define DEBUG cout << "_DEBUG_ "
 #else
     extern std::stringstream black_hole;

@@ -9,8 +9,16 @@ add_subdirectory(common/AnyOption)
 
 
 
+if(DEFINED OP_DEBUG AND  OP_DEBUG STREQUAL "TRUE")
+    message("+++ DEBUG ON")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOP_DEBUG")
+else()
+    message("+++ DEBUG OFF")
+endif()
+
+
 # << Choose the required tool by commenting or not >>
-add_subdirectory (benchmark_kernel_generator)
+#add_subdirectory (benchmark_kernel_generator)
 #add_subdirectory(tool_oprofile)
 #add_subdirectory (tool_yamb)
 add_subdirectory (benchmark_dml_mem)
