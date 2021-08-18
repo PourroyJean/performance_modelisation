@@ -41,7 +41,10 @@ Debug traces can be enabled with the following cmake option `-DCMAKE_CXX_FLAGS="
 
 ----------
 
-Availables options can be printed with `-h` option.
+Available options can be printed with `-h` option.
+
+- ``--stride 8,16,64`` size of the strides in **byte** (i.e. 64 = 1 element per cache ligne)
+- ``--matrixsize 1000`` size of the allocated data set in **mega byte**"
 
 
 ## Example
