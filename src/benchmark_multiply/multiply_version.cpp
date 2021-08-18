@@ -16,9 +16,9 @@ void init_mat(double *a, int MATRIX_LINES, int MATRIX_COLUMNS) {
     }
 }
 
-int sum_res(double *c, int MATRIX_LINES, int MATRIX_COLUMNS) {
+long sum_res(double *c, int MATRIX_LINES, int MATRIX_COLUMNS) {
     int i;
-    int res = 0;
+    float res = 0;
     for (i = 0; i < MATRIX_LINES; i++) {
         res += C(i, 0);
     }
@@ -26,7 +26,6 @@ int sum_res(double *c, int MATRIX_LINES, int MATRIX_COLUMNS) {
 }
 
 void mult_simple(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLUMNS) {
-
     int i, j, k;
     for (i = 0; i < MATRIX_LINES; ++i) {
         for (j = 0; j < MATRIX_LINES; ++j) {
@@ -53,24 +52,16 @@ void mult_KIJ(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLU
 
 void mult_simple_omp(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLUMNS) {
     int i, j, k;
-
+//    #pragma omp parallel for schedule(dynamic, 50) collapse(2) private(i, j, k) shared(a, b, c)
+    #pragma omp parallel for schedule(static, 50)  collapse(2) private(i, j, k) shared(a, b, c)
     for (i = 0; i < MATRIX_LINES; ++i) {
         for (j = 0; j < MATRIX_LINES; ++j) {
-            double my_ij = 0;
-            #pragma omp parallel private(my_ij)
-            {
-                #pragma omp for
-                for (k = 0; k < MATRIX_COLUMNS; ++k) {
-                    my_ij += A(i, k) * B(k, j);
-                }
-                #pragma omp atomic
-                C(i, j) += my_ij;
-
-                my_ij = 0;
-
+            for (k = 0; k < MATRIX_COLUMNS; ++k) {
+                C(i, j) += A(i, k) * B(k, j);
             }
         }
     }
+
     return;
 
 }
