@@ -17,6 +17,8 @@
 #include "dml_benchmark.h"
 #include "code_annotation.h"
 
+#include <sched.h>
+
 
 using namespace std;
 
@@ -30,7 +32,7 @@ double work_part2(Dml_parameters *p, uint64_t max_index, int step);
 
 double get_micros();
 
-double total_loops = 0.01; //TODO metre a 0
+double total_loops = 0;
 
 DML_DATA_TYPE *mat;  //THE matrix :)
 bool WITH_MPI = false;
@@ -52,29 +54,18 @@ extern std::stringstream black_hole;
 
 
 int main(int argc, const char *argv[]) {
-    fclose(stderr);
-    double tot, band;
-    double start_time, end_time = 0.0;
-
-    char **m_argv = (char **) argv;
 
 #ifdef  COMPILED_WITH_MPI
-    if ( ! is_Launched_with_mpirun()){
-        cout << "This program was compiled with MPI, you should use mpirun to launch it\n";
-        return 1;
-    }
+    char **m_argv = (char **) argv;
     MPI_Init(&argc, &m_argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpi_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpi_size);
     DEBUG << "Hello world from processor "  << mpi_rank << "out of " << mpi_size << "processors\n" << flush;
 #endif
 
-
-
-
-    //Parse argument, initiliaze the argument structure and print the configuration
+    //Parse argument, initialize the argument structure and print the configuration
     COUT_MPI << "\n ------------- CONFIGURATION --------------\n";
-    Dml_parameters * my_parameters = new Dml_parameters();
+    Dml_parameters *my_parameters = new Dml_parameters();
     my_parameters->init_arguments(argc, argv);
     if (mpi_rank == 0) {
         cout << "\n-- The following configuration will be used for the benchmark:\n";
@@ -93,20 +84,18 @@ int main(int argc, const char *argv[]) {
     }
 
 
-
     COUT_MPI << "\n ---------------- BENCHMARK ----------------\n";
     MPI_BARRIER
-    start_time = get_micros();
+    double start_time = get_micros();
     work(my_parameters);
-    end_time = get_micros();
+    double end_time = get_micros();
     MPI_BARRIER
-
 
 
     if (mpi_rank == 0) {
         cout << "\n ---------------- RESULTS ----------------\n";
-        tot = (end_time - start_time) * 1000.0 / total_loops;
-        band = my_parameters->m_CACHE_LINE / tot;
+        double tot = (end_time - start_time) * 1000.0 / total_loops;
+        double band = my_parameters->m_CACHE_LINE / tot;
 
         printf("%20s    %-10s \n", "Name", my_parameters->m_prefix.c_str());
         printf("%20s    %-10f \n", "Total micros", end_time - start_time);
@@ -140,11 +129,10 @@ int main(int argc, const char *argv[]) {
 
 int work(Dml_parameters *p) {
     //Some init
-    double log_max_index, time1, time2, ns_per_op, num_ops, best_measure, worst_measure, sum_measures;
+    double log_max_index, time_start, time_stop, ns_per_op, nb_effective_op, stride_best_measure, stride_worst_measure, stride_sum_measures;
     uint64_t max_index;
     int measure;
-    string log_temporal = "";
-    string big_log = "";
+    string log_temporal, big_log = "";
     char res_str[1000];
 
 
@@ -156,13 +144,13 @@ int work(Dml_parameters *p) {
         for (int stride : p->m_STRIDE_LIST) {
             char res_str[100];
 
-	    //Print the size of the stride for the current column
-	    if (p->m_DISP == DISP_MODE::AVERAGE) sprintf(res_str, "%11d", stride);
+            //Print the size of the stride for the current column
+            if (p->m_DISP == DISP_MODE::AVERAGE) sprintf(res_str, "%11d", stride);
             if (p->m_DISP == DISP_MODE::BEST) sprintf(res_str, "%11d", stride);
             if (p->m_DISP == DISP_MODE::TWO) sprintf(res_str, "%11d%11d", stride, stride);
             if (p->m_DISP == DISP_MODE::ALL) sprintf(res_str, "%11d%11d%11d", stride, stride, stride);
 
-	    COUT << res_str;
+            COUT << res_str;
             if (p->m_is_log) {
                 string s(res_str);
                 s.erase(remove(s.begin(), s.end(), ' '), s.end());
@@ -185,29 +173,35 @@ int work(Dml_parameters *p) {
         printf("\n");
     }
 
-    //Work
+    //Work: Each loop = 1 sub data set to bench
     for (log_max_index = p->m_MIN_LOG10; log_max_index < p->m_MAX_LOG10 + .0000001; log_max_index += p->m_STEP_LOG10) {
-        max_index = (THEINT) (double) (exp(log_max_index * LOG10) + 0.5);
-        THEINT istride = max_index * sizeof(DML_DATA_TYPE) / 1024;
+        max_index = (THEINT) (double) (exp(log_max_index * LOG10) + 0.5); //Index of the last element we read/write
+        THEINT curr_dateset_size = max_index * sizeof(DML_DATA_TYPE);     //Size of the subset in byte
 
-        if (max_index > p->m_MAT_NB_ELEM) {
-            break;
-        }
+//        DEBUG << "max index " << max_index << endl; //1000
+//        DEBUG << "curr_dateset_size   " << curr_dateset_size << "(" << convert_size(curr_dateset_size) << ")" << endl;   //
+
+        //Sanity check: enough element ?
+        if (max_index > p->m_MAT_NB_ELEM) break;
+
 
         if (mpi_rank == 0) {
-            printf("_ %s K = %10s", p->m_prefix.c_str(), convert_size(istride * 1024).c_str());
-            LOG_MPI(log_temporal, to_string(istride * 1024) + ",");
-            ANNOTATE(string("K = " + convert_size(istride * 1024)).c_str(), "blue");
+            printf("_ %s K = %10s", p->m_prefix.c_str(), convert_size(curr_dateset_size).c_str());
+            LOG_MPI(log_temporal, to_string(curr_dateset_size) + ",");
+            ANNOTATE(string("K = " + convert_size(curr_dateset_size)).c_str(), "blue");
         }
 
+        //Each loop = 1 stride to bench
         for (int stride : p->m_STRIDE_LIST) {
             if (stride != p->m_MIN_STRIDE) {
                 LOG_MPI(log_temporal, ",");
             }
             double gb;
-            best_measure = BIG_VAL;
-            worst_measure = 0;
-            sum_measures = 0.0;
+            stride_best_measure = BIG_VAL;
+            stride_worst_measure = 0;
+            stride_sum_measures = 0.0;
+
+            //Only rank 0 annotate YAMB
             if (mpi_rank == 0) {
                 string s = "1";
                 if (mpi_size > 1) {
@@ -215,43 +209,54 @@ int work(Dml_parameters *p) {
                 }
                 ANNOTATE(string("Stride : " + to_string(stride) + " nb_proc(" + s + ")").c_str(), "red");
             }
-            for (measure = 0; measure < p->m_MAX_MEASURES; measure++) {
-                double t;
-                int repeat;
-                int stride_nb_elem = stride / sizeof(DML_DATA_TYPE);
-                THEINT ops_per_scan = max_index / stride_nb_elem;
-                if (ops_per_scan < MIN_OPS_PER_SCAN) {
-                    num_ops = BIG_VAL;
-                } else {
-                    repeat = p->m_MAX_OPS / ops_per_scan;
-                    if (repeat == 0)repeat = 1;
 
-                    // --- BENCHMARK MEASURE ---
-//                    MPI_BARRIER
-                    time1 = get_micros();
-                    num_ops = p->m_BENCHMARK(p, max_index, stride_nb_elem, repeat, ops_per_scan);
-                    time2 = get_micros();
-//                    MPI_BARRIER
 
-                    t = (time2 - time1) * 1000.0;
-                    if (num_ops != 0)
-                        total_loops += num_ops;
-                    if (t < best_measure)
-                        best_measure = t;
-                    if (t > worst_measure)
-                        worst_measure = t;
-                    sum_measures += t;
+            //Calculate the number of measure / repeat
+            int stride_size_nb_elem = stride / sizeof(DML_DATA_TYPE);     //i.e. [stride  = 32]   / [double = 8]        = 4 elem per stride
+            THEINT nb_step_per_scan = max_index / stride_size_nb_elem;    //i.e. [dateset = 1024] / [4 elem per stride] = 256 ops
+
+            //Only measure if there is enough number of elements
+            if (nb_step_per_scan >= MIN_OPS_PER_SCAN) {
+
+                //We repeat the measure several times to take advantage of locality
+                int repeat = p->m_MAX_OPS / nb_step_per_scan;
+                if (repeat < 5) {
+                    repeat = 5;
                 }
+
+                // --- BENCHMARK MEASURE : each loop = 1 measure --
+                for (measure = 0; measure < p->m_MAX_MEASURES; measure++) {
+
+//                    MPI_BARRIER
+                    time_start = get_micros();
+                    nb_effective_op = p->m_BENCHMARK(p, stride_size_nb_elem, repeat, nb_step_per_scan);
+                    time_stop = get_micros();
+//                    MPI_BARRIER
+
+                    // Accumulate nb operation
+                    if (nb_effective_op != 0)
+                        total_loops += nb_effective_op;
+
+                    // Accumulate time
+                    double measure_total_time = (time_stop - time_start) * 1000.0;
+                    if (measure_total_time < stride_best_measure)
+                        stride_best_measure = measure_total_time;
+                    if (measure_total_time > stride_worst_measure)
+                        stride_worst_measure = measure_total_time;
+                    stride_sum_measures += measure_total_time;
+                }
+            } else {
+                nb_effective_op = BIG_VAL;
             }
 
             if (mpi_rank != 0)
                 continue;
 
-            if (num_ops < BIG_VAL) {
-
+            //If the benchmark was executed
+            if (nb_effective_op < BIG_VAL) {
 
                 //Print the best measure
-                ns_per_op = best_measure / num_ops;
+                ns_per_op = stride_best_measure / nb_effective_op;
                 gb = p->m_CACHE_LINE;
                 gb /= ns_per_op;
                 if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
@@ -267,7 +272,7 @@ int work(Dml_parameters *p) {
                 }
 
                 //Print the worst measure
-                ns_per_op = worst_measure / num_ops;
+                ns_per_op = stride_worst_measure / nb_effective_op;
                 gb = p->m_CACHE_LINE;
                 gb /= ns_per_op;
                 if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
@@ -283,7 +288,7 @@ int work(Dml_parameters *p) {
                 }
 
                 //Print the average measure
-                ns_per_op = sum_measures / num_ops / p->m_MAX_MEASURES;
+                ns_per_op = stride_sum_measures / nb_effective_op / p->m_MAX_MEASURES;
                 gb = p->m_CACHE_LINE;
                 gb /= ns_per_op;
                 if (p->m_unit == DISP_UNIT::GB) {
@@ -326,8 +331,8 @@ int work(Dml_parameters *p) {
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 //
 //   we use the content of the data to count the number of memory operations
-//   then for read count 1 per operation
-//   then for write count 2 per operation    read+write
+//   READ  count 1 per operation
+//   WRITE count 2 per operation (read+write, not always true !)
 //
 //@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
@@ -373,7 +378,6 @@ void data_alloc_spe(size_t size) {
     }
 #endif
 
-
     //shmat return 0xfffff if failed, equal to (char *) -1
     mat = (DML_DATA_TYPE *) shmat(shmid, ADDR, SHMAT_FLAGS);
     if ((char *) mat == (char *) -1) {
@@ -415,7 +419,7 @@ void init_mat(Dml_parameters *p) {
 
 
     // need to set CPU affinity after having writen in memory
-//    set_affinity(CPU_AFF); //TODO
+    //    set_affinity(CPU_AFF); //TODO
 }
 
 double get_micros() {

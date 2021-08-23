@@ -22,11 +22,4 @@ set_target_properties(merger
 
 
 
-#Used to PRINT DEBUG
-add_definitions(-DOP_DEBUG)
-
-
-
-
-
 

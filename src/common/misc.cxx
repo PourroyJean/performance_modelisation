@@ -47,7 +47,6 @@ string convert_size(size_t  size)
         size /= 1024;
     }
 
-//    printf("%.1f %s\n", (float)size + (float)rem / 1024.0, SIZES[div]);
     char str [100];
     sprintf(str,"%.1f %s", (float)size + (float)rem / 1024.0, SIZES[div]);
     return string(str);

@@ -52,7 +52,4 @@ extern std::stringstream black_hole;
 
 extern bool WITH_MPI;
 
-bool is_Launched_with_mpirun ();
-
-
 #endif //__dml_common_H__

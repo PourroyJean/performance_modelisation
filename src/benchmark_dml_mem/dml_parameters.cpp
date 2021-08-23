@@ -41,8 +41,20 @@ extern string YAMB_ANNOTATE_LOG_FILE;
 
 void Dml_parameters::print_configuration() {
 
-    size_t min = ((size_t) (double) (exp(m_MIN_LOG10 * LOG10) + 0.5)) * sizeof(DML_DATA_TYPE) / 1024;
-    size_t max = ((size_t) (double) (exp(m_MAX_LOG10 * LOG10) + 0.5)) * sizeof(DML_DATA_TYPE) / 1024;
+    //Find subdataset_min_size and subdataset_max_size
+    size_t subdataset_min_size = ((size_t) (double) (exp(m_MIN_LOG10 * LOG10) + 0.5)) * sizeof(DML_DATA_TYPE);
+    double max_log = m_MIN_LOG10;
+    do{
+        uint64_t max_index  = (THEINT) (double) (exp(max_log * LOG10) + 0.5);
+        if (max_index > m_MAT_NB_ELEM) {
+            max_log -= 0.001;
+            break;
+        }
+        max_log += 0.001;
+
+    }while (true);
+    size_t subdataset_max_size = ((size_t) (double) (exp(max_log * LOG10) + 0.5)) * sizeof(DML_DATA_TYPE);
+
 
     printf("  %-25s    %-10s \n", "Benchmark type", getValue(m_type).c_str());
     printf("  %-25s    %-10s \n", "Benchmark mode", getValue(m_mode).c_str());
@@ -60,7 +72,7 @@ void Dml_parameters::print_configuration() {
     printf("  %-25s    %-10s \n", "Log range", string(to_string(m_MIN_LOG10) + " - " + to_string(m_MAX_LOG10)).c_str());
     printf("  %-25s    %-10s \n", "Step Log", to_string(m_STEP_LOG10).c_str());
 
-    printf("  %-25s    %-10s \n", "Memory range", string((convert_size(min)) + " - " + (convert_size(max))).c_str());
+    printf("  %-25s    %-10s \n", "Memory range", string((convert_size(subdataset_min_size)) + " - " + (convert_size(subdataset_max_size))).c_str());
     printf("  %-25s    %-10s \n", "Save output ",
            m_is_log ? ("yes in : " + m_log_file_name).c_str() : "no output file");
     printf("  %-25s    %-10s \n", "Annotation file for YAMB",
@@ -279,7 +291,7 @@ int Dml_parameters::setup_parser(int argc, const char *argv[]) {
 
 
     opt.add(
-            "1", // Default.
+            "1048576", // Default 1024*1024.
             0, // Required?
             1, // Number of args expected.
             0, // Delimiter if expecting multiple args.
@@ -599,7 +611,7 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
     double size;
     opt.get("--matrixsize")->getDouble(size);
 
-    m_MAT_SIZE = size*(1024 * 1024); // 1 mb  == 1 * 1024 * 1024 byte
+    m_MAT_SIZE = size*(1024 * 1024); // The size is stored in byte : 1 MiB  == 1 * 1024 * 1024 byte
     if (!(m_MAT_SIZE >=  1024)) {
         cout << "Error: please check the size of your matrix (" << m_MAT_SIZE << ")\n";
         exit(EXIT_FAILURE);
@@ -608,7 +620,6 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
 
 
     opt.get("--maxops")->getInt(m_MAX_OPS);
-    m_MAX_OPS *= (1024 * 1024);
 
 
     opt.get("--minstride")->getInt(m_MIN_STRIDE);
@@ -722,6 +733,7 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--steplog")->getDouble(m_STEP_LOG10);
 
+    #ifdef OP_DEBUG //TODO CA MARCHE PAS
     string pretty;
     opt.configPrint(pretty);
     string line;
@@ -729,6 +741,7 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
     while (std::getline(f, line)) {
         DEBUG_MPI << line << std::endl;
     }
+    #endif
     return 0;
 }
 

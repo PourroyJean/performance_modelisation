@@ -9,14 +9,6 @@
 #include "misc.h"
 
 
-/**
- *
- * @param argc coucou
- * @param argv jannou
- * @return
- */
-
-
 #define KILO 1024UL
 #define MEGA 1048576UL
 #define GIGA KILO*MEGA

@@ -1,11 +1,6 @@
 #!/usr/bin/bash
 
 
-
-#Get Script source: https://stackoverflow.com/questions/59895/getting-the-source-directory-of-a-bash-script-from-within
-#
-
-
 PATH_TOOL="${BASH_SOURCE[0]}";
 if ([ -h "${PATH_TOOL}" ]) then
   while([ -h "${PATH_TOOL}" ]) do PATH_TOOL=`readlink "${PATH_TOOL}"`; done
@@ -15,9 +10,8 @@ cd `dirname ${PATH_TOOL}` > /dev/null
 PATH_TOOL=`pwd`;
 popd  > /dev/null
 
-
 PATH_SCRIPT=$PATH_TOOL/script
-KG=$PATH_TOOL/kg/kg
+KG=$PATH_TOOL/../tool_kernel_generator/kg
 
 
 echo "Current execution: $PATH_TOOL"
@@ -26,96 +20,114 @@ echo "  - hw_description path:   $PATH_TOOL"
 echo "  - hw_description script: $PATH_SCRIPT"
 
 
+echo ""
+echo "############################### "
 echo "#########  GENERAL ############ "
+echo "############################### "
+echo ""
 
+PM_HW_CPU_GENERATION=$($PATH_SCRIPT/get_hw_cpu_generation)
+PM_HW_CPU_NAME=$($PATH_SCRIPT/get_hw_cpu_name)
+PM_HW_SOCKET=$($PATH_SCRIPT/get_hw_socket)
+PM_HW_CPU_CORE_PHY=$($PATH_SCRIPT/get_hw_core_phy)
+PM_HW_CPU_THREADS=$($PATH_SCRIPT/get_hw_threads)
+PM_HW_CPU_FREQ_BASE=$($PATH_SCRIPT/get_hw_cpu_freq_base)
+PM_HW_CPU_HAS_TURBO=$($PATH_SCRIPT/get_hw_cpu_has_turbo)
 
-export PM_HW_CPU_GENERATION=$($PATH_SCRIPT/get_hw_cpu_generation)
-
-export PM_HW_CPU_NAME=$($PATH_SCRIPT/get_hw_cpu_name)
-
-export PM_HW_SOCKET=$($PATH_SCRIPT/get_hw_socket)
-
-export PM_HW_CPU_CORE_PHY=$($PATH_SCRIPT/get_hw_core_phy)
-
-export PM_HW_CPU_THREADS=$($PATH_SCRIPT/get_hw_threads)
-
-export PM_HW_CPU_FREQ_BASE=$($PATH_SCRIPT/get_hw_cpu_freq_base)
-
-export PM_HW_CPU_HAS_TURBO=$($PATH_SCRIPT/get_hw_cpu_has_turbo)
-
-
-
-
-
-
-echo "####  FLOATING POINT UNIT #####"
-
-echo "--------- operation per cycle ----------"
-
-$KG | grep IPC |  awk '{print $2}'
-
-OPERATION='mmmmmmm'
-
-echo "# MUL SINGLE PRECISION "
-export PM_HW_ALU_32_MUL_SP= #NOT YET AVAILABLE
-export PM_HW_ALU_64_MUL_SP=` $KG -O $OPERATION -W 64  -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_128_MUL_SP=`$KG -O $OPERATION -W 128 -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_256_MUL_SP=`$KG -O $OPERATION -W 256 -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_512_MUL_SP=`$KG -O $OPERATION -W 512 -P single | grep IPC |  awk '{print $2}'`
-
-echo "# MUL DOUBLE PRECISION "
-export PM_HW_ALU_32_MUL_DP= #NOT YET AVAILABLE
-export PM_HW_ALU_64_MUL_DP=` $KG -O $OPERATION -W 64  -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_128_MUL_DP=`$KG -O $OPERATION -W 128 -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_256_MUL_DP=`$KG -O $OPERATION -W 256 -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_512_MUL_DP=`$KG -O $OPERATION -W 512 -P double | grep IPC |  awk '{print $2}'`
+echo " - PM_HW_CPU_GENERATION   $PM_HW_CPU_GENERATION"
+echo " - PM_HW_CPU_NAME         $PM_HW_CPU_NAME"
+echo " - PM_HW_SOCKET           $PM_HW_SOCKET"
+echo " - PM_HW_CPU_CORE_PHY     $PM_HW_CPU_CORE_PHY"
+echo " - PM_HW_CPU_THREADS      $PM_HW_CPU_THREADS"
+echo " - PM_HW_CPU_FREQ_BASE    $PM_HW_CPU_FREQ_BASE"
+echo " - PM_HW_CPU_HAS_TURBO    $PM_HW_CPU_HAS_TURBO"
+echo ""
+echo ""
 
 
 
-OPERATION='fffffff'
-
-echo "# FMA SINGLE PRECISION "
-export PM_HW_ALU_32_FMA_SP= #NOT YET AVAILABLE
-export PM_HW_ALU_64_FMA_SP=` $KG -O $OPERATION -W 64  -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_128_FMA_SP=`$KG -O $OPERATION -W 128 -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_256_FMA_SP=`$KG -O $OPERATION -W 256 -P single | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_512_FMA_SP=`$KG -O $OPERATION -W 512 -P single | grep IPC |  awk '{print $2}'`
-
-echo "# FMA DOUBLE PRECISION "
-export PM_HW_ALU_32_FMA_DP= #NOT YET AVAILABLE
-export PM_HW_ALU_64_FMA_DP=` $KG -O $OPERATION -W 64  -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_128_FMA_DP=`$KG -O $OPERATION -W 128 -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_256_FMA_DP=`$KG -O $OPERATION -W 256 -P double | grep IPC |  awk '{print $2}'`
-export PM_HW_ALU_512_FMA_DP=`$KG -O $OPERATION -W 512 -P double | grep IPC |  awk '{print $2}'`
+echo "############################### "
+echo "#########  COMPUTE  ########### "
+echo "############################### "
 
 
-echo "#########  MEMORY  ############ "
+if ! command -v $KG &> /dev/null
+then
+  echo "Kernel Generator could not be found"
+else
+  echo -n "Launching Kernel generator : "
 
-export PM_HW_MEMORY_CACHE_LINE_SIZE=
+  OPERATION='mmmmmmm'
+  echo -n "MUL SINGLE PRECISION "
+  PM_HW_ALU_32_MUL_SP=NO #NOT YET AVAILABLE
+  PM_HW_ALU_64_MUL_SP=` $KG -O $OPERATION -W 64  -P single | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_128_MUL_SP=`$KG -O $OPERATION -W 128 -P single | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_256_MUL_SP=`$KG -O $OPERATION -W 256 -P single | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_512_MUL_SP=`$KG -O $OPERATION -W 512 -P single | grep "^IPC" |  awk '{print $2}'`
+  echo -n " ... MUL DOUBLE PRECISION "
+  PM_HW_ALU_32_MUL_DP=NO #NOT YET AVAILABLE
+  PM_HW_ALU_64_MUL_DP=` $KG -O $OPERATION -W 64  -P double | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_128_MUL_DP=`$KG -O $OPERATION -W 128 -P double | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_256_MUL_DP=`$KG -O $OPERATION -W 256 -P double | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_512_MUL_DP=`$KG -O $OPERATION -W 512 -P double | grep "^IPC" |  awk '{print $2}'`
 
-export PM_HW_MEMORY_L1_D_SIZE=
-export PM_HW_MEMORY_L1_I_SIZE=
-export PM_HW_MEMORY_L1_LATENCY=
-export PM_HW_MEMORY_L1_BW=
+  OPERATION='fffffff'
+  echo -n " ... FMA SINGLE PRECISION "
+  PM_HW_ALU_32_FMA_SP=NO #NOT YET AVAILABLE
+  PM_HW_ALU_64_FMA_SP=` $KG -O $OPERATION -W 64  -P single | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_128_FMA_SP=`$KG -O $OPERATION -W 128 -P single | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_256_FMA_SP=`$KG -O $OPERATION -W 256 -P single | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_512_FMA_SP=`$KG -O $OPERATION -W 512 -P single | grep "^IPC" |  awk '{print $2}'`
+  echo -n " ... FMA DOUBLE PRECISION "
+  PM_HW_ALU_32_FMA_DP=NO #NOT YET AVAILABLE
+  PM_HW_ALU_64_FMA_DP=` $KG -O $OPERATION -W 64  -P double | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_128_FMA_DP=`$KG -O $OPERATION -W 128 -P double | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_256_FMA_DP=`$KG -O $OPERATION -W 256 -P double | grep "^IPC" |  awk '{print $2}'`
+  PM_HW_ALU_512_FMA_DP=`$KG -O $OPERATION -W 512 -P double | grep "^IPC" |  awk '{print $2}'`
 
-export PM_HW_MEMORY_L2_SIZE=
-export PM_HW_MEMORY_L2_LATENCY=
-export PM_HW_MEMORY_L2_BW=
+  echo ""
+  echo ""
+  echo " -- Simple Precision"
+  echo "    - PM_HW_ALU_32_MUL_SP    $PM_HW_ALU_32_MUL_SP"
+  echo "    - PM_HW_ALU_64_MUL_SP    $PM_HW_ALU_64_MUL_SP"
+  echo "    - PM_HW_ALU_128_MUL_SP   $PM_HW_ALU_128_MUL_SP"
+  echo "    - PM_HW_ALU_256_MUL_SP   $PM_HW_ALU_256_MUL_SP"
+  echo "    - PM_HW_ALU_512_MUL_SP   $PM_HW_ALU_512_MUL_SP"
+  echo ""
+  echo "    - PM_HW_ALU_32_FMA_SP    $PM_HW_ALU_32_FMA_SP"
+  echo "    - PM_HW_ALU_64_FMA_SP    $PM_HW_ALU_64_FMA_SP"
+  echo "    - PM_HW_ALU_128_FMA_SP   $PM_HW_ALU_128_FMA_SP"
+  echo "    - PM_HW_ALU_256_FMA_SP   $PM_HW_ALU_256_FMA_SP"
+  echo "    - PM_HW_ALU_512_FMA_SP   $PM_HW_ALU_512_FMA_SP"
+  echo ""
+  echo " -- Double Precision"
+  echo "    - PM_HW_ALU_32_MUL_DP    $PM_HW_ALU_32_MUL_DP"
+  echo "    - PM_HW_ALU_64_MUL_DP    $PM_HW_ALU_64_MUL_DP"
+  echo "    - PM_HW_ALU_128_MUL_DP   $PM_HW_ALU_128_MUL_DP"
+  echo "    - PM_HW_ALU_256_MUL_DP   $PM_HW_ALU_256_MUL_DP"
+  echo "    - PM_HW_ALU_512_MUL_DP   $PM_HW_ALU_512_MUL_DP"
+  echo ""
+  echo "    - PM_HW_ALU_32_FMA_DP    $PM_HW_ALU_32_FMA_DP"
+  echo "    - PM_HW_ALU_64_FMA_DP    $PM_HW_ALU_64_FMA_DP"
+  echo "    - PM_HW_ALU_128_FMA_DP   $PM_HW_ALU_128_FMA_DP"
+  echo "    - PM_HW_ALU_256_FMA_DP   $PM_HW_ALU_256_FMA_DP"
+  echo "    - PM_HW_ALU_512_FMA_DP   $PM_HW_ALU_512_FMA_DP"
+  echo ""
+fi
 
-export PM_HW_MEMORY_L3_SIZE=
-export PM_HW_MEMORY_L3_LATENCY=
-export PM_HW_MEMORY_L3_BW=
-
-export PM_HW_MEMORY_LLC_SIZE=
-export PM_HW_MEMORY_LLC_LATENCY=
-export PM_HW_MEMORY_LLC_BW=
-
-
-
-#Updata the data file: hw_data.sh
-source $PATH_TOOL/hw_update.sh
-
-
-
-
-
+#TODO
+#echo "#########  MEMORY  ############ "
+#echo "PM_HW_MEMORY_CACHE_LINE_SIZE="
+#echo "PM_HW_MEMORY_L1_D_SIZE="
+#echo "PM_HW_MEMORY_L1_I_SIZE="
+#echo "PM_HW_MEMORY_L1_LATENCY="
+#echo "PM_HW_MEMORY_L1_BW="
+#echo "PM_HW_MEMORY_L2_SIZE="
+#echo "PM_HW_MEMORY_L2_LATENCY="
+#echo "PM_HW_MEMORY_L2_BW="
+#echo "PM_HW_MEMORY_L3_SIZE="
+#echo "PM_HW_MEMORY_L3_LATENCY="
+#echo "PM_HW_MEMORY_L3_BW="
+#echo "PM_HW_MEMORY_LLC_SIZE="
+#echo "PM_HW_MEMORY_LLC_LATENCY="
+#echo "PM_HW_MEMORY_LLC_BW="

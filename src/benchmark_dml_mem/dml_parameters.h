@@ -82,7 +82,7 @@ public:
     int m_mode;
     int m_type;
 
-    DML_DATA_TYPE (*m_BENCHMARK)(Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+    DML_DATA_TYPE (*m_BENCHMARK)(Dml_parameters *p, int step, int repeat, THEINT ops_per_scan);
     int m_GHZ = 0;
     int m_UNROLL;
     int m_VERBOSE = 1;
@@ -93,7 +93,7 @@ public:
     int m_MEM_AFF = 0;
     size_t m_MAT_SIZE = 100;        // size of the matrix in byte
     size_t m_MAT_NB_ELEM = -1;
-    int m_MAX_OPS = 1;
+    int m_MAX_OPS = 1024 * 1024;
     int m_MIN_STRIDE = sizeof(DML_DATA_TYPE);
     int m_MAX_STRIDE = 1024 * 8;
     int m_STRIDE_MODE = BENCH_STRIDE ::EVEN;

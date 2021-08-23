@@ -12,34 +12,34 @@
 static double towrite = 03.0592;
 
 
-DML_DATA_TYPE sum_read_unroll1  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_read_unroll2  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_read_unroll4  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_read_unroll8  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_read_unroll1  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_read_unroll2  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_read_unroll4  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_read_unroll8  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
 
-DML_DATA_TYPE sum_readspe_unroll2  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_readspe_unroll4  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_readspe_unroll8  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_readspe_unroll16  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_readspe_unroll32  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_readspe_unroll64  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_readspe_unroll2  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_readspe_unroll4  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_readspe_unroll8  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_readspe_unroll16  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_readspe_unroll32  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_readspe_unroll64  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
 
-DML_DATA_TYPE sum_readind_unroll2  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_readind_unroll4  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_readind_unroll8  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_readind_unroll2  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_readind_unroll4  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_readind_unroll8  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
 
-DML_DATA_TYPE sum_write_unroll1  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_write_unroll2  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_write_unroll4  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_write_unroll8  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_write_unroll1  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_write_unroll2  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_write_unroll4  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_write_unroll8  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
 
-DML_DATA_TYPE sum_writespe_unroll2  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_writespe_unroll4  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_writespe_unroll8  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_writespe_unroll2  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_writespe_unroll4  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_writespe_unroll8  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
 
-DML_DATA_TYPE sum_writeind_unroll2  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_writeind_unroll4  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
-DML_DATA_TYPE sum_writeind_unroll8  (Dml_parameters *p, THEINT max_index, int step, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_writeind_unroll2  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_writeind_unroll4  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
+DML_DATA_TYPE sum_writeind_unroll8  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
 
 
 
