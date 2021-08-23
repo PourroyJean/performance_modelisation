@@ -1,13 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 #include <iostream>
-#include <unistd.h>
 #include <getopt.h>
 #include <iomanip>
 #include "multiply_version.h"
-
 
 #if defined(_OPENMP)
 #include <omp.h>
@@ -15,19 +12,95 @@
 
 using namespace std;
 
+extern std::stringstream black_hole;
+
 int BENCH_VERSION = 1;
 int MATRIX_LINES = 100;
 int MATRIX_COLUMNS = 100;
-int BLOCK_SIZE = 1;
+int BLOCK_SIZE = 10;
+
+//    #define OMP_TARGET_GPU //TODO remove this
+
+void print_usage(int argc, char **argv);
+
+void parse_arguments(int argc, char **argv);
+
+int main(int argc, char *argv[]) {
+
+    //    DEBUG << "HEY ";
+    parse_arguments(argc, argv);
+
+    //MeMory allocation
+    //TODO
+    //int * af = (int*)aligned_alloc((2*1024*1024), sizeof(int)*4);
+    double *a = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_COLUMNS);
+    double *b = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_COLUMNS);
+    double *c = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_LINES);
+
+
+    //Initilisation of the matrix
+    init_mat(a, b, MATRIX_LINES, MATRIX_COLUMNS);
+    memset(c, 0, sizeof(c[0]) * MATRIX_LINES * MATRIX_LINES);
+
+
+    switch (BENCH_VERSION) {
+        case 1: {
+            cout << "BENCH_VERSION IJK     ...\n";
+            mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            break;
+        }
+        case 2: {
+            cout << "BENCH_VERSION KIJ     ...\n";
+            mult_KIJ(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            break;
+        }
+        case 3: {
+            cout << "BENCH_VERSION BLOCKING... (block=" << BLOCK_SIZE << ")\n";
+            mult_block(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
+            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            break;
+        }
+        case 4: {
+            cout << "BENCH_VERSION OMP    ... ";
+            mult_simple_omp(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+
+            break;
+        }
+        case 5: {
+            cout << "BENCH_VERSION OMP_GPU...\n";
+            mult_simple_omp_gpu(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+
+            break;
+        }
+        default: {
+            cout << "Please enter a correct BENCH_VERSION with -V option\n";
+            break;
+        }
+    }
+
+    free(a);
+    free(b);
+    free(c);
+
+//    print_matrix(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+
+
+}
+
 
 void print_usage(int argc, char **argv) {
     cout << "Usage: " << argv[0] << " <option>" << endl;
     cout << "   -V <version>" << endl <<
-         "       1 : standard   multiplication (IJK)" << endl <<
-         "       2 : permuted   multiplication (KIJ)" << endl <<
-         "       3 : blocking   multiplication (IKJ)" << endl <<
-         "       4 : OpenMP     multiplication (IJK)" << endl <<
-         "       5 : All versions" << endl <<
+         "       1 : SIMPLE" << endl <<
+         "       2 : SIMPLE + KIJ" << endl <<
+         "       3 : BLOCKING" << endl <<
+         "       4 : OPENMP CPU" << endl <<
+         "       5 : OPENMP GPU" << endl <<
+         "       10 : All versions" << endl <<
          "   -L <lines>    number of lines" << endl <<
          "   -C <columns>  number of columns" << endl <<
          "   -B <block>    number of block only for -V 3";
@@ -116,65 +189,3 @@ void parse_arguments(int argc, char **argv) {
 
 }
 
-
-int main(int argc, char *argv[]) {
-
-
-    parse_arguments(argc, argv);
-
-    //MeMory allocation
-    double *a = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_COLUMNS);
-    double *b = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_COLUMNS);
-    double *c = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_LINES);
-
-
-    //Initilisation of the matrix
-    init_mat(a, MATRIX_LINES, MATRIX_COLUMNS);
-    init_mat(b, MATRIX_LINES, MATRIX_COLUMNS);
-    memset(c, 0, sizeof(c[0]) * MATRIX_LINES * MATRIX_LINES);
-
-
-    switch (BENCH_VERSION) {
-        case 1: {
-            mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
-            break;
-        }
-        case 2: {
-            mult_KIJ(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
-            break;
-        }
-        case 3: {
-            mult_block(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
-            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) <<  "  (block=" << BLOCK_SIZE << ")" << endl;
-            break;
-        }
-        case 4: {
-            int nb_threads = 0;
-            #pragma omp parallel default(shared)
-            {
-                #pragma omp atomic
-                nb_threads++;
-            }
-            #pragma omp barrier
-            cout << "There is " << nb_threads << " threads\n";
-
-            mult_simple_omp(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
-
-            break;
-        }
-        case 5: {
-            mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-            mult_KIJ(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-            mult_block(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
-            cout << "BENCH_VERSION " << BENCH_VERSION << " - " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
-        }
-        default: {
-            cout << "Please enter a correct BENCH_VERSION with -V option";
-            break;
-        }
-    }
-
-}
