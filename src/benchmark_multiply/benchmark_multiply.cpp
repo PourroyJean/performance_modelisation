@@ -47,33 +47,38 @@ int main(int argc, char *argv[]) {
         case 1: {
             cout << "BENCH_VERSION IJK     ...\n";
             mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            cout << "SUM = " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             break;
         }
         case 2: {
             cout << "BENCH_VERSION KIJ     ...\n";
             mult_KIJ(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            cout << "SUM = " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             break;
         }
         case 3: {
             cout << "BENCH_VERSION BLOCKING... (block=" << BLOCK_SIZE << ")\n";
             mult_block(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
-            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            cout << "SUM = " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             break;
         }
         case 4: {
+            #if defined(BM_OMP)
             cout << "BENCH_VERSION OMP    ... ";
             mult_simple_omp(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
             cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
-
+            #endif
             break;
         }
         case 5: {
+            #if defined(BM_OMP) && defined(BM_OMP_TARGET_GPU)
             cout << "BENCH_VERSION OMP_GPU...\n";
             mult_simple_omp_gpu(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
-            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
-
+            cout << "SUM = " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            #else
+            cout << "Error: check the following flags BM_OMP BM_OMP_TARGET_GPU";
+            return -1;
+            #endif
             break;
         }
         default: {
