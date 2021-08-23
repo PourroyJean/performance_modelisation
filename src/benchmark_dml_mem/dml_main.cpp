@@ -3,21 +3,16 @@
 #include <assert.h>
 #include <math.h>
 #include <string.h>
-#include <unistd.h>
 #include <ctype.h>
 #include <iostream>
 #include <sys/time.h>
-#include <misc.h>
-#include "dml_misc.h"
 #include <sys/shm.h>        // Large parge
 #include <unistd.h>
 #include <iterator>
-
-
-#include <sys/shm.h>
 #include <iomanip>
 
 #include "misc.h"
+#include "dml_misc.h"
 #include "dml_parameters.h"
 #include "dml_benchmark.h"
 #include "code_annotation.h"
