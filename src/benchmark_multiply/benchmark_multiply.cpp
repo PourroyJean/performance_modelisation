@@ -133,7 +133,7 @@ void parse_arguments(int argc, char **argv) {
             {nullptr, 0,                   nullptr, 0}
     };
 
-    char option;
+    int option;
     string tmp_str;
     while ((option = getopt_long(argc, argv, short_opts, long_opts, nullptr)) != -1) {
         int ioptarg;
