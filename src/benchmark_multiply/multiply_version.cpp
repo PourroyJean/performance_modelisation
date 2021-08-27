@@ -9,6 +9,7 @@
 
 using namespace std;
 
+//TODO check init with real double
 void init_mat(double *a, double *b, int MATRIX_LINES, int MATRIX_COLUMNS) {
     int i, j;
     for (i = 0; i < MATRIX_LINES; i++) {

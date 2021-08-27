@@ -20,8 +20,13 @@ int MATRIX_LINES = 100;
 int MATRIX_COLUMNS = 100;
 int BLOCK_SIZE = 10;
 
-//    #define OMP_TARGET_GPU //TODO remove this
-
+//TODO remove this
+#ifndef BM_OMP_TARGET_GPU
+    #define BM_OMP_TARGET_GPU
+#endif
+#ifndef  BM_OMP
+    #define BM_OMP
+#endif
 void print_usage(int argc, char **argv);
 
 void parse_arguments(int argc, char **argv);
@@ -31,8 +36,7 @@ int main(int argc, char *argv[]) {
     //    DEBUG << "HEY ";
     parse_arguments(argc, argv);
 
-    //MeMory allocation
-    //TODO
+    //TODO aligned allocation
     //int * af = (int*)aligned_alloc((2*1024*1024), sizeof(int)*4);
     double *a = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_COLUMNS);
     double *b = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_COLUMNS);
