@@ -1,5 +1,5 @@
 
-#Benchmark Multiply
+# Benchmark Multiply
 
 Matrix multiplication benchmark implemented with several optimizations: blocking, OpenMP, GPU Offloading...
 Both matrices have the same size.
