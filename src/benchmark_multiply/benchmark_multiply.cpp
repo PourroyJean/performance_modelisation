@@ -14,6 +14,7 @@ using namespace std;
 
 extern std::stringstream black_hole;
 
+//Default values (can be changed with command line parameters)
 int BENCH_VERSION = 1;
 int MATRIX_LINES = 100;
 int MATRIX_COLUMNS = 100;
@@ -37,11 +38,9 @@ int main(int argc, char *argv[]) {
     double *b = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_COLUMNS);
     double *c = (double *) malloc(sizeof(double) * MATRIX_LINES * MATRIX_LINES);
 
-
-    //Initilisation of the matrix
+    //Initilisation of the matrix: A and B random, C with 0
     init_mat(a, b, MATRIX_LINES, MATRIX_COLUMNS);
     memset(c, 0, sizeof(c[0]) * MATRIX_LINES * MATRIX_LINES);
-
 
     switch (BENCH_VERSION) {
         case 1: {
@@ -76,8 +75,16 @@ int main(int argc, char *argv[]) {
             mult_simple_omp_gpu(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
             cout << "SUM = " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             #else
-            cout << "Error: check the following flags BM_OMP BM_OMP_TARGET_GPU";
+            cout << "Error: check the following compilation flags: BM_OMP, BM_OMP_TARGET_GPU" << endl;
             return -1;
+            #endif
+            break;
+        }
+        case 6: {
+            #if defined(BM_OMP)
+            cout << "BENCH_VERSION OMP_CPU_BLOCK  ... ";
+            mult_block_omp(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
+            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             #endif
             break;
         }
@@ -91,9 +98,9 @@ int main(int argc, char *argv[]) {
     free(b);
     free(c);
 
-//    print_matrix(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+    print_matrix(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
 
-
+    return 0;
 }
 
 
@@ -105,6 +112,7 @@ void print_usage(int argc, char **argv) {
          "       3 : BLOCKING" << endl <<
          "       4 : OPENMP CPU" << endl <<
          "       5 : OPENMP GPU" << endl <<
+         "       6 : OPENMP CPU + BLOCKING" << endl <<
          "       10 : All versions" << endl <<
          "   -L <lines>    number of lines" << endl <<
          "   -C <columns>  number of columns" << endl <<
@@ -114,13 +122,10 @@ void print_usage(int argc, char **argv) {
 
 
 void parse_arguments(int argc, char **argv) {
-
-
     if (argc <= 1) {
         print_usage(argc, argv);
         exit(EXIT_FAILURE);
     }
-
 
     const char *const short_opts = "V:L:C:B:h";
     const option long_opts[] = {
@@ -133,7 +138,7 @@ void parse_arguments(int argc, char **argv) {
             {nullptr, 0,                   nullptr, 0}
     };
 
-    char option;
+    int option;
     string tmp_str;
     while ((option = getopt_long(argc, argv, short_opts, long_opts, nullptr)) != -1) {
         int ioptarg;
@@ -174,7 +179,7 @@ void parse_arguments(int argc, char **argv) {
             case 'V':
                 ioptarg = atoi(optarg);
 
-                if (ioptarg >= 1 || ioptarg <= 4) {
+                if (ioptarg >= 1 && ioptarg <= 6) {
                     BENCH_VERSION = ioptarg;
                 } else {
                     printf("/!\\ WRONG VERSION OPTION: %s\n", optarg);
@@ -185,6 +190,7 @@ void parse_arguments(int argc, char **argv) {
 
             case 'h':
                 print_usage(argc, argv);
+                exit(EXIT_SUCCESS);
                 break;
             default:
                 print_usage(argc, argv);
