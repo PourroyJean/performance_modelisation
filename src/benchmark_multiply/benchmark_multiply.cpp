@@ -102,7 +102,7 @@ int main(int argc, char *argv[]) {
     free(b);
     free(c);
 
-    print_matrix(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+//    print_matrix(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
 
     return 0;
 }
