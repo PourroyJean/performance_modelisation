@@ -54,7 +54,7 @@ Typical execution
 ---------------------------
 Several scripts can be found in the [script folder](/src/benchmark_multiply/script)
 
-1. **[bm_execute.sh](/src/benchmark_multiply/script/bm_omp_execute.sh)**
+1. **[bm_execute.sh](/src/benchmark_multiply/script/bm_execute.sh)**
 
 Script to facilitate the execution and your different tests. Nothing special here. 
 
