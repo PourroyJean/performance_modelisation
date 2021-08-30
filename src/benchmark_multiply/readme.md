@@ -52,14 +52,14 @@ Typical execution
 ## Script
 
 ---------------------------
-Several scripts can be found in the [script folder](src/benchmark_multiply/script)
+Several scripts can be found in the [script folder](/src/benchmark_multiply/script)
 
-1. **[bm_execute.sh](src/benchmark_multiply/script/bm_omp_execute.sh)**
+1. **[bm_execute.sh](/src/benchmark_multiply/script/bm_omp_execute.sh)**
 
 Script to facilitate the execution and your different tests. Nothing special here. 
 
 
-2. **[bm_omp_cpu_bind.sh](src/benchmark_multiply/script/bm_omp_cpu_bind.sh)**
+2. **[bm_omp_cpu_bind.sh](/src/benchmark_multiply/script/bm_omp_cpu_bind.sh)**
 
 This script can be used to test different configuration of the OpenMP binding variables : **OMP_NUM_THREADS**, **OMP_PROC_BIND** and **OMP_PLACES**.
 Then, for different number of threads, binding and place strategies the script print the performance.
