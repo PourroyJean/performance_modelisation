@@ -217,13 +217,11 @@ void mult_block_omp_orig(double *a, double *b, double *c, int MATRIX_LINES, int 
 
 
 void mult_block_omp(double *a, double *b, double *c, int MATRIX_LINES, int MATRIX_COLUMNS, int BLOCK_SIZE) {
-    cout << endl;
+    count_omp_threads();
     #pragma omp parallel for collapse (2) schedule (static, 1) shared(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE)
     {
         for (int ii = 0; ii < MATRIX_LINES; ii += BLOCK_SIZE) {
             for (int jj = 0; jj < MATRIX_LINES; jj += BLOCK_SIZE) {
-//                #pragma omp critical
-//                cout << "Thread " << setw(4) << omp_get_thread_num() << "  block [ii,jj] = [" << ii << "," << jj << "]" << endl;
                 for (int kk = 0; kk < MATRIX_LINES; kk += BLOCK_SIZE) {
                     for (int i = ii; i < ((ii + BLOCK_SIZE) > MATRIX_LINES ? MATRIX_LINES : (ii + BLOCK_SIZE)); ++i) {
                         for (int j = jj; j < ((jj + BLOCK_SIZE) > MATRIX_LINES ? MATRIX_LINES : (jj + BLOCK_SIZE)); ++j) {
@@ -237,6 +235,8 @@ void mult_block_omp(double *a, double *b, double *c, int MATRIX_LINES, int MATRI
         }
     }
 }
+
+
 
 //-------------------------------------------------
 //-------------------------------------------------
