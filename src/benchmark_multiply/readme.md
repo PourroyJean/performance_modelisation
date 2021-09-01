@@ -59,9 +59,9 @@ Several scripts can be found in the [script folder](/src/benchmark_multiply/scri
 Script to facilitate the execution and your different tests. Nothing special here. 
 
 
-2. **[bm_omp_cpu_bind.sh](/src/benchmark_multiply/script/bm_omp_benchmark.sh)**
+2. **[bm_omp_benchmark.sh](/src/benchmark_multiply/script/bm_omp_benchmark.sh)**
 
-This script can be used to test different configuration of the OpenMP binding variables : **OMP_NUM_THREADS**, **OMP_PROC_BIND** and **OMP_PLACES**.
+This script can be used to test different configuration of the OpenMP binding variables (**OMP_NUM_THREADS**, **OMP_PROC_BIND**, **OMP_PLACES**) and different size of block.
 Then, for different number of threads, binding and place strategies the script print the performance.
 Below, the result of the exuction of `benchmark_multiply -V 6 -L 4000 -C 4000 -B 40` on AMD EPYC 7542 32-Core Processor
 ```
