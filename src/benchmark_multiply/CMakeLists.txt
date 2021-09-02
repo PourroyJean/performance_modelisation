@@ -33,7 +33,7 @@ endif()
 
 
 
-add_executable(benchmark_multiply benchmark_multiply.cpp multiply_version.cpp ${COMMON_SOURCES})
+add_executable(benchmark_multiply bm_main.cpp bm_bench_version.cpp ${COMMON_SOURCES})
 target_link_libraries(benchmark_multiply "misc")
 
 
