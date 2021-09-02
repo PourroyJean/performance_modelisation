@@ -63,14 +63,22 @@ Script to facilitate the execution and your different tests. Nothing special her
 
 This script can be used to test different configuration of the OpenMP binding variables (**OMP_NUM_THREADS**, **OMP_PROC_BIND**, **OMP_PLACES**) and different size of block.
 Then, for different number of threads, binding and place strategies the script print the performance.
-Below, the result of the exuction of `benchmark_multiply -V 6 -L 4000 -C 4000 -B 40` on AMD EPYC 7542 32-Core Processor
+Below, the result of the exuction of `benchmark_multiply -V 6 -L 4000 -C 4000 -B 40` on AMD EPYC 7542 32-Core Processor (see full results in [results folder](/results/benchmark_multiply/benchmark_multiply%20-V%206%20-L%204000%20-C%204000%20-B%2040.txt))
 
-
-![Alt text](/results/benchmark_multiply/V6_1-128_threads.png?raw=true "Title")
-
-
-``` 
 ```
+THREADS PROC_BIND OMP_PLACES VERSION BLOCK RES            TIME      
+1       true      cores      6       40    140100658790400 585.44    
+2       true      cores      6       40    140100658790400 182.41    
+3       true      cores      6       40    140100658790400 116.60    
+.......     
+122     true      cores      6       40    140100658790400 6.19      
+123     true      cores      6       40    140100658790400 6.23      
+124     true      cores      6       40    140100658790400 6.16   
+```
+
+
+Strong scaling on dual socket server for 1 to 128 threads with `OMP_PROC_BIND=true` and `OMP_PROC_PLACES=cores`. 
+![Alt text](/results/benchmark_multiply/V6_1-128_threads.png?raw=true "Strong scaling")
 
 
 
