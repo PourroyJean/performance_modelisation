@@ -4,9 +4,9 @@
 #include <iostream>
 #include <getopt.h>
 #include <iomanip>
-#include "multiply_version.h"
+#include "bm_bench_version.h"
 
-#if defined(_OPENMP)
+#if defined(BM_OMP)
 #include <omp.h>
 #endif
 
@@ -33,7 +33,6 @@ void parse_arguments(int argc, char **argv);
 
 int main(int argc, char *argv[]) {
 
-    //    DEBUG << "HEY ";
     parse_arguments(argc, argv);
 
     //TODO aligned allocation
@@ -48,34 +47,34 @@ int main(int argc, char *argv[]) {
 
     switch (BENCH_VERSION) {
         case 1: {
-            cout << "BENCH_VERSION IJK     ...\n";
+            cout << "BENCH_VERSION IJK (threads=" << count_number_of_thread() << ")...\n";
             mult_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
             cout << "SUM = " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             break;
         }
         case 2: {
-            cout << "BENCH_VERSION KIJ     ...\n";
+            cout << "BENCH_VERSION KIJ (threads=" << count_number_of_thread() << ")...\n";
             mult_KIJ(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
             cout << "SUM = " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             break;
         }
         case 3: {
-            cout << "BENCH_VERSION BLOCKING... (block=" << BLOCK_SIZE << ")\n";
+            cout << "BENCH_VERSION BLOCKING... (threads=" << count_number_of_thread() << ")...\n";
             mult_block(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
             cout << "SUM = " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             break;
         }
         case 4: {
             #if defined(BM_OMP)
-            cout << "BENCH_VERSION OMP    ... ";
-            mult_simple_omp(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+            cout << "BENCH_VERSION OMP (threads=" << count_number_of_thread() << ")...\n";
+            mult_omp_simple(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
             cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             #endif
             break;
         }
         case 5: {
             #if defined(BM_OMP) && defined(BM_OMP_TARGET_GPU)
-            cout << "BENCH_VERSION OMP_GPU...\n";
+            cout << "BENCH_VERSION OMP_GPU (threads=" << count_number_of_thread() << ")...\n";
             mult_simple_omp_gpu(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
             cout << "SUM = " << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             #else
@@ -86,8 +85,16 @@ int main(int argc, char *argv[]) {
         }
         case 6: {
             #if defined(BM_OMP)
-            cout << "BENCH_VERSION OMP_CPU_BLOCK  ... ";
-            mult_block_omp(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
+            cout << "BENCH_VERSION OMP_CPU_BLOCK_C (threads=" << count_number_of_thread() << ")...\n";
+            mult_omp_block_C(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
+            cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
+            #endif
+            break;
+        }
+        case 7: {
+            #if defined(BM_OMP)
+            cout << "BENCH_VERSION OMP_CPU_BLOCK_B (threads=" << count_number_of_thread() << ")...\n";
+            mult_omp_block_B(a, b, c, MATRIX_LINES, MATRIX_COLUMNS, BLOCK_SIZE);
             cout << "SUM = "  << setw(10) << sum_res(c, MATRIX_LINES, MATRIX_COLUMNS) << endl;
             #endif
             break;
@@ -98,11 +105,11 @@ int main(int argc, char *argv[]) {
         }
     }
 
+//    print_matrix(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
+
     free(a);
     free(b);
     free(c);
-
-//    print_matrix(a, b, c, MATRIX_LINES, MATRIX_COLUMNS);
 
     return 0;
 }
@@ -116,7 +123,8 @@ void print_usage(int argc, char **argv) {
          "       3 : BLOCKING" << endl <<
          "       4 : OPENMP CPU" << endl <<
          "       5 : OPENMP GPU" << endl <<
-         "       6 : OPENMP CPU + BLOCKING" << endl <<
+         "       6 : OPENMP CPU + BLOCKING C" << endl <<
+         "       7 : OPENMP CPU + BLOCKING B" << endl <<
          "       10 : All versions" << endl <<
          "   -L <lines>    number of lines" << endl <<
          "   -C <columns>  number of columns" << endl <<
@@ -183,7 +191,7 @@ void parse_arguments(int argc, char **argv) {
             case 'V':
                 ioptarg = atoi(optarg);
 
-                if (ioptarg >= 1 && ioptarg <= 6) {
+                if (ioptarg >= 1 && ioptarg <= 7) {
                     BENCH_VERSION = ioptarg;
                 } else {
                     printf("/!\\ WRONG VERSION OPTION: %s\n", optarg);
