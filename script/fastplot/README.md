@@ -8,8 +8,11 @@ customize the parsing of the input file and format of the output plot using many
 - [Usage](#usage)
 - [Limitations](#limitations)
 - [Advanced usage](#advanced-usage)
+  - [Output file](#output-file)
   - [Logarithmic scale](#logarithmic-scale)
   - [Axis titles and legend](#axis-titles-and-legend)
+  - [Main axis](#main-axis)
+  - [Miscellaneous](#miscellaneous)
 
 ## Installation
 For now, this tool must be installed manually from this repo.
@@ -68,6 +71,20 @@ This tool aims simplicity, this implies the following limitations:
 
 ## Advanced usage
 
+### Output file
+On a system without web browser, the default file path is just the input path with `.png` appended. Most
+of the time it's enough but if you want to change this path or even the output file format, use the 
+`-o <path>` *(`--output <path>`)*. Supported formats are `.png`, `.jpeg` (`.jpg`), `.svg`, `.pdf` and
+`.html` (`.htm`).
+
+For image formats (including PDFs and SVGs formats), you can append to the path the size of the image
+using the format `?<width>x<height>`.
+
+If you have a web browser, but you want to use the default path (with `.png` appended), use special empty
+path *(`-o ""`)*.
+
+> Note that the parents directories of the given output file path are created recursively if not existing.
+
 ### Logarithmic scale
 Two arguments allows you to enable logarithmic scale for both X and Y axis, respectively `--xlog` and `--ylog`.
 With the example from [usage section](#usage), using logarithmic scale for the Y axis will improve readability,
@@ -81,10 +98,11 @@ force enable this feature with the argument `--header {yes, no}`.
 In addition to the header decoding, you can force the title of the two X and Y axis, using respectively 
 `--xtitle <title>` and `--ytitle <title>`.
 
-### Arrays axis
+### Main axis
 By default, your data arrays are expected to be in column, but the program can guess that your file has arrays
 in lines if:
-- The first line of the file is not composed only of text values.
+- The `--header` argument is not set to `no`, in this case this make no sense to guess headers.
+- **And** the first line of the file is not composed only of text values.
 - **And** the first column is composed only of text values.
 
 You can also force FastPlot to use a specific axis with the `--axis {row, col}`.
@@ -96,3 +114,11 @@ Axe Y, 160.0, 80.0, 40.0, 20.0, 10.0
 ```
 
 ![View of exec_stats.png](examples/row_stats.png)
+
+### Miscellaneous
+Some advanced arguments are not yet fully documented:
+- `-s <sep1> [<sep2> [...]]` *(`--sep`)*, allows you to change separator chain used to split each line into values.
+- `--strip {yes, no}`, enable or not stripping of values (removing leading and trailing spaces).
+- `--skip-empty {yes, no}`, enable or not skipping of empty values, if yes, all empty values (after 
+optional stripping) are discarded from the line.
+- 
