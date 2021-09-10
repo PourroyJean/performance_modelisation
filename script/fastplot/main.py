@@ -2,6 +2,7 @@
 
 from argparse import ArgumentParser, HelpFormatter
 from os import path
+import webbrowser
 import itertools
 import sys
 import os
@@ -22,68 +23,74 @@ def main():
     args = parser.parse_args()
 
     file_path = args.input
-    _, file_ext = path.splitext(file_path)
-    file_ext_seps, file_ext_skip_empty = PREDEFINED_FILE_EXT.get(file_ext, DEFAULT_FILE_EXT)
 
-    log(f"Input file: {file_path}")
+    try:
+        log(f"Input file: {file_path}")
+        file_fh = open(file_path, "rt")
+    except OSError as err:
+        log(f"Invalid input file: {err}")
+        sys.exit(1)
 
-    raw_separators = args.sep
-    raw_skip_empty = args.skip_empty
+    with file_fh:
 
-    # Simple flags arguments
-    header = args.header == "yes"
-    strip = args.strip == "yes"
+        _, file_ext = path.splitext(file_path)
+        file_ext_seps, file_ext_skip_empty = PREDEFINED_FILE_EXT.get(file_ext, DEFAULT_FILE_EXT)
 
-    # If separators are not set, use default one for common extensions.
-    if raw_separators is None or not len(raw_separators):
-        raw_separators = file_ext_seps
+        raw_separators = args.sep
+        raw_skip_empty = args.skip_empty
 
-    log(f"Parsing separators...")
+        # Simple flags arguments
+        header = args.header == "yes"
+        strip = args.strip == "yes"
 
-    # Pre process separators expressions
-    separators = []
-    for raw_sep in raw_separators:
-        if raw_sep[-1] == "*":
-            separators.append((raw_sep[:-1], -1))
-        else:
-            factor_idx = raw_sep.rfind("*")
-            if factor_idx == -1:
-                separators.append((raw_sep, 1))
+        # If separators are not set, use default one for common extensions.
+        if raw_separators is None or not len(raw_separators):
+            raw_separators = file_ext_seps
+
+        log(f"Parsing separators...")
+
+        # Pre process separators expressions
+        separators = []
+        for raw_sep in raw_separators:
+            if raw_sep[-1] == "*":
+                separators.append((raw_sep[:-1], -1))
             else:
-                raw_factor = raw_sep[(factor_idx + 1):]
-                try:
-                    # Here, the given string IS not empty (check first if == "*").
-                    factor = int(raw_factor)
-                    separators.append((raw_sep[:factor_idx], factor))
-                except ValueError:
-                    print(f"Invalid factor '{raw_factor}' in '{raw_sep}'.")
-                    sys.exit(1)
+                factor_idx = raw_sep.rfind("*")
+                if factor_idx == -1:
+                    separators.append((raw_sep, 1))
+                else:
+                    raw_factor = raw_sep[(factor_idx + 1):]
+                    try:
+                        # Here, the given string IS not empty (check first if == "*").
+                        factor = int(raw_factor)
+                        separators.append((raw_sep[:factor_idx], factor))
+                    except ValueError:
+                        print(f"Invalid factor '{raw_factor}' in '{raw_sep}'.")
+                        sys.exit(1)
 
-    if raw_skip_empty is None:
-        # If skip empty is not set, set it to the file extension one.
-        skip_empty = file_ext_skip_empty
-    else:
-        # If skip is set, just parse the bool value.
-        skip_empty = raw_skip_empty == "yes"
+        if raw_skip_empty is None:
+            # If skip empty is not set, set it to the file extension one.
+            skip_empty = file_ext_skip_empty
+        else:
+            # If skip is set, just parse the bool value.
+            skip_empty = raw_skip_empty == "yes"
 
-    log(f"Parsing configuration:")
-    log(f"  Stripping: {get_enabled_str(strip)}")
-    log(f"  Skip empty: {get_enabled_str(skip_empty)}")
-    log(f"  Separators: {', '.join(map(get_separator_str, separators))}")
+        log(f"Parsing configuration:")
+        log(f"  Stripping: {get_enabled_str(strip)}")
+        log(f"  Skip empty: {get_enabled_str(skip_empty)}")
+        log(f"  Separators: {', '.join(map(get_separator_str, separators))}")
 
-    def append_filtered(line_: list, value: str):
-        if strip:
-            value = value.strip()
-        if not skip_empty or len(value):
-            line_.append(parse_float_or_str(value))
+        def append_filtered(line_: list, value: str):
+            if strip:
+                value = value.strip()
+            if not skip_empty or len(value):
+                line_.append(parse_float_or_str(value))
 
-    lines = []
-
-    with open(file_path, "rt") as fh:
+        lines = []
 
         log(f"Parsing... 0%", end="\r")
 
-        raw_lines = fh.readlines()
+        raw_lines = file_fh.readlines()
         raw_lines_count = len(raw_lines)
         separators_count = len(separators)
 
@@ -165,7 +172,7 @@ def main():
     if array_axis is None:
         # Here we try to guess the array axis, by default it's in column mode.
         array_axis = "col"
-        if isinstance(lines[0][0], str) and any(map(lambda value: not isinstance(value, str), lines[0][1:])):
+        if header and isinstance(lines[0][0], str) and any(map(lambda value: not isinstance(value, str), lines[0][1:])):
             # Here, we know that line #0 has a string at first value, and subsequent values are not all strings.
             if all(map(lambda line_: isinstance(line_[0], str), lines[1:])):
                 # Here we know that all lines after line #0 start with a string value.
@@ -221,55 +228,67 @@ def main():
     log(f"  X log scale: {get_enabled_str(args.xlog)}")
     log(f"  Y log scale: {get_enabled_str(args.ylog)}")
 
-    output_file_path: str = args.output
-    if output_file_path is not None:
+    output_file_path = args.output
+    if output_file_path is None:
+        log("Trying to open plot in your browser...")
+        try:
+            fig.show(renderer="browser")
+            sys.exit(0)
+        except webbrowser.Error:
+            log("  No web browser found, saving default image file...")
+    elif not len(output_file_path):
+        output_file_path = None
 
-        opts_idx = output_file_path.rfind("?")
-        if opts_idx != -1:
-            raw_opts = output_file_path[(opts_idx + 1):]
-            output_file_path = output_file_path[:opts_idx]
-        else:
-            raw_opts = None
+    if output_file_path is None:
+        output_file_path = f"{file_path}.png"
 
-        _, output_file_ext = path.splitext(output_file_path)
-
-        if output_file_ext in (".png", ".jpeg", ".jpg", ".svg", ".pdf"):
-
-            log(f"Writing to image file at: {output_file_path}")
-
-            size = [1280, 720]
-
-            if raw_opts is None:
-                log("No image size specified, using defaults (add '?<width>x<height>' after the path).")
-            else:
-                raw_opts_split = raw_opts.split("x", 1)
-                raw_size = None
-                if len(raw_opts_split) == 2:
-                    try:
-                        raw_size = [int(raw_opts_split[0]), int(raw_opts_split[1])]
-                    except ValueError:
-                        pass
-                if raw_size is None:
-                    log(f"Invalid image size '{raw_opts}', using defaults.")
-                else:
-                    size = raw_size
-
-            log(f"Using image size {size[0]}x{size[1]}")
-
-            os.makedirs(path.dirname(output_file_path), exist_ok=True)
-            fig.write_image(output_file_path, width=size[0], height=size[1])
-
-        elif output_file_ext in (".html", ".htm"):
-            log(f"Writing to HTML file at: {output_file_path}")
-            os.makedirs(path.dirname(output_file_path), exist_ok=True)
-            fig.write_html(output_file_path)
-        else:
-            log(f"Unsupported output file format: {output_file_path}")
-            sys.exit(1)
-
+    opts_idx = output_file_path.rfind("?")
+    if opts_idx != -1:
+        raw_opts = output_file_path[(opts_idx + 1):]
+        output_file_path = output_file_path[:opts_idx]
     else:
-        log(f"Opening in your browser, if supported...")
-        fig.show(renderer="browser")
+        raw_opts = None
+
+    _, output_file_ext = path.splitext(output_file_path)
+
+    def ensure_output_dir():
+        try:
+            os.makedirs(path.dirname(output_file_path), exist_ok=True)
+        except OSError:
+            pass
+
+    if output_file_ext in (".png", ".jpeg", ".jpg", ".svg", ".pdf"):
+
+        log(f"Writing to image file at: {output_file_path}")
+
+        size = [1280, 720]
+
+        if raw_opts is None:
+            log("No image size specified, using defaults (add '?<width>x<height>' after the path).")
+        else:
+            raw_opts_split = raw_opts.split("x", 1)
+            raw_size = None
+            if len(raw_opts_split) == 2:
+                try:
+                    raw_size = [int(raw_opts_split[0]), int(raw_opts_split[1])]
+                except ValueError:
+                    pass
+            if raw_size is None:
+                log(f"Invalid image size '{raw_opts}', using defaults.")
+            else:
+                size = raw_size
+
+        log(f"Using image size {size[0]}x{size[1]}")
+        ensure_output_dir()
+        fig.write_image(output_file_path, width=size[0], height=size[1])
+
+    elif output_file_ext in (".html", ".htm"):
+        log(f"Writing to HTML file at: {output_file_path}")
+        ensure_output_dir()
+        fig.write_html(output_file_path)
+    else:
+        log(f"Unsupported output file format: {output_file_path}")
+        sys.exit(1)
 
     sys.exit(0)
 
