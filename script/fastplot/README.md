@@ -23,17 +23,45 @@ website)*, once you have pipenv, run `pipenv install` in FastPlot's directory. N
 environment in a directory called `.virtualenvs` under your user's home directory. If you want to avoid that,
 you can set the environment variable `PIPENV_VENV_IN_PROJECT=1` before running any pipenv-related command.
 
+```
+export ROOT_PM=`pwd`                # root of the repo
+cd $ROOT_PM/script/fastplot/        # pipenv directory
+export PIPENV_VENV_IN_PROJECT=1     # avoid creating .venv folder in your home directory
+pipenv install                      # create .venv folder and dowload required packages
+```
+
+
 ## Usage
 > Disclaimer: This section covers usage of the tool through Pipenv, refer to 
 > [installation section](#installation) for more information about Pipenv.
 
-Once your Pipenv environment is set up and all dependencies installed into it, you can use two commands to run
-FastPlot into the environment:
-- `pipenv run python main.py`, this directly runs the script into the environment *(useful for aliases)*.
-- `pipenv shell`, this command opens a new shell session with some modified variables that allows you to run
-python in this environment. Once you are in this new shell, you can use `python main.py` directly *(useful 
-for development)*.
 
+Once your Pipenv environment is set up and all dependencies installed into it, you can use two commands to run
+FastPlot into the environment :
+
+1. Usage 1
+
+This allows you to use the pipenv environment from an other directory and run the script from the environment *(useful for aliases)* :
+
+```
+  export PIPENV_PIPFILE=$ROOT_PM/script/fastplot/Pipfile
+  pipenv run python $ROOT_PM/script/fastplot/main.py  data.txt
+``` 
+
+
+
+2. Usage 2
+
+This command opens a new shell session with some modified variables that allows you to run
+python in this environment. Once you are in this new shell, you can use `python main.py` directly *(useful
+for development)* :
+```
+  pipenv shell
+  python $ROOT_PM/script/fastplot/main.py
+```
+
+
+##Options
 You can then append command arguments after `main.py`, to a get the help message use `--help` argument.
 The only required argument is the input file which can be any text file. By default, the program parses
 the input file as a space-separated values files *(with skipping empty values)*, if the input file
