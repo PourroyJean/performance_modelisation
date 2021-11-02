@@ -1,5 +1,5 @@
 [[source]]
-url = "https://pypi.org/simple"
+url = "https://github.com/PourroyJean/performance_modelisation/tree/master/script/fastplot"
 verify_ssl = true
 name = "pypi"
 
@@ -10,4 +10,4 @@ kaleido = "*"
 [dev-packages]
 
 [requires]
-python_version = "3.6"
+python_version = "3"

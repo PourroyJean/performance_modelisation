@@ -11,8 +11,8 @@ import plotly.graph_objects as go
 
 
 PREDEFINED_FILE_EXT = {
-    ".csv": ([",*"], False),  # Don't skip empty values in CSV
-    ".tsv": (["\t*"], False), # Don't skip empty values in TSV
+    ".csv": ([",*"], False),   # Don't skip empty values in CSV
+    ".tsv": (["\t*"], False),  # Don't skip empty values in TSV
 }
 DEFAULT_FILE_EXT = ([" *"], True)  # Default file extensions uses ' ' separator and skip empty values.
 
@@ -86,17 +86,19 @@ def main():
             if not skip_empty or len(value):
                 line_.append(parse_float_or_str(value))
 
-        lines = []
-
         log(f"Parsing... 0%", end="\r")
 
         raw_lines = file_fh.readlines()
         raw_lines_count = len(raw_lines)
         separators_count = len(separators)
+        comment_prefix = args.comment
+        lines = []
 
         for raw_line_idx, raw_line in enumerate(raw_lines):
 
             raw_line = raw_line.rstrip("\r\n")
+            if raw_line.startswith(comment_prefix):
+                continue
 
             separator_idx = 0
             separator_count = 0
@@ -158,7 +160,7 @@ def main():
                 append_filtered(line, raw_line[search_idx:])
                 lines.append(line)
 
-            log(f"Parsing... {int((raw_line_idx + 1) / raw_lines_count * 100)}%", end="\r")
+            log(f"Parsing... {int((raw_line_idx + 1) / raw_lines_count * 100)}%   ", end="\r")
 
     print()
 
@@ -185,6 +187,16 @@ def main():
         # If the data axis is vertical, just transpose lines to columns.
         arrays = list(map(list, itertools.zip_longest(*lines)))
 
+    if len(args.exclude):
+        for idx in sorted(filter(lambda v: v is not None, map(parse_int_or_none, args.exclude)), reverse=True):
+            try:
+                arrays.pop(idx)
+            except IndexError:
+                continue
+        if not len(arrays):
+            log("All arrays were excluded (--exclude), terminating.")
+            sys.exit(0)
+
     if header:
         headers = []
         for array in arrays:
@@ -195,8 +207,8 @@ def main():
     fig = go.Figure()
 
     if len(arrays) == 1:
-        fig.add_trace(go.Scatter(x=map(lambda t: t[0], enumerate(arrays)), y=arrays[0], name=headers[0]))
-        xtitle = ""
+        fig.add_trace(go.Scatter(x=list(map(lambda t: t[0], enumerate(arrays[0]))), y=arrays[0], name=headers[0]))
+        xtitle = "Index"
         ytitle = headers[0]
     else:
         for array, header in zip(arrays[1:], headers[1:]):
@@ -210,7 +222,7 @@ def main():
         ytitle = args.ytitle
 
     fig.update_layout(
-        title=f"FastPlot from {file_path}",
+        title=f"FastPlot from {file_path}" if args.title is None else args.title,
         xaxis_title=xtitle,
         yaxis_title=ytitle
     )
@@ -261,7 +273,7 @@ def main():
 
         log(f"Writing to image file at: {output_file_path}")
 
-        size = [1280, 720]
+        size = [1920, 1080]
 
         if raw_opts is None:
             log("No image size specified, using defaults (add '?<width>x<height>' after the path).")
@@ -298,6 +310,13 @@ def parse_float_or_str(raw):
         return float(raw)
     except ValueError:
         return raw
+
+
+def parse_int_or_none(raw):
+    try:
+        return int(raw)
+    except ValueError:
+        return None
 
 
 def get_common_end(strings):
@@ -371,8 +390,14 @@ def build_arg_parser() -> ArgumentParser:
                                              "The default value depends on the input file extension.",
                         choices=["yes", "no"])
 
+    parser.add_argument("--comment", help="Set the comment prefix, all lines starting with this string will be "
+                                          "ignored. Default is '#'.",
+                        default="#")
+
+    parser.add_argument("--exclude", help="Exclude the column at a given index (starting at 0).", nargs="*")
+
     parser.add_argument("--axis", help="Specify the axis (column or row) of data arrays in the file. "
-                                       "By default, column axis is used by the row axis is guessed by the program "
+                                       "By default, column axis is used, and the row axis is guessed by the program "
                                        "if all values in the first column are not decimals, and therefore can be"
                                        "used as row header.",
                         choices=["col", "row"])
@@ -382,6 +407,8 @@ def build_arg_parser() -> ArgumentParser:
 
     parser.add_argument("--ytitle", help="Specify the title for the Y axis, by default it uses the common end string "
                                          "of each columns after X column.")
+
+    parser.add_argument("--title", help="Specify the title of the plot, but default its the file path.")
 
     parser.add_argument("--xlog", help="Use log scale for X axis.", action="store_true")
     parser.add_argument("--ylog", help="Use log scale for Y axis.", action="store_true")
