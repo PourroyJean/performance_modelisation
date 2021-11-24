@@ -1,19 +1,32 @@
-# Intro to Performance optimisation
-This package should be used by any programmer interested by tunning or monitoring the performance of his applications.
-This package contains the following tools:
-*   Kernel Generator: used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
-*   DML_MEM: a benchmark used to measure the performance of the memory subsystem by accessing memory with stride access
-*   YAMB: a tool used to monitor the memory bus traffic.
-*   Oprofile++: a tool to find and extract hot spots from an application
+# Performance optimisation repository
+This repo should be used by any programmer interested by tunning or monitoring the performance of his applications.
+The repo is composed of several tools :
+
+1. **Benchmarks**
+* [**Kernel Generator**](/src/benchmark_kernel_generator) : used to determine what are the different frequency used by your processor during different scenario (AVX1, AVX2, Turbo ON/OFF...)
+* [**DML_MEM**](/src/benchmark_dml_mem) : a benchmark used to measure the performance of the memory subsystem by accessing memory with stride access
+* [**Benchmark Multiply**](/src/benchmark_multiply) : Matrix multiplication benchmark implemented with several optimizations: blocking, OpenMP, GPU Offloading...
+
+
+2. **Profiling tools**  
+* [**YAMB**](/src/tool_yamb) : a tool used to monitor the memory bus traffic.
+* [**Oprofile++**](/src/tool_oprofile) : a tool to find and extract hot spots from an application
+
+3. **Other tools**
+* [**Fast Plot**](/script/fastplot) :  small python utility for plotting data from a text file
+
+**Each tool can be compiled separately and have its own settings. Each directory contains the corresponding *readme* file.**
+
 
 # Install
 
 Each tool/benchmark can be compiled separately. You can choose which one to compile by modifying the [Cmake configuration file](src/CMakeLists.txt) in **src/CMakeLists.txt**. For example, to only compile the Kernel Generator, you can use the following configuration:
 ```
 add_subdirectory (benchmark_kernel_generator)
-#add_subdirectory(tool_oprofile)
-#add_subdirectory (tool_yamb)
 #add_subdirectory (benchmark_dml_mem)
+#add_subdirectory (benchmark_multiply)
+#add_subdirectory (tool_yamb)
+#add_subdirectory(tool_oprofile)
 ```
 
 Here is the simplest way to download and install our tools:
@@ -27,19 +40,6 @@ cmake ..
 make
 ```
 
-## Configure each tool
-
-Each tool can be compiled separately and have its own settings.
-
-### DML_MEM benchmark
-The DML benchmark can be compiled with MPI or not. To do this, the following flag must be set in the cmake tool configuration:
-```
-cmake -DDML_BUILD_MPI=ON ..
-```
-To analyze the different steps of the benchmark (change of stride size, data set size) it can be interesting to monitor the memory bus traffic with YAMB and to annotate the graph with the library provided for. To do this, the following flag must be set in the cmake tool configuration:
-```
-cmake -DDML_USE_YAMB=ON ..
-```
 
 ## Requirement
 
@@ -49,13 +49,12 @@ cmake -DDML_USE_YAMB=ON ..
 ## Other
 
 We also provide :
-* KeKKak: simple kernels is developped to have a fair comparison of microarchitectures on the Keccak algorithm 
+* [KeKKak](src/benchmark_keccak): simple kernels is developped to have a fair comparison of microarchitectures on the Keccak algorithm 
 
-kldsfjsdkljf
 
 ## Authors
 
-* **[Jean Pourroy](https://www.linkedin.com/in/pourroyjean/)** - PHD student at ENS Paris Saclay - HPE
+* **[Jean Pourroy](https://www.linkedin.com/in/pourroyjean/)** - PHD - HPE
 * **[Patrick Demichel]()** - HPE
 
 ## License

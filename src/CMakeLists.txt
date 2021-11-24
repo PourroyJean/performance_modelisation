@@ -19,8 +19,8 @@ endif()
 
 
 # << Choose the required tool by commenting or not >>
-#add_subdirectory (benchmark_kernel_generator)
+add_subdirectory (benchmark_kernel_generator)
 #add_subdirectory (benchmark_dml_mem)
-add_subdirectory (benchmark_multiply)
-#add_subdirectory(tool_oprofile)
+#add_subdirectory (benchmark_multiply)
 #add_subdirectory (tool_yamb)
+#add_subdirectory(tool_oprofile)
