@@ -66,14 +66,14 @@ Then, for different number of threads, binding and place strategies the script p
 Below, the result of the exuction of `benchmark_multiply -V 6 -L 4000 -C 4000 -B 40` on AMD EPYC 7542 32-Core Processor (see full results in [results folder](/results/benchmark_multiply/benchmark_multiply%20-V%206%20-L%204000%20-C%204000%20-B%2040.txt))
 
 ```
-THREADS PROC_BIND OMP_PLACES VERSION BLOCK RES            TIME      
+THREADS PROC_BIND OMP_PLACES VERSION BLOCK RES             TIME      
 1       true      cores      6       40    140100658790400 585.44    
 2       true      cores      6       40    140100658790400 182.41    
 3       true      cores      6       40    140100658790400 116.60    
 .......     
-122     true      cores      6       40    140100658790400 6.19      
-123     true      cores      6       40    140100658790400 6.23      
-124     true      cores      6       40    140100658790400 6.16   
+126     true      cores      6       40    140100658790400 6.04
+127     true      cores      6       40    140100658790400 5.96
+128     true      cores      6       40    140100658790400 6.09  
 ```
 
 

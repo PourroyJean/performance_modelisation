@@ -56,4 +56,5 @@ for OMP_NUM_THREADS in $OMP_NUM_THREADS_LIST; do
     done
   done
 done
+
 rm -f ${LOG_FILE} 2>&1 1>/dev/null

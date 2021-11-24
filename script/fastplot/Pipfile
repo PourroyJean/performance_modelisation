@@ -1,0 +1,13 @@
+[[source]]
+url = "https://github.com/PourroyJean/performance_modelisation/tree/master/script/fastplot"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+plotly = "*"
+kaleido = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3"
