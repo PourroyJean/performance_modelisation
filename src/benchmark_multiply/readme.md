@@ -59,59 +59,26 @@ Several scripts can be found in the [script folder](/src/benchmark_multiply/scri
 Script to facilitate the execution and your different tests. Nothing special here. 
 
 
-2. **[bm_omp_cpu_bind.sh](/src/benchmark_multiply/script/bm_omp_cpu_bind.sh)**
+2. **[bm_omp_benchmark.sh](/src/benchmark_multiply/script/bm_omp_benchmark.sh)**
 
-This script can be used to test different configuration of the OpenMP binding variables : **OMP_NUM_THREADS**, **OMP_PROC_BIND** and **OMP_PLACES**.
+This script can be used to test different configuration of the OpenMP binding variables (**OMP_NUM_THREADS**, **OMP_PROC_BIND**, **OMP_PLACES**) and different size of block.
 Then, for different number of threads, binding and place strategies the script print the performance.
-Below, the result of the exuction of `benchmark_multiply -V 6 -L 4000 -C 4000 -B 40` on AMD EPYC 7542 32-Core Processor
+Below, the result of the exuction of `benchmark_multiply -V 6 -L 4000 -C 4000 -B 40` on AMD EPYC 7542 32-Core Processor (see full results in [results folder](/results/benchmark_multiply/benchmark_multiply%20-V%206%20-L%204000%20-C%204000%20-B%2040.txt))
+
 ```
-THREADS  PROC_BIND OMP_PLACES VERSION TIME       
-32       false     threads    6       0:11.88    
-32       false     cores      6       0:11.80    
-32       false     sockets    6       0:11.70    
-32       true      threads    6       0:10.11    
-32       true      cores      6       0:10.10    
-32       true      sockets    6       0:10.17    
-32       master    threads    6       ERROR      
-32       master    cores      6       ERROR      
-32       master    sockets    6       0:12.60    
-32       close     threads    6       0:19.25    
-32       close     cores      6       0:10.14    
-32       close     sockets    6       0:10.09    
-32       spread    threads    6       0:10.07    
-32       spread    cores      6       0:10.09    
-32       spread    sockets    6       0:10.28    
-64       false     threads    6       0:10.17    
-64       false     cores      6       0:10.19    
-64       false     sockets    6       0:10.13    
-64       true      threads    6       0:05.75    
-64       true      cores      6       0:05.70    
-64       true      sockets    6       0:08.19    
-64       master    threads    6       ERROR      
-64       master    cores      6       ERROR      
-64       master    sockets    6       0:10.45    
-64       close     threads    6       0:10.14    
-64       close     cores      6       0:05.67    
-64       close     sockets    6       0:08.08    
-64       spread    threads    6       0:05.69    
-64       spread    cores      6       0:05.65    
-64       spread    sockets    6       0:07.99    
-128      false     threads    6       0:06.33    
-128      false     cores      6       0:05.86    
-128      false     sockets    6       0:05.79    
-128      true      threads    6       0:05.42    
-128      true      cores      6       0:05.44    
-128      true      sockets    6       0:05.96    
-128      master    threads    6       ERROR      
-128      master    cores      6       ERROR      
-128      master    sockets    6       ERROR      
-128      close     threads    6       0:05.42    
-128      close     cores      6       0:05.48    
-128      close     sockets    6       0:06.23    
-128      spread    threads    6       0:05.43    
-128      spread    cores      6       0:05.45    
-128      spread    sockets    6       0:06.10 
+THREADS PROC_BIND OMP_PLACES VERSION BLOCK RES            TIME      
+1       true      cores      6       40    140100658790400 585.44    
+2       true      cores      6       40    140100658790400 182.41    
+3       true      cores      6       40    140100658790400 116.60    
+.......     
+122     true      cores      6       40    140100658790400 6.19      
+123     true      cores      6       40    140100658790400 6.23      
+124     true      cores      6       40    140100658790400 6.16   
 ```
+
+
+Strong scaling on dual socket server for 1 to 128 threads with `OMP_PROC_BIND=true` and `OMP_PROC_PLACES=cores`. 
+![Alt text](/results/benchmark_multiply/V6_1-128_threads.png?raw=true "Strong scaling")
 
 
 
