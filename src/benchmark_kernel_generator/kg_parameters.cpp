@@ -86,7 +86,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
             case 'O':
                 P_OPERATIONS = optarg;
                 break;
-            case 'K':
+            case 'C':
                 P_COMPILER   = optarg;
                 break;
             case 'w':
@@ -176,7 +176,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                 }
                 break;
 
-            case 'C':
+            case 'R': //todo implement this option...
                 tmp_str = optarg;
                 if (!tmp_str.compare("true") || !tmp_str.compare("false")) {
                     bool b;

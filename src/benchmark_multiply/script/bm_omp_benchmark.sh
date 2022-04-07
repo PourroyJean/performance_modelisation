@@ -7,8 +7,8 @@ rm -f ${LOG_FILE} 2>&1 1>/dev/null
 #               BENCHMARK CONFIGURATION           #
 #--------------------------------------------------
 BM=./bin/benchmark_multiply/benchmark_multiply
-COL=4000
-LINES=4000
+COL=400
+LINES=400
 VERSION=6
 #BLOCK_SIZE_LIST="1 2 4 8 16 20 32 40 80 100"
 BLOCK_SIZE_LIST="40"
@@ -56,4 +56,5 @@ for OMP_NUM_THREADS in $OMP_NUM_THREADS_LIST; do
     done
   done
 done
+
 rm -f ${LOG_FILE} 2>&1 1>/dev/null
