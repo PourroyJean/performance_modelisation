@@ -187,7 +187,7 @@ def main():
         # If the data axis is vertical, just transpose lines to columns.
         arrays = list(map(list, itertools.zip_longest(*lines)))
 
-    if len(args.exclude):
+    if args.exclude is not None and len(args.exclude):
         for idx in sorted(filter(lambda v: v is not None, map(parse_int_or_none, args.exclude)), reverse=True):
             try:
                 arrays.pop(idx)
@@ -206,13 +206,15 @@ def main():
 
     fig = go.Figure()
 
+    fig_line = go.scatter.Line(width=args.line_width)
+
     if len(arrays) == 1:
-        fig.add_trace(go.Scatter(x=list(map(lambda t: t[0], enumerate(arrays[0]))), y=arrays[0], name=headers[0]))
+        fig.add_trace(go.Scatter(x=list(map(lambda t: t[0], enumerate(arrays[0]))), y=arrays[0], name=headers[0], line=fig_line))
         xtitle = "Index"
         ytitle = headers[0]
     else:
         for array, header in zip(arrays[1:], headers[1:]):
-            fig.add_trace(go.Scatter(x=arrays[0], y=array, name=header))
+            fig.add_trace(go.Scatter(x=arrays[0], y=array, name=header, line=fig_line))
         xtitle = headers[0]
         ytitle = get_common_end(headers[1:])
 
@@ -224,7 +226,7 @@ def main():
     fig.update_layout(
         title=f"FastPlot from {file_path}" if args.title is None else args.title,
         xaxis_title=xtitle,
-        yaxis_title=ytitle
+        yaxis_title=ytitle,
     )
 
     if args.xlog:
@@ -235,6 +237,7 @@ def main():
     log("Drawing summary:")
     log(f"  Headers: {', '.join(headers)}")
     log(f"  Arrays: {len(arrays)} ({array_axis}s)")
+    log(f"  Line width: {fig_line.width}")
     log(f"  X title: {xtitle}")
     log(f"  Y title: {ytitle}")
     log(f"  X log scale: {get_enabled_str(args.xlog)}")
@@ -409,6 +412,8 @@ def build_arg_parser() -> ArgumentParser:
                                          "of each columns after X column.")
 
     parser.add_argument("--title", help="Specify the title of the plot, but default its the file path.")
+
+    parser.add_argument("--line-width", help="Change the default line width on the plot.", type=int, default=2)
 
     parser.add_argument("--xlog", help="Use log scale for X axis.", action="store_true")
     parser.add_argument("--ylog", help="Use log scale for Y axis.", action="store_true")
