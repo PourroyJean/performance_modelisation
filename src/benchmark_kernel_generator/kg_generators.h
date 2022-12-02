@@ -33,15 +33,7 @@ private:
 
     int Get_register_cible();
 
-
-
-    std::ofstream     mFile_assembly_src;
-    std::stringstream mkernel_assembly_src;
-    std::ifstream mFile_template_start ;
-    std::ifstream mFile_template_end   ;
-    std::ifstream mFile_template_freq   ;
-
-
+    std::stringstream mKernel_asm_src;
 
 public:
     KG_parameters *mParameters;

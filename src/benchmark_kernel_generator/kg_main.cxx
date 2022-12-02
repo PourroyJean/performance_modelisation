@@ -25,7 +25,7 @@ std::stringstream black_hole;
 
 
 int main(int argc, char **argv) {
-
+    
     //----------- ARGUMENT PARSING --------------
     KG_parameters * kg_parameters = new KG_parameters();
     kg_parameters->parse_arguments(argc, argv);
