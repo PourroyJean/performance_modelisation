@@ -11,7 +11,10 @@
 #include <sys/time.h>
 #include <string>
 #include <vector>
+
+#ifdef _OPENMP
 #include "omp.h"
+#endif
 
 using namespace std;
 
@@ -64,78 +67,81 @@ int main(int argc, char **argv) {
         .flops_dp = 0,
     };
 
-    if (argc >= 2) {
+#ifndef _OPENMP
 
-        int cpu_bind = stoi(argv[1]);
+    int cpu_bind = 0;
+    if (argc >= 2) {
+        cpu_bind = stoi(argv[1]);
+    }
+
+    cpu_set_t cpus;
+    CPU_ZERO(&cpus);
+    CPU_SET(cpu_bind, &cpus);
+    sched_setaffinity(0, sizeof(cpu_set_t), &cpus);
+    cout << "+ Bound to CPU " << cpu_bind << endl;
+
+    bench(&global_res);
+
+#else
+
+    int num_threads = omp_get_max_threads();
+    cout << "+ Number of OpenMP threads: " << num_threads << endl;
+
+    #pragma omp parallel for
+    for (int i = 0; i < num_threads; i++) {
+
+        // We get the CPU affinity of the current thread.
         cpu_set_t cpus;
         CPU_ZERO(&cpus);
-        CPU_SET(cpu_bind, &cpus);
-        sched_setaffinity(0, sizeof(cpu_set_t), &cpus);
+        sched_getaffinity(0, sizeof(cpu_set_t), &cpus);
 
-        cout << "+ Bound to CPU " << cpu_bind << endl;
-
-        bench(&global_res);
-
-    } else {
-
-        int num_threads = omp_get_max_threads();
-        cout << "+ Number of OpenMP threads: " << num_threads << endl;
-
-        #pragma omp parallel for
-        for (int i = 0; i < num_threads; i++) {
-
-            // We get the CPU affinity of the current thread.
-            cpu_set_t cpus;
-            CPU_ZERO(&cpus);
-            sched_getaffinity(0, sizeof(cpu_set_t), &cpus);
-
-            #pragma omp critical
-            {
-                int cpu_count = 0;
-                for (int j = 0; j < CPU_SETSIZE; j++) {
-                    if (CPU_ISSET(j, &cpus)) {
-                        cout << "+ OpenMP thread " << i << " bound to CPU " << j << endl;
-                        cpu_count++;
-                    }
-                }
-                if (cpu_count > 1) {
-                    cout << "+ /!\\ The OpenMP thread is running on more than one CPU." << endl;
-                    cout << "       If you don't want to run it using OpenMP, give the core to bind" << endl;
-                    cout << "       to as parameter. You can also use OMP_PLACES and OMP_PROC_BIND." << endl;
+        #pragma omp critical
+        {
+            int cpu_count = 0;
+            for (int j = 0; j < CPU_SETSIZE; j++) {
+                if (CPU_ISSET(j, &cpus)) {
+                    cout << "+ OpenMP thread " << i << " bound to CPU " << j << endl;
+                    cpu_count++;
                 }
             }
-
-            // Initialized by bench function.
-            bench_result res;
-            bench(&res);
-
-            #pragma omp critical
-            {
-                global_res.base_frequency += res.base_frequency;
-                global_res.real_frequency += res.real_frequency;
-                global_res.bench_frequency += res.bench_frequency;
-                global_res.time_total += res.time_total;
-                global_res.instructions += res.instructions;
-                global_res.cycles += res.cycles;
-                global_res.ipc += res.ipc;
-                global_res.flop_cycle_sp += res.flop_cycle_sp;
-                global_res.flop_cycle_dp += res.flop_cycle_dp;
-                global_res.flops_sp += res.flops_sp;
-                global_res.flops_dp += res.flops_dp;
+            if (cpu_count > 1) {
+                cout << "+ /!\\ The OpenMP thread is running on more than one CPU." << endl;
+                cout << "       If you don't want to run it using OpenMP, give the core to bind" << endl;
+                cout << "       to as parameter. You can also use OMP_PLACES and OMP_PROC_BIND." << endl;
             }
-
         }
 
-        global_res.base_frequency /= (double) num_threads;
-        global_res.real_frequency /= (double) num_threads;
-        global_res.bench_frequency /= (double) num_threads;
-        global_res.ipc /= (double) num_threads;
-        global_res.flop_cycle_sp /= (double) num_threads;
-        global_res.flop_cycle_dp /= (double) num_threads;
-        global_res.flops_sp /= (double) num_threads;
-        global_res.flops_dp /= (double) num_threads;
+        // Initialized by bench function.
+        bench_result res;
+        bench(&res);
+
+        #pragma omp critical
+        {
+            global_res.base_frequency += res.base_frequency;
+            global_res.real_frequency += res.real_frequency;
+            global_res.bench_frequency += res.bench_frequency;
+            global_res.time_total += res.time_total;
+            global_res.instructions += res.instructions;
+            global_res.cycles += res.cycles;
+            global_res.ipc += res.ipc;
+            global_res.flop_cycle_sp += res.flop_cycle_sp;
+            global_res.flop_cycle_dp += res.flop_cycle_dp;
+            global_res.flops_sp += res.flops_sp;
+            global_res.flops_dp += res.flops_dp;
+        }
 
     }
+
+    global_res.base_frequency /= (double) num_threads;
+    global_res.real_frequency /= (double) num_threads;
+    global_res.bench_frequency /= (double) num_threads;
+    global_res.ipc /= (double) num_threads;
+    global_res.flop_cycle_sp /= (double) num_threads;
+    global_res.flop_cycle_dp /= (double) num_threads;
+    global_res.flops_sp /= (double) num_threads;
+    global_res.flops_dp /= (double) num_threads;
+
+#endif
 
     cout << endl;
     cout << "-------------------  FREQUENCES SUMMARY ------------------------" << endl;
@@ -252,12 +258,19 @@ void bench(bench_result* result) {
     // cout << "----------------------------------------------------------------" << endl;
 
     // For now we only save results for a single thread.
-    if (omp_get_thread_num() == 0) {
-        ofstream mFile_template_start(TMP_FILE_monitoring, std::ios_base::binary);
+#ifdef _OPENMP
+    bool monitor = (omp_get_thread_num() == 0);
+#else
+    bool monitor = true;
+#endif
+
+    if (monitor) {
+
+        ofstream monitoring_file(TMP_FILE_monitoring, std::ios_base::binary);
         for (auto it = pairVec.begin(); it != pairVec.end(); it++) {
-            mFile_template_start << it->first << " " << to_string(it->second) << endl;
+            monitoring_file << it->first << " " << to_string(it->second) << endl;
         }
-        mFile_template_start.close();
+
     }
 
 }

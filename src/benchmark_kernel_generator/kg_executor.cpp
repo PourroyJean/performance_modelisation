@@ -23,13 +23,8 @@ void KG_executor::Execute_assembly(bool openmp) {
 
     //We let the kernel bind the process himself if no binding are set
     Cpu_binding();
-
-    string stmp(FILE_ASM_EXE);
-    if (!openmp) {
-        stmp += " 0"; // If not on OpenMP, we bind the kernel to core 0.
-    }
-
-    int status = system(stmp.c_str());
+    
+    int status = system(FILE_ASM_EXE.c_str());
 
     if (status != 0){
         cout << "Error status " << status << endl;
