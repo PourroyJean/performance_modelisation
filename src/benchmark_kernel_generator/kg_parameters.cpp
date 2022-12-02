@@ -32,6 +32,7 @@ KG_parameters::KG_parameters() {
     P_VERBOSE = PARAM_VERBOSE;
     P_HELP = false;
     P_DEBUG = PARAM_DEBUG;
+    P_OPENMP = PARAM_OPENMP;
 };
 
 
@@ -47,7 +48,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
     string cwd(buff);
     HOME_DIR = cwd;
 
-    const char *const short_opts = "W:O:K:B:D:P:L:U:F:S:A:C:vhG";
+    const char *const short_opts = "W:O:K:B:D:P:L:U:F:S:A:M:C:vhG";
     const option long_opts[] = {
             {"width",      required_argument, nullptr, 'W'},
 //            {"width_cust", required_argument, nullptr, 'w'},
@@ -65,6 +66,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
             {"verbose",    no_argument,       nullptr, 'v'},
             {"help",       no_argument,       nullptr, 'h'},
             {"debug",      required_argument, nullptr, 'A'},
+            {"openmp",      required_argument, nullptr, 'M'},
             {nullptr, 0,                      nullptr, 0}
     };
 
@@ -201,6 +203,18 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
 
                 break;
 
+            case 'M':
+                tmp_str = optarg;
+                if (!tmp_str.compare("true") || !tmp_str.compare("false")) {
+                    bool b;
+                    istringstream(optarg) >> std::boolalpha >> b;
+                    P_OPENMP = b;
+                } else {
+                    printf("/!\\ WRONG DEBUG OPTION: %s\n", optarg);
+                    exit(EXIT_FAILURE);
+                }
+
+                break;
 
             case 'v':
                 this->P_VERBOSE = true;
@@ -243,7 +257,7 @@ void KG_parameters::parameter_summary() {
     cout << "\t -S (samples)          " << this->P_SAMPLES << endl;
     cout << "\t -A (analysis)         " << this->P_DEBUG << endl;
     cout << "\t -C (count)            " << this->P_COUNT << endl;
-
+    cout << "\t -M (openmp)           " << this->P_OPENMP << endl;
 }
 
 
@@ -260,9 +274,11 @@ void KG_parameters::help() {
     cout << "\t -L,--loopsize          [" << PARAM_LOOP_SIZE << "]\n";
     cout << "\t -U,--unrolling         [" << PARAM_UNROLLING << "]\n";
     cout << "\t -F,--frequency         [" << PARAM_FREQUENCY << "] check the frequency of the core\n";
-    cout << "\t -G,--graphic            grapical output (python required)\n";
+    cout << "\t -G,--graphic           grapical output (python required)\n";
     cout << "\t -S,--samples           [" << PARAM_SAMPLES << "]\n";
     cout << "\t -A,--debug             [" << PARAM_DEBUG << "]\n";
+    cout << "\t -M,--openmp            [" << PARAM_OPENMP << "] launch the kernel using OMP_* variables,\n";
+    cout << "\t                        by default it is run on one thread bound to core 0\n";
     cout << "\t -v,--verbose\n";
     cout << "\t -h,--help\n";
 }

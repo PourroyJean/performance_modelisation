@@ -45,6 +45,7 @@ extern std::stringstream black_hole;
 #define PARAM_GRAPH         false
 #define PARAM_DEBUG         false
 #define PARAM_COUNT         false
+#define PARAM_OPENMP        false
 
 //We do  several measures to calculate the IPC of the program
 #define PARAM_SAMPLES       100

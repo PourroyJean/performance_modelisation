@@ -38,6 +38,7 @@ public:
     unsigned    P_SAMPLES;
     bool        P_COUNT;
     bool        P_DEBUG;
+    bool        P_OPENMP;
 
     KG_parameters();
 

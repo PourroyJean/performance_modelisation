@@ -18,15 +18,18 @@ KG_executor::KG_executor (KG_generators * generator){
 }
 
 
-void KG_executor::Execute_assembly() {
+void KG_executor::Execute_assembly(bool openmp) {
     DEBUG << "-- Execute the generated assembly file\n";
 
     //We let the kernel bind the process himself if no binding are set
     Cpu_binding();
 
     string stmp(FILE_ASM_EXE);
-    int status = system(stmp.c_str());
+    if (!openmp) {
+        stmp += " 0"; // If not on OpenMP, we bind the kernel to core 0.
+    }
 
+    int status = system(stmp.c_str());
 
     if (status != 0){
         cout << "Error status " << status << endl;
