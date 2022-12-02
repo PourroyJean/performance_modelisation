@@ -61,12 +61,12 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
             {"unrolling",  required_argument, nullptr, 'U'},
             {"frequency",  required_argument, nullptr, 'F'},
             {"graphic",    no_argument,       nullptr, 'G'},
-            {"samples",    required_argument, nullptr, 'S'},
-            {"count",      required_argument, nullptr, 'C'},
-            {"verbose",    no_argument,       nullptr, 'v'},
-            {"help",       no_argument,       nullptr, 'h'},
-            {"debug",      required_argument, nullptr, 'A'},
-            {"openmp",      required_argument, nullptr, 'M'},
+            {"samples",   required_argument, nullptr, 'S'},
+            {"count",     required_argument, nullptr, 'C'},
+            {"verbose",   no_argument,       nullptr, 'v'},
+            {"help",      no_argument,       nullptr, 'h'},
+            {"debug",     required_argument, nullptr, 'A'},
+            {"openmp",    required_argument, nullptr, 'M'},
             {nullptr, 0,                      nullptr, 0}
     };
 
