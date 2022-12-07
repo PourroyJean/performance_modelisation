@@ -135,6 +135,7 @@ int main(int argc, char **argv) {
     global_res.base_frequency /= (double) num_threads;
     global_res.real_frequency /= (double) num_threads;
     global_res.bench_frequency /= (double) num_threads;
+    global_res.time_total /= (double) num_threads;
     global_res.ipc /= (double) num_threads;
     global_res.flop_cycle_sp /= (double) num_threads;
     global_res.flop_cycle_dp /= (double) num_threads;
@@ -178,7 +179,7 @@ void bench(bench_result* result) {
 
     uint64_t cycleInStart, cycleInEnd;
     uint64_t cycle_total = 0, instructions_total = 0, instructions_executed = 0, instructions_executed_total = 0, loop_nb_instruction = 0, nb_total_loop_iteration = 0;
-    double IPC/*, inst_second = 0.0*/;
+    double IPC;
     int i;
     double timeStart, timeEnd, time_total = 0;
 
@@ -225,8 +226,6 @@ void bench(bench_result* result) {
         freq *= coef_freq;
     }
 
-    // inst_second = IPC * freq;
-
     result->bench_frequency = freq;
     result->time_total = time_total;
     result->cycles = cycle_total;
@@ -236,26 +235,6 @@ void bench(bench_result* result) {
     result->flop_cycle_dp = flop_cycle_dp;
     result->flops_sp = flops_sp;
     result->flops_dp = flops_dp;
-
-    // cout << "------------------  INSTRUCTIONS SUMMARY -----------------------" << endl;
-
-    // if (P_COUNT) {
-    //     instructions_executed_total -= (NB_INST * NB_lOOP);
-    //     cout << setw(20) << "instructions_total" << setw(25) << "instructions_executed"     << setw(20) << "cycle_total" << setw(13) << "FREQUENCY" << setw(10) << "IPC" << std::endl;
-    //     cout << setw(25) << instructions_total   << setw(25) << instructions_executed_total << setw(20) << cycle_total   << setw(13) << freq        << setw(10) << IPC * Base_vs_Current_freq << std::endl;
-
-    // } else {
-    //     cout << "_label_|" <<  setw(18) <<"NB INSTRUCTIONS"    << setw(10) << "Time"     << setw(13) << "FREQUENCY" << setw(20) << "Giga_inst/sec" << setw(10) << "IPC" << std::endl;
-    //     cout << "_value_|" <<  setw(18) <<instructions_total   << setw(10) << time_total << setw(13) << freq        << setw(20) <<   inst_second   << setw(10) << IPC   << std::endl;
-    // }
-
-    // cout << endl;
-
-    // cout << "----------------------  FLOP SUMMARY  --------------------------" << endl;
-    // cout << setw(10) << "PRECISION"  << setw(15) << "FLOP/cycle"   << setw(20) << "FLOP/second" << endl;
-    // cout << setw(10) << "Single"     << setw(15) << flop_cycle_sp  << setw(20) << flops_sp << endl ;
-    // cout << setw(10) << "Double"     << setw(15) << flop_cycle_dp  << setw(20) << flops_dp << endl ;
-    // cout << "----------------------------------------------------------------" << endl;
 
     // For now we only save results for a single thread.
 #ifdef _OPENMP
