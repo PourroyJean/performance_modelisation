@@ -95,17 +95,21 @@ def main():
         ax.plot(threads, data[512], "-b", label="AVX-512")
 
     cpu_model_full = cpu_model()
-    cpu_model_lower = cpu_model_full.lower().replace(" @ ", "_").replace(" ", "_").replace("(r)", "").replace(".", "_")
+    cpu_model_lower = cpu_model_full.lower().replace(" @ ", "_").replace(" ", "_").replace("(r)", "").replace(".", "_").replace("-", "_")
 
     fig, axs = plt.subplots(3)
-    fig.set_dpi(400)
     fig.set_size_inches((6.4, 8.0))
 
     ax0, ax1, ax2 = axs
 
     plot_widths(ax0, flops)
+    ax0t = ax0.twinx()
+    ax0t.plot(threads, [flop * threads for threads, flop in zip(threads, flops[128])], "--g")
+    ax0t.plot(threads, [flop * threads for threads, flop in zip(threads, flops[256])], "--r")
+    ax0t.plot(threads, [flop * threads for threads, flop in zip(threads, flops[512])], "--b")
     ax0.legend()
     ax0.set_ylabel("FLOPs")
+    ax0t.set_ylabel("Total FLOPs")
     ax0.grid()
 
     fig.suptitle(f"{cpu_model_full} ({cpu_count} CPUs)")
@@ -121,7 +125,7 @@ def main():
     ax2.set_xlabel("Threads")
     ax2.grid()
     
-    plt.savefig(f"kg_{cpu_model_lower}.png")
+    plt.savefig(f"kg_{cpu_model_lower}.png", dpi=400)
 
 
 if __name__ == "__main__":
