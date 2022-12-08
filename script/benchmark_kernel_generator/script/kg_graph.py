@@ -35,7 +35,7 @@ def run(*, threads: int, width: int) -> RunResult:
         line = line.strip()
 
         if line.startswith("+ Bench frequency is "):
-            bench_freq = float(line[21:].replace("Ghz", ""))
+            bench_freq = float(line[21:].replace("GHz", ""))
             continue
 
         values = list(filter(lambda s: len(s), line.split(" ")))

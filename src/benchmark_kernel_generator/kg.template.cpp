@@ -11,6 +11,8 @@
 #include <sys/time.h>
 #include <string>
 #include <vector>
+#include <chrono>
+#include <thread>
 
 #ifdef _OPENMP
 #include "omp.h"
@@ -19,53 +21,49 @@
 using namespace std;
 
 struct bench_result {
-    double base_frequency;
-    double real_frequency;
-    double bench_frequency;
-    double time_total;
+
+    uint64_t base_frequency;
+    uint64_t bench_frequency;
+    double duration;
     uint64_t instructions;
     uint64_t cycles;
     double ipc;
-    double flop_cycle_sp;
-    double flop_cycle_dp;
-    double flops_sp;
-    double flops_dp;
+    uint64_t flop_cycle_sp;
+    uint64_t flop_cycle_dp;
+    uint64_t flops_sp;
+    uint64_t flops_dp;
+
+    bench_result(): 
+        base_frequency(0),
+        bench_frequency(0),
+        duration(0),
+        instructions(0),
+        cycles(0),
+        ipc(0),
+        flop_cycle_sp(0),
+        flop_cycle_dp(0),
+        flops_sp(0),
+        flops_dp(0) {}
+
 };
 
 void bench(bench_result* result);
-float check_frequency(bench_result* result);
 
-uint64_t rdtsc() {
+inline uint64_t rdtsc() {
     uint32_t lo, hi;
     __asm__ __volatile__ ("rdtsc" : "=a" (lo), "=d" (hi));
     return (uint64_t) hi << 32 | lo;
 }
 
-double mygettime() {
-    struct timeval tp;
-    struct timezone tzp;
-    int i;
-    i = gettimeofday(&tp, &tzp);
-    return ((double) tp.tv_sec + (double) tp.tv_usec * 1.e-6);
+inline chrono::steady_clock::time_point instant() {
+    return chrono::steady_clock::now();
 }
 
 int main(int argc, char **argv) {
 
     cout.precision(3);
 
-    bench_result global_res {
-        .base_frequency = 0,
-        .real_frequency = 0,
-        .bench_frequency = 0,
-        .time_total = 0,
-        .instructions = 0,
-        .cycles = 0,
-        .ipc = 0,
-        .flop_cycle_sp = 0,
-        .flop_cycle_dp = 0,
-        .flops_sp = 0,
-        .flops_dp = 0,
-    };
+    bench_result global_res;
 
 #ifndef _OPENMP
 
@@ -118,9 +116,8 @@ int main(int argc, char **argv) {
         #pragma omp critical
         {
             global_res.base_frequency += res.base_frequency;
-            global_res.real_frequency += res.real_frequency;
             global_res.bench_frequency += res.bench_frequency;
-            global_res.time_total += res.time_total;
+            global_res.duration += res.duration;
             global_res.instructions += res.instructions;
             global_res.cycles += res.cycles;
             global_res.ipc += res.ipc;
@@ -133,9 +130,8 @@ int main(int argc, char **argv) {
     }
 
     global_res.base_frequency /= (double) num_threads;
-    global_res.real_frequency /= (double) num_threads;
     global_res.bench_frequency /= (double) num_threads;
-    global_res.time_total /= (double) num_threads;
+    global_res.duration /= (double) num_threads;
     global_res.ipc /= (double) num_threads;
     global_res.flop_cycle_sp /= (double) num_threads;
     global_res.flop_cycle_dp /= (double) num_threads;
@@ -146,30 +142,29 @@ int main(int argc, char **argv) {
 
     cout << endl;
     cout << "-------------------  FREQUENCES SUMMARY ------------------------" << endl;
-    cout << "+ Base frequency is " << global_res.base_frequency << "Ghz" << endl;
-    cout << "+ Real frequency is " << global_res.real_frequency << "Ghz" << endl;
-    cout << "+ Bench frequency is " << global_res.bench_frequency << "Ghz" << endl;
+    cout << "+ Base frequency is " << (double) global_res.base_frequency / 1e9 << "GHz" << endl;
+    cout << "+ Bench frequency is " << (double) global_res.bench_frequency / 1e9 << "GHz" << endl;
 
-    if (global_res.base_frequency - global_res.real_frequency > 0.05) {
-        cout << "+ /!\\ The frequency seems to be capped: -" << (1 - global_res.ipc) * 100 << '%' << endl;
-    } else if (global_res.real_frequency - global_res.base_frequency > 0.05) {
-        cout << "+ /!\\ Turbo seems to be ON: +" << global_res.ipc << '%' << " (be carful with the following values)" << endl;
-    } else{
-        cout << "+ OK: the core is running at his frequency based value" << endl;
-    }
+    // if (global_res.base_frequency - global_res.real_frequency > 0.05) {
+    //     cout << "+ /!\\ The frequency seems to be capped: -" << (1 - global_res.ipc) * 100 << '%' << endl;
+    // } else if (global_res.real_frequency - global_res.base_frequency > 0.05) {
+    //     cout << "+ /!\\ Turbo seems to be ON: +" << global_res.ipc << '%' << " (be carful with the following values)" << endl;
+    // } else{
+    //     cout << "+ OK: the core is running at his frequency based value" << endl;
+    // }
 
     cout << endl;
 
     cout << "------------------  INSTRUCTIONS SUMMARY -----------------------" << endl;
     double inst_second = global_res.ipc * global_res.bench_frequency;
-    cout << setw(16) << "NB INSTRUCTIONS"         << setw(10) << "Time"                << setw(20) << "Giga_inst/sec" << setw(10) << "IPC"          << endl;
-    cout << setw(16) << global_res.instructions   << setw(10) << global_res.time_total << setw(20) << inst_second     << setw(10) << global_res.ipc << endl;
+    cout << setw(16) << "NB INSTRUCTIONS"         << setw(10) << "Duration"          << setw(20) << "Giga_inst/sec" << setw(10) << "IPC"          << endl;
+    cout << setw(16) << global_res.instructions   << setw(10) << global_res.duration << setw(20) << inst_second     << setw(10) << global_res.ipc << endl;
     cout << endl;
 
     cout << "----------------------  FLOP SUMMARY  --------------------------" << endl;
     cout << setw(10) << "PRECISION"  << setw(15) << "FLOP/cycle"              << setw(20) << "FLOP/second"       << endl;
-    cout << setw(10) << "Single"     << setw(15) << global_res.flop_cycle_sp  << setw(20) << global_res.flops_sp << endl;
-    cout << setw(10) << "Double"     << setw(15) << global_res.flop_cycle_dp  << setw(20) << global_res.flops_dp << endl;
+    cout << setw(10) << "Single"     << setw(15) << global_res.flop_cycle_sp  << setw(20) << (double) global_res.flops_sp << endl;
+    cout << setw(10) << "Double"     << setw(15) << global_res.flop_cycle_dp  << setw(20) << (double) global_res.flops_dp << endl;
 
     return 0;
 
@@ -177,134 +172,83 @@ int main(int argc, char **argv) {
 
 void bench(bench_result* result) {
 
-    uint64_t cycleInStart, cycleInEnd;
-    uint64_t cycle_total = 0, instructions_total = 0, instructions_executed = 0, instructions_executed_total = 0, loop_nb_instruction = 0, nb_total_loop_iteration = 0;
-    double IPC;
-    int i;
-    double timeStart, timeEnd, time_total = 0;
+    // Here we measure the invariant base frequency
+    auto start_time = instant();
+    uint64_t start_tsc = rdtsc();
+    this_thread::sleep_for(chrono::milliseconds(100));
+    uint64_t stop_tsc = rdtsc();
+    auto stop_time = instant();
+    uint64_t base_freq = (double) (stop_tsc - start_tsc) / chrono::duration_cast<chrono::duration<double>>(stop_time - start_time).count();
 
-    vector<pair<int, double>> pairVec;
+    chrono::steady_clock::duration total_bench_duration = chrono::steady_clock::duration::zero();
+    uint64_t total_bench_freq = 0;
+    uint64_t total_bench_cycles = 0;
+    double total_bench_ipc = 0;
 
-    for (i = 0; i < NB_lOOP; i++) {
+    for (int i = 0; i < NB_lOOP; i++) {
 
-        timeStart = mygettime();
-        cycleInStart = rdtsc();
+        // Actual benchmark
+        auto bench_start_time = instant();
+        uint64_t bench_start_tsc = rdtsc();
 
-        // Here the kernel assembly is inserted in the template
         #pragma kg asm
+
+        uint64_t bench_stop_tsc = rdtsc();
+        auto bench_stop_time = instant();
         
-        cycleInEnd = rdtsc();
-        timeEnd = mygettime();
-        pairVec.push_back(make_pair(cycleInEnd - cycleInStart, timeEnd - timeStart));
-        cycle_total += (cycleInEnd - cycleInStart);
-        time_total += timeEnd - timeStart;
-        instructions_executed_total += instructions_executed;
+        // Frequency adjustment
+        uint64_t freq_sub_count = 10000;
+        uint64_t freq_start_tsc = rdtsc();
+
+        __asm__ __volatile__ (
+            ".loop: "
+                "sub $0x1, %%eax\n"
+                "sub $0x1, %%eax\n"
+                "sub $0x1, %%eax\n"
+                "sub $0x1, %%eax\n"
+                "sub $0x1, %%eax\n"
+                "sub $0x1, %%eax\n"
+                "sub $0x1, %%eax\n"
+                "sub $0x1, %%eax\n"
+                "jnz .loop" 
+                : 
+                : "a" (freq_sub_count));
+
+        uint64_t freq_stop_tsc = rdtsc();
+
+        // The measure of elapsed TSC is not affected by frequency
+        // changes, therefore because we expect this to be approx
+        // "freq_sub_count" cycles, we can adjust the number of cycles
+        // measured on the actual benchmark.
+        double freq_adjustment = (double) freq_sub_count / (freq_stop_tsc - freq_start_tsc);
+
+        uint64_t bench_freq = base_freq * freq_adjustment;
+        uint64_t bench_cycles = (bench_stop_tsc - bench_start_tsc) / freq_adjustment;
+        double bench_ipc = (double) (NB_INST * NB_lOOP_IN * P_UNROLLING) / bench_cycles;
+        double bench_duration = chrono::duration_cast<chrono::duration<double>>(bench_stop_time - bench_start_time).count();
+
+        result->bench_frequency += bench_freq;
+        result->duration += bench_duration;
+        result->cycles += bench_cycles;
+        result->ipc += bench_ipc;
+
+        result->flop_cycle_sp += (uint64_t) ((double) (NB_lOOP_IN * FLOP_SP_PER_LOOP) / bench_cycles);
+        result->flop_cycle_dp += (uint64_t) ((double) (NB_lOOP_IN * FLOP_DP_PER_LOOP) / bench_cycles);
+        result->flops_sp += (uint64_t) ((double) (NB_lOOP_IN * FLOP_SP_PER_LOOP) / bench_duration);
+        result->flops_dp += (uint64_t) ((double) (NB_lOOP_IN * FLOP_DP_PER_LOOP) / bench_duration);
         
     }
 
-    loop_nb_instruction = (uint64_t) NB_INST * (uint64_t) P_UNROLLING ;
-    nb_total_loop_iteration = (uint64_t)(NB_lOOP_IN * (uint64_t) NB_lOOP);
-    instructions_total = nb_total_loop_iteration * loop_nb_instruction;
-    
-    IPC = double(instructions_total) / double(cycle_total);
-    double freq = (cycle_total / time_total )/1000000000;
+    result->base_frequency = base_freq;
+    result->bench_frequency /= NB_lOOP;
+    result->duration /= NB_lOOP;
+    result->cycles /= NB_lOOP;
+    result->ipc /= NB_lOOP;
+    result->flop_cycle_sp /= NB_lOOP;
+    result->flop_cycle_dp /= NB_lOOP;
+    result->flops_sp /= NB_lOOP;
+    result->flops_dp /= NB_lOOP;
 
-    double flop_cycle_sp  = float((FLOP_SP_PER_LOOP * nb_total_loop_iteration)) / cycle_total;
-    double flop_cycle_dp  = float((FLOP_DP_PER_LOOP * nb_total_loop_iteration)) / cycle_total;
-    double flops_sp = (freq * 1000000000 * float((FLOP_SP_PER_LOOP * nb_total_loop_iteration)) / (cycle_total));
-    double flops_dp = freq * 1000000000 * float((FLOP_DP_PER_LOOP * nb_total_loop_iteration)) / cycle_total;
-
-    //Applying some correction depending on the cpu clock: if the CPU is capped or has turbo: the rdtsc instruction will not work as expected
-    float coef_freq = check_frequency(result);
-    if (coef_freq < 0.98){
-        IPC /=  coef_freq;
-        freq *= coef_freq;
-        flop_cycle_sp /= coef_freq;
-        flop_cycle_dp /= coef_freq;
-    } else if (coef_freq > 1.02){
-        IPC /= coef_freq;
-        freq *= coef_freq;
-    }
-
-    result->bench_frequency = freq;
-    result->time_total = time_total;
-    result->cycles = cycle_total;
-    result->instructions = instructions_total;
-    result->ipc = IPC;
-    result->flop_cycle_sp = flop_cycle_sp;
-    result->flop_cycle_dp = flop_cycle_dp;
-    result->flops_sp = flops_sp;
-    result->flops_dp = flops_dp;
-
-    // For now we only save results for a single thread.
-#ifdef _OPENMP
-    bool monitor = (omp_get_thread_num() == 0);
-#else
-    bool monitor = true;
-#endif
-
-    if (monitor) {
-
-        ofstream monitoring_file(TMP_FILE_monitoring, std::ios_base::binary);
-        for (auto it = pairVec.begin(); it != pairVec.end(); it++) {
-            monitoring_file << it->first << " " << to_string(it->second) << endl;
-        }
-
-    }
-
-}
-
-float check_frequency(bench_result* result) {
-
-    if (!is_check_freq) {
-        return 1;
-    }
-
-    int i;
-    double timeStart, timeEnd, time_total, freq_Base;
-    unsigned long long int cycleInStart, cycleInEnd;
-    int N_LOOP = 5;
-
-    //********************
-    //** BASE FREQUENCY  *
-    //********************
-    timeStart = mygettime();
-    cycleInStart = rdtsc();
-    usleep(10000);
-    cycleInEnd = rdtsc();
-    timeEnd = mygettime();
-    unsigned long long int cycleSpent = (cycleInEnd - cycleInStart);
-
-    freq_Base = cycleSpent / (1000000000 * (timeEnd - timeStart));
-
-    //********************
-    //** REAL FREQUENCY  *
-    //********************
-    cycleInStart = rdtsc();
-    for (i = 0; i < N_LOOP; i++) {
-        __asm__ ("aloop%=: "
-                "       sub    $0x1,%%eax\n"
-                "       sub    $0x1,%%eax\n"
-                "       sub    $0x1,%%eax\n"
-                "       sub    $0x1,%%eax\n"
-                "       sub    $0x1,%%eax\n"
-                "       sub    $0x1,%%eax\n"
-                "       sub    $0x1,%%eax\n"
-                "       sub    $0x1,%%eax\n"
-                "       jnz    aloop%=" : : "a" (40000000UL)
-        );
-    }
-
-    cycleInEnd = rdtsc();
-    cycleSpent = (cycleInEnd - cycleInStart);
-
-    unsigned long long int NbInstruction = (double) N_LOOP * (double) 40000000UL;
-    float ipc = NbInstruction / (double) cycleSpent; //Should be equal to 1: 1 inst. per cycle
-    float freq_Real = freq_Base * ipc;
-
-    result->base_frequency = freq_Base;
-    result->real_frequency = freq_Real;
-
-    return ipc;
+    result->instructions = NB_INST * NB_lOOP_IN * P_UNROLLING * NB_lOOP;
 
 }

@@ -22,7 +22,7 @@ void KG_generators::generate_assembly() {
   std::string padding("            ");
   std::string smallestRegisterName = "xmm";
 
-  mKernel_asm_src << "__asm__ (" << endl;
+  mKernel_asm_src << "__asm__ __volatile__ (" << endl;
 
   // TODO : remetre l'initialisation des registre xmm
   //-- KERNEL INIT
@@ -43,7 +43,7 @@ void KG_generators::generate_assembly() {
   }
 
   //-- KERNEL GENERATION: loop generation
-  mKernel_asm_src << padding << "\"myBench:\\n\"" << endl;
+  mKernel_asm_src << padding << "\".bench:\\n\"" << endl;
   for (int i = 0; i < mParameters->P_UNROLLING; ++i) {
     for (auto instruction : *mInstructions_set) {
       mKernel_asm_src << padding << "\t\"" << instruction << "\\n\"\n";
@@ -51,7 +51,7 @@ void KG_generators::generate_assembly() {
   }
 
   mKernel_asm_src << padding << "\t\"sub $0x1, %%eax\\n\"\n";
-  mKernel_asm_src << padding << "\"jnz myBench\\n\"";
+  mKernel_asm_src << padding << "\"jnz .bench\\n\"";
 
   //-- ONLY IF WE SELF CHECK
   if (mParameters->P_COUNT) {
@@ -70,7 +70,7 @@ void KG_generators::generate_assembly() {
   }
 
   mKernel_asm_src << padding << endl 
-                  << padding << ": \"=r\" (instructions_executed) " << endl
+                  << padding << ": " << endl
                   << padding << ": \"a\" (NB_lOOP_IN));";
 
 }
