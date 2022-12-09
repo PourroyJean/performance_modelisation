@@ -90,7 +90,7 @@ def main():
             ipc[width].append(res.ipc)
     
     def plot_widths(ax, data):
-        ax.plot(threads, data[128], "-g", label="AVX")
+        ax.plot(threads, data[128], "-g", label="SSE")
         ax.plot(threads, data[256], "-r", label="AVX2")
         ax.plot(threads, data[512], "-b", label="AVX-512")
 
