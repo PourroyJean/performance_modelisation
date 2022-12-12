@@ -249,6 +249,6 @@ void bench(bench_result* result) {
     result->flops_sp /= NB_lOOP;
     result->flops_dp /= NB_lOOP;
 
-    result->instructions = NB_INST * NB_lOOP_IN * P_UNROLLING * NB_lOOP;
+    result->instructions = (uint64_t) NB_INST * NB_lOOP_IN * P_UNROLLING * NB_lOOP;
 
 }
