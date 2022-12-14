@@ -197,7 +197,7 @@ void bench(bench_result* result) {
         auto bench_stop_time = instant();
         
         // Frequency adjustment
-        uint64_t freq_sub_count = 10000;
+        uint64_t freq_sub_count = 8000;
         uint64_t freq_start_tsc = rdtsc();
 
         __asm__ __volatile__ (
@@ -224,7 +224,7 @@ void bench(bench_result* result) {
 
         uint64_t bench_freq = base_freq * freq_adjustment;
         uint64_t bench_cycles = (bench_stop_tsc - bench_start_tsc) / freq_adjustment;
-        double bench_ipc = (double) (NB_INST * NB_lOOP_IN * P_UNROLLING) / bench_cycles;
+        double bench_ipc = (double) ((uint64_t) NB_INST * NB_lOOP_IN * P_UNROLLING) / bench_cycles;
         double bench_duration = chrono::duration_cast<chrono::duration<double>>(bench_stop_time - bench_start_time).count();
 
         result->bench_frequency += bench_freq;
@@ -232,16 +232,15 @@ void bench(bench_result* result) {
         result->cycles += bench_cycles;
         result->ipc += bench_ipc;
 
-        result->flop_cycle_sp += (uint64_t) ((double) (NB_lOOP_IN * FLOP_SP_PER_LOOP) / bench_cycles);
-        result->flop_cycle_dp += (uint64_t) ((double) (NB_lOOP_IN * FLOP_DP_PER_LOOP) / bench_cycles);
-        result->flops_sp += (uint64_t) ((double) (NB_lOOP_IN * FLOP_SP_PER_LOOP) / bench_duration);
-        result->flops_dp += (uint64_t) ((double) (NB_lOOP_IN * FLOP_DP_PER_LOOP) / bench_duration);
+        result->flop_cycle_sp += (uint64_t) ((double) ((uint64_t) NB_lOOP_IN * FLOP_SP_PER_LOOP) / bench_cycles);
+        result->flop_cycle_dp += (uint64_t) ((double) ((uint64_t) NB_lOOP_IN * FLOP_DP_PER_LOOP) / bench_cycles);
+        result->flops_sp += (uint64_t) ((double) ((uint64_t) NB_lOOP_IN * FLOP_SP_PER_LOOP) / bench_duration);
+        result->flops_dp += (uint64_t) ((double) ((uint64_t) NB_lOOP_IN * FLOP_DP_PER_LOOP) / bench_duration);
         
     }
 
     result->base_frequency = base_freq;
     result->bench_frequency /= NB_lOOP;
-    result->duration /= NB_lOOP;
     result->cycles /= NB_lOOP;
     result->ipc /= NB_lOOP;
     result->flop_cycle_sp /= NB_lOOP;
