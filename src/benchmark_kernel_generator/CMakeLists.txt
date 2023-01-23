@@ -1,4 +1,3 @@
-
 #However, the file(GLOB...) allows for wildcard additions:
 file(GLOB SOURCES "*.cxx")
 #message(WARNING "-- YOLO    --" ${CMAKE_SOURCE_DIR})

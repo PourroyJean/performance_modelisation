@@ -8,6 +8,7 @@ CTestTestfile.cmake
 
 .DS_store
 .idea
+.vscode
 *._.DS_Store*
 
 src/tool_PMU/skylake_nda_information
