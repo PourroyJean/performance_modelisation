@@ -1,10 +1,13 @@
 //
 // Created by Jean Pourroy on 20/02/2017.
 //
+#include <fstream>
+#include <sstream>
 #include <stdio.h>
 #include <iostream>
 #include "kg_generators.h"
 #include <misc.h>
+#include <string>
 
 
 #ifndef _GNU_SOURCE
@@ -14,91 +17,90 @@
 
 using namespace std;
 
-
 void KG_generators::generate_assembly() {
 
+  std::string padding("            ");
+  std::string smallestRegisterName = "xmm";
 
-    mFile_assembly_src << "\t\t__asm__ (\"\" " << endl;
+  mKernel_asm_src << "__asm__ __volatile__ (" << endl;
 
-    string smallestRegisterName = "xmm";
+  // TODO : remetre l'initialisation des registre xmm
+  //-- KERNEL INIT
+  mKernel_asm_src << padding << "// Initialisation opérandes à 1\n";
+  //    mFile_assembly_src << "\t\t \"mov     $1,    %%rbx; \"\n";
+  //    mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName
+  //    << "0;\"" << "  //operand 1;\n"; mFile_assembly_src << "\t\t \"movq
+  //    %%rbx, %%" << smallestRegisterName << "1;\"" << "  //operand 2;\n\n";
 
-    //TODO : remetre l'initialisation des registre xmm
-    //-- KERNEL INIT
-    mFile_assembly_src << "\t\t //Initialisation opérandes à 1\n";
-//    mFile_assembly_src << "\t\t \"mov     $1,    %%rbx; \"\n";
-//    mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName << "0;\"" << "  //operand 1;\n";
-//    mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName << "1;\"" << "  //operand 2;\n\n";
-
-    if (mParameters->P_COUNT) {
-        mFile_assembly_src << "\t\t //Initialisation compteur\n";
-        mFile_assembly_src << "\t\t \"mov     $1,    %%rbx; \"\n";
-        for (int i = 2; i <= 15; ++i) {
-            mFile_assembly_src << "\t\t \"movq    %%rbx, %%" << smallestRegisterName << "" << i << ";\"\n";
-        }
-        mFile_assembly_src << endl;
+  if (mParameters->P_COUNT) {
+    mKernel_asm_src << padding << "//Initialisation compteur\n";
+    mKernel_asm_src << padding << "\"mov  $1,    %%rbx\\n\"\n";
+    for (int i = 2; i <= 15; ++i) {
+      mKernel_asm_src << padding << "\"movq %%rbx, %%"
+                      << smallestRegisterName << "" << i << "\\n\"\n";
     }
+    mKernel_asm_src << endl;
+  }
 
-
-    //-- KERNEL GENERATION: loop generation
-    mFile_assembly_src << "\t\t \"myBench: \" " << endl;
-    for (int i = 0; i < mParameters->P_UNROLLING; ++i) {
-        for (auto instruction: *mInstructions_set) {
-            mkernel_assembly_src << "\t\t\t\t\"" << instruction << "\"\n";
-        }
+  //-- KERNEL GENERATION: loop generation
+  mKernel_asm_src << padding << "\".bench:\\n\"" << endl;
+  for (int i = 0; i < mParameters->P_UNROLLING; ++i) {
+    for (auto instruction : *mInstructions_set) {
+      mKernel_asm_src << padding << "\t\"" << instruction << "\\n\"\n";
     }
-    mFile_assembly_src << mkernel_assembly_src.str();
+  }
 
-    mFile_assembly_src << "\t\t\"sub  $0x1, %%eax;\"\n";
-    mFile_assembly_src << "\t\t\"jnz  myBench;\"";
+  mKernel_asm_src << padding << "\t\"sub $0x1, %%eax\\n\"\n";
+  mKernel_asm_src << padding << "\"jnz .bench\\n\"";
 
-    //-- ONLY IF WE SELF CHECK
-    if (mParameters->P_COUNT) {
-        mFile_assembly_src << "\n\n\t\t//Réduction: dommer le nombre d'addition total dans xmm0\n";
-        mFile_assembly_src << "\t\t \"mov     $0,    %%rbx; \"\n";
-        mFile_assembly_src << "\t\t \"movq    %%rbx, %%xmm0;\"\n";
-        for (int i = 2; i <= mRegister_max; ++i) {
-            mFile_assembly_src << "\t\t \"vaddpd  %%" << smallestRegisterName << "0, %%" << smallestRegisterName << i
-                               << ", %%xmm0;\"\n";
-        }
-        mFile_assembly_src << "\t\t \"movd  %%xmm0, %0;  //Final result \"\n";
-        mFile_assembly_src << endl;
+  //-- ONLY IF WE SELF CHECK
+  if (mParameters->P_COUNT) {
+    mKernel_asm_src
+        << "\n\n"
+        << padding
+        << "// Réduction: dommer le nombre d'addition total dans xmm0\n";
+    mKernel_asm_src << padding << "\"mov  $0,    %%rbx \\n\"\n";
+    mKernel_asm_src << padding << "\"movq %%rbx, %%xmm0\\n\"\n";
+    for (int i = 2; i <= mRegister_max; ++i) {
+      mKernel_asm_src << padding << "\"vaddpd  %%" << smallestRegisterName
+                      << "0, %%" << smallestRegisterName << i
+                      << ", %%xmm0\\n\"\n";
     }
+    mKernel_asm_src << padding << "\"movd %%xmm0, %0\\n\"  //Final result";
+  }
 
-    mFile_assembly_src
-            << "\t\t: \"=r\" (instructions_executed) "
-            << ": \"a\" (NB_lOOP_IN));" << endl;
-
-
+  mKernel_asm_src << padding << endl 
+                  << padding << ": " << endl
+                  << padding << ": \"a\" (NB_lOOP_IN));";
 
 }
-
 
 void KG_generators::generate_source() {
-    mFile_assembly_src << "#define TMP_FILE_monitoring \"" + FILE_MONTORING_TMP + "\"\n";
-    mFile_assembly_src << "int NB_lOOP = " << mParameters->P_SAMPLES << ";\n";
-    mFile_assembly_src << "int NB_lOOP_IN = " << mParameters->P_LOOP_SIZE << ";\n";
-    mFile_assembly_src << "int NB_INST = " << mParameters->P_OPERATIONS.length() << ";\n";
-    mFile_assembly_src << "int P_COUNT = " << mParameters->P_COUNT << ";\n";
-    mFile_assembly_src << "int P_UNROLLING = " << mParameters->P_UNROLLING << ";\n";
-    mFile_assembly_src << "int CPU_BIND = " << mParameters->P_BIND << ";\n";
-    mFile_assembly_src << "int FLOP_SP_PER_LOOP = " << mFLOP_SP << ";\n";
-    mFile_assembly_src << "int FLOP_DP_PER_LOOP = " << mFLOP_DP << ";\n";
-    mFile_assembly_src << "bool is_check_freq = " << std::boolalpha << mParameters->P_FREQUENCY << ";\n";
 
+    std::ofstream assembly_src_file(FILE_ASM_SOURCE_GENERATED, std::ios_base::binary);
+    assembly_src_file << "#define TMP_FILE_monitoring \"" + FILE_MONTORING_TMP + "\"\n";
+    assembly_src_file << "int NB_lOOP = " << mParameters->P_SAMPLES << ";\n";
+    assembly_src_file << "int NB_lOOP_IN = " << mParameters->P_LOOP_SIZE << ";\n";
+    assembly_src_file << "int NB_INST = " << mParameters->P_OPERATIONS.length() << ";\n";
+    assembly_src_file << "int P_COUNT = " << mParameters->P_COUNT << ";\n";
+    assembly_src_file << "int P_UNROLLING = " << mParameters->P_UNROLLING << ";\n";
+    assembly_src_file << "int CPU_BIND = " << mParameters->P_BIND << ";\n";
+    assembly_src_file << "int FLOP_SP_PER_LOOP = " << mFLOP_SP << ";\n";
+    assembly_src_file << "int FLOP_DP_PER_LOOP = " << mFLOP_DP << ";\n";
+    assembly_src_file << "bool is_check_freq = " << std::boolalpha << mParameters->P_FREQUENCY << ";\n";
 
-    //Template_START + LOOP_ASSEMBLY + Template_END
-    mFile_assembly_src << mFile_template_start.rdbuf();
-    generate_assembly();
-    mFile_assembly_src << mFile_template_end.rdbuf();
-    mFile_assembly_src << mFile_template_freq.rdbuf();
+    std::ifstream template_src_file(FILE_TEMPLATE_SRC, std::ios_base::binary);
+    std::stringstream template_src_stream;
+    template_src_stream << template_src_file.rdbuf();
+    std::string template_src = template_src_stream.str();
 
+    generate_assembly(); // Generate to 'mKernel_asm_src'
+    size_t index = template_src.find("#pragma kg asm");
+    template_src.replace(index, 14, mKernel_asm_src.str());
+    
+    assembly_src_file << template_src;
 
-    mFile_template_start.close();
-    mFile_template_end.close();
-    mFile_template_freq.close();
-    mFile_assembly_src.close();
 }
-
 
 int KG_generators::Get_register_source() {
     if (mParameters->P_DEPENDENCY) {
@@ -184,7 +186,7 @@ void KG_generators::generate_instructions() {
         // 3 registers
         instruction += "%%" + mRegister_name + to_string(mTableRegisterSource1->at(instruction_index_register)) + ", ";
         instruction += "%%" + mRegister_name + to_string(mTableRegisterSource2->at(instruction_index_register)) + ", ";
-        instruction += "%%" + mRegister_name + to_string(mTableRegisterCible->at(instruction_index_register)) + "; ";
+        instruction += "%%" + mRegister_name + to_string(mTableRegisterCible->at(instruction_index_register));
 
 
         mInstructions_set->push_back(instruction);
@@ -368,7 +370,7 @@ void KG_generators::Generate_code() {
 }
 
 void KG_generators::print_assembly_kernel () const{
-    cout << mkernel_assembly_src.str();
+    cout << mKernel_asm_src.str();
     return;
 }
 
@@ -383,22 +385,21 @@ KG_generators::KG_generators(KG_parameters *param) :
         mFLOP_DP(0) {
 
     mOperations_set = new vector<string>();
-    mFile_template_start.open(FILE_TEMPLATE_START, std::ios_base::binary);
-    mFile_template_end.open(FILE_TEMPLATE_END, std::ios_base::binary);
-    mFile_template_freq.open(FILE_TEMPLATE_FREQ, std::ios_base::binary);
-    mFile_assembly_src.open(FILE_ASM_SOURCE_GENERATED, std::ios_base::binary);
 
+    // mFile_template_src.open(FILE_TEMPLATE_SRC, std::ios_base::binary);
+    // mFile_template_end.open(FILE_TEMPLATE_END, std::ios_base::binary);
+    // mFile_template_freq.open(FILE_TEMPLATE_FREQ, std::ios_base::binary);
+    // mFile_assembly_src.open(FILE_ASM_SOURCE_GENERATED, std::ios_base::binary);
 
-    if (!(mFile_assembly_src.is_open() && mFile_template_end.is_open() && mFile_template_start.is_open() &&
-          mFile_template_freq.is_open())) {
-        cerr << "Error opening one of these files: \n";
-        cerr << FILE_TEMPLATE_START << endl;
-        cerr << FILE_TEMPLATE_END << endl;
-        cerr << FILE_TEMPLATE_FREQ << endl;
-        cerr << FILE_ASM_SOURCE_GENERATED << endl;
-        exit(0);
-    }
-
+    // if (!(mFile_assembly_src.is_open() && mFile_template_end.is_open() && mFile_template_start.is_open() &&
+    //       mFile_template_freq.is_open())) {
+    //     cerr << "Error opening one of these files: \n";
+    //     cerr << FILE_TEMPLATE_START << endl;
+    //     cerr << FILE_TEMPLATE_END << endl;
+    //     cerr << FILE_TEMPLATE_FREQ << endl;
+    //     cerr << FILE_ASM_SOURCE_GENERATED << endl;
+    //     exit(0);
+    // } FIXME:
 
 }
 

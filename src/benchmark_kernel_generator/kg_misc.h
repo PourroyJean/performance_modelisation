@@ -14,9 +14,9 @@ extern std::stringstream black_hole;
 //**        FILES PATH      **
 //****************************
 //These files are two template used to generate the code. _start and _end containing the beginning and the ending of the final file
-#define FILE_TEMPLATE_START         (BIN_DIR  + "/kg_template_start.cpp")
-#define FILE_TEMPLATE_END           (BIN_DIR  + "/kg_template_end.cpp")
-#define FILE_TEMPLATE_FREQ           (BIN_DIR  + "/kg_template_frequency.cpp")
+#define FILE_TEMPLATE_SRC           (BIN_DIR  + "/kg.template.cpp")
+// #define FILE_TEMPLATE_END           (BIN_DIR  + "/kg_template_end.cpp")
+// #define FILE_TEMPLATE_FREQ           (BIN_DIR  + "/kg_template_frequency.cpp")
 //This is the generated cpp file and the program compiled with. Generated file are created in the user's current directory
 #define FILE_ASM_SOURCE_GENERATED   (HOME_DIR  + "/assembly_generated.cpp")
 #define FILE_ASM_EXE                (HOME_DIR  + "/assembly")
@@ -45,6 +45,7 @@ extern std::stringstream black_hole;
 #define PARAM_GRAPH         false
 #define PARAM_DEBUG         false
 #define PARAM_COUNT         false
+#define PARAM_OPENMP        false
 
 //We do  several measures to calculate the IPC of the program
 #define PARAM_SAMPLES       100

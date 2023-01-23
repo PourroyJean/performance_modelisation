@@ -23,10 +23,8 @@ void KG_executor::Execute_assembly() {
 
     //We let the kernel bind the process himself if no binding are set
     Cpu_binding();
-
-    string stmp(FILE_ASM_EXE);
-    int status = system(stmp.c_str());
-
+    
+    int status = system(FILE_ASM_EXE.c_str());
 
     if (status != 0){
         cout << "Error status " << status << endl;

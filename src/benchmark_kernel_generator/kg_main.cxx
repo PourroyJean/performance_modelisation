@@ -25,7 +25,7 @@ std::stringstream black_hole;
 
 
 int main(int argc, char **argv) {
-
+    
     //----------- ARGUMENT PARSING --------------
     KG_parameters * kg_parameters = new KG_parameters();
     kg_parameters->parse_arguments(argc, argv);
@@ -38,7 +38,7 @@ int main(int argc, char **argv) {
         generator->print_assembly_kernel();
 
     //------------ ASSEMBLY COMPILATION ---------
-    std::string stmp = "bash -c \"" + kg_parameters->P_COMPILER + " " +  (kg_parameters->P_DEBUG ? "-g" : "")  +  " -o " + FILE_ASM_EXE + " " +  FILE_ASM_SOURCE_GENERATED +  "\"";
+    std::string stmp = "bash -c \"" + kg_parameters->P_COMPILER + (kg_parameters->P_OPENMP ? " -fopenmp" : "") +  (kg_parameters->P_DEBUG ? " -g" : "")  +  " -o " + FILE_ASM_EXE + " " +  FILE_ASM_SOURCE_GENERATED +  "\"";
     if (kg_parameters->P_VERBOSE)
         cout << "+ Compilation command : " << stmp << endl;
     system(stmp.c_str());
