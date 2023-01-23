@@ -18,7 +18,7 @@ KG_executor::KG_executor (KG_generators * generator){
 }
 
 
-void KG_executor::Execute_assembly(bool openmp) {
+void KG_executor::Execute_assembly() {
     DEBUG << "-- Execute the generated assembly file\n";
 
     //We let the kernel bind the process himself if no binding are set

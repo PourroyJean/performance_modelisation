@@ -26,7 +26,7 @@ public:
 
     KG_executor(KG_generators *generator);
 
-    void Execute_assembly(bool openmp);
+    void Execute_assembly();
 
     void Monitor_Execution();
 

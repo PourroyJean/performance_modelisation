@@ -45,7 +45,7 @@ int main(int argc, char **argv) {
 
     //----------- EXECUTING --------------------
     KG_executor  * executor = new KG_executor (generator);
-    executor->Execute_assembly(kg_parameters->P_OPENMP);
+    executor->Execute_assembly();
 
     //----------- ANALYZING -------------------
     executor->Monitor_Execution();
