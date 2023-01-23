@@ -197,7 +197,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                     istringstream(optarg) >> std::boolalpha >> b;
                     P_DEBUG = b;
                 } else {
-                    printf("/!\\ WRONG DEBUG OPTION: %s\n", optarg);
+                    printf("/!\\ WRONG ANALYSIS OPTION: %s\n", optarg);
                     exit(EXIT_FAILURE);
                 }
 
@@ -210,7 +210,7 @@ void KG_parameters::parse_arguments(int argc, char **argv) {
                     istringstream(optarg) >> std::boolalpha >> b;
                     P_OPENMP = b;
                 } else {
-                    printf("/!\\ WRONG DEBUG OPTION: %s\n", optarg);
+                    printf("/!\\ WRONG OPENMP OPTION: %s\n", optarg);
                     exit(EXIT_FAILURE);
                 }
 
