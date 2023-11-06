@@ -94,6 +94,8 @@ static void init_tile_config(__tilecfg *tileinfo) {
     tileinfo->colsb[TILE_SRC_2] = ROW_SIZE;
     tileinfo->rows[TILE_SRC_2] = MAX_ROWS;
 
+    // Here we initialize another tile triplet to facilitate testing in the main function loop
+    // but they are not used in this version
     tileinfo->colsb[TILE_RES_2] = ROW_SIZE;
     tileinfo->rows[TILE_RES_2] = MAX_ROWS;
     tileinfo->colsb[TILE_SRC_3] = ROW_SIZE;
@@ -250,13 +252,12 @@ int main(int argc, char **argv) {
 
     if (argc >= 2) {
         char *ptr;
-        int value = strtol(argv[1], &ptr, 10);  // Convertit la chaîne en long int
-
-        // Vérifie si la conversion a réussi et s'il n'y a pas de caractères non numériques restants
+        int value = strtol(argv[1], &ptr, 10);
+        // Checks if conversion was successful and if there are no remaining non-numeric characters
         if (*ptr == '\0') {
             cpu_bind = value;
         } else {
-            printf("Erreur: Le second argument n'est pas un nombre entier valide.\n");
+            printf("Error: The second argument is not a valid integer.\n");
         }
     }
 
@@ -284,7 +285,6 @@ int main(int argc, char **argv) {
     init_buffer_FP32(res, 0, OUT_NB_FP32);
     
     // print_buffer_BF16(src1, ROWS, COL);
-
     // print_buffer_BF16(src2, COL, ROWS);
     // print_buffer_FP32(res, ROWS, ROWS);
 
@@ -293,6 +293,7 @@ int main(int argc, char **argv) {
     _tile_loadd(TILE_SRC_2, src2, STRIDE);
     _tile_loadd(TILE_RES_1, res, STRIDE);
 
+    // Not used in this version : uncomment the corresponding line in the following loop
     _tile_loadd(TILE_SRC_3, src1, STRIDE);
     _tile_loadd(TILE_SRC_4, src2, STRIDE);
     _tile_loadd(TILE_RES_2, res, STRIDE);
@@ -309,7 +310,7 @@ int main(int argc, char **argv) {
         _tile_dpbf16ps(TILE_RES_1, TILE_SRC_1, TILE_SRC_2);
         _tile_dpbf16ps(TILE_RES_1, TILE_SRC_1, TILE_SRC_2);
         _tile_dpbf16ps(TILE_RES_1, TILE_SRC_1, TILE_SRC_2);
-        // _tile_dpbf16ps(TILE_RES_2, TILE_SRC_3, TILE_SRC_4);
+        // _tile_dpbf16ps(TILE_RES_2, TILE_SRC_3, TILE_SRC_4); 
     }
 
     // Store the tile data to memory
