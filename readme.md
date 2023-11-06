@@ -50,7 +50,7 @@ make
 
 We also provide :
 * [KeKKak](src/benchmark_keccak): simple kernels is developped to have a fair comparison of microarchitectures on the Keccak algorithm 
-
+* [AMX](src/benchmark_amx): two AMX benchmarks with INT8 and BF16 implementations
 
 ## Authors
 
