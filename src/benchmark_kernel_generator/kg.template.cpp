@@ -221,24 +221,40 @@ void bench(bench_result* result) {
         // "freq_sub_count" cycles, we can adjust the number of cycles
         // measured on the actual benchmark.
         double freq_adjustment = (double) freq_sub_count / (freq_stop_tsc - freq_start_tsc);
-
         uint64_t bench_freq = base_freq * freq_adjustment;
-        uint64_t bench_cycles = (bench_stop_tsc - bench_start_tsc) / freq_adjustment;
-        double bench_ipc = (double) ((uint64_t) NB_INST * NB_lOOP_IN * P_UNROLLING) / bench_cycles;
-        double bench_duration = chrono::duration_cast<chrono::duration<double>>(bench_stop_time - bench_start_time).count();
 
+        // Compute total cycles of the bench (adjusted on the real frequency)
+        uint64_t bench_cycles = (bench_stop_tsc - bench_start_tsc) / freq_adjustment;
+        
+        // Compute total time of the bench
+        double bench_duration = chrono::duration_cast<chrono::duration<double>>(bench_stop_time - bench_start_time).count();
+        
+        // Total instructions of the bench
+        double instructions = ((uint64_t) NB_INST * NB_lOOP_IN * P_UNROLLING);
+
+        // Instructions per cycles -> Instructions / Cycles count
+        double bench_ipc = (double) instructions / bench_cycles;
+
+        // Increment total result (for all the samples)
         result->bench_frequency += bench_freq;
         result->duration += bench_duration;
         result->cycles += bench_cycles;
         result->ipc += bench_ipc;
 
-        result->flop_cycle_sp += (uint64_t) ((double) ((uint64_t) NB_lOOP_IN * FLOP_SP_PER_LOOP) / bench_cycles);
-        result->flop_cycle_dp += (uint64_t) ((double) ((uint64_t) NB_lOOP_IN * FLOP_DP_PER_LOOP) / bench_cycles);
-        result->flops_sp += (uint64_t) ((double) ((uint64_t) NB_lOOP_IN * FLOP_SP_PER_LOOP) / bench_duration);
-        result->flops_dp += (uint64_t) ((double) ((uint64_t) NB_lOOP_IN * FLOP_DP_PER_LOOP) / bench_duration);
+        // Count flop per sample,
+        // A bench covers "NB_LOOP" sample
+        // A sample covers "NB_LOOP_IN" loops of "FLOP_SP_PER_LOOP" FLOP
+        double sp_flop_per_sample = ((uint64_t) NB_lOOP_IN * FLOP_SP_PER_LOOP);
+        double dp_flop_per_sample = ((uint64_t) NB_lOOP_IN * FLOP_DP_PER_LOOP);
+
+        result->flop_cycle_sp += sp_flop_per_sample / bench_cycles;
+        result->flop_cycle_dp += dp_flop_per_sample / bench_cycles;
+        result->flops_sp +=  sp_flop_per_sample / bench_duration;
+        result->flops_dp +=  dp_flop_per_sample / bench_duration;
         
     }
 
+    // Mean of samples
     result->base_frequency = base_freq;
     result->bench_frequency /= NB_lOOP;
     result->cycles /= NB_lOOP;
