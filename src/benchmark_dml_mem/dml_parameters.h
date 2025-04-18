@@ -81,6 +81,7 @@ public:
     int m_PID;
     int m_mode;
     int m_type;
+    bool m_is_simd;
 
     DML_DATA_TYPE (*m_BENCHMARK)(Dml_parameters *p, int step, int repeat, THEINT ops_per_scan);
     int m_GHZ = 0;

@@ -58,6 +58,7 @@ void Dml_parameters::print_configuration() {
 
     printf("  %-25s    %-10s \n", "Benchmark type", getValue(m_type).c_str());
     printf("  %-25s    %-10s \n", "Benchmark mode", getValue(m_mode).c_str());
+    printf("  %-25s    %-10s \n", "SIMD optimization", m_is_simd ? "Enabled" : "Disabled");
     printf("  %-25s    %-10s \n", "Matrix size", convert_size(m_MAT_SIZE).c_str());
     printf("  %-25s    %-10d \n", "Number of thread", mpi_size);
     printf("  %-25s    %-10s \n", "Memory page size", m_is_huge_pages ? "Huge Pages (2 MiB)" : "Default (4 KiB)");
@@ -122,7 +123,10 @@ int Dml_parameters::init_arguments(int argc, const char *argv[]) {
     //Select the correct benchmark
     //----- READ BENCHMARK -----
     if (m_type == BENCH_TYPE::READ) {
-        if (m_mode == BENCH_MODE::NORMAL) {
+        if (m_is_simd) {
+            m_BENCHMARK = sum_readspe_omp_simd;
+        }
+        else if (m_mode == BENCH_MODE::NORMAL) {
             if (m_UNROLL == UNROLL1) {
                 m_BENCHMARK = sum_read_unroll1;
             } else if (m_UNROLL == UNROLL2) {
@@ -139,7 +143,7 @@ int Dml_parameters::init_arguments(int argc, const char *argv[]) {
                 exit(-1);
             }
         }
-        if (m_mode == BENCH_MODE::SPECIAL) {
+        else if (m_mode == BENCH_MODE::SPECIAL) {
             if (m_UNROLL == UNROLL1) {
                 m_BENCHMARK = sum_read_unroll1; //without unrolling it is the same as normal mode
             } else if (m_UNROLL == UNROLL2) {
@@ -157,7 +161,7 @@ int Dml_parameters::init_arguments(int argc, const char *argv[]) {
             }
         }
 
-        if (m_mode == BENCH_MODE::INDEXED) {
+        else if (m_mode == BENCH_MODE::INDEXED) {
             if (m_UNROLL == UNROLL1) {
                 cout << "\nERROR: Not yet implemented\n";
                 exit(-1);
@@ -516,6 +520,16 @@ int Dml_parameters::setup_parser(int argc, const char *argv[]) {
             "-h"    // Flag token.
     );
 
+
+    opt.add(
+        "false", // Default.
+        0, // Required?
+        0, // Number of args expected.
+        0, // Delimiter if expecting multiple args.
+        "Use SIMD optimized function (only for READ SPECIAL mode)", // Help description.
+        "--simd" // Flag token.
+    );
+
     return 0;
 }
 
@@ -565,6 +579,12 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
         cout << "Error: please check the unroll argument: " << m_UNROLL << ": can be 1, 2, 4, 8, 16, 32, 64 \n";
         exit(EXIT_FAILURE);
     };
+
+    if (opt.isSet("--simd")) {
+        m_is_simd = true;
+    } else {
+        m_is_simd = false;
+    }
 
     opt.get("--verbose")->getInt(m_VERBOSE);
 

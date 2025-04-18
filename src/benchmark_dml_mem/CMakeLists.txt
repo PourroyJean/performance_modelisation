@@ -1,139 +1,172 @@
-# CONFIGURATION
-option(DML_BUILD_MPI                "Build the benchmark with MPI" OFF)
-option(DML_INST_TYPE=skylake-avx512 "Build the benchmark with INTEL_SKL_AVX512" OFF)
-option(DML_BUILD_AVX512 "Build the benchmark with AVX512" OFF)
-option(DML_USE_YAMB "Use YAMB lib annotation (YAMB must be compiled)" OFF)
+cmake_minimum_required(VERSION 3.15)
 
-#TODO
-#    - faire le readme.md
-#    - rendre possible l'affichage dans cmake -LA pour que ca affiche  un truc
-#    - coucou
+project(DmlBenchmark CXX)
 
+option(DML_BUILD_MPI "Build with MPI support" OFF)
+option(DML_USE_YAMB "Enable YAMB library annotation" OFF)
 
-#However, the file(GLOB...) allows for wildcard additions:
-file(GLOB SOURCES "*.cxx")
-file(GLOB COMMON_SOURCES "../common" "*.cxx")
+set(DML_INST_TYPE "native" CACHE STRING "Target CPU microarchitecture for optimization")
+message(STATUS "+++ Target Architecture Optimization (-march): ${DML_INST_TYPE}")
 
+get_filename_component(CMAKE_CURRENT_LIST_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-# COMPILER FLAG
-if(DML_INST_TYPE)
-    if ("${DML_INST_TYPE}" STREQUAL "INTEL_SKL_AVX512")
-        set (DML_FLAG_INST_TYPE "-march=skylake-avx512")
-        message("+++ DML_INST_TYPE (" "${DML_INST_TYPE}" ") flag = " ${DML_FLAG_INST_TYPE})
-    endif()
-endif()
+# Define source files for the executable
+set(DML_EXECUTABLE_SOURCES
+    "${CMAKE_CURRENT_LIST_DIR}/dml_main.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/dml_parameters.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/dml_benchmark.cpp"
+    "${CMAKE_CURRENT_LIST_DIR}/dml_misc.cpp"
+)
 
+set(CXX_STANDARD_FLAG "-std=c++11")
+set(ARCH_OPT_FLAG "-march=${DML_INST_TYPE}")
+set(BASE_OPT_FLAGS "-O3")
+set(LTO_FLAG "-flto")
 
+set(DML_EXECUTABLE_NAME "dml")
+set(MPI_DEFINITIONS "")
+set(MPI_INCLUDE_DIRS "")
+set(MPI_LIBRARIES "")
+set(MPI_COMPILE_FLAGS "")
+set(MPI_LINK_FLAGS "")
 
-if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
-    # MacOS
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
-    # GCC
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 ${DML_FLAG_INST_TYPE}")
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel")
-    # ICC
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3 ${DML_FLAG_INST_TYPE} -qopt-streaming-stores=always")
-elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-    # Visual Studio C++
-else()
-    # Default
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -O3")
-endif()
+# Find OpenMP
+find_package(OpenMP REQUIRED)
 
-# enable or not the yamb annotation lib
-if(DML_USE_YAMB)
-    message("+++ YAMB : enabled")
-    #Enable C++ code
-    add_definitions(-DYAMB_ENABLED)
-
-    #Generate the code annotation library
-    add_library(libAnno SHARED IMPORTED)
-    set_property(TARGET libAnno PROPERTY IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so")
-else()
-    message("+++ YAMB : disabled")
-endif()
-
-
-
-
-# MPI
-set (DML_EXECUTABLE "xxx")
+# Handle MPI build options
 if(DML_BUILD_MPI)
     find_package(MPI REQUIRED)
-
     if (MPI_FOUND)
-        include_directories(${MPI_INCLUDE_PATH})
-        message("+++ The benchmark will be compiled with MPI library" )
-        add_definitions(-DCOMPILED_WITH_MPI)
-        set (DML_EXECUTABLE "dml_mpi")
-    else ()
-        #should never happen as MPI is required
-        message(WARNING "/!\ MPI requested but not found by Cmake")
-        set (DML_EXECUTABLE "dml")
-
+        message(STATUS "+++ MPI Found: Building with MPI support.")
+        set(DML_EXECUTABLE_NAME "dml_mpi")
+        set(MPI_DEFINITIONS "-DCOMPILED_WITH_MPI")
+        set(MPI_INCLUDE_DIRS ${MPI_CXX_INCLUDE_PATH})
+        set(MPI_LIBRARIES ${MPI_CXX_LIBRARIES})
+        set(MPI_COMPILE_FLAGS ${MPI_CXX_COMPILE_FLAGS})
+        set(MPI_LINK_FLAGS ${MPI_CXX_LINK_FLAGS})
+    else()
+        message(WARNING "/!\ MPI requested but not found by CMake.")
     endif()
 else()
-    message("+++ MPI NOT REQUIRED")
-    set (DML_EXECUTABLE "dml")
+    message(STATUS "+++ MPI support disabled.")
 endif()
 
-
-
-
-
-
-
-
-include_directories(../common)
-include_directories(../tool_yamb/)
-
-
-add_executable(${DML_EXECUTABLE} dml_main.cpp dml_parameters.cpp dml_benchmark.cpp ${COMMON_SOURCES} dml_misc.cpp)
-
-
-#INCLUDE DIRECTORY
-target_include_directories(${DML_EXECUTABLE} PRIVATE ${MPI_CXX_INCLUDE_PATH})
-
-#LINK LIBRARIES
-target_link_libraries (${DML_EXECUTABLE} "misc" )
+set(YAMB_DEFINITIONS "")
+set(YAMB_LIBRARIES "")
+# Handle YAMB annotation options
 if(DML_USE_YAMB)
-    target_link_libraries (${DML_EXECUTABLE} "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so"  )
+    message(STATUS "+++ YAMB annotation enabled.")
+    set(YAMB_LIB_PATH "${CMAKE_BINARY_DIR}/lib/libcodeAnnotation.so")
+    if(EXISTS "${YAMB_LIB_PATH}")
+         add_library(libAnno SHARED IMPORTED GLOBAL)
+         set_property(TARGET libAnno PROPERTY IMPORTED_LOCATION "${YAMB_LIB_PATH}")
+         set(YAMB_LIBRARIES libAnno)
+         set(YAMB_DEFINITIONS "-DYAMB_ENABLED")
+    else()
+        message(WARNING "/!\ YAMB enabled, but library not found at ${YAMB_LIB_PATH}. Annotation will not be linked.")
+    endif()
+else()
+    message(STATUS "+++ YAMB annotation disabled.")
 endif()
-target_link_libraries (${DML_EXECUTABLE} "${MPI_CXX_LIBRARIES}")
 
+add_executable(${DML_EXECUTABLE_NAME} ${DML_EXECUTABLE_SOURCES})
 
+get_filename_component(CMAKE_CURRENT_LIST_DIR "${CMAKE_CURRENT_LIST_FILE}" PATH)
 
-if(MPI_COMPILE_FLAGS)
-    set_target_properties(${DML_EXECUTABLE} PROPERTIES COMPILE_FLAGS "${MPI_COMPILE_FLAGS}")
+target_include_directories(${DML_EXECUTABLE_NAME} PRIVATE
+    "${CMAKE_CURRENT_LIST_DIR}"
+    "${CMAKE_CURRENT_LIST_DIR}/../tool_yamb"
+    ${MPI_INCLUDE_DIRS}
+)
+
+target_compile_definitions(${DML_EXECUTABLE_NAME} PRIVATE
+    ${MPI_DEFINITIONS}
+    ${YAMB_DEFINITIONS}
+)
+
+target_compile_options(${DML_EXECUTABLE_NAME} PRIVATE
+    ${CXX_STANDARD_FLAG}
+    ${BASE_OPT_FLAGS}
+    ${ARCH_OPT_FLAG}
+    ${MPI_COMPILE_FLAGS}
+    ${OpenMP_CXX_FLAGS}
+)
+
+# Compiler-specific flags
+if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang|GNU")
+    target_compile_options(${DML_EXECUTABLE_NAME} PRIVATE
+        "-fopenmp-simd"
+        "-funroll-loops"
+        "-ffast-math"
+        "-fno-exceptions"
+        ${LTO_FLAG}
+        
+    )
+    if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
+         if("${DML_INST_TYPE}" MATCHES "znver[0-9]+")
+             target_compile_options(${DML_EXECUTABLE_NAME} PRIVATE 
+             "-fnt-store"
+             "-Rpass=loop-vectorize" 
+             "-Rpass-missed=loop-vectorize" 
+             "-Rpass-analysis=loop-vectorize"
+             )
+             message(STATUS "+++ Added Clang/AOCC AMD-specific flag: -fnt-store")
+         endif()
+    elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        target_compile_options(${DML_EXECUTABLE_NAME} PRIVATE
+            "-fprefetch-loop-arrays"
+            "-fomit-frame-pointer"
+            "-fstrict-aliasing"
+        )
+        message(STATUS "+++ Added GCC-specific flags: -fprefetch-loop-arrays -fomit-frame-pointer")
+    endif()
+
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Intel" OR "${CMAKE_CXX_COMPILER_ID}" STREQUAL "IntelLLVM")
+    target_compile_options(${DML_EXECUTABLE_NAME} PRIVATE
+        "-ftz"
+        "-qopenmp-simd"
+    )
+
+elseif ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
+    target_compile_options(${DML_EXECUTABLE_NAME} PRIVATE
+        "/O2"
+        "/arch:AVX2"
+        "/EHsc-"
+        "/openmp:experimental"
+    )
+    set(LTO_FLAG "/GL")
+    message(STATUS "+++ Added MSVC-specific flags")
+
+else()
+    message(WARNING "+++ Unknown CXX Compiler ID: ${CMAKE_CXX_COMPILER_ID}. Applying base optimizations only.")
 endif()
 
-if(MPI_LINK_FLAGS)
-    set_target_properties(${DML_EXECUTABLE} PROPERTIES LINK_FLAGS "${MPI_LINK_FLAGS}")
-endif()
+target_link_libraries(${DML_EXECUTABLE_NAME} PRIVATE
+    misc
+    anyOptionlib
+    ${MPI_LIBRARIES}
+    ${YAMB_LIBRARIES}
+    ${OpenMP_CXX_LIBRARIES}
+)
 
+target_link_options(${DML_EXECUTABLE_NAME} PRIVATE
+    ${LTO_FLAG}
+    ${OpenMP_CXX_FLAGS}
+)
 
-set_target_properties( ${DML_EXECUTABLE}
+# Set output directory for the executable
+set_target_properties(${DML_EXECUTABLE_NAME}
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/benchmark_dml_mem"
 )
 
+message(STATUS "+++ Executable: ${DML_EXECUTABLE_NAME}")
+message(STATUS "+++ Build Type: ${CMAKE_BUILD_TYPE}")
+message(STATUS "+++ CXX Compiler: ${CMAKE_CXX_COMPILER} (ID: ${CMAKE_CXX_COMPILER_ID})")
+message(STATUS "+++ CXX Flags: ${CMAKE_CXX_FLAGS} (Note: Target-specific flags applied separately)")
 
-#MESSAGE("MPI_CXX_LIBRARIES = ${MPI_CXX_LIBRARIES}")
+get_target_property(TARGET_COMPILE_OPTIONS ${DML_EXECUTABLE_NAME} INTERFACE_COMPILE_OPTIONS)
+message(STATUS "+++ Final compile options for ${DML_EXECUTABLE_NAME}: ${TARGET_COMPILE_OPTIONS}")
 
-
-#file(GLOB KG_COPY_FILES
-#        "script/*.py"
-#        "script/*.sh"
-#        "kg_template_start.cpp"
-#        "kg_template_end.cpp"
-#        )
-#
-#
-#file(COPY ${KG_COPY_FILES} DESTINATION ${CMAKE_BINARY_DIR}/bin/benchmark_kernel_generator)
-
-
-
-
-
-
+get_target_property(TARGET_LINK_OPTIONS ${DML_EXECUTABLE_NAME} INTERFACE_LINK_OPTIONS)
+message(STATUS "+++ Final link options for ${DML_EXECUTABLE_NAME}: ${TARGET_LINK_OPTIONS}")

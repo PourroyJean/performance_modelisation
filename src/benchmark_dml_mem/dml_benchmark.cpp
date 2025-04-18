@@ -3,20 +3,76 @@
 //
 
 #include "dml_benchmark.h"
+#include <omp.h>
 
+DML_DATA_TYPE sum_readspe_omp_simd(Dml_parameters *p,
+                                   int stride_size_nb_elem,
+                                   int repeat,
+                                   THEINT ops_per_scan)
+{
+    THEINT steps = ops_per_scan / 8;
+    int xstep = stride_size_nb_elem * 8;
+    DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
+    DML_DATA_TYPE sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0;
 
-DML_DATA_TYPE sum_read_unroll1(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
-//    printf ("\n");
-//    printf ("_unroll_1_ Mat            %p \n", mat);
-//    printf ("_unroll_1_ Mat[0]         %f \n", mat[0]);
-//    cout << "\n COUCOU unroll 1 - mat : \n" << flush;
+    for (int rep = 0; rep < repeat; ++rep)
+    {
+        DML_DATA_TYPE *p1 = mat;
+        DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
+        DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
+        DML_DATA_TYPE *p4 = p3 + stride_size_nb_elem;
+        DML_DATA_TYPE *p5 = p4 + stride_size_nb_elem;
+        DML_DATA_TYPE *p6 = p5 + stride_size_nb_elem;
+        DML_DATA_TYPE *p7 = p6 + stride_size_nb_elem;
+        DML_DATA_TYPE *p8 = p7 + stride_size_nb_elem;
+
+#pragma omp simd reduction(+ : sum1, sum2, sum3, sum4, sum5, sum6, sum7, sum8)
+        for (THEINT i = 0; i < steps; ++i)
+        {
+            sum1 += *p1;
+            p1 += xstep;
+            sum2 += *p2;
+            p2 += xstep;
+            sum3 += *p3;
+            p3 += xstep;
+            sum4 += *p4;
+            p4 += xstep;
+            sum5 += *p5;
+            p5 += xstep;
+            sum6 += *p6;
+            p6 += xstep;
+            sum7 += *p7;
+            p7 += xstep;
+            sum8 += *p8;
+            p8 += xstep;
+        }
+    }
+    sum1 += sum2;
+    sum3 += sum4;
+    sum5 += sum6;
+    sum7 += sum8;
+    sum1 += sum3;
+    sum5 += sum7;
+    sum1 += sum5;
+
+    return sum1;
+}
+
+DML_DATA_TYPE sum_read_unroll1(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
+    //    printf ("\n");
+    //    printf ("_unroll_1_ Mat            %p \n", mat);
+    //    printf ("_unroll_1_ Mat[0]         %f \n", mat[0]);
+    //    cout << "\n COUCOU unroll 1 - mat : \n" << flush;
 
     THEINT steps;
     DML_DATA_TYPE sum = 0;
     int rep;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum += *p1;
             p1 += stride_size_nb_elem;
         }
@@ -24,45 +80,49 @@ DML_DATA_TYPE sum_read_unroll1(Dml_parameters *p, int stride_size_nb_elem, int r
     return (sum);
 }
 
-
-DML_DATA_TYPE sum_read_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_read_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 2;
     int rep;
     DML_DATA_TYPE sum = 0;
     ops_per_scan /= 2;
-//    printf ("\n_sum_read_unroll2_ stride_size_nb_elem           %d \n", stride_size_nb_elem);
-//    printf ("_sum_read_unroll2_ xstep          %d \n", xstep);
-//    printf ("_sum_read_unroll2_ ops_per_scan   %d \n", ops_per_scan);
-//    printf ("_sum_read_unroll2_ repeat         %d \n", repeat);
+    //    printf ("\n_sum_read_unroll2_ stride_size_nb_elem           %d \n", stride_size_nb_elem);
+    //    printf ("_sum_read_unroll2_ xstep          %d \n", xstep);
+    //    printf ("_sum_read_unroll2_ ops_per_scan   %d \n", ops_per_scan);
+    //    printf ("_sum_read_unroll2_ repeat         %d \n", repeat);
 
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
-//        cout << rep << " (" <<  mat[0] << ") " <<  flush;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        //        cout << rep << " (" <<  mat[0] << ") " <<  flush;
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum += *p1;
             p1 += xstep;
             sum += *p2;
             p2 += xstep;
         }
     }
-//    exit (-1);
+    //    exit (-1);
 
     return (sum);
 }
 
-
-DML_DATA_TYPE sum_read_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_read_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 4;
     DML_DATA_TYPE sum = 0;
     int rep;
     ops_per_scan /= 4;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
         DML_DATA_TYPE *p4 = p3 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum += *p1;
             p1 += xstep;
             sum += *p2;
@@ -77,12 +137,14 @@ DML_DATA_TYPE sum_read_unroll4(Dml_parameters *p, int stride_size_nb_elem, int r
 }
 
 //
-DML_DATA_TYPE sum_read_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_read_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 8;
     DML_DATA_TYPE sum = 0;
     int rep;
     ops_per_scan /= 8;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
@@ -91,7 +153,8 @@ DML_DATA_TYPE sum_read_unroll8(Dml_parameters *p, int stride_size_nb_elem, int r
         DML_DATA_TYPE *p6 = p5 + stride_size_nb_elem;
         DML_DATA_TYPE *p7 = p6 + stride_size_nb_elem;
         DML_DATA_TYPE *p8 = p7 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum += *p1;
             p1 += xstep;
             sum += *p2;
@@ -113,7 +176,7 @@ DML_DATA_TYPE sum_read_unroll8(Dml_parameters *p, int stride_size_nb_elem, int r
     return (sum);
 }
 //
-//DML_DATA_TYPE sum_read_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+// DML_DATA_TYPE sum_read_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
 //    THEINT steps, xstep = 8 * 8;
 //    DML_DATA_TYPE sum = 0;
 //    int rep;
@@ -151,15 +214,18 @@ DML_DATA_TYPE sum_read_unroll8(Dml_parameters *p, int stride_size_nb_elem, int r
 
 // ------------ SPE
 
-DML_DATA_TYPE sum_readspe_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_readspe_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 2;
     DML_DATA_TYPE sum1 = 0, sum2 = 0;
     int rep;
     ops_per_scan /= 2;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += *p1;
             p1 += xstep;
             sum2 += *p2;
@@ -170,17 +236,20 @@ DML_DATA_TYPE sum_readspe_unroll2(Dml_parameters *p, int stride_size_nb_elem, in
     return (sum1);
 }
 
-DML_DATA_TYPE sum_readspe_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_readspe_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 4;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
     int rep;
     ops_per_scan /= 4;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
         DML_DATA_TYPE *p4 = p3 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += *p1;
             p1 += xstep;
             sum2 += *p2;
@@ -197,12 +266,14 @@ DML_DATA_TYPE sum_readspe_unroll4(Dml_parameters *p, int stride_size_nb_elem, in
     return (sum1);
 }
 
-DML_DATA_TYPE sum_readspe_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_readspe_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 8;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0;
     int rep;
     ops_per_scan /= 8;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
@@ -211,7 +282,8 @@ DML_DATA_TYPE sum_readspe_unroll8(Dml_parameters *p, int stride_size_nb_elem, in
         DML_DATA_TYPE *p6 = p5 + stride_size_nb_elem;
         DML_DATA_TYPE *p7 = p6 + stride_size_nb_elem;
         DML_DATA_TYPE *p8 = p7 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += *p1;
             p1 += xstep;
             sum2 += *p2;
@@ -240,12 +312,14 @@ DML_DATA_TYPE sum_readspe_unroll8(Dml_parameters *p, int stride_size_nb_elem, in
     return (sum1);
 }
 
-DML_DATA_TYPE sum_readspe_unroll16(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_readspe_unroll16(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 16;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0, sum9 = 0, sum10 = 0, sum11 = 0, sum12 = 0, sum13 = 0, sum14 = 0, sum15 = 0, sum16 = 0;
     int rep;
     ops_per_scan /= 16;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
@@ -263,7 +337,8 @@ DML_DATA_TYPE sum_readspe_unroll16(Dml_parameters *p, int stride_size_nb_elem, i
         DML_DATA_TYPE *p15 = p14 + stride_size_nb_elem;
         DML_DATA_TYPE *p16 = p15 + stride_size_nb_elem;
 
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += *p1;
             p1 += xstep;
             sum2 += *p2;
@@ -297,20 +372,20 @@ DML_DATA_TYPE sum_readspe_unroll16(Dml_parameters *p, int stride_size_nb_elem, i
             p15 += xstep;
             sum16 += *p16;
             p16 += xstep;
-
         }
     }
     return (sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7 + sum8 + sum9 + sum10 + sum11 + sum12 + sum13 + sum14 +
             sum15 + sum16);
 }
 
-
-DML_DATA_TYPE sum_readspe_unroll32(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_readspe_unroll32(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 32;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0, sum9 = 0, sum10 = 0, sum11 = 0, sum12 = 0, sum13 = 0, sum14 = 0, sum15 = 0, sum16 = 0, sum17 = 0, sum18 = 0, sum19 = 0, sum20 = 0, sum21 = 0, sum22 = 0, sum23 = 0, sum24 = 0, sum25 = 0, sum26 = 0, sum27 = 0, sum28 = 0, sum29 = 0, sum30 = 0, sum31 = 0, sum32 = 0;
     int rep;
     ops_per_scan /= 32;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
@@ -344,7 +419,8 @@ DML_DATA_TYPE sum_readspe_unroll32(Dml_parameters *p, int stride_size_nb_elem, i
         DML_DATA_TYPE *p31 = p30 + stride_size_nb_elem;
         DML_DATA_TYPE *p32 = p31 + stride_size_nb_elem;
 
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += *p1;
             p1 += xstep;
             sum2 += *p2;
@@ -409,21 +485,19 @@ DML_DATA_TYPE sum_readspe_unroll32(Dml_parameters *p, int stride_size_nb_elem, i
             p31 += xstep;
             sum32 += *p32;
             p32 += xstep;
-
-
         }
     }
     return (sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7 + sum8 + sum9 + sum10 + sum11 + sum12 + sum13 + sum14 + sum15 + sum16 + sum17 + sum18 + sum19 + sum20 + sum21 + sum22 + sum23 + sum24 + sum25 + sum26 + sum27 + sum28 + sum29 + sum30 + sum31 + sum32);
 }
 
-
-
-DML_DATA_TYPE sum_readspe_unroll64(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_readspe_unroll64(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 64;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0, sum9 = 0, sum10 = 0, sum11 = 0, sum12 = 0, sum13 = 0, sum14 = 0, sum15 = 0, sum16 = 0, sum17 = 0, sum18 = 0, sum19 = 0, sum20 = 0, sum21 = 0, sum22 = 0, sum23 = 0, sum24 = 0, sum25 = 0, sum26 = 0, sum27 = 0, sum28 = 0, sum29 = 0, sum30 = 0, sum31 = 0, sum32 = 0, sum33 = 0, sum34 = 0, sum35 = 0, sum36 = 0, sum37 = 0, sum38 = 0, sum39 = 0, sum40 = 0, sum41 = 0, sum42 = 0, sum43 = 0, sum44 = 0, sum45 = 0, sum46 = 0, sum47 = 0, sum48 = 0, sum49 = 0, sum50 = 0, sum51 = 0, sum52 = 0, sum53 = 0, sum54 = 0, sum55 = 0, sum56 = 0, sum57 = 0, sum58 = 0, sum59 = 0, sum60 = 0, sum61 = 0, sum62 = 0, sum63 = 0, sum64 = 0;
     int rep;
     ops_per_scan /= 64;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
@@ -489,7 +563,8 @@ DML_DATA_TYPE sum_readspe_unroll64(Dml_parameters *p, int stride_size_nb_elem, i
         DML_DATA_TYPE *p63 = p62 + stride_size_nb_elem;
         DML_DATA_TYPE *p64 = p63 + stride_size_nb_elem;
 
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += *p1;
             p1 += xstep;
             sum2 += *p2;
@@ -618,7 +693,6 @@ DML_DATA_TYPE sum_readspe_unroll64(Dml_parameters *p, int stride_size_nb_elem, i
             p63 += xstep;
             sum64 += *p64;
             p64 += xstep;
-
         }
     }
     return (sum1 + sum2 + sum3 + sum4 + sum5 + sum6 + sum7 + sum8 + sum9 + sum10 + sum11 + sum12 + sum13 + sum14 + sum15 + sum16 + sum17 + sum18 + sum19 + sum20 + sum21 + sum22 + sum23 + sum24 + sum25 + sum26 + sum27 + sum28 + sum29 + sum30 + sum31 + sum32 + sum33 + sum34 + sum35 + sum36 + sum37 + sum38 + sum39 + sum40 + sum41 + sum42 + sum43 + sum44 + sum45 + sum46 + sum47 + sum48 + sum49 + sum50 + sum51 + sum52 + sum53 + sum54 + sum55 + sum56 + sum57 + sum58 + sum59 + sum60 + sum61 + sum62 + sum63 + sum64);
@@ -626,15 +700,17 @@ DML_DATA_TYPE sum_readspe_unroll64(Dml_parameters *p, int stride_size_nb_elem, i
 
 //-------------------- INDEXED
 
-
-DML_DATA_TYPE sum_readind_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_readind_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 2;
     DML_DATA_TYPE sum1 = 0, sum2 = 0;
     int rep;
     ops_per_scan /= 2;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += p1[0];
             sum2 += p1[stride_size_nb_elem];
             p1 += xstep;
@@ -644,7 +720,8 @@ DML_DATA_TYPE sum_readind_unroll2(Dml_parameters *p, int stride_size_nb_elem, in
     return (sum1);
 }
 
-DML_DATA_TYPE sum_readind_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_readind_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 4;
     int rep;
     int step2 = stride_size_nb_elem + stride_size_nb_elem;
@@ -652,10 +729,13 @@ DML_DATA_TYPE sum_readind_unroll4(Dml_parameters *p, int stride_size_nb_elem, in
     int step4 = step3 + stride_size_nb_elem;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
     ops_per_scan /= 4;
-    for (rep = 0; rep < repeat; rep++) {
-        if (p->m_NUM_INDEX == 1) {
+    for (rep = 0; rep < repeat; rep++)
+    {
+        if (p->m_NUM_INDEX == 1)
+        {
             DML_DATA_TYPE *p1 = mat;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 sum2 += p1[stride_size_nb_elem];
                 sum3 += p1[step2];
@@ -663,10 +743,12 @@ DML_DATA_TYPE sum_readind_unroll4(Dml_parameters *p, int stride_size_nb_elem, in
                 p1 += xstep;
             }
         }
-        if (p->m_NUM_INDEX == 2) {
+        if (p->m_NUM_INDEX == 2)
+        {
             DML_DATA_TYPE *p1 = mat;
             DML_DATA_TYPE *p2 = mat + step2;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 sum2 += p1[stride_size_nb_elem];
                 p2 += xstep;
@@ -682,7 +764,8 @@ DML_DATA_TYPE sum_readind_unroll4(Dml_parameters *p, int stride_size_nb_elem, in
     return (sum1);
 }
 
-DML_DATA_TYPE sum_readind_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_readind_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 8;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0;
     int rep;
@@ -693,10 +776,13 @@ DML_DATA_TYPE sum_readind_unroll8(Dml_parameters *p, int stride_size_nb_elem, in
     int step6 = step5 + stride_size_nb_elem;
     int step7 = step6 + stride_size_nb_elem;
     ops_per_scan /= 8;
-    for (rep = 0; rep < repeat; rep++) {
-        if (p->m_NUM_INDEX == 1) {
+    for (rep = 0; rep < repeat; rep++)
+    {
+        if (p->m_NUM_INDEX == 1)
+        {
             DML_DATA_TYPE *p1 = mat;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 sum2 += p1[stride_size_nb_elem];
                 sum3 += p1[step2];
@@ -708,10 +794,12 @@ DML_DATA_TYPE sum_readind_unroll8(Dml_parameters *p, int stride_size_nb_elem, in
                 p1 += xstep;
             }
         }
-        if (p->m_NUM_INDEX == 2) {
+        if (p->m_NUM_INDEX == 2)
+        {
             DML_DATA_TYPE *p1 = mat;
             DML_DATA_TYPE *p2 = mat + step4;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 sum2 += p1[stride_size_nb_elem];
                 sum3 += p1[step2];
@@ -724,12 +812,14 @@ DML_DATA_TYPE sum_readind_unroll8(Dml_parameters *p, int stride_size_nb_elem, in
                 p2 += xstep;
             }
         }
-        if (p->m_NUM_INDEX == 4) {
+        if (p->m_NUM_INDEX == 4)
+        {
             DML_DATA_TYPE *p1 = mat;
             DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem * 2;
             DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem * 2;
             DML_DATA_TYPE *p4 = p3 + stride_size_nb_elem * 2;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 sum2 += p1[stride_size_nb_elem];
                 p1 += xstep;
@@ -755,10 +845,6 @@ DML_DATA_TYPE sum_readind_unroll8(Dml_parameters *p, int stride_size_nb_elem, in
     return (sum1);
 }
 
-
-
-
-
 //
 //                                   WRITE
 //                                   WRITE
@@ -766,15 +852,17 @@ DML_DATA_TYPE sum_readind_unroll8(Dml_parameters *p, int stride_size_nb_elem, in
 //                                   WRITE
 //
 
-
-DML_DATA_TYPE sum_write_unroll1(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_write_unroll1(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps;
     DML_DATA_TYPE sum = 0;
     DML_DATA_TYPE wr = towrite;
     int rep;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum += *p1;
             *p1 += wr;
             p1 += stride_size_nb_elem;
@@ -783,17 +871,19 @@ DML_DATA_TYPE sum_write_unroll1(Dml_parameters *p, int stride_size_nb_elem, int 
     return (sum);
 }
 
-
-DML_DATA_TYPE sum_write_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_write_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 2;
     DML_DATA_TYPE sum = 0;
     int rep;
     ops_per_scan /= 2;
     DML_DATA_TYPE wr = towrite;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum += *p1;
             *p1 += wr;
             p1 += xstep;
@@ -805,19 +895,21 @@ DML_DATA_TYPE sum_write_unroll2(Dml_parameters *p, int stride_size_nb_elem, int 
     return (sum);
 }
 
-
-DML_DATA_TYPE sum_write_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_write_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 4;
     DML_DATA_TYPE sum = 0;
     int rep;
     ops_per_scan /= 4;
     DML_DATA_TYPE wr = towrite;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
         DML_DATA_TYPE *p4 = p3 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum += *p1;
             *p1 += wr;
             p1 += xstep;
@@ -835,14 +927,15 @@ DML_DATA_TYPE sum_write_unroll4(Dml_parameters *p, int stride_size_nb_elem, int 
     return (sum);
 }
 
-
-DML_DATA_TYPE sum_write_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_write_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 8;
     DML_DATA_TYPE sum = 0;
     int rep;
     ops_per_scan /= 8;
     DML_DATA_TYPE wr = towrite;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
@@ -851,7 +944,8 @@ DML_DATA_TYPE sum_write_unroll8(Dml_parameters *p, int stride_size_nb_elem, int 
         DML_DATA_TYPE *p6 = p5 + stride_size_nb_elem;
         DML_DATA_TYPE *p7 = p6 + stride_size_nb_elem;
         DML_DATA_TYPE *p8 = p7 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum += *p1;
             *p1 += wr;
             p1 += xstep;
@@ -883,16 +977,19 @@ DML_DATA_TYPE sum_write_unroll8(Dml_parameters *p, int stride_size_nb_elem, int 
 
 // ------------ SPE
 
-DML_DATA_TYPE sum_writespe_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_writespe_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 2;
     DML_DATA_TYPE sum1 = 0, sum2 = 0;
     int rep;
     ops_per_scan /= 2;
     DML_DATA_TYPE wr = towrite;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += *p1;
             *p1 += wr;
             p1 += xstep;
@@ -905,18 +1002,21 @@ DML_DATA_TYPE sum_writespe_unroll2(Dml_parameters *p, int stride_size_nb_elem, i
     return (sum1);
 }
 
-DML_DATA_TYPE sum_writespe_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_writespe_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 4;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
     int rep;
     ops_per_scan /= 4;
     DML_DATA_TYPE wr = towrite;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
         DML_DATA_TYPE *p4 = p3 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += *p1;
             *p1 += wr;
             p1 += xstep;
@@ -937,13 +1037,15 @@ DML_DATA_TYPE sum_writespe_unroll4(Dml_parameters *p, int stride_size_nb_elem, i
     return (sum1);
 }
 
-DML_DATA_TYPE sum_writespe_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_writespe_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 8;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0;
     int rep;
     ops_per_scan /= 8;
     DML_DATA_TYPE wr = towrite;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
         DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
@@ -952,7 +1054,8 @@ DML_DATA_TYPE sum_writespe_unroll8(Dml_parameters *p, int stride_size_nb_elem, i
         DML_DATA_TYPE *p6 = p5 + stride_size_nb_elem;
         DML_DATA_TYPE *p7 = p6 + stride_size_nb_elem;
         DML_DATA_TYPE *p8 = p7 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += *p1;
             *p1 += wr;
             p1 += xstep;
@@ -991,16 +1094,18 @@ DML_DATA_TYPE sum_writespe_unroll8(Dml_parameters *p, int stride_size_nb_elem, i
 
 //-------------------- INDEXED
 
-
-DML_DATA_TYPE sum_writeind_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_writeind_unroll2(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 2;
     DML_DATA_TYPE sum1 = 0, sum2 = 0;
     int rep;
     ops_per_scan /= 2;
     DML_DATA_TYPE wr = towrite;
-    for (rep = 0; rep < repeat; rep++) {
+    for (rep = 0; rep < repeat; rep++)
+    {
         DML_DATA_TYPE *p1 = mat;
-        for (steps = 0; steps < ops_per_scan; steps++) {
+        for (steps = 0; steps < ops_per_scan; steps++)
+        {
             sum1 += p1[0];
             p1[0] += wr;
             sum2 += p1[stride_size_nb_elem];
@@ -1012,7 +1117,8 @@ DML_DATA_TYPE sum_writeind_unroll2(Dml_parameters *p, int stride_size_nb_elem, i
     return (sum1);
 }
 
-DML_DATA_TYPE sum_writeind_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_writeind_unroll4(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 4;
     int rep;
     int step2 = stride_size_nb_elem + stride_size_nb_elem;
@@ -1021,10 +1127,13 @@ DML_DATA_TYPE sum_writeind_unroll4(Dml_parameters *p, int stride_size_nb_elem, i
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
     ops_per_scan /= 4;
     DML_DATA_TYPE wr = towrite;
-    for (rep = 0; rep < repeat; rep++) {
-        if (p->m_NUM_INDEX == 1) {
+    for (rep = 0; rep < repeat; rep++)
+    {
+        if (p->m_NUM_INDEX == 1)
+        {
             DML_DATA_TYPE *p1 = mat;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 p1[0] += wr;
                 sum2 += p1[stride_size_nb_elem];
@@ -1036,10 +1145,12 @@ DML_DATA_TYPE sum_writeind_unroll4(Dml_parameters *p, int stride_size_nb_elem, i
                 p1 += xstep;
             }
         }
-        if (p->m_NUM_INDEX == 2) {
+        if (p->m_NUM_INDEX == 2)
+        {
             DML_DATA_TYPE *p1 = mat;
             DML_DATA_TYPE *p2 = mat + step2;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 p1[0] += wr;
                 sum2 += p1[stride_size_nb_elem];
@@ -1059,7 +1170,8 @@ DML_DATA_TYPE sum_writeind_unroll4(Dml_parameters *p, int stride_size_nb_elem, i
     return (sum1);
 }
 
-DML_DATA_TYPE sum_writeind_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan) {
+DML_DATA_TYPE sum_writeind_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+{
     THEINT steps, xstep = stride_size_nb_elem * 8;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0;
     int rep;
@@ -1071,10 +1183,13 @@ DML_DATA_TYPE sum_writeind_unroll8(Dml_parameters *p, int stride_size_nb_elem, i
     int step7 = step6 + stride_size_nb_elem;
     ops_per_scan /= 8;
     DML_DATA_TYPE wr = towrite;
-    for (rep = 0; rep < repeat; rep++) {
-        if (p->m_NUM_INDEX == 1) {
+    for (rep = 0; rep < repeat; rep++)
+    {
+        if (p->m_NUM_INDEX == 1)
+        {
             DML_DATA_TYPE *p1 = mat;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 p1[0] += wr;
                 sum2 += p1[stride_size_nb_elem];
@@ -1094,10 +1209,12 @@ DML_DATA_TYPE sum_writeind_unroll8(Dml_parameters *p, int stride_size_nb_elem, i
                 p1 += xstep;
             }
         }
-        if (p->m_NUM_INDEX == 2) {
+        if (p->m_NUM_INDEX == 2)
+        {
             DML_DATA_TYPE *p1 = mat;
             DML_DATA_TYPE *p2 = mat + step4;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 p1[0] += wr;
                 sum2 += p1[stride_size_nb_elem];
@@ -1118,12 +1235,14 @@ DML_DATA_TYPE sum_writeind_unroll8(Dml_parameters *p, int stride_size_nb_elem, i
                 p2 += xstep;
             }
         }
-        if (p->m_NUM_INDEX == 4) {
+        if (p->m_NUM_INDEX == 4)
+        {
             DML_DATA_TYPE *p1 = mat;
             DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem * 2;
             DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem * 2;
             DML_DATA_TYPE *p4 = p3 + stride_size_nb_elem * 2;
-            for (steps = 0; steps < ops_per_scan; steps++) {
+            for (steps = 0; steps < ops_per_scan; steps++)
+            {
                 sum1 += p1[0];
                 p1[0] += wr;
                 sum2 += p1[stride_size_nb_elem];
