@@ -9,7 +9,7 @@
 #include "dml_parameters.h"
 
 
-static double towrite = 03.0592;
+static DML_DATA_TYPE towrite = DML_DATA_TYPE(2.0);
 
 DML_DATA_TYPE sum_readspe_omp_simd(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);
 DML_DATA_TYPE sum_read_unroll1  (Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan);

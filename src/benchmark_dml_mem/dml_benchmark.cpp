@@ -3,59 +3,51 @@
 //
 
 #include "dml_benchmark.h"
-#include <omp.h>
+// #include <omp.h>
 
 DML_DATA_TYPE sum_readspe_omp_simd(Dml_parameters *p,
                                    int stride_size_nb_elem,
                                    int repeat,
                                    THEINT ops_per_scan)
 {
+    DML_DATA_TYPE sum = 0;
+
     THEINT steps = ops_per_scan / 8;
     int xstep = stride_size_nb_elem * 8;
-    DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0;
-    DML_DATA_TYPE sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0;
-
     for (int rep = 0; rep < repeat; ++rep)
     {
-        DML_DATA_TYPE *p1 = mat;
-        DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
-        DML_DATA_TYPE *p3 = p2 + stride_size_nb_elem;
-        DML_DATA_TYPE *p4 = p3 + stride_size_nb_elem;
-        DML_DATA_TYPE *p5 = p4 + stride_size_nb_elem;
-        DML_DATA_TYPE *p6 = p5 + stride_size_nb_elem;
-        DML_DATA_TYPE *p7 = p6 + stride_size_nb_elem;
-        DML_DATA_TYPE *p8 = p7 + stride_size_nb_elem;
+        DML_DATA_TYPE local_sum = 0;
+        DML_DATA_TYPE *__restrict p1 = mat;
+        DML_DATA_TYPE *__restrict p2 = mat + stride_size_nb_elem;
+        DML_DATA_TYPE *__restrict p3 = mat + 2 * stride_size_nb_elem;
+        DML_DATA_TYPE *__restrict p4 = mat + 3 * stride_size_nb_elem;
+        DML_DATA_TYPE *__restrict p5 = mat + 4 * stride_size_nb_elem;
+        DML_DATA_TYPE *__restrict p6 = mat + 5 * stride_size_nb_elem;
+        DML_DATA_TYPE *__restrict p7 = mat + 6 * stride_size_nb_elem;
+        DML_DATA_TYPE *__restrict p8 = mat + 7 * stride_size_nb_elem;
 
-#pragma omp simd reduction(+ : sum1, sum2, sum3, sum4, sum5, sum6, sum7, sum8)
+// #pragma omp simd reduction(+ : local_sum) simdlen(8)
         for (THEINT i = 0; i < steps; ++i)
         {
-            sum1 += *p1;
-            p1 += xstep;
-            sum2 += *p2;
-            p2 += xstep;
-            sum3 += *p3;
-            p3 += xstep;
-            sum4 += *p4;
-            p4 += xstep;
-            sum5 += *p5;
-            p5 += xstep;
-            sum6 += *p6;
-            p6 += xstep;
-            sum7 += *p7;
-            p7 += xstep;
-            sum8 += *p8;
-            p8 += xstep;
+            local_sum += p1[i * xstep];
+            local_sum += p2[i * xstep];
+            local_sum += p3[i * xstep];
+            local_sum += p4[i * xstep];
+            local_sum += p5[i * xstep];
+            local_sum += p6[i * xstep];
+            local_sum += p7[i * xstep];
+            local_sum += p8[i * xstep];
         }
+        
+        // Handle remaining elements
+        for (THEINT i = steps * 8; i < ops_per_scan; ++i)
+        {
+            local_sum += mat[i * stride_size_nb_elem];
+        }
+        sum += local_sum;
     }
-    sum1 += sum2;
-    sum3 += sum4;
-    sum5 += sum6;
-    sum7 += sum8;
-    sum1 += sum3;
-    sum5 += sum7;
-    sum1 += sum5;
 
-    return sum1;
+    return sum;
 }
 
 DML_DATA_TYPE sum_read_unroll1(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
@@ -266,13 +258,14 @@ DML_DATA_TYPE sum_readspe_unroll4(Dml_parameters *p, int stride_size_nb_elem, in
     return (sum1);
 }
 
-DML_DATA_TYPE sum_readspe_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
+
+DML_DATA_TYPE sum_readspe_unroll8(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan_arg)
 {
-    THEINT steps, xstep = stride_size_nb_elem * 8;
+    size_t xstep = (size_t)stride_size_nb_elem * 8;
     DML_DATA_TYPE sum1 = 0, sum2 = 0, sum3 = 0, sum4 = 0, sum5 = 0, sum6 = 0, sum7 = 0, sum8 = 0;
-    int rep;
-    ops_per_scan /= 8;
-    for (rep = 0; rep < repeat; rep++)
+    THEINT ops_per_scan_unrolled = (ops_per_scan_arg > 0) ? ops_per_scan_arg / 8 : 0;
+
+    for (int rep = 0; rep < repeat; rep++)
     {
         DML_DATA_TYPE *p1 = mat;
         DML_DATA_TYPE *p2 = p1 + stride_size_nb_elem;
@@ -282,7 +275,8 @@ DML_DATA_TYPE sum_readspe_unroll8(Dml_parameters *p, int stride_size_nb_elem, in
         DML_DATA_TYPE *p6 = p5 + stride_size_nb_elem;
         DML_DATA_TYPE *p7 = p6 + stride_size_nb_elem;
         DML_DATA_TYPE *p8 = p7 + stride_size_nb_elem;
-        for (steps = 0; steps < ops_per_scan; steps++)
+
+        for (THEINT steps = 0; steps < ops_per_scan_unrolled; steps++)
         {
             sum1 += *p1;
             p1 += xstep;
@@ -309,7 +303,8 @@ DML_DATA_TYPE sum_readspe_unroll8(Dml_parameters *p, int stride_size_nb_elem, in
     sum1 += sum3;
     sum5 += sum7;
     sum1 += sum5;
-    return (sum1);
+
+    return sum1;
 }
 
 DML_DATA_TYPE sum_readspe_unroll16(Dml_parameters *p, int stride_size_nb_elem, int repeat, THEINT ops_per_scan)
@@ -864,7 +859,7 @@ DML_DATA_TYPE sum_write_unroll1(Dml_parameters *p, int stride_size_nb_elem, int 
         for (steps = 0; steps < ops_per_scan; steps++)
         {
             sum += *p1;
-            *p1 += wr;
+            *p1 = wr;
             p1 += stride_size_nb_elem;
         }
     }
@@ -885,10 +880,10 @@ DML_DATA_TYPE sum_write_unroll2(Dml_parameters *p, int stride_size_nb_elem, int 
         for (steps = 0; steps < ops_per_scan; steps++)
         {
             sum += *p1;
-            *p1 += wr;
+            *p1 = wr;
             p1 += xstep;
             sum += *p2;
-            *p2 += wr;
+            *p2 = wr;
             p2 += xstep;
         }
     }
@@ -911,16 +906,16 @@ DML_DATA_TYPE sum_write_unroll4(Dml_parameters *p, int stride_size_nb_elem, int 
         for (steps = 0; steps < ops_per_scan; steps++)
         {
             sum += *p1;
-            *p1 += wr;
+            *p1 = wr;
             p1 += xstep;
             sum += *p2;
-            *p2 += wr;
+            *p2 = wr;
             p2 += xstep;
             sum += *p3;
-            *p3 += wr;
+            *p3 = wr;
             p3 += xstep;
             sum += *p4;
-            *p4 += wr;
+            *p4 = wr;
             p4 += xstep;
         }
     }
@@ -947,28 +942,28 @@ DML_DATA_TYPE sum_write_unroll8(Dml_parameters *p, int stride_size_nb_elem, int 
         for (steps = 0; steps < ops_per_scan; steps++)
         {
             sum += *p1;
-            *p1 += wr;
+            *p1 = wr;
             p1 += xstep;
             sum += *p2;
-            *p2 += wr;
+            *p2 = wr;
             p2 += xstep;
             sum += *p3;
-            *p3 += wr;
+            *p3 = wr;
             p3 += xstep;
             sum += *p4;
-            *p4 += wr;
+            *p4 = wr;
             p4 += xstep;
             sum += *p5;
-            *p5 += wr;
+            *p5 = wr;
             p5 += xstep;
             sum += *p6;
-            *p6 += wr;
+            *p6 = wr;
             p6 += xstep;
             sum += *p7;
-            *p7 += wr;
+            *p7 = wr;
             p7 += xstep;
             sum += *p8;
-            *p8 += wr;
+            *p8 = wr;
             p8 += xstep;
         }
     }
@@ -991,10 +986,10 @@ DML_DATA_TYPE sum_writespe_unroll2(Dml_parameters *p, int stride_size_nb_elem, i
         for (steps = 0; steps < ops_per_scan; steps++)
         {
             sum1 += *p1;
-            *p1 += wr;
+            *p1 = wr;
             p1 += xstep;
             sum2 += *p2;
-            *p2 += wr;
+            *p2 = wr;
             p2 += xstep;
         }
     }
@@ -1018,16 +1013,16 @@ DML_DATA_TYPE sum_writespe_unroll4(Dml_parameters *p, int stride_size_nb_elem, i
         for (steps = 0; steps < ops_per_scan; steps++)
         {
             sum1 += *p1;
-            *p1 += wr;
+            *p1 = wr;
             p1 += xstep;
             sum2 += *p2;
-            *p2 += wr;
+            *p2 = wr;
             p2 += xstep;
             sum3 += *p3;
-            *p3 += wr;
+            *p3 = wr;
             p3 += xstep;
             sum4 += *p4;
-            *p4 += wr;
+            *p4 = wr;
             p4 += xstep;
         }
     }
@@ -1057,28 +1052,28 @@ DML_DATA_TYPE sum_writespe_unroll8(Dml_parameters *p, int stride_size_nb_elem, i
         for (steps = 0; steps < ops_per_scan; steps++)
         {
             sum1 += *p1;
-            *p1 += wr;
+            *p1 = wr;
             p1 += xstep;
             sum2 += *p2;
-            *p2 += wr;
+            *p2 = wr;
             p2 += xstep;
             sum3 += *p3;
-            *p3 += wr;
+            *p3 = wr;
             p3 += xstep;
             sum4 += *p4;
-            *p4 += wr;
+            *p4 = wr;
             p4 += xstep;
             sum5 += *p5;
-            *p5 += wr;
+            *p5 = wr;
             p5 += xstep;
             sum6 += *p6;
-            *p6 += wr;
+            *p6 = wr;
             p6 += xstep;
             sum7 += *p7;
-            *p7 += wr;
+            *p7 = wr;
             p7 += xstep;
             sum8 += *p8;
-            *p8 += wr;
+            *p8 = wr;
             p8 += xstep;
         }
     }
@@ -1107,9 +1102,9 @@ DML_DATA_TYPE sum_writeind_unroll2(Dml_parameters *p, int stride_size_nb_elem, i
         for (steps = 0; steps < ops_per_scan; steps++)
         {
             sum1 += p1[0];
-            p1[0] += wr;
+            p1[0] = wr;
             sum2 += p1[stride_size_nb_elem];
-            p1[stride_size_nb_elem] += wr;
+            p1[stride_size_nb_elem] = wr;
             p1 += xstep;
         }
     }
@@ -1135,13 +1130,13 @@ DML_DATA_TYPE sum_writeind_unroll4(Dml_parameters *p, int stride_size_nb_elem, i
             for (steps = 0; steps < ops_per_scan; steps++)
             {
                 sum1 += p1[0];
-                p1[0] += wr;
+                p1[0] = wr;
                 sum2 += p1[stride_size_nb_elem];
-                p1[stride_size_nb_elem] += wr;
+                p1[stride_size_nb_elem] = wr;
                 sum3 += p1[step2];
-                p1[step2] += wr;
+                p1[step2] = wr;
                 sum4 += p1[step3];
-                p1[step3] += wr;
+                p1[step3] = wr;
                 p1 += xstep;
             }
         }
@@ -1152,14 +1147,14 @@ DML_DATA_TYPE sum_writeind_unroll4(Dml_parameters *p, int stride_size_nb_elem, i
             for (steps = 0; steps < ops_per_scan; steps++)
             {
                 sum1 += p1[0];
-                p1[0] += wr;
+                p1[0] = wr;
                 sum2 += p1[stride_size_nb_elem];
-                p1[stride_size_nb_elem] += wr;
+                p1[stride_size_nb_elem] = wr;
                 p2 += xstep;
                 sum3 += p2[0];
-                p2[0] += wr;
+                p2[0] = wr;
                 sum4 += p2[stride_size_nb_elem];
-                p2[stride_size_nb_elem] += wr;
+                p2[stride_size_nb_elem] = wr;
                 p2 += xstep;
             }
         }
@@ -1191,21 +1186,21 @@ DML_DATA_TYPE sum_writeind_unroll8(Dml_parameters *p, int stride_size_nb_elem, i
             for (steps = 0; steps < ops_per_scan; steps++)
             {
                 sum1 += p1[0];
-                p1[0] += wr;
+                p1[0] = wr;
                 sum2 += p1[stride_size_nb_elem];
-                p1[stride_size_nb_elem] += wr;
+                p1[stride_size_nb_elem] = wr;
                 sum3 += p1[step2];
-                p1[step2] += wr;
+                p1[step2] = wr;
                 sum4 += p1[step3];
-                p1[step3] += wr;
+                p1[step3] = wr;
                 sum5 += p1[step4];
-                p1[step4] += wr;
+                p1[step4] = wr;
                 sum6 += p1[step5];
-                p1[step5] += wr;
+                p1[step5] = wr;
                 sum7 += p1[step6];
-                p1[step6] += wr;
+                p1[step6] = wr;
                 sum8 += p1[step7];
-                p1[step7] += wr;
+                p1[step7] = wr;
                 p1 += xstep;
             }
         }
@@ -1216,22 +1211,22 @@ DML_DATA_TYPE sum_writeind_unroll8(Dml_parameters *p, int stride_size_nb_elem, i
             for (steps = 0; steps < ops_per_scan; steps++)
             {
                 sum1 += p1[0];
-                p1[0] += wr;
+                p1[0] = wr;
                 sum2 += p1[stride_size_nb_elem];
-                p1[stride_size_nb_elem] += wr;
+                p1[stride_size_nb_elem] = wr;
                 sum3 += p1[step2];
-                p1[step2] += wr;
+                p1[step2] = wr;
                 sum4 += p1[step3];
-                p1[step3] += wr;
+                p1[step3] = wr;
                 p1 += xstep;
                 sum5 += p2[0];
-                p2[0] += wr;
+                p2[0] = wr;
                 sum6 += p2[stride_size_nb_elem];
-                p2[stride_size_nb_elem] += wr;
+                p2[stride_size_nb_elem] = wr;
                 sum7 += p2[step2];
-                p2[step2] += wr;
+                p2[step2] = wr;
                 sum8 += p2[step3];
-                p2[step3] += wr;
+                p2[step3] = wr;
                 p2 += xstep;
             }
         }
@@ -1244,24 +1239,24 @@ DML_DATA_TYPE sum_writeind_unroll8(Dml_parameters *p, int stride_size_nb_elem, i
             for (steps = 0; steps < ops_per_scan; steps++)
             {
                 sum1 += p1[0];
-                p1[0] += wr;
+                p1[0] = wr;
                 sum2 += p1[stride_size_nb_elem];
-                p1[stride_size_nb_elem] += wr;
+                p1[stride_size_nb_elem] = wr;
                 p1 += xstep;
                 sum3 += p2[0];
-                p2[0] += wr;
+                p2[0] = wr;
                 sum4 += p2[stride_size_nb_elem];
-                p2[stride_size_nb_elem] += wr;
+                p2[stride_size_nb_elem] = wr;
                 p2 += xstep;
                 sum5 += p3[0];
-                p3[0] += wr;
+                p3[0] = wr;
                 sum6 += p3[stride_size_nb_elem];
-                p3[stride_size_nb_elem] += wr;
+                p3[stride_size_nb_elem] = wr;
                 p3 += xstep;
                 sum7 += p4[0];
-                p4[0] += wr;
+                p4[0] = wr;
                 sum8 += p4[stride_size_nb_elem];
-                p4[stride_size_nb_elem] += wr;
+                p4[stride_size_nb_elem] = wr;
                 p4 += xstep;
             }
         }

@@ -100,7 +100,6 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang|GNU")
         "-ffast-math"
         "-fno-exceptions"
         ${LTO_FLAG}
-        
     )
     if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang")
          if("${DML_INST_TYPE}" MATCHES "znver[0-9]+")
@@ -165,8 +164,8 @@ message(STATUS "+++ Build Type: ${CMAKE_BUILD_TYPE}")
 message(STATUS "+++ CXX Compiler: ${CMAKE_CXX_COMPILER} (ID: ${CMAKE_CXX_COMPILER_ID})")
 message(STATUS "+++ CXX Flags: ${CMAKE_CXX_FLAGS} (Note: Target-specific flags applied separately)")
 
-get_target_property(TARGET_COMPILE_OPTIONS ${DML_EXECUTABLE_NAME} INTERFACE_COMPILE_OPTIONS)
+get_target_property(TARGET_COMPILE_OPTIONS ${DML_EXECUTABLE_NAME} COMPILE_OPTIONS)
 message(STATUS "+++ Final compile options for ${DML_EXECUTABLE_NAME}: ${TARGET_COMPILE_OPTIONS}")
 
-get_target_property(TARGET_LINK_OPTIONS ${DML_EXECUTABLE_NAME} INTERFACE_LINK_OPTIONS)
+get_target_property(TARGET_LINK_OPTIONS ${DML_EXECUTABLE_NAME} LINK_OPTIONS)
 message(STATUS "+++ Final link options for ${DML_EXECUTABLE_NAME}: ${TARGET_LINK_OPTIONS}")
