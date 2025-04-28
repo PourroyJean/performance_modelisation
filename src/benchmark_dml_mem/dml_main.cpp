@@ -180,66 +180,92 @@ int work(Dml_parameters *p) {
         printf("\n");
     }
 
-    //Work: Each loop = 1 sub data set to bench
-    for (log_max_index = p->m_MIN_LOG10; log_max_index < p->m_MAX_LOG10 + .0000001; log_max_index += p->m_STEP_LOG10) {
-        max_index = (THEINT) (double) (exp(log_max_index * LOG10) + 0.5); //Index of the last element we read/write
-        THEINT curr_dateset_size = max_index * sizeof(DML_DATA_TYPE);     //Size of the subset in byte
+    uint64_t current_max_index = p->m_START_SIZE;
+    bool first_iteration = true;
 
-//        DEBUG << "max index " << max_index << endl; //1000
-//        DEBUG << "curr_dateset_size   " << curr_dateset_size << "(" << convert_size(curr_dateset_size) << ")" << endl;   //
+    while (true) { 
 
-        //Sanity check: enough element ?
-        if (max_index > p->m_MAT_NB_ELEM) break;
-
-
-        if (mpi_rank == 0) {
-            printf("_ %s K = %10s", p->m_prefix.c_str(), convert_size(curr_dateset_size).c_str());
-            LOG_MPI(log_temporal, to_string(curr_dateset_size) + ",");
-            ANNOTATE(string("K = " + convert_size(curr_dateset_size)).c_str(), "blue");
+        // Ensure current_max_index is valid before proceeding
+        if (!first_iteration && current_max_index <= p->m_START_SIZE && p->m_START_SIZE != p->m_END_SIZE) {
+            // Avoid getting stuck if step factor is too small or start size is 1
+            current_max_index = p->m_START_SIZE + 1; // Force minimum progress
         }
 
-        //Each loop = 1 stride to bench
-        for (int stride : p->m_STRIDE_LIST) {
-            if (stride != p->m_MIN_STRIDE) {
-                LOG_MPI(log_temporal, ",");
+        // Have we gone past the end size?
+        if (current_max_index > p->m_END_SIZE) {
+            break;
+        }
+
+        max_index = current_max_index; // Use the current loop size
+
+        // Sanity check: Check against the allocated buffer size
+        if (max_index > p->m_MAT_NB_ELEM) {
+            if (mpi_rank == 0 && p->m_VERBOSE > 0) {
+                printf("INFO: Stopping benchmark loop: Requested size %lu exceeds allocated elements %lu\n", max_index, p->m_MAT_NB_ELEM);
             }
-            double gb;
+            break;
+        }
+
+        size_t curr_dateset_size_bytes = max_index * sizeof(DML_DATA_TYPE); // Size of the subset in bytes
+
+        if (mpi_rank == 0) {
+            string size_str = convert_size(curr_dateset_size_bytes);
+            printf("_ %-10s %10s : ", p->m_prefix.c_str(), size_str.c_str());
+            LOG_MPI(log_temporal, to_string(curr_dateset_size_bytes) + ","); // Log byte size
+            ANNOTATE(string("Size = " + size_str).c_str(), "blue"); // YAMB annotation
+        }
+
+        for (int stride_bytes : p->m_STRIDE_LIST) {
+
+            // Check if stride is valid for the current data type size
+            if (stride_bytes % sizeof(DML_DATA_TYPE) != 0) {
+                if (mpi_rank == 0 && p->m_VERBOSE > 0)
+                    printf("Warning: Stride %d bytes not multiple of element size %lu bytes. Skipping.\n", stride_bytes, sizeof(DML_DATA_TYPE));
+                // Print placeholder and continue
+                if (mpi_rank == 0) {
+                    int cols = (p->m_DISP == DISP_MODE::ALL) ? 3 : ((p->m_DISP == DISP_MODE::TWO) ? 2 : 1);
+                    for (int i = 0; i < cols; ++i) {
+                        printf("%11s", "N/A");
+                        LOG_MPI(log_temporal, "N/A");
+                        if (i < cols - 1 || stride_bytes != p->m_STRIDE_LIST.back()) LOG_MPI(log_temporal, ",");
+                    }
+                }
+                continue; // Skip to next stride
+            }
+            int stride_elems = stride_bytes / sizeof(DML_DATA_TYPE); // Stride in elements
+
+            // Reset measures for this stride
             stride_best_measure = BIG_VAL;
-            stride_worst_measure = 0;
+            stride_worst_measure = 0.0;
             stride_sum_measures = 0.0;
 
-            //Only rank 0 annotate YAMB
             if (mpi_rank == 0) {
-                string s = "1";
-                if (mpi_size > 1) {
-                    s = to_string(mpi_size);
-                }
-                ANNOTATE(string("Stride : " + to_string(stride) + " nb_proc(" + s + ")").c_str(), "red");
+                string proc_count_str = (mpi_size > 1) ? to_string(mpi_size) : "1";
+                ANNOTATE(string("Stride(B): " + to_string(stride_bytes) + " np: " + proc_count_str).c_str(), "red");
             }
 
+            // Calculate ops per scan and repeats
+            if (stride_elems == 0) stride_elems = 1; // Avoid division by zero if stride somehow became 0
+            uint64_t nb_step_per_scan = max_index / stride_elems; // Number of stride steps to cover the array
 
-            //Calculate the number of measure / repeat
-            int stride_size_nb_elem = stride / sizeof(DML_DATA_TYPE);     //i.e. [stride  = 32]   / [double = 8]        = 4 elem per stride
-            THEINT nb_step_per_scan = max_index / stride_size_nb_elem;    //i.e. [dateset = 1024] / [4 elem per stride] = 256 ops
-
-            //Only measure if there is enough number of elements
             if (nb_step_per_scan >= MIN_OPS_PER_SCAN) {
-
-                //We repeat the measure several times to take advantage of locality
+                // Calculate repeat factor to reach target ops (p->m_MAX_OPS)
                 int repeat = p->m_MAX_OPS / nb_step_per_scan;
-                if (repeat < 5) {
+                if (repeat < 5) { // Ensure minimum repeats for stability
                     repeat = 5;
                 }
-                
-                // --- BENCHMARK MEASURE : each loop = 1 measure --
-                for (measure = 0; measure < p->m_MAX_MEASURES; measure++) {
 
-//                    MPI_BARRIER
-                    time_start = get_micros();
-                    nb_effective_op = p->m_BENCHMARK(p, stride_size_nb_elem, repeat, nb_step_per_scan);
-                    time_stop = get_micros();
-//                    MPI_BARRIER
+                // --- Measurement Loop ---
+                for (int measure = 0; measure < p->m_MAX_MEASURES; measure++) {
 
+                    MPI_BARRIER // Sync before measurement
+                    time_start = get_micros(); // Time on each rank
+
+                    // Call the selected benchmark function
+                    nb_effective_op = p->m_BENCHMARK(p, stride_elems, repeat, nb_step_per_scan);
+
+                    time_stop = get_micros(); // Time on each rank
+                    MPI_BARRIER // Sync after measurement
 
                     // Accumulate time
                     double measure_total_time = (time_stop - time_start) * 1000.0;
@@ -249,89 +275,107 @@ int work(Dml_parameters *p) {
                         stride_worst_measure = measure_total_time;
                     stride_sum_measures += measure_total_time;
 
-                    // Accumulate nb operation
+                    // Accumulate total loops/ops
                     total_loops += nb_effective_op;
-                    if (stride == p->m_MAX_STRIDE) {
+                    if (stride_bytes == p->m_MAX_STRIDE) {
                         total_time_max_stride += time_stop - time_start;
                         total_last_stride_loops += nb_effective_op;
                     }
-                }
-            } else {
+                } // End Measurement Loop
+
+            } else { // Not enough steps for a reliable measurement
                 nb_effective_op = BIG_VAL;
             }
 
-            if (mpi_rank != 0)
-                continue;
+            // --- Process and Print Results for this Stride (Rank 0) ---
+            if (mpi_rank == 0) {
+                if (nb_effective_op < BIG_VAL) {
+                    // Print the best measure
+                    ns_per_op = stride_best_measure / nb_effective_op;
+                    double gb = p->m_CACHE_LINE / ns_per_op;
+                    if (p->m_DISP == DISP_UNIT::GB) ns_per_op = gb;
+                    if (p->m_DISP == DISP_UNIT::CY) ns_per_op *= p->m_GHZ;
+                    if ((p->m_DISP == DISP_MODE::BEST || p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO)) {
+                        stringstream ss;
+                        ss << fixed << setprecision(2) << ns_per_op;
+                        float a;
+                        ss >> a;
+                        sprintf(res_str, "%11.2f", a);
+                        printf("%s", res_str);
+                        LOG_MPI(log_temporal, ss.str());
+                    }
 
-            //If the benchmark was executed
-            if (nb_effective_op < BIG_VAL) {
+                    // Print the worst measure
+                    ns_per_op = stride_worst_measure / nb_effective_op;
+                    gb = p->m_CACHE_LINE / ns_per_op;
+                    if (p->m_DISP == DISP_UNIT::GB) ns_per_op = gb;
+                    if (p->m_DISP == DISP_UNIT::CY) ns_per_op *= p->m_GHZ;
+                    if (p->m_DISP == DISP_MODE::ALL) {
+                        stringstream ss;
+                        ss << fixed << setprecision(2) << ns_per_op;
+                        float a;
+                        ss >> a;
+                        sprintf(res_str, "%11.2f", a);
+                        printf("%s", res_str);
+                        LOG_MPI(log_temporal, ss.str());
+                    }
 
-                //Print the best measure
-                ns_per_op = stride_best_measure / nb_effective_op;
-                gb = p->m_CACHE_LINE;
-                gb /= ns_per_op;
-                if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
-                if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
-                if ((p->m_DISP == DISP_MODE::BEST || p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO)) {
-                    stringstream ss;
-                    ss << fixed << setprecision(2) << ns_per_op;
-                    float a;
-                    ss >> a;
-                    sprintf(res_str, "%11.2f", a);
-                    COUT << res_str;
-                    LOG_MPI(log_temporal, ss.str());
+                    // Print the average measure
+                    ns_per_op = stride_sum_measures / nb_effective_op / p->m_MAX_MEASURES;
+                    gb = p->m_CACHE_LINE / ns_per_op;
+                    if (p->m_unit == DISP_UNIT::GB) ns_per_op = gb;
+                    if (p->m_unit == DISP_UNIT::CY) ns_per_op *= p->m_GHZ;
+                    if (p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO || p->m_DISP == DISP_MODE::AVERAGE) {
+                        stringstream ss;
+                        ss << fixed << setprecision(2) << ns_per_op;
+                        float a;
+                        ss >> a;
+                        sprintf(res_str, "%11.2f", a);
+                        printf("%s", res_str);
+                        LOG_MPI(log_temporal, ss.str());
+                    }
+                } else {
+                    sprintf(res_str, "%11s", "-");
+                    printf("%s", res_str);
+                    LOG_MPI(log_temporal, "0");
                 }
+            } 
 
-                //Print the worst measure
-                ns_per_op = stride_worst_measure / nb_effective_op;
-                gb = p->m_CACHE_LINE;
-                gb /= ns_per_op;
-                if (p->m_DISP == DISP_UNIT::GB)ns_per_op = gb;
-                if (p->m_DISP == DISP_UNIT::CY)ns_per_op *= p->m_GHZ;
-                if (p->m_DISP == DISP_MODE::ALL) {
-                    stringstream ss;
-                    ss << fixed << setprecision(2) << ns_per_op;
-                    float a;
-                    ss >> a;
-                    sprintf(res_str, "%11.2f", a);
-                    COUT << res_str;
-                    LOG_MPI(log_temporal, ss.str());
-                }
+        } 
+        if (mpi_rank == 0) {
+            printf("\n");
+            LOG_MPI(log_temporal, "\n");
+        }
 
-                //Print the average measure
-                ns_per_op = stride_sum_measures / nb_effective_op / p->m_MAX_MEASURES;
-                gb = p->m_CACHE_LINE;
-                gb /= ns_per_op;
-                if (p->m_unit == DISP_UNIT::GB) {
-                    ns_per_op = gb;
-                }
-                if (p->m_unit == DISP_UNIT::CY) {
-                    ns_per_op *= p->m_GHZ;
-                }
-                if (p->m_DISP == DISP_MODE::ALL || p->m_DISP == DISP_MODE::TWO || p->m_DISP == DISP_MODE::AVERAGE) {
-                    stringstream ss;
-                    ss << fixed << setprecision(2) << ns_per_op;
-                    float a;
-                    ss >> a;
-                    sprintf(res_str, "%11.2f", a);
-                    COUT << res_str;
-                    LOG_MPI(log_temporal, ss.str());
+        first_iteration = false; // Mark that we've completed the first iteration
 
-                }
+        if (current_max_index == p->m_END_SIZE) {
+            break;
+        }
+
+        uint64_t next_max_index = 0;
+        if (p->m_SIZE_STEP_FACTOR > 1.0) {
+            next_max_index = static_cast<uint64_t>(static_cast<double>(current_max_index) * p->m_SIZE_STEP_FACTOR);
+        } else {
+            if (current_max_index == p->m_START_SIZE && p->m_START_SIZE != p->m_END_SIZE) {
+                next_max_index = p->m_END_SIZE;
             } else {
-                sprintf(res_str, "%11s", "-");
-                COUT << res_str;
-                LOG_MPI(log_temporal, "0");
+                break;
             }
         }
 
-        COUT_MPI << endl << flush;
-        LOG_MPI(log_temporal, "\n");
-        LOG_MPI(big_log, log_temporal);
-        log_temporal = "";
+        if (next_max_index <= current_max_index) {
+            next_max_index = current_max_index + 1;
+        }
+
+        if (next_max_index > p->m_END_SIZE && current_max_index < p->m_END_SIZE) {
+            next_max_index = p->m_END_SIZE;
+        }
+
+        current_max_index = next_max_index;
+
     }
-    //Write to the file only at the end of the benchmark: performance matter
-    //Move this line above to be able to stop the benchmark while being able to get the output file
+
     if (is_I_LOG) {
         p->m_log_file << big_log << flush;
     }

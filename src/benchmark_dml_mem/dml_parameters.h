@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include "ezOptionParser.hpp"
 #include "dml_misc.h"
+#include <cstdint>
 
 using namespace ez;
 using namespace std;
@@ -101,9 +102,9 @@ public:
     int m_MAX_MEASURES = 2;
     int m_MAT_OFFSET = 0;
     int m_NUM_INDEX = 1;
-    double m_MIN_LOG10=3.0;
-    double m_MAX_LOG10=8.0;
-    double m_STEP_LOG10 = 0.1;
+    uint64_t m_START_SIZE = 0.2;
+    uint64_t m_END_SIZE = 100;
+    double m_SIZE_STEP_FACTOR = 1.2;
     bool m_is_huge_pages = false;
     bool m_is_log = false;
     bool m_is_annotate = true;
