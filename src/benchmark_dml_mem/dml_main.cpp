@@ -34,6 +34,9 @@ double get_micros();
 
 double total_loops = 0;
 
+double total_time_max_stride = 0.0;
+double total_last_stride_loops = 0;
+
 DML_DATA_TYPE *mat;  //THE matrix :)
 bool WITH_MPI = false;
 
@@ -97,11 +100,15 @@ int main(int argc, const char *argv[]) {
         double tot = (end_time - start_time) * 1000.0 / total_loops;
         double band = my_parameters->m_CACHE_LINE / tot;
 
+        double total_last_stride = total_time_max_stride * 1000.0 / total_last_stride_loops;
+        double last_stride_bandwidth = my_parameters->m_CACHE_LINE / total_last_stride;
+
         printf("%20s    %-10s \n", "Name", my_parameters->m_prefix.c_str());
         printf("%20s    %-10f \n", "Total micros", end_time - start_time);
         printf("%20s    %-10f \n", "Total Loops", total_loops);
         printf("%20s    %-10f ns/loop\n", "Performance", tot);
         printf("%20s    %-10f GB/s\n", "Bandwidth", band);
+        printf("%20s    %-10f GB/s\n", "Last Stride Bandwidth", last_stride_bandwidth);
     }
 
     //Release the memory:
@@ -223,7 +230,7 @@ int work(Dml_parameters *p) {
                 if (repeat < 5) {
                     repeat = 5;
                 }
-
+                
                 // --- BENCHMARK MEASURE : each loop = 1 measure --
                 for (measure = 0; measure < p->m_MAX_MEASURES; measure++) {
 
@@ -233,9 +240,6 @@ int work(Dml_parameters *p) {
                     time_stop = get_micros();
 //                    MPI_BARRIER
 
-                    // Accumulate nb operation
-                    if (nb_effective_op != 0)
-                        total_loops += nb_effective_op;
 
                     // Accumulate time
                     double measure_total_time = (time_stop - time_start) * 1000.0;
@@ -244,6 +248,13 @@ int work(Dml_parameters *p) {
                     if (measure_total_time > stride_worst_measure)
                         stride_worst_measure = measure_total_time;
                     stride_sum_measures += measure_total_time;
+
+                    // Accumulate nb operation
+                    total_loops += nb_effective_op;
+                    if (stride == p->m_MAX_STRIDE) {
+                        total_time_max_stride += time_stop - time_start;
+                        total_last_stride_loops += nb_effective_op;
+                    }
                 }
             } else {
                 nb_effective_op = BIG_VAL;
