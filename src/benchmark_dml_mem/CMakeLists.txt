@@ -105,9 +105,9 @@ if ("${CMAKE_CXX_COMPILER_ID}" MATCHES "Clang|GNU")
          if("${DML_INST_TYPE}" MATCHES "znver[0-9]+")
              target_compile_options(${DML_EXECUTABLE_NAME} PRIVATE 
              "-fnt-store"
-             "-Rpass=loop-vectorize" 
-             "-Rpass-missed=loop-vectorize" 
-             "-Rpass-analysis=loop-vectorize"
+            #  "-Rpass=loop-vectorize" 
+            #  "-Rpass-missed=loop-vectorize" 
+            #  "-Rpass-analysis=loop-vectorize"
              )
              message(STATUS "+++ Added Clang/AOCC AMD-specific flag: -fnt-store")
          endif()
