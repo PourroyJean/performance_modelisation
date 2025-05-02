@@ -14,6 +14,8 @@
 #include <sys/shm.h>
 #include <cstdlib>
 #include <unistd.h>
+#include <chrono>
+
 
 #ifdef COMPILED_WITH_MPI
 #include <mpi.h>
@@ -771,15 +773,16 @@ void init_mat(Dml_parameters *p)
     MPI_Barrier(MPI_COMM_WORLD);
 }
 
+
 /**
- * @brief Returns current time in microseconds using gettimeofday().
+ * @brief Returns current time in microseconds using high_resolution_clock.
  * @return Timestamp in microseconds
  */
-double get_micros()
-{
-    struct timeval tv;
-    gettimeofday(&tv, nullptr);
-    return tv.tv_sec * 1e6 + tv.tv_usec;
+double get_micros() {
+    auto now = std::chrono::high_resolution_clock::now();
+    auto duration = now.time_since_epoch();
+    auto micros = std::chrono::duration_cast<std::chrono::microseconds>(duration).count();
+    return static_cast<double>(micros);
 }
 
 /**
