@@ -59,16 +59,7 @@ int main(int argc, const char *argv[]) {
 //    double STEP_LOG10 = 0.1;            /* log10 of STEP for vector size used				   */
 //#define MIN_OPS_PER_SCAN 128        /* we do not measure if less MIN_OPS_PER SCAN operations per loop */
 
-//  init_uint64_parm(argc, argv, &MAT_SIZE, "MAT_SIZE");
-    opt.add(
-            "100", // Default.
-            0, // Required?
-            1, // Number of args expected.
-            0, // Delimiter if expecting multiple args.
-            "Matrix size in meg", // Help description.
-//            "-s",     // Flag token.
-            "--matrixsize" // Flag token.
-    );
+
 
 //    init_uint64_parm(argc, argv, &MAT_OFFSET, "MAT_OFFSET");
     opt.add(

@@ -234,15 +234,6 @@ int Dml_parameters::setup_parser(int argc, const char *argv[]) {
     );
 
     opt.add(
-            "100", // Default.
-            0, // Required?
-            1, // Number of args expected.
-            0, // Delimiter if expecting multiple args.
-            "Matrix size in Mib", // Help description.
-            "--matrixsize" // Flag token.
-    );
-
-    opt.add(
             "0", // Default.
             0, // Required?
             1, // Number of args expected.
@@ -608,17 +599,6 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
 
     opt.get("--memaff")->getInt(m_MEM_AFF);
 
-    double size;
-    opt.get("--matrixsize")->getDouble(size);
-
-    m_MAT_SIZE = size*(1024 * 1024); // The size is stored in byte : 1 MiB  == 1 * 1024 * 1024 byte
-    if (!(m_MAT_SIZE >=  1024)) {
-        cout << "Error: please check the size of your matrix (" << m_MAT_SIZE << ")\n";
-        exit(EXIT_FAILURE);
-    };
-    m_MAT_NB_ELEM = size_t(size_t(m_MAT_SIZE) / (sizeof(DML_DATA_TYPE)));
-
-
     opt.get("--maxops")->getInt(m_MAX_OPS);
 
 
@@ -691,16 +671,22 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
     opt.get("--endsize")->getDouble(parsed_end_mb);
     opt.get("--sizestepfactor")->getDouble(m_SIZE_STEP_FACTOR);
 
+    // Calculate initial benchmark range in elements based on input MB
     m_START_SIZE = static_cast<uint64_t>((parsed_start_mb * 1024.0 * 1024.0) / sizeof(DML_DATA_TYPE));
     m_END_SIZE = static_cast<uint64_t>((parsed_end_mb * 1024.0 * 1024.0) / sizeof(DML_DATA_TYPE));
 
-
+    // Handle --size override: if specified, benchmark only that single size
     opt.get("--size")->getDouble(parsed_size_mb);
-
     if (parsed_size_mb > 0) {
         m_START_SIZE = static_cast<uint64_t>((parsed_size_mb * 1024.0 * 1024.0) / sizeof(DML_DATA_TYPE));
         m_END_SIZE = m_START_SIZE;
-        DEBUG_MPI << "Info: --size specified, setting range to [" << m_START_SIZE << ", " << m_END_SIZE << "]\n";    }
+        DEBUG_MPI << "Info: --size specified, setting range to [" << m_START_SIZE << ", " << m_END_SIZE << "]\n";
+    }
+
+    // Store the target end size before considering allocation limits
+    uint64_t target_end_size = m_END_SIZE;
+
+    // Basic validation of the benchmark range
     if (m_START_SIZE == 0) {
         cerr << "Warning: --startsize is 0. Adjusting to 1 element.\n";
         m_START_SIZE = 1;
@@ -709,17 +695,20 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
         cerr << "Error: --endsize (" << m_END_SIZE << ") cannot be less than --startsize (" << m_START_SIZE << ").\n";
         exit(EXIT_FAILURE);
     }
-    if (m_SIZE_STEP_FACTOR <= 1.0) {
-        if (m_START_SIZE != m_END_SIZE) {
-            cerr << "Warning: --sizestepfactor (" << m_SIZE_STEP_FACTOR << ") is <= 1.0. Only start and end sizes will be tested.\n";
-        }
+    if (m_SIZE_STEP_FACTOR <= 1.0 && m_START_SIZE != m_END_SIZE) {
+        cerr << "Warning: --sizestepfactor (" << m_SIZE_STEP_FACTOR << ") is <= 1.0. Only start and end sizes will be tested.\n";
     }
-    if (m_START_SIZE > m_MAT_NB_ELEM) {
-        cerr << "Warning: --startsize (" << m_START_SIZE << ") exceeds total allocated elements (" << m_MAT_NB_ELEM << "). Benchmark might not run.\n";
+
+    // Set the matrix allocation size to be exactly the determined benchmark end size
+    m_MAT_NB_ELEM = m_END_SIZE;
+    m_MAT_SIZE = m_MAT_NB_ELEM * sizeof(DML_DATA_TYPE);
+
+    // Check minimum allocation size based on the determined END_SIZE
+    if (m_MAT_SIZE < 1024) {
+        cout << "Error: Determined matrix size (" << m_MAT_SIZE << " bytes, based on END_SIZE) is less than the minimum required size (1 KiB).\n";
+        exit(EXIT_FAILURE);
     }
-    if (m_END_SIZE > m_MAT_NB_ELEM) {
-        cerr << "Info: --endsize (" << m_END_SIZE << ") exceeds total allocated elements (" << m_MAT_NB_ELEM << "). Range will be capped.\n";
-    }
+
 
     if (opt.isSet("--hugepages")) {
         m_is_huge_pages = true;
