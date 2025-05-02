@@ -41,26 +41,26 @@ extern string YAMB_ANNOTATE_LOG_FILE;
 
 void Dml_parameters::print_configuration() {
 
-    //Find subdataset_min_size and subdataset_max_size
-    size_t subdataset_min_size = ((size_t) (double) (exp(m_MIN_LOG10 * LOG10) + 0.5)) * sizeof(DML_DATA_TYPE);
-    double max_log = m_MIN_LOG10;
-    do{
-        uint64_t max_index  = (THEINT) (double) (exp(max_log * LOG10) + 0.5);
-        if (max_index > m_MAT_NB_ELEM) {
-            max_log -= 0.001;
-            break;
-        }
-        max_log += 0.001;
+    uint64_t actual_max_elements = std::min<uint64_t>(m_END_SIZE, m_MAT_NB_ELEM);
+    if (m_START_SIZE > m_MAT_NB_ELEM) {
+        if (mpi_rank == 0)
+            printf("  WARNING: Start size (%lu) exceeds allocated elements (%lu).\n", m_START_SIZE, m_MAT_NB_ELEM);
+        actual_max_elements = m_START_SIZE; // To prevent negative range display if start > alloc
+    }
+    if (m_END_SIZE > m_MAT_NB_ELEM && mpi_rank == 0) {
+        printf("  INFO: Requested end size (%lu) capped at allocated elements (%lu).\n", m_END_SIZE, m_MAT_NB_ELEM);
+    }
 
-    }while (true);
-    size_t subdataset_max_size = ((size_t) (double) (exp(max_log * LOG10) + 0.5)) * sizeof(DML_DATA_TYPE);
-
+    size_t subdataset_min_size_bytes = m_START_SIZE * sizeof(DML_DATA_TYPE);
+    size_t subdataset_max_size_bytes = actual_max_elements * sizeof(DML_DATA_TYPE);
 
     printf("  %-25s    %-10s \n", "Benchmark type", getValue(m_type).c_str());
     printf("  %-25s    %-10s \n", "Benchmark mode", getValue(m_mode).c_str());
     printf("  %-25s    %-10s \n", "SIMD optimization", m_is_simd ? "Enabled" : "Disabled");
     printf("  %-25s    %-10s \n", "Matrix size", convert_size(m_MAT_SIZE).c_str());
-    printf("  %-25s    %-10d \n", "Number of thread", mpi_size);
+    printf("  %-25s    %-10s \n", "Total Matrix Alloc Size", convert_size(m_MAT_SIZE).c_str());
+    printf("  %-25s    %-10lu\n", "Total Matrix Elements", m_MAT_NB_ELEM);
+    printf("  %-25s    %-10d \n", "Number of processes", mpi_size);    
     printf("  %-25s    %-10s \n", "Memory page size", m_is_huge_pages ? "Huge Pages (2 MiB)" : "Default (4 KiB)");
     printf("  %-25s    %-10lu\n", "Number of element", m_MAT_NB_ELEM);
     printf("  %-25s    %-10d \n", "Number of manual unroll", m_UNROLL);
@@ -68,16 +68,14 @@ void Dml_parameters::print_configuration() {
     printf("  %-25s    %-10s \n", "Measure represents the", getValue(m_DISP).c_str());
     printf("  %-25s    %-10d \n", "Cache line size", m_CACHE_LINE);
     printf("  %-25s    %-10s \n", "Stride range in byte",
-           string(to_string(m_MIN_STRIDE) + " - " + to_string(m_MAX_STRIDE) + " mode " +
-                  getValue(m_STRIDE_MODE).c_str()).c_str());
-    printf("  %-25s    %-10s \n", "Log range", string(to_string(m_MIN_LOG10) + " - " + to_string(m_MAX_LOG10)).c_str());
-    printf("  %-25s    %-10s \n", "Step Log", to_string(m_STEP_LOG10).c_str());
-
-    printf("  %-25s    %-10s \n", "Memory range", string((convert_size(subdataset_min_size)) + " - " + (convert_size(subdataset_max_size))).c_str());
-    printf("  %-25s    %-10s \n", "Save output ",
-           m_is_log ? ("yes in : " + m_log_file_name).c_str() : "no output file");
-    printf("  %-25s    %-10s \n", "Annotation file for YAMB",
-           m_is_annotate ? ("yes in : " + m_annotate_file_name).c_str() : "no");
+    string(to_string(m_STRIDE_LIST.empty() ? 0 : m_STRIDE_LIST.front()) + " - " +
+        to_string(m_STRIDE_LIST.empty() ? 0 : m_STRIDE_LIST.back()) + " mode " +
+        getValue(m_STRIDE_MODE).c_str()).c_str());
+    printf("  %-25s    %lu - %lu \n", "Element range", m_START_SIZE, actual_max_elements);
+    printf("  %-25s    %.2f \n", "Size Step Factor", m_SIZE_STEP_FACTOR);
+    printf("  %-25s    %-10s \n", "Memory range Tested", string((convert_size(subdataset_min_size_bytes)) + " - " + (convert_size(subdataset_max_size_bytes))).c_str());
+    printf("  %-25s    %-10s \n", "Save output ", m_is_log ? ("yes in : " + m_log_file_name).c_str() : "no output file");
+    printf("  %-25s    %-10s \n", "Annotation file for YAMB", m_is_annotate ? ("yes in : " + m_annotate_file_name).c_str() : "no");
 
 
     cout << endl;
@@ -98,26 +96,6 @@ int Dml_parameters::init_arguments(int argc, const char *argv[]) {
 
     //Parse and check the argument validity
     parse_arguments(argc, argv);
-
-
-    //If the LOG_STEP is null we try to find the highest value
-    if (m_STEP_LOG10 == 0) {
-        double max_log = 2;
-        do{
-            uint64_t max_index  = (THEINT) (double) (exp(max_log * LOG10) + 0.5);
-            if (max_index > m_MAT_NB_ELEM) {
-                max_log -= 0.001;
-                break;
-            }
-            max_log += 0.001;
-
-        }while (true);
-
-        m_MIN_LOG10 = max_log;
-        m_MAX_LOG10 = max_log;
-        m_STEP_LOG10 = 99999;
-    }
-
 
 
     //Select the correct benchmark
@@ -400,42 +378,49 @@ int Dml_parameters::setup_parser(int argc, const char *argv[]) {
             "--cacheline" // Flag token.
     );
 
+    // Default values for matrix size parameters
+    std::string start_size_default = to_string(m_START_SIZE);
+    std::string end_size_default = to_string(m_END_SIZE);
+    std::string size_step_factor_default = to_string(m_SIZE_STEP_FACTOR);
+
+    // Add option for starting matrix size
     opt.add(
-            "3", // Default.
-            0, // Required?
-            1, // Number of args expected.
-            0, // Delimiter if expecting multiple args.
-            "log10 of minimal  vector size used", // Help description.
-            "--minlog" // Flag token.
+        start_size_default.c_str(), // Default value
+        0, // Not required
+        1, // Number of arguments expected
+        0, // No delimiter
+        "Starting matrix size (number of elements)", // Help description
+        "--startsize" // Flag token
     );
 
+    // Add option for ending matrix size
     opt.add(
-            "15", // Default.
-            0, // Required?
-            1, // Number of args expected.
-            0, // Delimiter if expecting multiple args.
-            "log10 of maximal  vector size used", // Help description.
-            "--maxlog" // Flag token.
+        end_size_default.c_str(), // Default value
+        0, // Not required
+        1, // Number of arguments expected
+        0, // No delimiter
+        "Ending matrix size (number of elements)", // Help description
+        "--endsize" // Flag token
     );
 
+    // Add option for benchmarking a single matrix size
     opt.add(
-            "0", // Default.
-            0, // Required?
-            1, // Number of args expected.
-            0, // Delimiter if expecting multiple args.
-            "measure only one data set size (set minlog and maxlog at the same value)", // Help description.
-            "--log" // Flag token.
+        "0", // Default: 0 means use start/end range
+        0, // Not required
+        1, // Number of arguments expected
+        0, // No delimiter
+        "Benchmark a single matrix size (number of elements). Overrides --startsize and --endsize.", // Help description
+        "--size" // Flag token
     );
 
-
+    // Add option for size step factor
     opt.add(
-            "0.1", // Default.
-            0, // Required?
-            1, // Number of args expected.
-            0, // Delimiter if expecting multiple args.
-            "step used to increase the length of the buffer\n"
-                    "combined with (MIN_STRIDE==MAX_STRIDE) you can profile caracteristic behaviour", // Help description.
-            "--steplog" // Flag token.
+        size_step_factor_default.c_str(), // Default value
+        0, // Not required
+        1, // Number of arguments expected
+        0, // No delimiter
+        "Multiplicative factor for increasing size between steps (e.g., 1.2 for 20% increase)", // Help description
+        "--sizestepfactor" // Flag token
     );
 
     opt.add(
@@ -550,6 +535,7 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
     string tmp;
     int itmp;
     double dtmp;
+    unsigned long long ultmp; // For parsing sizes
 
     m_PID = getpid();
 
@@ -579,13 +565,7 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
         cout << "Error: please check the unroll argument: " << m_UNROLL << ": can be 1, 2, 4, 8, 16, 32, 64 \n";
         exit(EXIT_FAILURE);
     };
-
-    if (opt.isSet("--simd")) {
-        m_is_simd = true;
-    } else {
-        m_is_simd = false;
-    }
-
+        
     opt.get("--verbose")->getInt(m_VERBOSE);
 
 
@@ -706,15 +686,40 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
         exit(EXIT_FAILURE);
     };
 
-    opt.get("--minlog")->getDouble(m_MIN_LOG10);
-    opt.get("--maxlog")->getDouble(m_MAX_LOG10);
+    double parsed_start_mb, parsed_end_mb, parsed_size_mb;
+    opt.get("--startsize")->getDouble(parsed_start_mb);
+    opt.get("--endsize")->getDouble(parsed_end_mb);
+    opt.get("--sizestepfactor")->getDouble(m_SIZE_STEP_FACTOR);
 
-    opt.get("--log")->getDouble(dtmp);
-    if (dtmp > 0) {
-        m_MIN_LOG10 = dtmp;
-        m_MAX_LOG10 = dtmp;
+    m_START_SIZE = static_cast<uint64_t>((parsed_start_mb * 1024.0 * 1024.0) / sizeof(DML_DATA_TYPE));
+    m_END_SIZE = static_cast<uint64_t>((parsed_end_mb * 1024.0 * 1024.0) / sizeof(DML_DATA_TYPE));
+
+
+    opt.get("--size")->getDouble(parsed_size_mb);
+
+    if (parsed_size_mb > 0) {
+        m_START_SIZE = static_cast<uint64_t>((parsed_size_mb * 1024.0 * 1024.0) / sizeof(DML_DATA_TYPE));
+        m_END_SIZE = m_START_SIZE;
+        DEBUG_MPI << "Info: --size specified, setting range to [" << m_START_SIZE << ", " << m_END_SIZE << "]\n";    }
+    if (m_START_SIZE == 0) {
+        cerr << "Warning: --startsize is 0. Adjusting to 1 element.\n";
+        m_START_SIZE = 1;
     }
-
+    if (m_END_SIZE < m_START_SIZE) {
+        cerr << "Error: --endsize (" << m_END_SIZE << ") cannot be less than --startsize (" << m_START_SIZE << ").\n";
+        exit(EXIT_FAILURE);
+    }
+    if (m_SIZE_STEP_FACTOR <= 1.0) {
+        if (m_START_SIZE != m_END_SIZE) {
+            cerr << "Warning: --sizestepfactor (" << m_SIZE_STEP_FACTOR << ") is <= 1.0. Only start and end sizes will be tested.\n";
+        }
+    }
+    if (m_START_SIZE > m_MAT_NB_ELEM) {
+        cerr << "Warning: --startsize (" << m_START_SIZE << ") exceeds total allocated elements (" << m_MAT_NB_ELEM << "). Benchmark might not run.\n";
+    }
+    if (m_END_SIZE > m_MAT_NB_ELEM) {
+        cerr << "Info: --endsize (" << m_END_SIZE << ") exceeds total allocated elements (" << m_MAT_NB_ELEM << "). Range will be capped.\n";
+    }
 
     if (opt.isSet("--hugepages")) {
         m_is_huge_pages = true;
@@ -751,7 +756,6 @@ int Dml_parameters::parse_arguments(int argc, const char *argv[]) {
     }
 
 
-    opt.get("--steplog")->getDouble(m_STEP_LOG10);
 
     #ifdef OP_DEBUG //TODO CA MARCHE PAS
     string pretty;
